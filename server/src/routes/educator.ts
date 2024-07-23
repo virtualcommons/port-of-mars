@@ -32,11 +32,17 @@ educatorRouter.get("/student", async (req: Request, res: Response, next: NextFun
 });
 
 educatorRouter.get("/classroom-games", async (req: Request, res: Response, next) => {
-  const { classroomId } = req.body;
+  const user = req.user as User;
+  const classroomId = Number(req.query.classroomId);
   try {
     const services = getServices();
+    const teacher = await services.educator.getTeacherByUserId(user.id);
+    if (!teacher) {
+      res.status(403).json({ message: "Only teachers can get active games" });
+      return;
+    }
     const games = await services.educator.getActiveRoomsForClassroom(classroomId);
-    res.status(200).json(games);
+    res.json(games);
   } catch (e) {
     logger.warn(`Unable to get classroom games for classroom ID ${classroomId}`);
     next(e);
@@ -143,29 +149,29 @@ educatorRouter.put("/classroom", async (req: Request, res: Response, next) => {
   }
 });
 
-  // educatorRouter.get("/completed-games", async(req: Request, res: Response, next) => {
-  //   const user = req.user as User;
-  //   const {classroomId} = req.query;
+// educatorRouter.get("/completed-games", async(req: Request, res: Response, next) => {
+//   const user = req.user as User;
+//   const {classroomId} = req.query;
 
-  //  if (!classroomId){
-  //   res.status(400).json({ message: "ClassroomId is required" });
-  //   return;
-  //  }
+//  if (!classroomId){
+//   res.status(400).json({ message: "ClassroomId is required" });
+//   return;
+//  }
 
-  //   try {
-  //     const services = getServices();
-  //     const teacher = await services.educator.getTeacherByUserId(user.id);
-  //     if (!teacher || !user.isAdmin) {
-  //       res.status(403).json({ message: "Only teachers can get a list of completed games" });
-  //       return;
-  //     }
-  //     const games = await services.educator.getCompletedGamesForClassroom(Number(classroomId));
-  //     res.status(200).json(games);
-  //   } catch (e) {
-  //     logger.warn("Unable to get a list of finalized games for classroom");
-  //     next(e);
-  //   }
-  // })
+//   try {
+//     const services = getServices();
+//     const teacher = await services.educator.getTeacherByUserId(user.id);
+//     if (!teacher || !user.isAdmin) {
+//       res.status(403).json({ message: "Only teachers can get a list of completed games" });
+//       return;
+//     }
+//     const games = await services.educator.getCompletedGamesForClassroom(Number(classroomId));
+//     res.status(200).json(games);
+//   } catch (e) {
+//     logger.warn("Unable to get a list of finalized games for classroom");
+//     next(e);
+//   }
+// })
 
 educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
   const user = req.user as User;
@@ -173,7 +179,7 @@ educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher || !user.isAdmin) {
+    if (!teacher) {
       res
         .status(403)
         .json({ message: "Only teachers can get a list of clients for the classroom lobby" });
@@ -231,7 +237,7 @@ educatorRouter.post(
     try {
       const services = getServices();
       const teacher = await services.educator.getTeacherByUserId(user.id);
-      if (!(teacher || !user.isAdmin)) {
+      if (!teacher) {
         res.status(403).json({ message: "Only teachers can start the game" });
         return;
       }
