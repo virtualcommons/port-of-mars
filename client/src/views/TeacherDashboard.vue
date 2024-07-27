@@ -7,31 +7,40 @@
           <div class="mb-2 ml-3">
             <b-row>
               <h4 class="header-nowrap mt-2">Classrooms</h4>
-              <p class="h4 mb-1">
+              <!-- <p class="h1 mb-1">
                 <b-icon
                   icon="plus"
-                  class="icon ml-2 mt-2"
-                  style="color: white; cursor: pointer"
+                  class="icon ml-2  plus-icon"
+                  style="color: teal; cursor: pointer"
                   v-b-modal.add-classroom-modal
                 ></b-icon>
-              </p>
+              </p> -->
             </b-row>
           </div>
           <div class="classrooms">
-            <b-button-group vertical>
-              <b-button
+            <b-tabs pills vertical nav-wrapper-class="w-100" class="classroom-tabs">
+              <b-tab
                 v-for="classroom in classrooms"
                 :key="classroom.id"
-                variant="primary"
-                class="mb-2 rounded"
+                :title="classroom.descriptor"
+                class="classroom-tab"
                 @click="
                   selectClassroom(classroom.id);
                   clearRenameErrorMessage();
+                  fetchLobby();
+                  fetchCompletedGames();
                 "
-              >
-                {{ classroom.descriptor }}
-              </b-button>
-            </b-button-group>
+              ></b-tab>
+            </b-tabs>
+
+            <b-button v-b-modal.add-classroom-modal variant="success" class="w-100 mt-4">
+              <h4 class="mb-0">New<b-icon-plus></b-icon-plus></h4>
+              <!-- <b-icon
+                icon="plus"
+                class="icon ml-2 plus-icon"
+                style="color: white; cursor: pointer"
+              ></b-icon> -->
+            </b-button>
           </div>
         </b-col>
         <!--Main dashboard-->
@@ -42,15 +51,12 @@
                 <h4>{{ selectedClassroom?.descriptor }}</h4>
                 <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
               </div>
-              <div class="column mr-3">
-                <b-button variant="success" @click="startGames">Start Game</b-button>
-              </div>
             </div>
             <b-row>
               <div class="tabs-container w-100 h-100">
                 <b-tabs pills card>
                   <!-- classroom roster -->
-                  <b-tab title="Students" class="tab-header">
+                  <b-tab title="Lobby" class="tab-header" @click="fetchLobby">
                     <div
                       v-if="clients.length < 1"
                       class="h-100 d-flex align-items-center justify-content-center"
@@ -61,7 +67,13 @@
                     </div>
                     <div v-else>
                       <b-col cols="13">
-                        <b-card-text>Students in Classroom: {{ clients.length }}</b-card-text>
+                        <div class="d-flex mb-3 justify-content-between align-items-center">
+                        <b-card-text>Students in Lobby: {{ clients.length }}</b-card-text>
+                        
+                          <b-button variant="success" @click="startGames"
+                            ><h4 class="mb-0">Start Game</h4></b-button
+                          >
+                        </div>
                         <div class="content-container">
                           <b-table
                             dark
@@ -87,7 +99,19 @@
                     </div>
                   </b-tab>
 
-                  <b-tab title="Group" @click="fetchActiveRooms">
+                  <b-tab title="Games">
+                    <div
+                      v-if="rooms.length < 1"
+                      class="h-100 d-flex align-items-center justify-content-center"
+                    >
+                      <p style="color: rgba(241, 224, 197, 0.25)">
+                        Games will display here once a session has started.
+                      </p>
+                    </div>
+                    <div v-else></div>
+                  </b-tab>
+
+                  <b-tab title="Groups" @click="fetchActiveRooms">
                     <div
                       v-if="rooms.length < 1"
                       class="h-100 d-flex align-items-center justify-content-center"
@@ -312,7 +336,7 @@
                       <b-button
                         :pressed="false"
                         class="text-nowrap"
-                        variant="warning"
+                        variant="danger"
                         @click="deleteClassroom"
                         >Delete Classroom</b-button
                       >
@@ -352,7 +376,7 @@
           </div>
           <div v-else>
             <h3 class="mt-2">No Classrooms Available</h3>
-            <p>Please add a classroom using the plus sign button on the left</p>
+            <p>Please add a classroom using the button on the left</p>
           </div>
         </b-col>
       </b-row>
@@ -435,14 +459,14 @@ export default class TeacherDashboard extends Vue {
 
   clientFields = [
     { key: "username", label: "Username" },
-    { key: "firstName", label: "First" },
-    { key: "lastName", label: "Last", sortable: true },
+    { key: "name", label: "Name", sortable: true },
     { key: "status", label: "Lobby Status", sortable: true },
   ];
 
   // FIXME: define these types
   classrooms: Classroom[] = [];
   selectedClassroom: Classroom | null = null;
+  clients: any[] = []; //FIXME: fix type
 
   nextClassroomID: number = this.classrooms.length + 1;
 
@@ -533,11 +557,22 @@ export default class TeacherDashboard extends Vue {
 
   async fetchCompletedGames() {
     try {
-      // this.completedGames = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
+      this.completedGames = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
       // this.findHighScores();
       console.log("Completed games: " + this.completedGames.length);
     } catch (e) {
       console.error("Failed to fetched completed games", e);
+    }
+  }
+
+  async fetchLobby() {
+    if (this.selectedClassroom) {
+      try {
+        const lobbyData = await this.educatorApi.getLobby(this.selectedClassroom.id);
+        this.clients = Array.isArray(lobbyData) ? lobbyData : [];
+      } catch (e) {
+        console.error("Failed to fetch lobby data", e);
+      }
     }
   }
 
@@ -584,6 +619,9 @@ export default class TeacherDashboard extends Vue {
     console.log(this.classrooms);
     console.log("Selected Classroom:", classroom);
     this.selectedClassroom = classroom;
+    this.clients = [];
+    this.fetchLobby();
+    this.fetchCompletedGames();
   }
 
   checkDescriptorForm() {
@@ -642,7 +680,9 @@ export default class TeacherDashboard extends Vue {
       const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
       console.log("New Classroom:", newClassroom);
       this.classrooms = await this.educatorApi.getClassrooms();
+      //this.classrooms.push(newClassroom);
       this.selectClassroom(newClassroom.id);
+      this.classroomDescriptor = "";
     } catch (e) {
       console.error("Failed to add a new classroom:", e);
     }
@@ -701,9 +741,9 @@ export default class TeacherDashboard extends Vue {
     this.renameErrorMessage = "";
   }
 
-  get clients() {
-    return this.studentsByClassroom[this.selectedClassroom.id] || [];
-  }
+  // get clients() {
+  //   return this.studentsByClassroom[this.selectedClassroom.id] || [];
+  // }
 
   studentsByClassroom: { [key: number]: Student[] } = {
     1: [
@@ -752,6 +792,7 @@ export default class TeacherDashboard extends Vue {
     this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
     this.isTeacher = await this.educatorApi.authTeacher();
     await this.fetchClassrooms();
+    await this.fetchLobby();
   }
 
   async fetchClassrooms() {
@@ -778,7 +819,24 @@ export default class TeacherDashboard extends Vue {
 }
 
 .icon {
-  vertical-align: text-top !important;
+  vertical-align: top !important;
   font-size: 2rem;
+}
+
+// .plus-icon {
+//   font-size: 3rem;
+// }
+
+.plus-icon {
+  font-size: 1.5rem; /* Adjusted size to align with text */
+  vertical-align: middle; /* Align icon vertically with the text */
+}
+
+.classroom-tabs .nav-link {
+  width: 100%;
+}
+
+.classroom-tab {
+  text-align: left;
 }
 </style>
