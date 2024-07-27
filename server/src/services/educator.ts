@@ -123,7 +123,7 @@ export class EducatorService extends BaseService {
     }
   }
 
-  async getCompletedGamesForClassroom(classroomId: number): Promise<any> {
+  async getCompletedGamesForClassroom(classroomId: number): Promise<Array<Game>> {
     const query = this.em
       .getRepository(Game)
       .createQueryBuilder("game")
@@ -172,7 +172,7 @@ export class EducatorService extends BaseService {
   }
 
   //get all students in a specified classroom
-  async getStudentsByClassroomId(classroomId: number): Promise<StudentData[]> {
+  async getStudentsByClassroomId(classroomId: number): Promise<Array<StudentData>> {
     const studentRepo = this.em.getRepository(Student);
     const students = await studentRepo.find({
       where: { classroomId: classroomId },

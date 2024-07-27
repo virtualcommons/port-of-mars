@@ -13,11 +13,13 @@ export class LobbyClient extends Schema {
   @type("number") dateJoined: number;
   client: Client;
   accepted: boolean;
+  name: string;
 
   constructor(client: Client) {
     super();
     this.client = client;
     this.username = client.auth.username;
+    this.name = client.auth.name;
     this.id = this.client.auth.id;
     this.ready = false;
     this.accepted = false;

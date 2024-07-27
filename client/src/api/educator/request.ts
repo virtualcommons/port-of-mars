@@ -174,18 +174,33 @@ export class EducatorAPI {
     }
   }
 
-  // async getCompletedGames(classroomId: number): Promise<any> {
-  //   try {
-  //     return await this.ajax.get(
-  //       url(`/educator/completed-games?classroomId=${classroomId}`),
-  //       ({ data, status }) => {
-  //         return data;
-  //       }
-  //     );
-  //   } catch (e) {
-  //     console.log("Unable to retrieve completed games");
-  //     console.log(e);
-  //     throw e;
-  //   }
-  // }
+  async getLobby(classroomId: number): Promise<any> {
+    try {
+      return await this.ajax.get(
+        url(`/educator/lobby?classroomId=${classroomId}`),
+        ({ data, status }) => {
+          return data;
+        }
+      );
+    } catch (e) {
+      console.log("Unable to retrieve Lobby data");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getCompletedGames(classroomId: number): Promise<any> {
+    try {
+      return await this.ajax.get(
+        url(`/educator/completed-games?classroomId=${classroomId}`),
+        ({ data, status }) => {
+          return data;
+        }
+      );
+    } catch (e) {
+      console.log("Unable to retrieve completed games");
+      console.log(e);
+      throw e;
+    }
+  }
 }
