@@ -45,7 +45,17 @@ export class ClassroomLobbyRoom extends LobbyRoom<ClassroomLobbyRoomState> {
 
   afterJoin(client: Client) {
     this.groupManager.addClientToQueue(client);
+    this.setMetadata({
+      clients: this.queue.map(c => {
+        return {
+          username: c.username,
+          name: c.name,
+        }
+      }),
+    });
+    logger.info(`Client ${client.sessionId} joined lobby for classroom ${this.metadata.classroomId}`);
   }
+
 
   afterLeave(client: Client) {
     this.groupManager.removeClientFromQueue(client);

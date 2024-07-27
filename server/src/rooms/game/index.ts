@@ -139,6 +139,7 @@ async function onCreate(
   shouldEnableDb?: boolean
 ): Promise<void> {
   shouldEnableDb = shouldEnableDb ?? false;
+  room.setState(new GameState(options));
   room.setPrivate(true);
   room.persister = new DBPersister();
   // if we have a classroomId, make it available in queries

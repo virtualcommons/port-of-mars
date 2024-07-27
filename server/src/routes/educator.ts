@@ -7,6 +7,7 @@ import { getLogger } from "@port-of-mars/server/settings";
 import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { matchMaker } from "colyseus";
 import { Classroom, Teacher } from "../entity";
+import { CLASSROOM_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 
 const logger = getLogger(__filename);
 
@@ -95,7 +96,7 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher) {
+    if (!teacher ) {
       res.status(403).json({ message: "Only teachers can create a classroom" });
       return;
     }
@@ -118,7 +119,7 @@ educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher) {
+    if (!teacher ) {
       res.status(403).json({ message: "Only teachers can delete a classroom" });
       return;
     }
@@ -149,33 +150,35 @@ educatorRouter.put("/classroom", async (req: Request, res: Response, next) => {
   }
 });
 
-// educatorRouter.get("/completed-games", async(req: Request, res: Response, next) => {
-//   const user = req.user as User;
-//   const {classroomId} = req.query;
+educatorRouter.get("/completed-games", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  const classroomId = Number(req.query.classroomId);
 
-//  if (!classroomId){
-//   res.status(400).json({ message: "ClassroomId is required" });
-//   return;
-//  }
+  if (!classroomId) {
+    res.status(400).json({ message: "ClassroomId is required" });
+    return;
+  }
 
-//   try {
-//     const services = getServices();
-//     const teacher = await services.educator.getTeacherByUserId(user.id);
-//     if (!teacher || !user.isAdmin) {
-//       res.status(403).json({ message: "Only teachers can get a list of completed games" });
-//       return;
-//     }
-//     const games = await services.educator.getCompletedGamesForClassroom(Number(classroomId));
-//     res.status(200).json(games);
-//   } catch (e) {
-//     logger.warn("Unable to get a list of finalized games for classroom");
-//     next(e);
-//   }
-// })
+  try {
+    const services = getServices();
+    const teacher = await services.educator.getTeacherByUserId(user.id);
+    if (!teacher) {
+      res.status(403).json({ message: "Only teachers can get a list of completed games" });
+      return;
+    }
+    const games = await services.educator.getCompletedGamesForClassroom(classroomId);
+    res.status(200).json(games);
+  } catch (e) {
+    logger.warn("Unable to get a list of finalized games for classroom");
+    next(e);
+  }
+});
 
 educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
   const user = req.user as User;
-  const { classroomId } = req.body;
+  const classroomId = Number(req.query.classroomId);
+  console.log("User:", user);
+  console.log("ClassroomId:", classroomId);
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
@@ -188,15 +191,17 @@ educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
 
     const lobbies = (await matchMaker.query({
       name: ClassroomLobbyRoom.NAME,
-      classroomId,
     })) as any;
-    const lobby = lobbies.find((room: any) => lobby.classroomId === classroomId);
+    console.log("Lobbies found:", lobbies);
+    const lobby = lobbies.find((room: any) => room.metadata.classroomId === classroomId);
+    console.log("Lobby found:", lobby);
 
-    if (!lobby) {
-      res.status(404).json({ message: "Classroom lobby not found" });
-      return;
-    }
-    const clients = lobby.clients;
+    // if (!lobby) {
+    //   res.status(404).json({ message: "Classroom lobby not found" });
+    //   return;
+    // }
+
+    const clients = lobby ? lobby.metadata.clients : lobby;
     res.status(200).json(clients);
   } catch (e) {
     logger.warn("Unable to get list of clients for the classroom lobby");
