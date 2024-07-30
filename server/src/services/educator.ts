@@ -1,6 +1,7 @@
 import { BaseService } from "@port-of-mars/server/services/db";
 import { matchMaker } from "colyseus";
 import { Teacher, Classroom, Student, User, Game } from "@port-of-mars/server/entity";
+import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
 import {
   ServerError,
@@ -71,7 +72,11 @@ export class EducatorService extends BaseService {
     return authToken;
   }
 
-  async updateClassroom(teacher: Teacher, classroomId: number, descriptor: string): Promise<any> {
+  async updateClassroom(
+    teacher: Teacher,
+    classroomId: number,
+    descriptor: string
+  ): Promise<Classroom> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
       where: { id: classroomId, teacher: { id: teacher.id } },
@@ -84,7 +89,7 @@ export class EducatorService extends BaseService {
     return classroom;
   }
 
-  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<any> {
+  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<Classroom> {
     const classroomRepo = this.em.getRepository(Classroom);
     const authToken = await this.generateAuthToken();
     const newClassroom = classroomRepo.create({
@@ -94,6 +99,30 @@ export class EducatorService extends BaseService {
     });
     await classroomRepo.save(newClassroom);
     return newClassroom;
+  }
+
+  async getLobby(classroomId: number): Promise<any> {
+    const lobbies = (await matchMaker.query({
+      name: ClassroomLobbyRoom.NAME,
+    })) as any;
+    const lobby = lobbies.find((room: any) => room.metadata.classroomId === classroomId);
+    return lobby;
+  }
+
+  async startClassroomGames(classroomId: number): Promise<any> {
+    const rooms = await matchMaker.query({
+      name: ClassroomLobbyRoom.NAME,
+    });
+    const room = rooms.filter((room: any) => room.metadata.classroomId === classroomId)[0];
+    if (!room) {
+      throw new ServerError({
+        code: 404,
+        message: "Classroom lobby not found",
+      });
+    }
+    //TODO: check if remoteRoomCall was successful and return a boolean
+    await matchMaker.remoteRoomCall(room.roomId, "startGames");
+    return;
   }
 
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
@@ -107,7 +136,6 @@ export class EducatorService extends BaseService {
         roomId: g.roomId,
         clients: g.clients,
         elapsed: Date.now() - new Date(g.createdAt).getTime(),
-        type: g.type,
       };
     });
   }
@@ -143,19 +171,18 @@ export class EducatorService extends BaseService {
     });
     if (!classroom) {
       throw new Error("Classroom not found");
-      return;
     }
     //if number of games or number of students in classroom is greater than 0, then error
     const students = await this.getStudentsByClassroomId(classroomId);
     const games = await this.getActiveRoomsForClassroom(classroomId);
     if (students.length > 0 || games.length > 0) {
       throw new Error("Classroom cannot be deleted because it has active games and/or students");
-      return;
     }
     await classroomRepo.remove(classroom);
     return;
   }
-  async getClassroomsForTeacher(userId: number): Promise<any> {
+
+  async getClassroomsForTeacher(userId: number): Promise<Array<Classroom>> {
     const classroomRepo = this.em.getRepository(Classroom);
     const teacher = await this.getTeacherByUserId(userId);
 
@@ -188,7 +215,7 @@ export class EducatorService extends BaseService {
     });
   }
 
-  async createStudent(classroomAuthToken: string) {
+  async createStudent(classroomAuthToken: string): Promise<User> {
     /**
      * Create a new user account and matching Student in the given classroom
      */
@@ -222,7 +249,7 @@ export class EducatorService extends BaseService {
     return user;
   }
 
-  async setStudentName(userId: number, name: string) {
+  async setStudentName(userId: number, name: string): Promise<Student> {
     const student = await this.getStudentByUser(userId, true);
     if (!student) {
       throw new ServerError({
@@ -238,7 +265,7 @@ export class EducatorService extends BaseService {
     return student;
   }
 
-  async createTeacher(email: string, username: string, name: string) {
+  async createTeacher(email: string, username: string, name: string): Promise<Teacher> {
     const userRepo = this.em.getRepository(User);
     const teacherRepo = this.em.getRepository(Teacher);
     const user = await getServices().account.getOrCreateUser({ email, username, name });
@@ -254,7 +281,7 @@ export class EducatorService extends BaseService {
     return teacherRepo.save(teacher);
   }
 
-  async createClassroomForTeacher(username: string, descriptor: string) {
+  async createClassroomForTeacher(username: string, descriptor: string): Promise<Classroom> {
     const teacher = await this.em
       .getRepository(Teacher)
       .createQueryBuilder("teacher")
