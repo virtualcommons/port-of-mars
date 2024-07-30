@@ -539,3 +539,11 @@ export interface StudentData {
   user: ClientSafeUser;
   inLobby: boolean;
 }
+
+export interface ClassroomData {
+  id: number;
+  students: Array<StudentData>;
+  teacherId: number;
+  authToken: string;
+  descriptor: string;
+}

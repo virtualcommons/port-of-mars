@@ -4,10 +4,6 @@ import { User } from "@port-of-mars/server/entity/User";
 import { isAuthenticated } from "@port-of-mars/server/routes/middleware";
 import { ValidationError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
-import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
-import { matchMaker } from "colyseus";
-import { Classroom, Teacher } from "../entity";
-import { CLASSROOM_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 
 const logger = getLogger(__filename);
 
@@ -18,8 +14,7 @@ educatorRouter.use(isAuthenticated);
 educatorRouter.get("/student", async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User;
   try {
-    const services = getServices();
-    const student = await services.educator.getStudentByUser(user.id, true);
+    const student = await getServices().educator.getStudentByUser(user.id, true);
     if (!student) {
       res.status(404).json({ message: "Student not found" });
       return;
@@ -39,11 +34,11 @@ educatorRouter.get("/classroom-games", async (req: Request, res: Response, next)
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
     if (!teacher) {
-      res.status(403).json({ message: "Only teachers can get active games" });
+      res.status(403).json({ message: "Only teachers can get classroom games" });
       return;
     }
     const games = await services.educator.getActiveRoomsForClassroom(classroomId);
-    res.json(games);
+    res.status(200).json(games);
   } catch (e) {
     logger.warn(`Unable to get classroom games for classroom ID ${classroomId}`);
     next(e);
@@ -67,8 +62,7 @@ educatorRouter.get("/inspect-room", async (req: Request, res: Response, next) =>
 educatorRouter.get("/classrooms", async (req: Request, res: Response, next) => {
   const user = req.user as User;
   try {
-    const services = getServices();
-    const classrooms = await services.educator.getClassroomsForTeacher(user.id);
+    const classrooms = await getServices().educator.getClassroomsForTeacher(user.id);
     res.json(classrooms);
   } catch (e) {
     logger.warn("Unable to get classrooms for teacher with user ID %d", user.id);
@@ -79,8 +73,7 @@ educatorRouter.get("/classrooms", async (req: Request, res: Response, next) => {
 educatorRouter.get("/students", async (req: Request, res: Response, next) => {
   const { classroomId } = req.body;
   try {
-    const services = getServices();
-    const students = await services.educator.getStudentsByClassroomId(Number(classroomId));
+    const students = await getServices().educator.getStudentsByClassroomId(Number(classroomId));
     res.json(students);
   } catch (e) {
     logger.warn("Unable to get students from classroom with ID %d", classroomId);
@@ -96,7 +89,7 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher ) {
+    if (!teacher) {
       res.status(403).json({ message: "Only teachers can create a classroom" });
       return;
     }
@@ -119,7 +112,7 @@ educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher ) {
+    if (!teacher) {
       res.status(403).json({ message: "Only teachers can delete a classroom" });
       return;
     }
@@ -188,19 +181,12 @@ educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
         .json({ message: "Only teachers can get a list of clients for the classroom lobby" });
       return;
     }
-
-    const lobbies = (await matchMaker.query({
-      name: ClassroomLobbyRoom.NAME,
-    })) as any;
-    console.log("Lobbies found:", lobbies);
-    const lobby = lobbies.find((room: any) => room.metadata.classroomId === classroomId);
+    const lobby = await services.educator.getLobby(classroomId);
     console.log("Lobby found:", lobby);
-
     // if (!lobby) {
-    //   res.status(404).json({ message: "Classroom lobby not found" });
+    //   res.status(403).json({ message: "Classroom lobby not found" });
     //   return;
     // }
-
     const clients = lobby ? lobby.metadata.clients : lobby;
     res.status(200).json(clients);
   } catch (e) {
@@ -212,7 +198,6 @@ educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
 educatorRouter.post("/confirm-student", async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User;
   try {
-    const services = getServices();
     const data = { ...req.body };
 
     //make sure that first and last name are filled out
@@ -221,7 +206,7 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
         displayMessage: "Student name is required",
       });
     }
-    await services.educator.setStudentName(user.id, data.name);
+    await getServices().educator.setStudentName(user.id, data.name);
     res.status(200).json({ message: "Student confirmed successfully" });
     return;
   } catch (e) {
@@ -246,15 +231,7 @@ educatorRouter.post(
         res.status(403).json({ message: "Only teachers can start the game" });
         return;
       }
-      const rooms = await matchMaker.query({
-        name: ClassroomLobbyRoom.NAME,
-      });
-      const room = rooms.filter((room: any) => room.metadata.classroomId === classroomId)[0];
-      if (!room) {
-        res.status(404).json({ message: "Classroom lobby not found" });
-        return;
-      }
-      await matchMaker.remoteRoomCall(room.roomId, "startGames");
+      await services.educator.startClassroomGames(classroomId);
       res.status(200).json({ message: "Games have been started" });
       return;
     } catch (e) {
