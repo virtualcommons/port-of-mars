@@ -50,12 +50,13 @@ export class ClassroomLobbyRoom extends LobbyRoom<ClassroomLobbyRoomState> {
         return {
           username: c.username,
           name: c.name,
-        }
+        };
       }),
     });
-    logger.info(`Client ${client.sessionId} joined lobby for classroom ${this.metadata.classroomId}`);
+    logger.info(
+      `Client ${client.sessionId} joined lobby for classroom ${this.metadata.classroomId}`
+    );
   }
-
 
   afterLeave(client: Client) {
     this.groupManager.removeClientFromQueue(client);
@@ -68,7 +69,7 @@ export class ClassroomLobbyRoom extends LobbyRoom<ClassroomLobbyRoomState> {
       try {
         await this.formAndInviteGroups();
       } catch (e) {
-        logger.fatal("error forming and inviting groups", e);
+        logger.fatal("error forming and inviting groups: %o", e);
         this.started = false;
         await this.unlock();
       }
