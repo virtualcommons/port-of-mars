@@ -121,7 +121,8 @@ export class EducatorService extends BaseService {
       });
     }
     //TODO: check if remoteRoomCall was successful and return a boolean
-    await matchMaker.remoteRoomCall(room.roomId, "startGames");
+    const data = await matchMaker.remoteRoomCall(room.roomId, "startGames");
+    console.log("Data: ", data);
     return;
   }
 

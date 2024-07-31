@@ -75,13 +75,7 @@
                     </b-col>
                   </div>
                 </b-tab>
-                <b-tab title="Games">
-                  <div v-if="rooms.length < 1" class="empty-container">
-                    <p>Games will display here once a session has started.</p>
-                  </div>
-                  <div v-else></div>
-                </b-tab>
-                <b-tab title="Groups">
+                <b-tab title="Groups" @click="fetchActiveRooms">
                   <div v-if="rooms.length < 1" class="empty-container">
                     <p>Groups will display here once a game session has started.</p>
                   </div>
@@ -471,11 +465,16 @@ export default class TeacherDashboard extends Vue {
     return this.inspectedRoomId === roomId;
   }
 
+  studentsInGames: any[] = [];
+
   async fetchActiveRooms() {
     try {
       const rooms = await this.educatorApi.getClassroomGames(this.selectedClassroom.id);
       Vue.set(this, "rooms", rooms);
-      console.log("Current active games: " + this.rooms.length);
+
+      // Assuming the room object has a list of clients/students in it
+      this.studentsInGames = rooms.flatMap((room: { clients: any }) => room.clients);
+      console.log("Students in games:", this.studentsInGames);
     } catch (e) {
       console.error("Failed to get active rooms:", e);
     }
@@ -610,6 +609,7 @@ export default class TeacherDashboard extends Vue {
     this.fetchLobby();
     this.fetchActiveRooms();
     this.fetchCompletedGames();
+    // this.fetchGameClients();
   }
 
   checkDescriptorForm() {
@@ -719,6 +719,7 @@ export default class TeacherDashboard extends Vue {
   async startGames() {
     try {
       await this.educatorApi.startGames(this.selectedClassroom.id);
+      console.log("Games started successfully");
     } catch (e) {
       console.error("Failed to start games:", e);
     }
