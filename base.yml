@@ -33,7 +33,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: postgres:12
+    image: postgres:15-bookworm
     secrets:
       - pom_db_password
     restart: always
