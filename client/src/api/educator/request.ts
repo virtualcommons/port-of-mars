@@ -1,7 +1,7 @@
 import { url } from "@port-of-mars/client/util";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
-import { StudentAuthData, InspectData } from "@port-of-mars/shared/types";
+import { StudentAuthData, InspectData, StudentData } from "@port-of-mars/shared/types";
 
 export class EducatorAPI {
   http: any;
@@ -174,10 +174,25 @@ export class EducatorAPI {
     }
   }
 
-  async getLobby(classroomId: number): Promise<any> {
+  async getClassroomStudents(classroomId: number): Promise<Array<StudentData>> {
     try {
       return await this.ajax.get(
-        url(`/educator/lobby?classroomId=${classroomId}`),
+        url(`/educator/students?classroomId=${classroomId}`),
+        ({ data, status }) => {
+          return data;
+        }
+      );
+    } catch (e) {
+      console.log("Unable to retrieve classroom students");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getLobbyClients(classroomId: number): Promise<Array<StudentData>> {
+    try {
+      return await this.ajax.get(
+        url(`/educator/lobby-clients?classroomId=${classroomId}`),
         ({ data, status }) => {
           return data;
         }

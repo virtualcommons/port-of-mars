@@ -558,10 +558,10 @@ export interface StudentAuthData {
 }
 
 export interface StudentData {
-  id: number;
-  classroomId: number;
-  user: ClientSafeUser;
-  inLobby: boolean;
+  id?: number;
+  username: string;
+  name: string;
+  inLobby?: boolean;
 }
 
 export interface ClassroomData {

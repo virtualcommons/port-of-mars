@@ -41,7 +41,14 @@
           <h4 class="mb-0" v-if="exitSurveyUrl">Take Exit Survey</h4>
           <h4 class="mb-0" v-else><b-spinner></b-spinner></h4>
         </b-button>
-        <b-button v-else block class="w-100" variant="success" size="lg" :to="freePlayLobby">
+        <b-button
+          v-else
+          block
+          class="w-100"
+          variant="success"
+          size="lg"
+          :to="isEducatorMode ? classroomLobby : freePlayLobby"
+        >
           <b-icon-chevron-left shift-v="-2" class="float-left"></b-icon-chevron-left>
           <h4 class="mb-0">Return to Lobby</h4>
         </b-button>
@@ -71,7 +78,11 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { FREE_PLAY_LOBBY_PAGE, TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import {
+  FREE_PLAY_LOBBY_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
+  CLASSROOM_LOBBY_PAGE,
+} from "@port-of-mars/shared/routes";
 import { Phase, Role } from "@port-of-mars/shared/types";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import SocialShare from "@port-of-mars/client/components/global/SocialShare.vue";
@@ -87,6 +98,7 @@ import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 export default class Victory extends Vue {
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
+  classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
 
   tournamentAPI!: TournamentAPI;
 
@@ -114,6 +126,10 @@ export default class Victory extends Vue {
 
   get isTournament() {
     return this.$tstore.state.gameType === "tournament";
+  }
+
+  get isEducatorMode() {
+    return this.$store.state.gameType === "classroom";
   }
 
   get victoryPoints() {
