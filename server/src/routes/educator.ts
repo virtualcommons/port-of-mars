@@ -71,7 +71,7 @@ educatorRouter.get("/classrooms", async (req: Request, res: Response, next) => {
 });
 
 educatorRouter.get("/students", async (req: Request, res: Response, next) => {
-  const { classroomId } = req.body;
+  const classroomId = Number(req.query.classroomId);
   try {
     const students = await getServices().educator.getStudentsByClassroomId(Number(classroomId));
     res.json(students);
@@ -119,8 +119,12 @@ educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>
     await services.educator.deleteClassroom(teacher, classroomId);
     res.status(200).json({ message: "Classroom deleted successfully" });
   } catch (e) {
-    logger.warn("Unable to delete classroom");
-    next(e);
+    if (e instanceof Error) {
+      res.status(400).json({ message: e.message });
+    } else {
+      logger.warn("Unable to delete classroom");
+      next(e);
+    }
   }
 });
 
@@ -167,11 +171,9 @@ educatorRouter.get("/completed-games", async (req: Request, res: Response, next)
   }
 });
 
-educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
+educatorRouter.get("/lobby-clients", async (req: Request, res: Response, next) => {
   const user = req.user as User;
   const classroomId = Number(req.query.classroomId);
-  console.log("User:", user);
-  console.log("ClassroomId:", classroomId);
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
@@ -181,13 +183,7 @@ educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
         .json({ message: "Only teachers can get a list of clients for the classroom lobby" });
       return;
     }
-    const lobby = await services.educator.getLobby(classroomId);
-    console.log("Lobby found:", lobby);
-    // if (!lobby) {
-    //   res.status(403).json({ message: "Classroom lobby not found" });
-    //   return;
-    // }
-    const clients = lobby ? lobby.metadata.clients : lobby;
+    const clients = await services.educator.getLobbyClients(classroomId);
     res.status(200).json(clients);
   } catch (e) {
     logger.warn("Unable to get list of clients for the classroom lobby");

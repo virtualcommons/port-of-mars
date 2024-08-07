@@ -5,10 +5,15 @@
         <h1>Classroom Lobby</h1>
         <div class="text-center" style="padding: 1rem">
           <p>Total joined: {{ clients.length }}</p>
-          <p>Please wait patiently for your teacher to start the game...</p>
-          <div v-if="isTeacher" class="start-game-button" style="padding: 1rem">
-            <b-button @click="startGame">Start Game</b-button>
-          </div>
+          <span v-if="starting">
+            <p>
+              <b-spinner small label="Loading..."></b-spinner>
+              A game will begin shortly, have fun!
+            </p>
+          </span>
+          <span v-else>
+            <p>Please wait patiently for your teacher to start the game...</p>
+          </span>
         </div>
       </div>
       <div class="player-grid">
@@ -50,12 +55,17 @@ export default class ClassroomLobby extends Vue {
   home = { name: HOME_PAGE };
   manual = { name: MANUAL_PAGE };
   isTeacher = false;
-  startGame = {};
 
   clientFields = [{ key: "username", label: "Player" }];
 
   get clients() {
     return this.$tstore.state.lobby.clients;
+  }
+
+  get starting() {
+    return false;
+    // FIXME: find how to get lobby status when transitioning into a game
+    // return this.$tstore.state.lobby.ready;
   }
 
   get chatMessages() {
@@ -131,6 +141,6 @@ export default class ClassroomLobby extends Vue {
   padding: 1rem;
   text-align: center;
   height: 4rem;
-  width: 12rem;
+  width: fit-content;
 }
 </style>
