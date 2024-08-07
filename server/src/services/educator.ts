@@ -101,12 +101,12 @@ export class EducatorService extends BaseService {
     return newClassroom;
   }
 
-  async getLobby(classroomId: number): Promise<any> {
+  async getLobbyClients(classroomId: number): Promise<Array<StudentData>> {
     const lobbies = (await matchMaker.query({
       name: ClassroomLobbyRoom.NAME,
     })) as any;
     const lobby = lobbies.find((room: any) => room.metadata.classroomId === classroomId);
-    return lobby;
+    return lobby ? lobby.metadata.clients : [];
   }
 
   async startClassroomGames(classroomId: number): Promise<any> {
@@ -200,20 +200,24 @@ export class EducatorService extends BaseService {
   }
 
   //get all students in a specified classroom
-  async getStudentsByClassroomId(classroomId: number): Promise<Array<StudentData>> {
+  async getStudentsByClassroomId(
+    classroomId: number,
+    onlyVerified = true
+  ): Promise<Array<StudentData>> {
     const studentRepo = this.em.getRepository(Student);
     const students = await studentRepo.find({
       where: { classroomId: classroomId },
       relations: ["user"],
     });
-    return students.map(student => {
-      return {
-        id: student.id,
-        classroomId: student.classroomId,
-        user: toClientSafeUser(student.user),
-        inLobby: false, // FIXME: need to look this up
-      };
-    });
+    return students
+      .filter(student => !onlyVerified || student.user.isVerified)
+      .map(student => {
+        return {
+          id: student.id,
+          username: student.user.username,
+          name: student.user.name,
+        };
+      });
   }
 
   async createStudent(classroomAuthToken: string): Promise<User> {
@@ -266,7 +270,7 @@ export class EducatorService extends BaseService {
     return student;
   }
 
-  async createTeacher(email: string, username: string, name: string): Promise<Teacher> {
+  async createTeacher(email: string, username: string, name: string) {
     const userRepo = this.em.getRepository(User);
     const teacherRepo = this.em.getRepository(Teacher);
     const user = await getServices().account.getOrCreateUser({ email, username, name });
@@ -282,7 +286,7 @@ export class EducatorService extends BaseService {
     return teacherRepo.save(teacher);
   }
 
-  async createClassroomForTeacher(username: string, descriptor: string): Promise<Classroom> {
+  async createClassroomForTeacher(username: string, descriptor: string) {
     const teacher = await this.em
       .getRepository(Teacher)
       .createQueryBuilder("teacher")
