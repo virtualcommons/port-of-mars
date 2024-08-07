@@ -24,6 +24,7 @@ export interface ClientSafeUser {
   name?: string;
   username: string;
   isAdmin: boolean;
+  isTeacher?: boolean;
   isMuted: boolean;
   isBanned: boolean;
   passedQuiz?: boolean;
@@ -67,7 +68,7 @@ export interface LeaderboardData {
   withoutBots: Array<LeaderboardItem>;
 }
 
-export type GameType = "freeplay" | "tournament";
+export type GameType = "freeplay" | "tournament" | "classroom";
 export type LobbyType = GameType;
 
 export interface LobbyChatMessageData {
@@ -520,4 +521,29 @@ export interface DynamicSettingsData {
   tournamentLobbyOpenAfterOffset: number;
   tournamentSignupsPopularityThreshold: number;
   announcementBannerText: string;
+}
+
+// educator mode-specific types
+
+export interface StudentAuthData {
+  id: number;
+  userId: number;
+  user?: ClientSafeUser;
+  classroomId: number;
+  rejoinCode: string;
+}
+
+export interface StudentData {
+  id?: number;
+  username: string;
+  name: string;
+  inLobby?: boolean;
+}
+
+export interface ClassroomData {
+  id: number;
+  students: Array<StudentData>;
+  teacherId: number;
+  authToken: string;
+  descriptor: string;
 }
