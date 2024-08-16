@@ -5,10 +5,8 @@ import {
   Generated,
   OneToMany,
   PrimaryGeneratedColumn,
-  OneToOne,
 } from "typeorm";
 import { Player } from "./Player";
-import { Teacher } from "./Teacher";
 import { SoloPlayer } from "./SoloPlayer";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
