@@ -207,7 +207,6 @@ export default class TeacherDashboard extends Vue {
 <style lang="scss" scoped>
 .empty-container {
   color: var(--light-shade-25);
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -56,15 +56,21 @@ describe("the educator service", () => {
   });
 
   it("classrooms can be updated", async () => {
-    let classroom = await educatorService.createNewClassroom(teacher, "update me");
+    let classroom: Classroom | null = await educatorService.createNewClassroom(
+      teacher,
+      "update me"
+    );
     const updatedDesc = "updated";
     await educatorService.updateClassroom(teacher, classroom.id, updatedDesc);
     classroom = await educatorService.getClassroomById(classroom.id);
-    expect(classroom.descriptor).toEqual(updatedDesc);
+    expect(classroom?.descriptor).toEqual(updatedDesc);
   });
 
   it("classrooms can be deleted", async () => {
-    let classroom = await educatorService.createNewClassroom(teacher, "delete me");
+    let classroom: Classroom | null = await educatorService.createNewClassroom(
+      teacher,
+      "delete me"
+    );
     const classId = classroom.id;
     await educatorService.deleteClassroom(teacher, classroom.id);
     classroom = await educatorService.getClassroomById(classId);
