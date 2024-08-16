@@ -70,9 +70,6 @@ export default class ClassroomLobby extends Vue {
 
   get chatMessages() {
     return [];
-    // FIXME: dont think we'll have a chat in the classroom lobby,
-    // can just ignore it in the UI
-    // return this.$tstore.state.lobby.chat;
   }
 
   async created() {
@@ -87,11 +84,6 @@ export default class ClassroomLobby extends Vue {
     } catch (e) {
       this.$router.push(this.home);
     }
-    // FIXME: do we want this button in here? or on the teacher dashboard, both?
-    // call to server to find out user's role
-    // then add button above for starting game if user is a teacher
-    // this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
-    // this.isTeacher = await this.educatorApi.authTeacher();
   }
 
   beforeDestroy() {

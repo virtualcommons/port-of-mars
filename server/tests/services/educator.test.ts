@@ -29,13 +29,11 @@ describe("the educator service", () => {
 
   it("educators can sign up", async () => {
     for (let i = 0; i < 10; i++) {
-      //Creates mock data
       const username = teacherUsername + `${i}`;
       const email = username + "@gmail.com";
       const name = teacherUsername.toUpperCase() + ` ${i}`;
       await sp.educator.createTeacher(email, username, name);
     }
-    //Retrieve all passwords in repo to check uniqueness
     const teacherRepo = educatorService.em.getRepository(Teacher);
     const data = await teacherRepo.find({ select: { password: true } });
     const passwords = data.map(teacher => teacher.password);
@@ -75,7 +73,6 @@ describe("the educator service", () => {
     await educatorService.deleteClassroom(teacher, classroom.id);
     classroom = await educatorService.getClassroomById(classId);
     expect(classroom).toBeNull();
-    //expect(educatorService.getClassroomById(classId)).resolves.toBeNull();
   });
 
   it("students can sign up", async () => {

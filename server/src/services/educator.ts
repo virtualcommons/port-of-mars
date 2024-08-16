@@ -3,45 +3,41 @@ import { matchMaker } from "colyseus";
 import { Teacher, Classroom, Student, User, Game } from "@port-of-mars/server/entity";
 import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
-import {
-  ServerError,
-  generateUsername,
-  generateCode,
-  toClientSafeUser,
-} from "@port-of-mars/server/util";
+import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
 import { StudentData, InspectData } from "@port-of-mars/shared/types";
-// import { settings } from "@port-of-mars/server/settings";
-
-// const logger = settings.logging.getLogger(__filename);
 
 export class EducatorService extends BaseService {
-  async getTeacherByUserId(userId: number, withUser = false) {
+  async getTeacherByUserId(userId: number, withUser = false): Promise<Teacher | null> {
     return this.em.getRepository(Teacher).findOne({
       where: { userId },
       relations: withUser ? ["user"] : [],
     });
   }
 
-  async getTeacherByUsernameAndPassword(username: string, password: string, withUser = false) {
+  async getTeacherByUsernameAndPassword(
+    username: string,
+    password: string,
+    withUser = false
+  ): Promise<Teacher | null> {
     return this.em.getRepository(Teacher).findOne({
       where: { user: { username }, password },
       relations: ["user"],
     });
   }
 
-  async getStudentByUser(userId: number, withUser = false) {
+  async getStudentByUser(userId: number, withUser = false): Promise<Student | null> {
     return this.em.getRepository(Student).findOne({
       where: { userId },
       relations: withUser ? ["user"] : [],
     });
   }
 
-  async getStudentByRejoinCode(rejoinCode: string, withUser = false) {
+  async getStudentByRejoinCode(rejoinCode: string, withUser = false): Promise<Student | null> {
     return this.em.getRepository(Student).findOne({ where: { rejoinCode }, relations: ["user"] });
   }
 
-  async getClassroomById(id: number, withTeacher = false) {
+  async getClassroomById(id: number, withTeacher = false): Promise<Classroom | null> {
     return this.em.getRepository(Classroom).findOne({
       where: { id },
       relations: withTeacher ? ["teacher"] : [],
@@ -109,6 +105,7 @@ export class EducatorService extends BaseService {
     return lobby ? lobby.metadata.clients : [];
   }
 
+  //FIXME: fix type?
   async startClassroomGames(classroomId: number): Promise<any> {
     const rooms = await matchMaker.query({
       name: ClassroomLobbyRoom.NAME,
@@ -120,12 +117,12 @@ export class EducatorService extends BaseService {
         message: "Classroom lobby not found",
       });
     }
-    //TODO: check if remoteRoomCall was successful and return a boolean
     const data = await matchMaker.remoteRoomCall(room.roomId, "startGames");
     console.log("Data: ", data);
     return;
   }
 
+  //FIXME: fix type?
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
     const games = await matchMaker.query({ name: GameRoom.NAME });
     const classroomGames = games.filter((game: any) => game.metadata.classroomId === classroomId);
@@ -165,6 +162,7 @@ export class EducatorService extends BaseService {
     return query.getMany();
   }
 
+  //FIXME: fix type?
   async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
@@ -173,7 +171,6 @@ export class EducatorService extends BaseService {
     if (!classroom) {
       throw new Error("Classroom not found");
     }
-    //if number of games or number of students in classroom is greater than 0, then error
     const students = await this.getStudentsByClassroomId(classroomId);
     const games = await this.getActiveRoomsForClassroom(classroomId);
     if (students.length > 0 || games.length > 0) {
@@ -199,7 +196,6 @@ export class EducatorService extends BaseService {
     return classrooms;
   }
 
-  //get all students in a specified classroom
   async getStudentsByClassroomId(
     classroomId: number,
     onlyVerified = true
@@ -221,9 +217,6 @@ export class EducatorService extends BaseService {
   }
 
   async createStudent(classroomAuthToken: string): Promise<User> {
-    /**
-     * Create a new user account and matching Student in the given classroom
-     */
     const userRepo = this.em.getRepository(User);
     const classroomRepo = this.em.getRepository(Classroom);
     const studentRepo = this.em.getRepository(Student);
