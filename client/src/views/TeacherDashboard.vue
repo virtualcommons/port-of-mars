@@ -236,13 +236,11 @@ export default class TeacherDashboard extends Vue {
       console.error("Descriptor form is not completed");
       return;
     } else if (modalType === "rename") {
-      // Handles renaming classroom
       this.renameClassroom();
       this.$nextTick(() => {
         this.$bvModal.hide("rename-classroom-modal");
       });
     } else {
-      // Handles adding new classroom
       this.addClassroom();
       this.$nextTick(() => {
         this.$bvModal.hide("add-classroom-modal");
@@ -261,10 +259,10 @@ export default class TeacherDashboard extends Vue {
       return;
     }
     try {
-      const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
-      console.log("New Classroom:", newClassroom);
+      await this.educatorApi.createClassroom(this.classroomDescriptor);
       this.classrooms = await this.educatorApi.getClassrooms();
       this.classroomDescriptor = "";
+      console.log("Added new classroom successfully");
     } catch (e) {
       console.error("Failed to add a new classroom:", e);
     }
@@ -324,7 +322,6 @@ export default class TeacherDashboard extends Vue {
   }
 
   async created() {
-    // this.isTeacher = await this.educatorApi.authTeacher();
     await this.fetchClassrooms();
   }
 }

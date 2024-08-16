@@ -93,8 +93,8 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
       res.status(403).json({ message: "Only teachers can create a classroom" });
       return;
     }
-    const newClassroom = await services.educator.createNewClassroom(teacher, descriptor);
-    res.status(201).json(newClassroom);
+    await services.educator.createNewClassroom(teacher, descriptor);
+    res.status(201).json(true);
   } catch (e) {
     logger.warn("Unable to create a new classroom for the teacher");
     if (e instanceof Error) {
@@ -108,7 +108,9 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
 
 educatorRouter.delete("/classroom", async (req: Request, res: Response, next) => {
   const user = req.user as User;
-  const { classroomId } = req.body;
+
+  const classroomId = Number(req.query.classroomId);
+
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
@@ -130,8 +132,13 @@ educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>
 
 educatorRouter.put("/classroom", async (req: Request, res: Response, next) => {
   const user = req.user as User;
-  const { classroomId, descriptor } = req.body;
+  const classroomId = Number(req.query.classroomId);
+  const { descriptor } = req.body;
 
+  if (isNaN(classroomId)) {
+    res.status(400).json({ message: "Invalid classroom ID" });
+    return;
+  }
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
@@ -196,7 +203,6 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
   try {
     const data = { ...req.body };
 
-    //make sure that first and last name are filled out
     if (!data.name) {
       throw new ValidationError({
         displayMessage: "Student name is required",
@@ -219,7 +225,8 @@ educatorRouter.post(
   "/start-classroom-games",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
-    const { classroomId } = req.body;
+    const classroomId = Number(req.query.classroomId);
+    // const { classroomId } = req.body;
     try {
       const services = getServices();
       const teacher = await services.educator.getTeacherByUserId(user.id);
