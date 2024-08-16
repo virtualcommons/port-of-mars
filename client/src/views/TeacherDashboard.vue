@@ -1,13 +1,13 @@
 <template>
-  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop overflow-hidden">
+  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop overflow-auto">
     <div class="h-100 w-100 d-flex flex-column">
+      <Messages class="position-fixed p-3"></Messages>
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-3">
-        <Messages class="mb-3"></Messages>
         <!--Classrooms Sidebar-->
         <b-col cols="2">
           <h4 class="row header-nowrap my-2 ml-1">Classrooms</h4>
           <div class="classrooms">
-            <b-tabs pills vertical nav-wrapper-class="w-100" class="classroom-tabs">
+            <b-tabs pills vertical nav-wrapper-class="w-100">
               <b-tab
                 v-for="classroom in classrooms"
                 :key="classroom.id"
@@ -15,10 +15,10 @@
                 @click="selectClassroom(classroom.id)"
               ></b-tab>
             </b-tabs>
-            <b-button v-b-modal.add-classroom-modal variant="success" class="w-100 mt-4">
-              <h4 class="mb-0">New<b-icon-plus></b-icon-plus></h4>
-            </b-button>
           </div>
+          <b-button v-b-modal.add-classroom-modal variant="success" class="w-100 mt-2">
+            <h4 class="mb-0">New<b-icon-plus></b-icon-plus></h4>
+          </b-button>
         </b-col>
         <!--Main dashboard-->
         <b-col cols="10" class="content-container h-100 w-100 p-3 overflow-hidden">
@@ -26,17 +26,14 @@
             <h4>{{ selectedClassroom?.descriptor }}</h4>
             <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
             <b-row>
-              <b-tabs pills card class="w-100 h-100">
-                <!-- Students Roster -->
-                <b-tab title="Students" class="tab-header">
+              <b-tabs pills card v-model="dashboardTabs" class="w-100" lazy>
+                <b-tab title="Students">
                   <Students :selectedClassroom="selectedClassroom" />
                 </b-tab>
-                <!-- Groups -->
-                <b-tab title="Groups" class="tab-header">
+                <b-tab title="Groups">
                   <Groups :selectedClassroom="selectedClassroom" />
                 </b-tab>
-                <!-- Reports -->
-                <b-tab title="Reports" class="tab-header">
+                <b-tab title="Reports">
                   <Reports :selectedClassroom="selectedClassroom" />
                 </b-tab>
                 <b-tab title="Settings">
@@ -77,17 +74,19 @@
       id="add-classroom-modal"
       size="lg"
       centered
-      title="Create a New Classroom"
-      body-bg-variant="info"
-      header-bg-variant="info"
-      footer-bg-variant="info"
+      title="Enter a New Classroom:"
+      body-bg-variant="dark"
+      header-bg-variant="dark"
+      header-class="pb-0 border-bottom-0"
+      footer-class="pt-0 border-top-0"
+      footer-bg-variant="dark"
+      cancel-variant="outline-secondary"
       @ok="handleDescriptorOk('add', $event)"
       @show="resetDescriptorModal"
       @hidden="resetDescriptorModal"
     >
       <form ref="form" @submit.stop.prevent="handleDescriptorSubmit('add')">
         <b-form-group
-          label="Enter a Classroom Descriptor:"
           label-for="descriptor-input"
           description="Must be no more than 20 characters."
           :state="descriptorState"
@@ -112,17 +111,19 @@
       id="rename-classroom-modal"
       size="lg"
       centered
-      title="Rename Classroom"
-      body-bg-variant="info"
-      header-bg-variant="info"
-      footer-bg-variant="info"
+      title="Rename Classroom to:"
+      body-bg-variant="dark"
+      header-bg-variant="dark"
+      header-class="pb-0 border-bottom-0"
+      footer-class="pt-0 border-top-0"
+      footer-bg-variant="dark"
+      cancel-variant="outline-secondary"
       @ok="handleDescriptorOk('rename', $event)"
       @show="resetDescriptorModal"
       @hidden="resetDescriptorModal"
     >
       <form ref="form" @submit.stop.prevent="handleDescriptorSubmit('rename')">
         <b-form-group
-          label="Enter a New Classroom Descriptor:"
           label-for="descriptor-input"
           description="Must be no more than 20 characters."
           :state="descriptorState"
@@ -147,9 +148,12 @@
       id="delete-confirm-modal"
       centered
       title="Delete Confirmation"
-      body-bg-variant="info"
-      header-bg-variant="info"
-      footer-bg-variant="info"
+      body-bg-variant="dark"
+      header-bg-variant="dark"
+      header-class="pb-0 border-bottom-0"
+      footer-class="pt-0 border-top-0"
+      footer-bg-variant="dark"
+      cancel-variant="outline-secondary"
       okTitle="Confirm"
       @ok="deleteClassroom"
     >
@@ -184,7 +188,8 @@ export default class TeacherDashboard extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() educatorApi = new EducatorAPI(this.$store, this.$ajax);
 
-  isTeacher = false;
+  // isTeacher = false;
+  dashboardTabs = 0;
   classroomDescriptor = "";
   descriptorErrorMessage = "";
   descriptorState: boolean | null = null;
@@ -259,8 +264,6 @@ export default class TeacherDashboard extends Vue {
       const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
       console.log("New Classroom:", newClassroom);
       this.classrooms = await this.educatorApi.getClassrooms();
-      //this.classrooms.push(newClassroom);
-      this.selectClassroom(newClassroom.id);
       this.classroomDescriptor = "";
     } catch (e) {
       console.error("Failed to add a new classroom:", e);
@@ -275,6 +278,7 @@ export default class TeacherDashboard extends Vue {
       try {
         this.classrooms = await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
         await this.fetchClassrooms();
+        this.dashboardTabs = 0;
         console.log("Classroom list updated successfully");
       } catch (e) {
         console.error("Failed to delete classroom:", e);
@@ -301,9 +305,10 @@ export default class TeacherDashboard extends Vue {
   }
 
   selectClassroom(classroomId: number) {
-    const classroom = this.classrooms.find(c => c.id === classroomId);
+    const classroom = this.classrooms.find(c => c.id === classroomId) || null;
     console.log(this.classrooms);
-    this.selectedClassroom = classroom; //FIXME: putting undefined will not update selectedClassroom properly
+    this.selectedClassroom = classroom;
+    this.dashboardTabs = 0;
     console.log("Selected Classroom:", this.selectedClassroom);
   }
 
@@ -327,7 +332,8 @@ export default class TeacherDashboard extends Vue {
 
 <style lang="scss" scoped>
 .classrooms {
-  height: 83%;
+  max-height: 43rem;
+  overflow-x: hidden !important;
   overflow-y: auto;
 }
 .classrooms::-webkit-scrollbar {
@@ -337,10 +343,5 @@ export default class TeacherDashboard extends Vue {
 .icon {
   vertical-align: top !important;
   font-size: 2rem;
-}
-
-.plus-icon {
-  font-size: 1.5rem; /* Adjusted size to align with text */
-  vertical-align: middle; /* Align icon vertically with the text */
 }
 </style>

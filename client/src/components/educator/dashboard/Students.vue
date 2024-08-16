@@ -3,7 +3,7 @@
     <div v-if="students.length < 1" class="empty-container">
       <p>Waiting for students to join...</p>
     </div>
-    <div v-else>
+    <b-row v-else>
       <b-col cols="12">
         <b-alert v-model="startGamesAlert" variant="success" dismissible
           >Successfully started games!</b-alert
@@ -23,7 +23,7 @@
             sticky-header
             sort-icon-left
             class="h-100 m-0 custom-table"
-            style="overflow-y: auto; max-height: 59vh"
+            style="overflow-y: auto; max-height: 58vh"
             :fields="studentFields"
             :items="students"
             sort-by="inLobby"
@@ -37,12 +37,12 @@
           </b-table>
         </div>
       </b-col>
-    </div>
+    </b-row>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue, Prop } from "vue-property-decorator";
+import { Component, Inject, Vue, Prop, Watch } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
 import { ClassroomData, StudentData } from "@port-of-mars/shared/types";
@@ -54,16 +54,20 @@ export default class TeacherDashboard extends Vue {
   @Inject() readonly $client!: Client;
   @Inject() educatorApi!: EducatorAPI;
   @Prop() selectedClassroom!: ClassroomData;
+  @Watch("selectedClassroom")
+  watchSelectedClassroom() {
+    this.fetchStudents();
+  }
 
   startGamesAlert = false;
   pollingIntervalId = 0;
+  students: StudentData[] = [];
 
   studentFields = [
     { key: "username", label: "Username" },
-    { key: "name", label: "Student Name" },
+    { key: "name", label: "Student Name", sortable: true },
     { key: "inLobby", label: "In Lobby", sortable: true },
   ];
-  students: StudentData[] = [];
 
   get numLobbyStudents() {
     return this.students.filter(student => student.inLobby).length;
@@ -124,7 +128,6 @@ export default class TeacherDashboard extends Vue {
 <style lang="scss" scoped>
 .empty-container {
   color: var(--light-shade-25);
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -5,13 +5,13 @@
         <h1>Classroom Lobby</h1>
         <div class="text-center" style="padding: 1rem">
           <p>Total joined: {{ clients.length }}</p>
-          <span v-if="starting">
+          <!-- <span v-if="starting">
             <p>
               <b-spinner small label="Loading..."></b-spinner>
               A game will begin shortly, have fun!
             </p>
-          </span>
-          <span v-else>
+          </span> -->
+          <span>
             <p>Please wait patiently for your teacher to start the game...</p>
           </span>
         </div>

@@ -11,8 +11,9 @@
           <b-table
             dark
             sticky-header
+            sort-icon-left
             class="h-100 m-0 custom-table"
-            style="overflow-y: auto; max-height: 61vh"
+            style="overflow-y: auto; max-height: 60.5vh"
             :fields="completedGameFields"
             :items="completedGames"
             sort-by="dateFinalized"
@@ -106,19 +107,19 @@ export default class TeacherDashboard extends Vue {
   completedGames: AdminGameData[] = [];
   inspectedCompletedGame: AdminGameData | null = null;
 
+  completedGameFields = [
+    { key: "id", label: "Game ID" },
+    { key: "dateFinalized", label: "Time Finished", sortable: true },
+    { key: "status", label: "Game Status", sortable: true },
+    { key: "players", label: "Players" },
+    { key: "highScore", label: "High Score" },
+    { key: "inspect", label: "" },
+  ];
+
   playerFields = [
     { key: "username", label: "Username" },
     { key: "role", label: "Role" },
     { key: "points", label: "Points" },
-  ];
-
-  completedGameFields = [
-    { key: "id", label: "Game ID" },
-    { key: "dateFinalized", label: "Time Finished" },
-    { key: "status", label: "Status" },
-    { key: "players", label: "Players" },
-    { key: "highScore", label: "High Score" },
-    { key: "inspect", label: "" },
   ];
 
   getHumanCount(players: AdminGameData["players"]) {
@@ -193,7 +194,6 @@ export default class TeacherDashboard extends Vue {
 <style lang="scss" scoped>
 .empty-container {
   color: var(--light-shade-25);
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
