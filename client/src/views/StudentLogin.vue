@@ -42,7 +42,7 @@
           </b-tab>
           <b-tab title="Rejoin a game" title-link-class="small">
             <p class="text-muted text-left">
-              Enter a rejoin code to sign back in if you were disconnected from a game
+              Enter a rejoin code to sign back in if you were disconnected from a game or lobby
             </p>
             <b-form
               @submit.stop.prevent="handleRejoinGame"

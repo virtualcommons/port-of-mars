@@ -30,7 +30,7 @@
           Manual
         </b-nav-item>
         <b-nav-item
-          v-if="isVerified && !isTeacher"
+          v-if="isVerified"
           class="mx-2"
           :to="classroomLobby"
           exact-active-class="active"
