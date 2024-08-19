@@ -39,12 +39,17 @@ export class SetPlayerCmd extends Cmd<{ user: User }> {
 
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
-    // TODO: make sure this works with 0 event cards
     const { sologame: service } = getServices();
-    const cards = _.shuffle(await service.drawEventCardDeck(this.state.type)).map(
+    const cards = (await service.drawEventCardDeck(this.state.type)).map(
       data => new EventCard(data)
     );
-    this.state.eventCardDeck.push(...cards);
+    if (this.state.type === "prolific_variable") {
+      // prolific configuration uses a fixed deck
+      this.state.eventCardDeck.push(...cards);
+    } else {
+      const shuffledCards = _.shuffle(cards);
+      this.state.eventCardDeck.push(...shuffledCards);
+    }
   }
 }
 
@@ -204,9 +209,6 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
 export class DrawCardsCmd extends CmdWithoutPayload {
   execute() {
     let drawCount = this.getDrawCount();
-    // FIXME:
-    // this crashes if we run out of cards, should find a way to handle that (rare) case
-    // min of 30 cards max of 14 rounds, max of ~35 cards encountered though very unlikely
     this.drawRoundCards(drawCount);
     // draw 2 more if murphy's law is in play
     if (this.state.roundEventCards.some(card => card.isMurphysLaw)) {
@@ -307,7 +309,12 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
       card.inPlay = false;
     });
     this.state.updateVisibleCards();
-    return new DrawCardsCmd();
+    if (this.state.upcomingEventCards.length > 0) {
+      return new DrawCardsCmd();
+    } else {
+      this.state.canInvest = true;
+      this.state.activeCardId = -1;
+    }
   }
 }
 

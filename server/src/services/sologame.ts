@@ -26,10 +26,11 @@ const logger = getLogger(__filename);
 export class SoloGameService extends BaseService {
   async drawEventCardDeck(gameType: SoloGameType): Promise<EventCardData[]> {
     /**
-     * draw a deck of event cards from the db
+     * draw a deck of event cards from the db (ordered by id)
      */
     const cards = await this.em.getRepository(SoloMarsEventCard).find({
       where: { gameType },
+      order: { id: "ASC" },
     });
     const deck: EventCardData[] = [];
 

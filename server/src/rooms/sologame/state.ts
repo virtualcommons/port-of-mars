@@ -158,8 +158,8 @@ export class SoloGameState extends Schema {
     prolific_baseline: {
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 1,
-      twoEventsThreshold: { min: 999, max: 999 },
-      threeEventsThreshold: { min: 999, max: 999 },
+      twoEventsThreshold: { min: -1, max: -1 },
+      threeEventsThreshold: { min: -1, max: -1 },
       timeRemaining: 15,
       eventTimeout: 5,
       ...SoloGameState.STATIC_PARAMS,
