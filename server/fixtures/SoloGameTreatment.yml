@@ -1,62 +1,138 @@
 entity: SoloGameTreatment
 items:
-  treatment1:
+  # FREEPLAY TREATMENTS
+  freeplayTreatment1:
     id: 1
+    gameType: freeplay
     isNumberOfRoundsKnown: false
     isEventDeckKnown: false
     thresholdInformation: unknown
-  treatment2:
+    isLowResSystemHealth: false
+  freeplayTreatment2:
     id: 2
+    gameType: freeplay
     isNumberOfRoundsKnown: false
     isEventDeckKnown: false
     thresholdInformation: range
-  treatment3:
+    isLowResSystemHealth: false
+  freeplayTreatment3:
     id: 3
+    gameType: freeplay
     isNumberOfRoundsKnown: false
     isEventDeckKnown: false
     thresholdInformation: known
-  treatment4:
+    isLowResSystemHealth: false
+  freeplayTreatment4:
     id: 4
+    gameType: freeplay
     isNumberOfRoundsKnown: false
     isEventDeckKnown: true
     thresholdInformation: unknown
-  treatment5:
+    isLowResSystemHealth: false
+  freeplayTreatment5:
     id: 5
+    gameType: freeplay
     isNumberOfRoundsKnown: false
     isEventDeckKnown: true
     thresholdInformation: range
-  treatment6:
+    isLowResSystemHealth: false
+  freeplayTreatment6:
     id: 6
+    gameType: freeplay
     isNumberOfRoundsKnown: false
     isEventDeckKnown: true
     thresholdInformation: known
-  treatment7:
+    isLowResSystemHealth: false
+  freeplayTreatment7:
     id: 7
+    gameType: freeplay
     isNumberOfRoundsKnown: true
     isEventDeckKnown: false
     thresholdInformation: unknown
-  treatment8:
+    isLowResSystemHealth: false
+  freeplayTreatment8:
     id: 8
+    gameType: freeplay
     isNumberOfRoundsKnown: true
     isEventDeckKnown: false
     thresholdInformation: range
-  treatment9:
+    isLowResSystemHealth: false
+  freeplayTreatment9:
     id: 9
+    gameType: freeplay
     isNumberOfRoundsKnown: true
     isEventDeckKnown: false
     thresholdInformation: known
-  treatment10:
+    isLowResSystemHealth: false
+  freeplayTreatment10:
     id: 10
+    gameType: freeplay
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: unknown
-  treatment11:
+    isLowResSystemHealth: false
+  freeplayTreatment11:
     id: 11
+    gameType: freeplay
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: range
-  treatment12:
+    isLowResSystemHealth: false
+  freeplayTreatment12:
     id: 12
+    gameType: freeplay
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: known
+    isLowResSystemHealth: false
+  # PROLIFIC BASELINE TREATMENTS
+  prolificBaselineTreatment1:
+    id: 13
+    gameType: prolific_baseline
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+  # PROLIFIC VARIABLE TREATMENTS
+  prolificVariableTreatment1:
+    id: 14
+    gameType: prolific_variable
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+  prolificVariableTreatment2:
+    id: 15
+    gameType: prolific_variable
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: false
+    thresholdInformation: known
+    isLowResSystemHealth: false
+  prolificVariableTreatment3:
+    id: 16
+    gameType: prolific_variable
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: false
+    thresholdInformation: known
+    isLowResSystemHealth: true
+  prolificVariableTreatment4:
+    id: 17
+    gameType: prolific_variable
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+  prolificVariableTreatment5:
+    id: 18
+    gameType: prolific_variable
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: true
+    thresholdInformation: range
+    isLowResSystemHealth: false
+  prolificVariableTreatment6:
+    id: 19
+    gameType: prolific_variable
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: true
+    thresholdInformation: unknown
+    isLowResSystemHealth: false

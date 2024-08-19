@@ -1,7 +1,9 @@
 entity: SoloMarsEventCard
 items:
-  event1:
+  # FREEPLAY EVENT CARDS
+  freeplayEvent1:
     id: 1
+    gameType: freeplay
     codeName: "lifeAsUsual"
     displayName: "Life As Usual"
     flavorText: "As the first human outpost on Mars, having a \"usual\" day is pretty unusual."
@@ -13,8 +15,9 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: 0
     resourcesMultiplier: 0
-  event2: # needs special casing (draw 2 more cards)
+  freeplayEvent2: # needs special casing (draw 2 more cards)
     id: 2
+    gameType: freeplay
     codeName: "murphysLaw"
     displayName: "Murphy's Law"
     flavorText: "Residents at Port of Mars know better than to ask, \"what ELSE could go wrong?\""
@@ -26,8 +29,9 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: 0
     resourcesMultiplier: 0
-  event3:
+  freeplayEvent3:
     id: 3
+    gameType: freeplay
     codeName: "lostTime"
     displayName: "Lost Time"
     flavorText: "Time flies when you're trying to stay alive."
@@ -39,8 +43,9 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: 0
     resourcesMultiplier: -1
-  event4:
+  freeplayEvent4:
     id: 4
+    gameType: freeplay
     codeName: "richDeposit"
     displayName: "Rich Deposit"
     flavorText: "A stroke of luck in an otherwise unlucky day."
@@ -52,8 +57,9 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: 0
     resourcesMultiplier: 1
-  event5:
+  freeplayEvent5:
     id: 5
+    gameType: freeplay
     codeName: "urgentRepairs"
     displayName: "Urgent Repairs"
     flavorText: "No pneumatic tires on mars, but there are always holes to patch."
@@ -65,8 +71,9 @@ items:
     systemHealthMultiplier: 1
     pointsMultiplier: 0
     resourcesMultiplier: -1
-  event6:
+  freeplayEvent6:
     id: 6
+    gameType: freeplay
     codeName: "hullBreach"
     displayName: "Hull Breach"
     flavorText: "Accidents happen. It's unavoidable. Our job is to do our best to avoid them all the same."
@@ -78,8 +85,9 @@ items:
     systemHealthMultiplier: -1
     pointsMultiplier: 0
     resourcesMultiplier: 0
-  event7:
+  freeplayEvent7:
     id: 7
+    gameType: freeplay
     codeName: "softwareUpgrade"
     displayName: "Software Upgrade"
     flavorText: "A much needed patch to the system comes online."
@@ -91,8 +99,9 @@ items:
     systemHealthMultiplier: 1
     pointsMultiplier: 0
     resourcesMultiplier: 0
-  event8:
+  freeplayEvent8:
     id: 8
+    gameType: freeplay
     codeName: "lostCargo"
     displayName: "Lost Cargo"
     flavorText: "Precious cargo, now forever Martian property."
@@ -104,8 +113,9 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: -1
     resourcesMultiplier: 0
-  event9:
+  freeplayEvent9:
     id: 9
+    gameType: freeplay
     codeName: "hitTheMotherlode"
     displayName: "Hit the Motherlode"
     flavorText: "A valuable find. Fortunately for us, not that useful for repairs."
@@ -117,3 +127,40 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: 1
     resourcesMultiplier: 0
+  # PROLIFIC VARIABLE EVENT CARDS
+
+  # TODO: add prolific_variable event cards, baseline doesn't have any
+  # no display name or flavor text!
+  # going to have to define each of these in order since the deck is fixed:
+
+  # Increase system health with 7 units
+  # Reduce system health with 6 units
+  # Life as usual 
+  # Increase points gained with 5
+  # Reduce system health with 5 units 
+  # Increase points gained with 4
+  # Increase points gained with 2
+  # Reduce points gained with 4
+  # Life as usual 
+  # Life as usual 
+  # Murphy's Law, draw 2 more event cards
+  # Reduce the number of time blocks with 6 units
+  # Life as usual 
+  # Invest at least 8 timeblocks into system health
+  # Reduce system health with 1 unit
+  # Reduce points gained with 1
+  # Increase points gained with 9
+  # Reduce system health with 8 units
+  # Life as usual 
+  # Life as usual 
+  # Life as usual 
+  # Increase system health with 3 units
+  # Reduce points gained with 5
+  # Increase system health with 6 units
+  # Life as usual 
+  # Increase the number of time blocks with 2 units
+  # Increase system health with 4 units
+  # Life as usual 
+  # Reduce points gained with 10
+  # Life as usual 
+
