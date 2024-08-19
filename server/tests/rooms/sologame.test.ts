@@ -87,6 +87,7 @@ describe("a solo game", () => {
       expect(state.treatmentParams.isEventDeckKnown).toBeDefined();
       expect(state.treatmentParams.isNumberOfRoundsKnown).toBeDefined();
       expect(state.treatmentParams.thresholdInformation).toBeDefined();
+      expect(state.treatmentParams.isLowResSystemHealth).toBeDefined();
     });
 
     // continue with game logic/command tests, intent is to run through a game

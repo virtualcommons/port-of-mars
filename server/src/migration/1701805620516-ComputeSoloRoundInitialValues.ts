@@ -2,9 +2,9 @@ import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 import { SoloGame, SoloGameRound } from "@port-of-mars/server/entity";
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
 
-const WEAR_AND_TEAR = SoloGameState.DEFAULTS.systemHealthWear;
-const MAX_SYSTEM_HEALTH = SoloGameState.DEFAULTS.systemHealthMax;
-const STARTING_POINTS = SoloGameState.DEFAULTS.points;
+const WEAR_AND_TEAR = SoloGameState.STATIC_PARAMS.systemHealthWear;
+const MAX_SYSTEM_HEALTH = SoloGameState.STATIC_PARAMS.systemHealthMax;
+const STARTING_POINTS = SoloGameState.STATIC_PARAMS.points;
 
 export class ComputeSoloRoundInitialValues1701805620516 implements MigrationInterface {
   name = "ComputeSoloRoundInitialValues1701805620516";

@@ -1,9 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { SoloGameType } from "@port-of-mars/shared/sologame";
 
 @Entity()
 export class SoloMarsEventCard {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ default: "freeplay" })
+  gameType!: SoloGameType;
 
   @Column()
   codeName!: string;

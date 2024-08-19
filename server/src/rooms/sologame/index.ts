@@ -6,7 +6,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { ApplyCardCmd, InitGameCmd, InvestCmd, PersistRoundCmd, SetNextRoundCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
-import { EventContinue, Invest, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
+import { EventContinue, Invest, SOLO_ROOM_NAME, SoloGameType } from "@port-of-mars/shared/sologame";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -25,10 +25,10 @@ export class SoloGameRoom extends Room<SoloGameState> {
     return this.clients[0];
   }
 
-  onCreate(options: any) {
-    // do we need any options? most things are set up after onJoin is called
+  onCreate(options: { type?: SoloGameType }) {
     logger.trace("SoloGameRoom '%s' created", this.roomId);
     this.setState(new SoloGameState());
+    this.state.type = options.type || "freeplay";
     this.setPrivate(true);
     this.registerAllHandlers();
     this.clock.setInterval(() => {

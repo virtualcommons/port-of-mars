@@ -66,7 +66,7 @@ export default class SoloGame extends Vue {
   async begin() {
     try {
       await this.leave();
-      this.api.room = await this.$client.create(SOLO_ROOM_NAME);
+      this.api.room = await this.$client.create(SOLO_ROOM_NAME, { type: "freeplay" });
       applySoloGameServerResponses(this.api.room, this);
       this.started = true;
     } catch (err) {

@@ -4,10 +4,14 @@ import { User } from "@port-of-mars/server/entity";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
-import { EventCard, SoloGameState, TreatmentParams } from "./state";
+import { EventCard, TreatmentParams } from "./state";
 import { SoloGameStatus } from "@port-of-mars/shared/sologame";
 
-abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {}
+abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {
+  get defaultParams() {
+    return this.state.defaultParams;
+  }
+}
 abstract class CmdWithoutPayload extends Cmd<Record<string, never>> {}
 
 export class InitGameCmd extends Cmd<{ user: User }> {
@@ -35,8 +39,11 @@ export class SetPlayerCmd extends Cmd<{ user: User }> {
 
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
+    // TODO: make sure this works with 0 event cards
     const { sologame: service } = getServices();
-    const cards = _.shuffle(await service.drawEventCardDeck()).map(data => new EventCard(data));
+    const cards = _.shuffle(await service.drawEventCardDeck(this.state.type)).map(
+      data => new EventCard(data)
+    );
     this.state.eventCardDeck.push(...cards);
   }
 }
@@ -44,13 +51,21 @@ export class CreateDeckCmd extends CmdWithoutPayload {
 export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
   async execute({ user } = this.payload) {
     const { sologame: service } = getServices();
-    this.state.treatmentParams = new TreatmentParams(await service.getUserNextTreatment(user.id));
+    if (this.state.type === "freeplay") {
+      this.state.treatmentParams = new TreatmentParams(
+        await service.getUserNextFreeplayTreatment(user.id)
+      );
+    } else {
+      this.state.treatmentParams = new TreatmentParams(
+        await service.getRandomTreatment(this.state.type)
+      );
+    }
   }
 }
 
 export class SetGameParamsCmd extends CmdWithoutPayload {
   execute() {
-    const defaults = SoloGameState.DEFAULTS;
+    const defaults = this.defaultParams;
     this.state.maxRound = getRandomIntInclusive(defaults.maxRound.min, defaults.maxRound.max);
     this.state.twoEventsThreshold = getRandomIntInclusive(
       defaults.twoEventsThreshold.min,
@@ -83,7 +98,7 @@ export class PersistGameCmd extends CmdWithoutPayload {
 
 export class SetFirstRoundCmd extends CmdWithoutPayload {
   execute() {
-    const defaults = SoloGameState.DEFAULTS;
+    const defaults = this.defaultParams;
     this.state.round = 1;
     this.state.systemHealth = defaults.systemHealthMax - defaults.systemHealthWear;
     this.state.timeRemaining = defaults.timeRemaining;
@@ -108,8 +123,8 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
       data.twoEventsThreshold = this.state.twoEventsThreshold;
       data.threeEventsThreshold = this.state.threeEventsThreshold;
     } else if (this.state.treatmentParams.thresholdInformation === "range") {
-      data.twoEventsThresholdRange = SoloGameState.DEFAULTS.twoEventsThreshold;
-      data.threeEventsThresholdRange = SoloGameState.DEFAULTS.threeEventsThreshold;
+      data.twoEventsThresholdRange = this.defaultParams.twoEventsThreshold;
+      data.threeEventsThresholdRange = this.defaultParams.threeEventsThreshold;
     }
     this.room.client.send("set-hidden-params", {
       kind: "set-hidden-params",
@@ -148,7 +163,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     this.state.systemHealth = Math.max(
       0,
       Math.min(
-        SoloGameState.DEFAULTS.systemHealthMax,
+        this.defaultParams.systemHealthMax,
         this.state.systemHealth + this.state.activeCard.systemHealthEffect
       )
     );
@@ -182,7 +197,7 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
   execute() {
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
-    }, SoloGameState.DEFAULTS.eventTimeout * 1000);
+    }, this.defaultParams.eventTimeout * 1000);
   }
 }
 
@@ -198,7 +213,7 @@ export class DrawCardsCmd extends CmdWithoutPayload {
       drawCount += 2;
       this.drawRoundCards(2);
     }
-    this.state.timeRemaining += SoloGameState.DEFAULTS.eventTimeout * drawCount;
+    this.state.timeRemaining += this.defaultParams.eventTimeout * drawCount;
     const nextRoundCard = this.state.nextRoundCard;
     if (nextRoundCard) {
       this.state.activeCardId = nextRoundCard.deckCardId;
@@ -235,16 +250,16 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
   async execute({ systemHealthInvestment } = this.payload) {
     const surplus = this.state.resources - systemHealthInvestment;
     this.state.systemHealth = Math.min(
-      SoloGameState.DEFAULTS.systemHealthMax,
+      this.defaultParams.systemHealthMax,
       this.state.systemHealth + systemHealthInvestment
     );
     this.state.player.points += surplus;
     // wait a bit for the round transition so we can see the investment before deducting wear+tear
-    this.state.timeRemaining = SoloGameState.DEFAULTS.roundTransitionDuration;
+    this.state.timeRemaining = this.defaultParams.roundTransitionDuration;
     this.state.isRoundTransitioning = true;
     this.state.canInvest = false;
     await new Promise(resolve =>
-      setTimeout(resolve, SoloGameState.DEFAULTS.roundTransitionDuration * 1000)
+      setTimeout(resolve, this.defaultParams.roundTransitionDuration * 1000)
     );
     return [
       new PersistRoundCmd().setPayload({
@@ -271,7 +286,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     this.state.canInvest = false; // disable investment until all cards are applied
     this.state.isRoundTransitioning = false;
 
-    const defaults = SoloGameState.DEFAULTS;
+    const defaults = this.defaultParams;
 
     if (this.state.round + 1 > this.state.maxRound) {
       return new EndGameCmd().setPayload({ status: "victory" });

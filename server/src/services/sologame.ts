@@ -1,5 +1,10 @@
 import { BaseService } from "@port-of-mars/server/services/db";
-import { EventCardData, SoloGameStatus, TreatmentData } from "@port-of-mars/shared/sologame";
+import {
+  EventCardData,
+  SoloGameStatus,
+  SoloGameType,
+  TreatmentData,
+} from "@port-of-mars/shared/sologame";
 import {
   SoloGame,
   SoloGameRound,
@@ -19,11 +24,13 @@ import { getLogger } from "@port-of-mars/server/settings";
 const logger = getLogger(__filename);
 
 export class SoloGameService extends BaseService {
-  async drawEventCardDeck(): Promise<EventCardData[]> {
+  async drawEventCardDeck(gameType: SoloGameType): Promise<EventCardData[]> {
     /**
      * draw a deck of event cards from the db
      */
-    const cards = await this.em.getRepository(SoloMarsEventCard).find();
+    const cards = await this.em.getRepository(SoloMarsEventCard).find({
+      where: { gameType },
+    });
     const deck: EventCardData[] = [];
 
     for (const card of cards) {
@@ -54,13 +61,24 @@ export class SoloGameService extends BaseService {
     return deck;
   }
 
-  async getUserNextTreatment(userId: number): Promise<TreatmentData> {
+  async getUserNextFreeplayTreatment(userId: number): Promise<TreatmentData> {
     /**
      * get the next treatment (in order) that a user has not yet seen. If they have seen all
      * then return a random one.
      */
+    const gameType = "freeplay";
     const treatmentRepo = this.em.getRepository(SoloGameTreatment);
-    const numTreatments = await treatmentRepo.count();
+    const availableTreatmentIds = (
+      await treatmentRepo.find({
+        select: ["id"],
+        where: { gameType },
+      })
+    ).map(t => t.id);
+    const numTreatments = availableTreatmentIds.length;
+
+    if (numTreatments === 0) {
+      throw new Error(`No treatments found for solo game type: ${gameType}`);
+    }
 
     const highestPlayedTreatment = (
       await this.em
@@ -71,13 +89,31 @@ export class SoloGameService extends BaseService {
         .select("COALESCE(MAX(soloGame.treatmentId), 0)", "max")
         .where("user.id = :userId", { userId })
         .andWhere("soloGame.status != :status", { status: "incomplete" })
+        .andWhere("soloGame.treatmentId IN (:...availableTreatmentIds)", {
+          availableTreatmentIds,
+        })
         .getRawOne()
     ).max;
 
     if (highestPlayedTreatment < numTreatments) {
       return treatmentRepo.findOneByOrFail({ id: highestPlayedTreatment + 1 });
     }
-    return treatmentRepo.findOneByOrFail({ id: getRandomIntInclusive(1, numTreatments) });
+    const randomTreatmentId = availableTreatmentIds[getRandomIntInclusive(0, numTreatments - 1)];
+    return treatmentRepo.findOneByOrFail({ id: randomTreatmentId });
+  }
+
+  async getRandomTreatment(gameType: SoloGameType): Promise<TreatmentData> {
+    /**
+     * get a random treatment for a given game type
+     */
+    const treatmentRepo = this.em.getRepository(SoloGameTreatment);
+    const treatments = await treatmentRepo.find({
+      where: { gameType },
+    });
+    if (treatments.length === 0) {
+      throw new Error(`No treatments found for solo game type: ${gameType}`);
+    }
+    return treatments[getRandomIntInclusive(0, treatments.length - 1)];
   }
 
   async getTreatmentById(id: number): Promise<TreatmentData> {
@@ -128,6 +164,7 @@ export class SoloGameService extends BaseService {
         isNumberOfRoundsKnown: treatmentData.isNumberOfRoundsKnown,
         isEventDeckKnown: treatmentData.isEventDeckKnown,
         thresholdInformation: treatmentData.thresholdInformation,
+        isLowResSystemHealth: treatmentData.isLowResSystemHealth,
       },
     });
   }
@@ -255,6 +292,7 @@ export class SoloGameService extends BaseService {
         knownEventDeck: game.treatment.isEventDeckKnown,
         knownEndRound: game.treatment.isNumberOfRoundsKnown,
         thresholdInformation: game.treatment.thresholdInformation,
+        isLowResSystemHealth: game.treatment.isLowResSystemHealth,
         dateCreated: game.dateCreated.toISOString(),
       }));
       const header = Object.keys(formattedGames[0]).map(name => ({

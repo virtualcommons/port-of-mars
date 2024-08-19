@@ -1,5 +1,11 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
-import { EventCardData, SoloGameStatus, TreatmentData } from "@port-of-mars/shared/sologame";
+import {
+  EventCardData,
+  SoloGameParams,
+  SoloGameStatus,
+  SoloGameType,
+  TreatmentData,
+} from "@port-of-mars/shared/sologame";
 
 export class EventCard extends Schema {
   id = 0;
@@ -34,14 +40,15 @@ export class EventCard extends Schema {
 export class Player extends Schema {
   userId = 0;
   @type("string") username = "";
-  @type("uint8") resources = SoloGameState.DEFAULTS.resources;
-  @type("uint8") points = SoloGameState.DEFAULTS.points;
+  @type("uint8") resources = SoloGameState.DEFAULTS.freeplay.resources;
+  @type("uint8") points = SoloGameState.DEFAULTS.freeplay.points;
 }
 
 export class TreatmentParams extends Schema {
   @type("boolean") isNumberOfRoundsKnown = false;
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
+  @type("boolean") isLowResSystemHealth = false;
 
   constructor(data?: TreatmentData) {
     super();
@@ -49,14 +56,17 @@ export class TreatmentParams extends Schema {
     this.isNumberOfRoundsKnown = data.isNumberOfRoundsKnown;
     this.isEventDeckKnown = data.isEventDeckKnown;
     this.thresholdInformation = data.thresholdInformation;
+    this.isLowResSystemHealth = data.isLowResSystemHealth;
   }
 }
 
 export class SoloGameState extends Schema {
+  @type("string") type: SoloGameType = "freeplay";
   @type("string") status: SoloGameStatus = "incomplete";
   @type("int8") systemHealth =
-    SoloGameState.DEFAULTS.systemHealthMax - SoloGameState.DEFAULTS.systemHealthWear;
-  @type("uint8") timeRemaining = SoloGameState.DEFAULTS.timeRemaining;
+    SoloGameState.DEFAULTS.freeplay.systemHealthMax -
+    SoloGameState.DEFAULTS.freeplay.systemHealthWear;
+  @type("uint8") timeRemaining = SoloGameState.DEFAULTS.freeplay.timeRemaining;
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
   @type(Player) player: Player = new Player();
@@ -72,12 +82,12 @@ export class SoloGameState extends Schema {
   @type("boolean") isRoundTransitioning = false;
 
   gameId = 0;
-  roundInitialSystemHealth = SoloGameState.DEFAULTS.systemHealthMax;
+  roundInitialSystemHealth = SoloGameState.DEFAULTS.freeplay.systemHealthMax;
   roundInitialPoints = 0;
   // hidden properties
-  maxRound = SoloGameState.DEFAULTS.maxRound.max;
-  twoEventsThreshold = SoloGameState.DEFAULTS.twoEventsThreshold.max;
-  threeEventsThreshold = SoloGameState.DEFAULTS.threeEventsThreshold.max;
+  maxRound = SoloGameState.DEFAULTS.freeplay.maxRound.max;
+  twoEventsThreshold = SoloGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
+  threeEventsThreshold = SoloGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
   eventCardDeck: Array<EventCard> = [];
 
   get points() {
@@ -124,16 +134,44 @@ export class SoloGameState extends Schema {
     }
   }
 
-  static DEFAULTS = {
-    maxRound: { min: 6, max: 14 },
-    roundTransitionDuration: 3,
-    twoEventsThreshold: { min: 12, max: 20 },
-    threeEventsThreshold: { min: 5, max: 15 },
+  get defaultParams() {
+    return SoloGameState.DEFAULTS[this.type];
+  }
+
+  static STATIC_PARAMS = {
     systemHealthMax: 25,
     systemHealthWear: 5,
-    timeRemaining: 30,
-    eventTimeout: 10,
     points: 0,
     resources: 10,
+  };
+
+  static DEFAULTS: Record<SoloGameType, SoloGameParams> = {
+    freeplay: {
+      maxRound: { min: 6, max: 14 },
+      roundTransitionDuration: 3,
+      twoEventsThreshold: { min: 12, max: 20 },
+      threeEventsThreshold: { min: 5, max: 15 },
+      timeRemaining: 30,
+      eventTimeout: 10,
+      ...SoloGameState.STATIC_PARAMS,
+    },
+    prolific_baseline: {
+      maxRound: { min: 8, max: 8 },
+      roundTransitionDuration: 1,
+      twoEventsThreshold: { min: 999, max: 999 },
+      threeEventsThreshold: { min: 999, max: 999 },
+      timeRemaining: 15,
+      eventTimeout: 5,
+      ...SoloGameState.STATIC_PARAMS,
+    },
+    prolific_variable: {
+      maxRound: { min: 11, max: 11 },
+      roundTransitionDuration: 1,
+      twoEventsThreshold: { min: 9, max: 9 },
+      threeEventsThreshold: { min: 16, max: 16 },
+      timeRemaining: 15,
+      eventTimeout: 5,
+      ...SoloGameState.STATIC_PARAMS,
+    },
   };
 }
