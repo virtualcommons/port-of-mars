@@ -94,7 +94,7 @@
 import { Component, Inject, Vue, Prop } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import { InspectData, ClassroomData } from "@port-of-mars/shared/types";
+import { InspectData, ClassroomData, ActiveRoomData } from "@port-of-mars/shared/types";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
 import StatusBar from "@port-of-mars/client/components/game/static/systemhealth/StatusBar.vue";
@@ -114,8 +114,7 @@ export default class TeacherDashboard extends Vue {
   pollingIntervalId = 0;
   inspectedRoomId: string = "";
 
-  rooms: any = [];
-  studentsInGames: any[] = [];
+  rooms: ActiveRoomData[] = [];
 
   roomFields = [
     { key: "roomId", label: "Room ID" },
@@ -155,10 +154,6 @@ export default class TeacherDashboard extends Vue {
       try {
         const rooms = await this.educatorApi.getClassroomGames(this.selectedClassroom.id);
         Vue.set(this, "rooms", rooms);
-
-        // Assuming the room object has a list of clients/students in it
-        this.studentsInGames = rooms.flatMap((room: { clients: any }) => room.clients);
-        console.log("Students in games:", this.studentsInGames);
       } catch (e) {
         console.error("Failed to get active rooms:", e);
       }

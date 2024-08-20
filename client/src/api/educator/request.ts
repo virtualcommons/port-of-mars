@@ -5,6 +5,7 @@ import {
   StudentAuthData,
   InspectData,
   StudentData,
+  ActiveRoomData,
   ClassroomData,
 } from "@port-of-mars/shared/types";
 
@@ -18,7 +19,7 @@ export class EducatorAPI {
     });
   }
 
-  async confirmStudent(formData: { name: string }) {
+  async confirmStudent(formData: { name: string }): Promise<void> {
     await this.ajax.post(
       url("/educator/confirm-student"),
       ({ data, status }) => {
@@ -48,19 +49,18 @@ export class EducatorAPI {
     );
   }
 
-  async getClassrooms() {
+  //FIXME: Services uses Promise<Classroom>
+  async getClassrooms(): Promise<Array<ClassroomData>> {
     return await this.ajax.get(url("/educator/classrooms"), ({ data, status }) => {
       return data;
     });
   }
 
-  async updateClassroom(classroomId: number, descriptor: string) {
+  async updateClassroom(classroomId: number, descriptor: string): Promise<void> {
     return await this.ajax.update(
       url(`/educator/classroom?classroomId=${classroomId}`),
       ({ data, status }) => {
         if (status === 200) {
-          return data;
-        } else {
           throw new Error(data.message || "Classroom renaming failed");
         }
       },
@@ -68,24 +68,24 @@ export class EducatorAPI {
     );
   }
 
-  async deleteClassroom(classroomId: number) {
+  async deleteClassroom(classroomId: number): Promise<void> {
     return await this.ajax.delete(
       url(`/educator/classroom?classroomId=${classroomId}`),
       ({ data, status }) => {
-        return data;
+        if (status !== 200) {
+          throw new Error(data.message || "Classroom deletion failed");
+        }
       }
     );
   }
 
-  async startGames(classroomId: number): Promise<any> {
+  async startGames(classroomId: number): Promise<void> {
     const payload = { classroomId };
 
     return await this.ajax.post(
       url("/educator/start-classroom-games"),
       ({ data, status }) => {
-        if (status === 200) {
-          return data;
-        } else {
+        if (status !== 200) {
           throw new Error(data.message || "games failed to start");
         }
       },
@@ -93,7 +93,7 @@ export class EducatorAPI {
     );
   }
 
-  async getClassroomGames(classroomId: number): Promise<any> {
+  async getClassroomGames(classroomId: number): Promise<Array<ActiveRoomData>> {
     return await this.ajax.get(
       url(`/educator/classroom-games?classroomId=${classroomId}`),
       ({ data, status }) => {
@@ -129,6 +129,7 @@ export class EducatorAPI {
     );
   }
 
+  //Should there be a specific type for completed games?
   async getCompletedGames(classroomId: number): Promise<any> {
     return await this.ajax.get(
       url(`/educator/completed-games?classroomId=${classroomId}`),

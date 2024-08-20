@@ -94,7 +94,7 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
       return;
     }
     await services.educator.createNewClassroom(teacher, descriptor);
-    res.status(201).json(true);
+    res.status(201).json({ message: "Created classroom successfully" });
   } catch (e) {
     logger.warn("Unable to create a new classroom for the teacher");
     if (e instanceof Error) {
@@ -108,7 +108,6 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
 
 educatorRouter.delete("/classroom", async (req: Request, res: Response, next) => {
   const user = req.user as User;
-
   const classroomId = Number(req.query.classroomId);
 
   try {
@@ -146,8 +145,8 @@ educatorRouter.put("/classroom", async (req: Request, res: Response, next) => {
       res.status(403).json({ message: "Only teachers can update a classroom" });
       return;
     }
-    const classroom = await services.educator.updateClassroom(teacher, classroomId, descriptor);
-    res.status(200).json(classroom);
+    await services.educator.updateClassroom(teacher, classroomId, descriptor);
+    res.status(200).json({ message: "Classrom updated successfully" });
   } catch (e) {
     logger.warn("Unable to update classroom");
     next(e);
@@ -225,8 +224,9 @@ educatorRouter.post(
   "/start-classroom-games",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
-    const classroomId = Number(req.query.classroomId);
-    // const { classroomId } = req.body;
+    // const classroomId = Number(req.query.classroomId);
+    //FIXME: accessing classroomId as req.query will cause issues starting games.
+    const { classroomId } = req.body;
     try {
       const services = getServices();
       const teacher = await services.educator.getTeacherByUserId(user.id);

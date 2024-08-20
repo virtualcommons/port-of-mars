@@ -188,7 +188,6 @@ export default class TeacherDashboard extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() educatorApi = new EducatorAPI(this.$store, this.$ajax);
 
-  // isTeacher = false;
   dashboardTabs = 0;
   classroomDescriptor = "";
   descriptorErrorMessage = "";
@@ -222,7 +221,7 @@ export default class TeacherDashboard extends Vue {
         return;
       } else if (this.classroomDescriptor.length > 20) {
         this.descriptorState = false;
-        this.descriptorErrorMessage = "Invalid descriptor. Please try again.";
+        this.descriptorErrorMessage = "Invalid name. Please try again.";
         bvModalEvent.preventDefault();
         return;
       } else {
@@ -260,7 +259,7 @@ export default class TeacherDashboard extends Vue {
     }
     try {
       await this.educatorApi.createClassroom(this.classroomDescriptor);
-      this.classrooms = await this.educatorApi.getClassrooms();
+      await this.fetchClassrooms();
       this.classroomDescriptor = "";
       console.log("Added new classroom successfully");
     } catch (e) {
@@ -274,10 +273,9 @@ export default class TeacherDashboard extends Vue {
     }
     if (this.selectedClassroom) {
       try {
-        this.classrooms = await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
+        await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
         await this.fetchClassrooms();
-        this.dashboardTabs = 0;
-        console.log("Classroom list updated successfully");
+        console.log("Deleted classroom successfully");
       } catch (e) {
         console.error("Failed to delete classroom:", e);
       }
@@ -304,15 +302,17 @@ export default class TeacherDashboard extends Vue {
 
   selectClassroom(classroomId: number) {
     const classroom = this.classrooms.find(c => c.id === classroomId) || null;
-    console.log(this.classrooms);
-    this.selectedClassroom = classroom;
-    this.dashboardTabs = 0;
-    console.log("Selected Classroom:", this.selectedClassroom);
+    if (classroom) {
+      this.selectedClassroom = classroom;
+      this.dashboardTabs = 0;
+      console.log("Selected Classroom:", this.selectedClassroom);
+    }
   }
 
   async fetchClassrooms() {
     try {
       this.classrooms = await this.educatorApi.getClassrooms();
+      this.dashboardTabs = 0;
       if (this.classrooms.length > 0) {
         this.selectedClassroom = this.classrooms[0];
       }
