@@ -547,3 +547,9 @@ export interface ClassroomData {
   authToken: string;
   descriptor: string;
 }
+
+export interface ActiveRoomData {
+  roomId: string;
+  clients: number;
+  elapsed: number;
+}
