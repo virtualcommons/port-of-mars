@@ -5,7 +5,12 @@ import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
 import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
-import { StudentData, InspectData } from "@port-of-mars/shared/types";
+import {
+  StudentData,
+  InspectData,
+  ActiveRoomData,
+  // ClassroomData,
+} from "@port-of-mars/shared/types";
 
 export class EducatorService extends BaseService {
   async getTeacherByUserId(userId: number, withUser = false): Promise<Teacher | null> {
@@ -68,11 +73,7 @@ export class EducatorService extends BaseService {
     return authToken;
   }
 
-  async updateClassroom(
-    teacher: Teacher,
-    classroomId: number,
-    descriptor: string
-  ): Promise<Classroom> {
+  async updateClassroom(teacher: Teacher, classroomId: number, descriptor: string): Promise<void> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
       where: { id: classroomId, teacher: { id: teacher.id } },
@@ -82,10 +83,10 @@ export class EducatorService extends BaseService {
     }
     classroom.descriptor = descriptor;
     await classroomRepo.save(classroom);
-    return classroom;
+    return;
   }
 
-  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<Classroom> {
+  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<void> {
     const classroomRepo = this.em.getRepository(Classroom);
     const authToken = await this.generateAuthToken();
     const newClassroom = classroomRepo.create({
@@ -94,7 +95,7 @@ export class EducatorService extends BaseService {
       authToken: authToken,
     });
     await classroomRepo.save(newClassroom);
-    return newClassroom;
+    return;
   }
 
   async getLobbyClients(classroomId: number): Promise<Array<StudentData>> {
@@ -105,8 +106,7 @@ export class EducatorService extends BaseService {
     return lobby ? lobby.metadata.clients : [];
   }
 
-  //FIXME: fix type?
-  async startClassroomGames(classroomId: number): Promise<any> {
+  async startClassroomGames(classroomId: number): Promise<void> {
     const rooms = await matchMaker.query({
       name: ClassroomLobbyRoom.NAME,
     });
@@ -122,8 +122,7 @@ export class EducatorService extends BaseService {
     return;
   }
 
-  //FIXME: fix type?
-  async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
+  async getActiveRoomsForClassroom(classroomId: number): Promise<Array<ActiveRoomData>> {
     const games = await matchMaker.query({ name: GameRoom.NAME });
     const classroomGames = games.filter((game: any) => game.metadata.classroomId === classroomId);
     if (!classroomGames) {
@@ -162,8 +161,7 @@ export class EducatorService extends BaseService {
     return query.getMany();
   }
 
-  //FIXME: fix type?
-  async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any> {
+  async deleteClassroom(teacher: Teacher, classroomId: number): Promise<void> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
       where: { id: classroomId, teacher: { id: teacher.id } },
@@ -247,7 +245,7 @@ export class EducatorService extends BaseService {
     return user;
   }
 
-  async setStudentName(userId: number, name: string): Promise<Student> {
+  async setStudentName(userId: number, name: string): Promise<void> {
     const student = await this.getStudentByUser(userId, true);
     if (!student) {
       throw new ServerError({
@@ -260,7 +258,7 @@ export class EducatorService extends BaseService {
     user.name = name;
     user.isVerified = true;
     await this.em.getRepository(User).save(user);
-    return student;
+    return;
   }
 
   async createTeacher(email: string, username: string, name: string) {
