@@ -12,33 +12,33 @@ export class SoloMarsEventCard {
   @Column()
   codeName!: string;
 
-  @Column()
+  @Column({ default: "" })
   displayName!: string;
 
-  @Column()
+  @Column({ default: "" })
   flavorText!: string;
 
   @Column()
   effect!: string;
 
-  @Column()
+  @Column({ default: 1 })
   drawMin!: number;
 
-  @Column()
+  @Column({ default: 1 })
   drawMax!: number;
 
-  @Column()
+  @Column({ default: 0 })
   rollMin!: number;
 
-  @Column()
+  @Column({ default: 0 })
   rollMax!: number;
 
-  @Column()
+  @Column({ default: 0 })
   systemHealthMultiplier!: number;
 
-  @Column()
+  @Column({ default: 0 })
   pointsMultiplier!: number;
 
-  @Column()
+  @Column({ default: 0 })
   resourcesMultiplier!: number;
 }
