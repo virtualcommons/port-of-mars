@@ -130,6 +130,7 @@ export class SoloGameService extends BaseService {
     const player = await this.createPlayer(state.player.userId);
     const game = gameRepo.create({
       player,
+      type: state.type,
       treatment: await this.findTreatment(state.treatmentParams),
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
@@ -162,6 +163,7 @@ export class SoloGameService extends BaseService {
   async findTreatment(treatmentData: TreatmentData): Promise<SoloGameTreatment> {
     return this.em.getRepository(SoloGameTreatment).findOneOrFail({
       where: {
+        gameType: treatmentData.gameType,
         isNumberOfRoundsKnown: treatmentData.isNumberOfRoundsKnown,
         isEventDeckKnown: treatmentData.isEventDeckKnown,
         thresholdInformation: treatmentData.thresholdInformation,
@@ -251,15 +253,21 @@ export class SoloGameService extends BaseService {
     return round;
   }
 
-  async getGameIdsBetween(start: Date, end: Date): Promise<Array<number>> {
-    const query = this.em
+  async getGameIds(type: SoloGameType, start?: Date, end?: Date): Promise<Array<number>> {
+    /**
+     * get all game ids for games of a certain type that were created between start and end
+     */
+    let query = this.em
       .getRepository(SoloGame)
       .createQueryBuilder("game")
       .select("game.id")
-      .where("game.dateCreated BETWEEN :start AND :end", {
+      .where("game.type = :type", { type });
+    if (start && end) {
+      query = query.andWhere("game.dateCreated BETWEEN :start AND :end", {
         start: start.toISOString().split("T")[0],
         end: end.toISOString().split("T")[0],
       });
+    }
     const result = await query.getRawMany();
     return result.map(row => row.game_id);
   }
@@ -276,13 +284,14 @@ export class SoloGameService extends BaseService {
       .leftJoinAndSelect("game.player", "player")
       .leftJoinAndSelect("player.user", "user")
       .leftJoinAndSelect("game.treatment", "treatment");
-    if (gameIds) {
+    if (gameIds && gameIds.length > 0) {
       query = query.where("game.id IN (:...gameIds)", { gameIds });
     }
     try {
       const games = await query.getMany();
       const formattedGames = games.map(game => ({
         gameId: game.id,
+        gameType: game.type,
         userId: game.player.user.id,
         username: game.player.user.username,
         status: game.status,
@@ -339,10 +348,14 @@ export class SoloGameService extends BaseService {
         resourcesEffect: deckCard.resourcesEffect,
         pointsEffect: deckCard.pointsEffect,
       }));
-      const header = Object.keys(formattedDeckCards[0]).map(name => ({
-        id: name,
-        title: name,
-      }));
+      let header: any[] = [];
+      // if there are no cards, just write an empty file
+      if (formattedDeckCards.length > 0) {
+        header = Object.keys(formattedDeckCards[0]).map(name => ({
+          id: name,
+          title: name,
+        }));
+      }
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedDeckCards);
       logger.info(`Event cards data exported successfully to ${path}`);

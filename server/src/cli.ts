@@ -30,6 +30,7 @@ import appDataSource from "@port-of-mars/server/datasource";
 import { program } from "commander";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { EntityManager } from "typeorm";
+import { SoloGameType } from "@port-of-mars/shared/sologame";
 /*
 import { promisify } from "util";
 
@@ -54,22 +55,24 @@ async function withDataSource<T>(func: (em: EntityManager) => Promise<T>): Promi
   }
 }
 
-async function exportSoloData(em: EntityManager, start?: string, end?: string) {
+async function exportSoloData(em: EntityManager, type: SoloGameType, start?: string, end?: string) {
   const soloGameService = getServices().sologame;
   await mkdir("/dump/solo", { recursive: true });
-  let gameIds;
+  let startDate;
+  let endDate;
   if (start && end) {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
+    startDate = new Date(start);
+    endDate = new Date(end);
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       logger.fatal("Invalid date format");
       return;
     }
-    gameIds = await soloGameService.getGameIdsBetween(startDate, endDate);
   } else if (start || end) {
     logger.fatal("Must specify both start and end dates or neither");
     return;
   }
+  const gameIds = await soloGameService.getGameIds(type, startDate, endDate);
+  logger.info("Exporting %d games", gameIds.length);
   await getServices().sologame.exportGamesCsv("/dump/solo/games.csv", gameIds);
   await getServices().sologame.exportEventCardsCsv("/dump/solo/eventcards.csv", gameIds);
   await getServices().sologame.exportInvestmentsCsv("/dump/solo/investments.csv", gameIds);
@@ -732,10 +735,11 @@ program
         program
           .createCommand("solo")
           .description("export solo game data to flat CSV files")
+          .option("-t, --type <gameType>", "Solo game type", "freeplay")
           .option("-s, --start <date>", "Start date (YYYY-MM-DD)")
           .option("-e, --end <date>", "End date (YYYY-MM-DD)")
           .action(async cmd => {
-            await withDataSource(async em => exportSoloData(em, cmd.start, cmd.end));
+            await withDataSource(async em => exportSoloData(em, cmd.type, cmd.start, cmd.end));
           })
       )
   )

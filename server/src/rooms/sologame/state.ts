@@ -45,6 +45,7 @@ export class Player extends Schema {
 }
 
 export class TreatmentParams extends Schema {
+  @type("string") gameType: SoloGameType = "freeplay";
   @type("boolean") isNumberOfRoundsKnown = false;
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
@@ -53,6 +54,7 @@ export class TreatmentParams extends Schema {
   constructor(data?: TreatmentData) {
     super();
     if (!data) return;
+    this.gameType = data.gameType;
     this.isNumberOfRoundsKnown = data.isNumberOfRoundsKnown;
     this.isEventDeckKnown = data.isEventDeckKnown;
     this.thresholdInformation = data.thresholdInformation;
@@ -153,6 +155,7 @@ export class SoloGameState extends Schema {
       threeEventsThreshold: { min: 5, max: 15 },
       timeRemaining: 30,
       eventTimeout: 10,
+      startingSystemHealth: 20,
       ...SoloGameState.STATIC_PARAMS,
     },
     prolific_baseline: {
@@ -162,6 +165,7 @@ export class SoloGameState extends Schema {
       threeEventsThreshold: { min: -1, max: -1 },
       timeRemaining: 15,
       eventTimeout: 5,
+      startingSystemHealth: 15,
       ...SoloGameState.STATIC_PARAMS,
     },
     prolific_variable: {
@@ -171,6 +175,7 @@ export class SoloGameState extends Schema {
       threeEventsThreshold: { min: 16, max: 16 },
       timeRemaining: 15,
       eventTimeout: 5,
+      startingSystemHealth: 15,
       ...SoloGameState.STATIC_PARAMS,
     },
   };
