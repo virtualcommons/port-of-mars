@@ -31,6 +31,8 @@ export interface SoloGameParams {
   roundTransitionDuration: number;
   twoEventsThreshold: { min: number; max: number };
   threeEventsThreshold: { min: number; max: number };
+  twoEventsThresholdDisplayRange?: { min: number; max: number };
+  threeEventsThresholdDisplayRange?: { min: number; max: number };
   systemHealthMax: number;
   systemHealthWear: number;
   startingSystemHealth: number;
@@ -41,6 +43,7 @@ export interface SoloGameParams {
 }
 
 export interface SoloGameClientState {
+  type: SoloGameType;
   status: SoloGameStatus;
   timeRemaining: number;
   systemHealth: number;
@@ -54,6 +57,7 @@ export interface SoloGameClientState {
     isNumberOfRoundsKnown: boolean;
     isEventDeckKnown: boolean;
     thresholdInformation: "unknown" | "range" | "known";
+    isLowResSystemHealth: boolean;
   };
   player: {
     resources: number;

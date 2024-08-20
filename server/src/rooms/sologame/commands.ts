@@ -128,8 +128,11 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
       data.twoEventsThreshold = this.state.twoEventsThreshold;
       data.threeEventsThreshold = this.state.threeEventsThreshold;
     } else if (this.state.treatmentParams.thresholdInformation === "range") {
-      data.twoEventsThresholdRange = this.defaultParams.twoEventsThreshold;
-      data.threeEventsThresholdRange = this.defaultParams.threeEventsThreshold;
+      data.twoEventsThresholdRange =
+        this.defaultParams.twoEventsThresholdDisplayRange || this.defaultParams.twoEventsThreshold;
+      data.threeEventsThresholdRange =
+        this.defaultParams.threeEventsThresholdDisplayRange ||
+        this.defaultParams.threeEventsThreshold;
     }
     this.room.client.send("set-hidden-params", {
       kind: "set-hidden-params",

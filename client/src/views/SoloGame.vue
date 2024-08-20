@@ -40,6 +40,7 @@ export default class SoloGame extends Vue {
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores
   state: SoloGameClientState = {
+    type: "freeplay",
     status: "incomplete",
     timeRemaining: 0,
     systemHealth: 0,
@@ -48,6 +49,7 @@ export default class SoloGame extends Vue {
       isNumberOfRoundsKnown: false,
       isEventDeckKnown: false,
       thresholdInformation: "unknown",
+      isLowResSystemHealth: false,
     },
     player: {
       resources: 0,

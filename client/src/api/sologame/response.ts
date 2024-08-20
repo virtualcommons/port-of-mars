@@ -38,11 +38,13 @@ export function applySoloGameServerResponses(room: Room, component: any) {
       "isNumberOfRoundsKnown",
       "isEventDeckKnown",
       "thresholdInformation",
+      "isLowResSystemHealth",
     ]);
   };
 
   room.state.onChange = (changes: DataChange[]) => {
     applyChanges(component.state, changes, [
+      "type",
       "round",
       "timeRemaining",
       "systemHealth",
