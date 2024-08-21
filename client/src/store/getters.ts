@@ -26,6 +26,10 @@ export default {
     return state.user?.isTeacher || false;
   },
 
+  isStudent(state: State): boolean {
+    return state.user?.isStudent || false;
+  },
+
   hasConsented(state: State): boolean {
     return !!state.user?.dateConsented;
   },

@@ -13,6 +13,10 @@ export class EducatorAPI {
   http: any;
   constructor(public store: TStore, public ajax: AjaxRequest) {}
 
+  private classroomUrl(path: string, classroomId: number): string {
+    return url(`${path}?classroomId=${classroomId}`);
+  }
+
   async authStudent(): Promise<StudentAuthData | void> {
     return await this.ajax.get(url("/educator/student"), ({ data }) => {
       return data;
@@ -58,9 +62,9 @@ export class EducatorAPI {
 
   async updateClassroom(classroomId: number, descriptor: string): Promise<void> {
     return await this.ajax.update(
-      url(`/educator/classroom?classroomId=${classroomId}`),
+      this.classroomUrl("/educator/classroom", classroomId),
       ({ data, status }) => {
-        if (status === 200) {
+        if (status !== 200) {
           throw new Error(data.message || "Classroom renaming failed");
         }
       },
@@ -70,7 +74,7 @@ export class EducatorAPI {
 
   async deleteClassroom(classroomId: number): Promise<void> {
     return await this.ajax.delete(
-      url(`/educator/classroom?classroomId=${classroomId}`),
+      this.classroomUrl("/educator/classroom", classroomId),
       ({ data, status }) => {
         if (status !== 200) {
           throw new Error(data.message || "Classroom deletion failed");
@@ -80,22 +84,19 @@ export class EducatorAPI {
   }
 
   async startGames(classroomId: number): Promise<void> {
-    const payload = { classroomId };
-
     return await this.ajax.post(
-      url("/educator/start-classroom-games"),
+      this.classroomUrl("/educator/start-classroom-games", classroomId),
       ({ data, status }) => {
         if (status !== 200) {
           throw new Error(data.message || "games failed to start");
         }
-      },
-      payload
+      }
     );
   }
 
   async getClassroomGames(classroomId: number): Promise<Array<ActiveRoomData>> {
     return await this.ajax.get(
-      url(`/educator/classroom-games?classroomId=${classroomId}`),
+      this.classroomUrl("/educator/classroom-games", classroomId),
       ({ data, status }) => {
         return data;
       }
@@ -113,7 +114,7 @@ export class EducatorAPI {
 
   async getClassroomStudents(classroomId: number): Promise<Array<StudentData>> {
     return await this.ajax.get(
-      url(`/educator/students?classroomId=${classroomId}`),
+      this.classroomUrl("/educator/students", classroomId),
       ({ data, status }) => {
         return data;
       }
@@ -122,7 +123,7 @@ export class EducatorAPI {
 
   async getLobbyClients(classroomId: number): Promise<Array<StudentData>> {
     return await this.ajax.get(
-      url(`/educator/lobby-clients?classroomId=${classroomId}`),
+      this.classroomUrl("/educator/lobby-clients", classroomId),
       ({ data, status }) => {
         return data;
       }
@@ -132,7 +133,7 @@ export class EducatorAPI {
   //Should there be a specific type for completed games?
   async getCompletedGames(classroomId: number): Promise<any> {
     return await this.ajax.get(
-      url(`/educator/completed-games?classroomId=${classroomId}`),
+      this.classroomUrl("/educator/completed-games", classroomId),
       ({ data, status }) => {
         return data;
       }

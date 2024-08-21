@@ -30,7 +30,7 @@
           Manual
         </b-nav-item>
         <b-nav-item
-          v-if="isVerified"
+          v-if="isStudent && isVerified"
           class="mx-2"
           :to="classroomLobby"
           exact-active-class="active"
@@ -127,6 +127,10 @@ export default class Navbar extends Vue {
 
   get isTeacher() {
     return this.$tstore.getters.isTeacher;
+  }
+
+  get isStudent() {
+    return this.$tstore.getters.isStudent;
   }
 
   get isTournamentEnabled() {

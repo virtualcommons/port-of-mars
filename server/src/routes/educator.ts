@@ -224,9 +224,7 @@ educatorRouter.post(
   "/start-classroom-games",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
-    // const classroomId = Number(req.query.classroomId);
-    //FIXME: accessing classroomId as req.query will cause issues starting games.
-    const { classroomId } = req.body;
+    const classroomId = Number(req.query.classroomId);
     try {
       const services = getServices();
       const teacher = await services.educator.getTeacherByUserId(user.id);

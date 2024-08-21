@@ -230,22 +230,22 @@ export const PAGE_META: {
     path: "/student-confirm",
     name: STUDENT_CONFIRM_PAGE,
     meta: {
-      requiresAuth: false, //FIXME: change back to true
+      requiresAuth: true,
     },
   },
   [CLASSROOM_LOBBY_PAGE]: {
     path: "/classroom",
     name: CLASSROOM_LOBBY_PAGE,
     meta: {
-      // FIXME: temp
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   [TEACHER_DASHBOARD_PAGE]: {
     path: "/teacher-dashboard",
     name: TEACHER_DASHBOARD_PAGE,
     meta: {
-      requiresAuth: false, //FIXME: change back to true
+      requiresAuth: true,
+      requiresTeacher: true,
     },
   },
 };
