@@ -175,7 +175,6 @@ if (isEducatorMode()) {
             username,
             password
           );
-          logger.debug(teacher);
           if (!teacher) {
             return done(null, false, {
               message: "Incorrect username or password",

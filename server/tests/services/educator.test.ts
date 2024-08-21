@@ -54,14 +54,11 @@ describe("the educator service", () => {
   });
 
   it("classrooms can be updated", async () => {
-    let classroom: Classroom | null = await educatorService.createNewClassroom(
-      teacher,
-      "update me"
-    );
+    const classroom = await educatorService.createNewClassroom(teacher, "update me");
     const updatedDesc = "updated";
     await educatorService.updateClassroom(teacher, classroom.id, updatedDesc);
-    classroom = await educatorService.getClassroomById(classroom.id);
-    expect(classroom?.descriptor).toEqual(updatedDesc);
+    const updatedClassroom = await educatorService.getClassroomById(classroom.id);
+    expect(updatedClassroom?.descriptor).toEqual(updatedDesc);
   });
 
   it("classrooms can be deleted", async () => {

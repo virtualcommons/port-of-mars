@@ -19,15 +19,15 @@ if (isDevOrStaging()) {
 
 if (isEducatorMode()) {
   authRouter.post("/student-login", passport.authenticate("local-student"), function (req, res) {
-    res.json({ user: req.user });
+    res.json({ user: { ...req.user, isStudent: true } });
   });
 
   authRouter.post("/student-rejoin", passport.authenticate("local-rejoin"), function (req, res) {
-    res.json({ user: req.user });
+    res.json({ user: { ...req.user, isStudent: true } });
   });
 
   authRouter.post("/teacher-login", passport.authenticate("local-teacher"), function (req, res) {
-    res.json({ user: req.user });
+    res.json({ user: { ...req.user, isTeacher: true } });
   });
 }
 

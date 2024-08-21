@@ -25,6 +25,7 @@ export interface ClientSafeUser {
   username: string;
   isAdmin: boolean;
   isTeacher?: boolean;
+  isStudent?: boolean;
   isMuted: boolean;
   isBanned: boolean;
   passedQuiz?: boolean;

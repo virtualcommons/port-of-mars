@@ -184,7 +184,6 @@ function getEducatorRouter() {
       { path: "", name: "Home", redirect: { name: STUDENT_LOGIN_PAGE } },
       { ...PAGE_META[STUDENT_LOGIN_PAGE], component: StudentLogin },
       { ...PAGE_META[STUDENT_CONFIRM_PAGE], component: StudentConfirm },
-      // FIXME: add EDUCATOR_LOGIN_PAGE
       { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
       { ...PAGE_META[TEACHER_DASHBOARD_PAGE], component: TeacherDashboard },
     ],
