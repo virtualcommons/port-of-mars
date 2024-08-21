@@ -160,7 +160,7 @@ export class EducatorService extends BaseService {
     return query.getMany();
   }
 
-  async deleteClassroom(teacher: Teacher, classroomId: number): Promise<void> {
+  async deleteClassroom(teacher: Teacher, classroomId: number, force = false): Promise<void> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
       where: { id: classroomId, teacher: { id: teacher.id } },
@@ -168,10 +168,12 @@ export class EducatorService extends BaseService {
     if (!classroom) {
       throw new Error("Classroom not found");
     }
-    const students = await this.getStudentsByClassroomId(classroomId);
-    const games = await this.getActiveRoomsForClassroom(classroomId);
-    if (students.length > 0 || games.length > 0) {
-      throw new Error("Classroom cannot be deleted because it has active games and/or students");
+    if (!force) {
+      const students = await this.getStudentsByClassroomId(classroomId);
+      const games = await this.getActiveRoomsForClassroom(classroomId);
+      if (students.length > 0 || games.length > 0) {
+        throw new Error("Classroom cannot be deleted because it has active games and/or students");
+      }
     }
     await classroomRepo.remove(classroom);
     return;
