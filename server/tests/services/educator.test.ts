@@ -67,7 +67,7 @@ describe("the educator service", () => {
       "delete me"
     );
     const classId = classroom.id;
-    await educatorService.deleteClassroom(teacher, classroom.id);
+    await educatorService.deleteClassroom(teacher, classroom.id, true);
     classroom = await educatorService.getClassroomById(classId);
     expect(classroom).toBeNull();
   });
