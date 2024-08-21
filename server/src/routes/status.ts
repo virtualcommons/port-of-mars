@@ -13,11 +13,13 @@ statusRouter.get("/", async (req: Request, res: Response, next) => {
     const services = getServices();
     const user = req.user as User;
     let isTeacher = false;
+    let isStudent = false;
     if (user && isEducatorMode()) {
       // check if user is a teacher, only bother in educator mode
       isTeacher = !!(await services.educator.getTeacherByUserId(user.id));
+      isStudent = !!(await services.educator.getStudentByUser(user.id));
     }
-    const safeUser = user ? { ...toClientSafeUser(user), isTeacher } : null;
+    const safeUser = user ? { ...toClientSafeUser(user), isTeacher, isStudent } : null;
     const settings = await services.settings.getSettings();
     const { isFreePlayEnabled, isTournamentEnabled, announcementBannerText } = settings;
     let tournamentStatus = null;

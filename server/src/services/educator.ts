@@ -86,7 +86,7 @@ export class EducatorService extends BaseService {
     return;
   }
 
-  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<void> {
+  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<Classroom> {
     const classroomRepo = this.em.getRepository(Classroom);
     const authToken = await this.generateAuthToken();
     const newClassroom = classroomRepo.create({
@@ -94,8 +94,7 @@ export class EducatorService extends BaseService {
       teacher: teacher,
       authToken: authToken,
     });
-    await classroomRepo.save(newClassroom);
-    return;
+    return classroomRepo.save(newClassroom);
   }
 
   async getLobbyClients(classroomId: number): Promise<Array<StudentData>> {
@@ -190,7 +189,7 @@ export class EducatorService extends BaseService {
     }
     const classrooms = classroomRepo.find({
       where: { teacher: teacher },
-    }); //FIXME: may need to fix relations
+    });
     return classrooms;
   }
 

@@ -3,12 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import {
-  LOGIN_PAGE,
-  FREE_PLAY_LOBBY_PAGE,
-  CONSENT_PAGE,
-  HOME_PAGE,
-} from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, CONSENT_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 import { initialUserState } from "@port-of-mars/shared/game/client/state";
@@ -154,72 +149,6 @@ export class AjaxRequest {
   async delete(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
     return this.request("DELETE", path, done, data);
   }
-
-//   async post(
-//     path: string,
-//     done: (data: ResponseData) => Promise<any> | void,
-//     data?: any
-//   ): AjaxResponse {
-//     // FIXME: duplicated across post/get
-//     let response;
-//     try {
-//       response = await fetch(path, {
-//         method: "POST",
-//         cache: "no-cache",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         credentials: "include",
-//         redirect: "follow",
-//         referrerPolicy: "no-referrer",
-//         body: JSON.stringify(data),
-//       });
-//       const responseData = await this.handleResponse(response);
-//       return done(responseData);
-//     } catch (e) {
-//       if (e instanceof AjaxResponseError) {
-//         throw e;
-//       } else {
-//         if (response && e instanceof Error) {
-//           throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
-//         } else {
-//           console.error("Unhandled error in request, returning to home screen", e);
-//           // FIXME: add context so that login page has information about why they were redirected
-//           this.router.push({ name: LOGIN_PAGE });
-//         }
-//       }
-//     }
-//   }
-
-//   async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
-//     // FIXME: duplicated across post/get
-//     let response;
-//     try {
-//       response = await fetch(path, {
-//         method: "GET",
-//         credentials: "include",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         redirect: "follow",
-//         referrerPolicy: "no-referrer",
-//       });
-//       const responseData = await this.handleResponse(response);
-//       return done(responseData);
-//     } catch (e) {
-//       if (e instanceof AjaxResponseError) {
-//         throw e;
-//       } else {
-//         if (response && e instanceof Error) {
-//           throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
-//         } else {
-//           console.error("Unhandled error in request, returning to home screen", e);
-//           this.router.push({ name: HOME_PAGE });
-//         }
-//       }
-//     }
-//   }
-// }
 }
 
 export const Ajax = {
