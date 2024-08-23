@@ -5,9 +5,10 @@ import {
   SoloHighScoreData,
   SoloPlayerStatItem,
 } from "@port-of-mars/shared/types";
-import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
+import { Game, Player, SoloGame, SoloGameTreatment, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { SoloHighScore } from "@port-of-mars/server/entity/SoloHighScore";
+import { SoloGameType } from "@port-of-mars/shared/sologame";
 
 export class StatsService extends BaseService {
   /* Player stats */
@@ -144,7 +145,10 @@ export class StatsService extends BaseService {
     }
   }
 
-  async getSoloHighScoreData(limit: number): Promise<SoloHighScoreData> {
+  async getSoloHighScoreData(
+    limit: number,
+    gameType: SoloGameType = "freeplay"
+  ): Promise<SoloHighScoreData> {
     // get the top players in the solo highscores table
     const highscoresData = await this.em
       .getRepository(SoloHighScore)
@@ -156,7 +160,9 @@ export class StatsService extends BaseService {
       .addSelect("highscores.maxRound", "maxRound")
       .addSelect("highscores.pointsPerRound", "pointsPerRound")
       .innerJoin("highscores.user", "user")
+      .innerJoin("highscores.game", "game")
       .where("highscores.pointsPerRound IS NOT NULL")
+      .andWhere("game.type = :gameType", { gameType })
       .orderBy("highscores.pointsPerRound", "DESC")
       .limit(limit)
       .getRawMany();
