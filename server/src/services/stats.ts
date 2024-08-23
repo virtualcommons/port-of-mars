@@ -5,7 +5,7 @@ import {
   SoloHighScoreData,
   SoloPlayerStatItem,
 } from "@port-of-mars/shared/types";
-import { Game, Player, SoloGame, SoloGameTreatment, SoloPlayer } from "@port-of-mars/server/entity";
+import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { SoloHighScore } from "@port-of-mars/server/entity/SoloHighScore";
 import { SoloGameType } from "@port-of-mars/shared/sologame";

@@ -841,6 +841,32 @@ program
             }
           })
       )
+  )
+  .addCommand(
+    program
+      .createCommand("study")
+      .description("manage prolific studies")
+      .addCommand(
+        program
+          .createCommand("create")
+          .requiredOption("-i --studyId <studyId>", "prolific study id e.g. SV_123456ABCDEF")
+          .requiredOption(
+            "-c --completionCode <completionCode>",
+            "completion code for the study given by prolific"
+          )
+          .option("-d --description <description>", "description of the study")
+          .description("create a tournament")
+          .action(async cmd => {
+            await withDataSource(async em =>
+              getServices(em).study.createProlificStudy(
+                cmd.studyId,
+                cmd.completionCode,
+                cmd.description
+              )
+            );
+            logger.debug("created study record");
+          })
+      )
   );
 
 async function main(argv: Array<string>): Promise<void> {

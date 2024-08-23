@@ -43,7 +43,7 @@ export class CreateDeckCmd extends CmdWithoutPayload {
     const cards = (await service.drawEventCardDeck(this.state.type)).map(
       data => new EventCard(data)
     );
-    if (this.state.type === "prolific_variable") {
+    if (this.state.type === "prolificVariable") {
       // prolific configuration uses a fixed deck
       this.state.eventCardDeck.push(...cards);
     } else {

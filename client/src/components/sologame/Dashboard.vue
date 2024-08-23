@@ -170,7 +170,7 @@ export default class Dashboard extends Vue {
   }
 
   get isProlificBaselineGame() {
-    return this.state.type === "prolific_baseline";
+    return this.state.type === "prolificBaseline";
   }
 
   get lowResSystemHealth() {

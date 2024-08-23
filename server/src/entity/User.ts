@@ -42,10 +42,7 @@ export class User {
 
   @Column()
   @Generated("uuid")
-  participantId!: string; // survey participant id
-
-  @Column({ default: "" })
-  prolificId!: string;
+  participantId!: string;
 
   @Column({ default: "" })
   passportId!: string;

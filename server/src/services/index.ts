@@ -12,6 +12,7 @@ import { SoloGameService } from "@port-of-mars/server/services/sologame";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
 import dataSource from "@port-of-mars/server/datasource";
 import { createClient, RedisClient } from "redis";
+import { StudyService } from "./study";
 
 export class ServiceProvider {
   constructor(public em: EntityManager) {}
@@ -94,6 +95,14 @@ export class ServiceProvider {
       this._admin = new AdminService(this);
     }
     return this._admin;
+  }
+
+  private _study?: StudyService;
+  get study() {
+    if (!this._study) {
+      this._study = new StudyService(this);
+    }
+    return this._study;
   }
 
   private _settings?: RedisSettings;

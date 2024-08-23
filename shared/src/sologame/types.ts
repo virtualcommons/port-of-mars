@@ -22,7 +22,7 @@ export interface TreatmentData {
   isLowResSystemHealth: boolean;
 }
 
-export type SoloGameType = "freeplay" | "prolific_baseline" | "prolific_variable";
+export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
 
 export type SoloGameStatus = "incomplete" | "victory" | "defeat";
 

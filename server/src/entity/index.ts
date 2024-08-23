@@ -20,3 +20,5 @@ export * from "./SoloMarsEventDeck";
 export * from "./SoloMarsEventDeckCard";
 export * from "./SoloPlayer";
 export * from "./SoloPlayerDecision";
+export * from "./ProlificStudy";
+export * from "./ProlificStudyParticipant";

@@ -88,7 +88,7 @@ items:
   # PROLIFIC BASELINE TREATMENTS
   prolificBaselineTreatment1:
     id: 13
-    gameType: prolific_baseline
+    gameType: prolificBaseline
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: known
@@ -96,42 +96,42 @@ items:
   # PROLIFIC VARIABLE TREATMENTS
   prolificVariableTreatment1:
     id: 14
-    gameType: prolific_variable
+    gameType: prolificVariable
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: known
     isLowResSystemHealth: false
   prolificVariableTreatment2:
     id: 15
-    gameType: prolific_variable
+    gameType: prolificVariable
     isNumberOfRoundsKnown: true
     isEventDeckKnown: false
     thresholdInformation: known
     isLowResSystemHealth: false
   prolificVariableTreatment3:
     id: 16
-    gameType: prolific_variable
+    gameType: prolificVariable
     isNumberOfRoundsKnown: true
     isEventDeckKnown: false
     thresholdInformation: known
     isLowResSystemHealth: true
   prolificVariableTreatment4:
     id: 17
-    gameType: prolific_variable
+    gameType: prolificVariable
     isNumberOfRoundsKnown: false
     isEventDeckKnown: true
     thresholdInformation: known
     isLowResSystemHealth: false
   prolificVariableTreatment5:
     id: 18
-    gameType: prolific_variable
+    gameType: prolificVariable
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: range
     isLowResSystemHealth: false
   prolificVariableTreatment6:
     id: 19
-    gameType: prolific_variable
+    gameType: prolificVariable
     isNumberOfRoundsKnown: true
     isEventDeckKnown: true
     thresholdInformation: unknown

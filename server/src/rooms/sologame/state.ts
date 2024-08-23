@@ -158,7 +158,7 @@ export class SoloGameState extends Schema {
       startingSystemHealth: 20,
       ...SoloGameState.STATIC_PARAMS,
     },
-    prolific_baseline: {
+    prolificBaseline: {
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 1,
       twoEventsThreshold: { min: -1, max: -1 },
@@ -168,7 +168,7 @@ export class SoloGameState extends Schema {
       startingSystemHealth: 15,
       ...SoloGameState.STATIC_PARAMS,
     },
-    prolific_variable: {
+    prolificVariable: {
       maxRound: { min: 11, max: 11 },
       roundTransitionDuration: 1,
       twoEventsThreshold: { min: 16, max: 16 },

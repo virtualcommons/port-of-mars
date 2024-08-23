@@ -1,4 +1,5 @@
 import { Page } from "@port-of-mars/shared/routes";
+import { SoloGameType } from "@port-of-mars/shared/sologame/types";
 
 export type Dictionary<T> = { [key: string]: T };
 
@@ -520,4 +521,14 @@ export interface DynamicSettingsData {
   tournamentLobbyOpenAfterOffset: number;
   tournamentSignupsPopularityThreshold: number;
   announcementBannerText: string;
+}
+
+export interface ProlificParticipantStatus {
+  activeGameType: SoloGameType | null;
+  nextGameType: SoloGameType | null;
+  progress: {
+    max: number;
+    current: number;
+    label: string;
+  };
 }

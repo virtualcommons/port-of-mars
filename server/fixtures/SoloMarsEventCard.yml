@@ -100,7 +100,7 @@ items:
   # PROLIFIC VARIABLE EVENT CARDS
   prolificVariableEvent1:
     id: 10
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increaseSystemHealth7"
     effect: "Gain 7 system health."
     rollMin: 7
@@ -108,7 +108,7 @@ items:
     systemHealthMultiplier: 1
   prolificVariableEvent2:
     id: 11
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reduceSystemHealth6"
     effect: "Lose 6 system health."
     rollMin: 6
@@ -116,12 +116,12 @@ items:
     systemHealthMultiplier: -1
   prolificVariableEvent3:
     id: 12
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent4:
     id: 13
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increasePoints5"
     effect: "Gain 5 points."
     rollMin: 5
@@ -129,7 +129,7 @@ items:
     pointsMultiplier: 1
   prolificVariableEvent5:
     id: 14
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reduceSystemHealth5"
     effect: "Lose 5 system health."
     rollMin: 5
@@ -137,7 +137,7 @@ items:
     systemHealthMultiplier: -1
   prolificVariableEvent6:
     id: 15
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increasePoints4"
     effect: "Gain 4 points."
     rollMin: 4
@@ -145,7 +145,7 @@ items:
     pointsMultiplier: 1
   prolificVariableEvent7:
     id: 16
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increasePoints2"
     effect: "Gain 2 points."
     rollMin: 2
@@ -153,7 +153,7 @@ items:
     pointsMultiplier: 1
   prolificVariableEvent8:
     id: 17
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reducePoints4"
     effect: "Lose 4 points."
     rollMin: 4
@@ -161,22 +161,22 @@ items:
     pointsMultiplier: -1
   prolificVariableEvent9:
     id: 18
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent10:
     id: 19
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent11:
     id: 20
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "murphysLaw"
     effect: "Reveal 2 more events for this round."
   prolificVariableEvent12:
     id: 21
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reduceResources6"
     effect: "Lose 6 resources."
     rollMin: 6
@@ -184,12 +184,12 @@ items:
     resourcesMultiplier: -1
   prolificVariableEvent13:
     id: 22
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent14:
     id: 23
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "investSystemHealth8"
     effect: "8 resources are immediately diverted to system health."
     rollMin: 8
@@ -198,7 +198,7 @@ items:
     resourcesMultiplier: -1
   prolificVariableEvent15:
     id: 24
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reduceSystemHealth1"
     effect: "Lose 1 system health."
     rollMin: 1
@@ -206,7 +206,7 @@ items:
     systemHealthMultiplier: -1
   prolificVariableEvent16:
     id: 25
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reducePoints1"
     effect: "Lose 1 point."
     rollMin: 1
@@ -214,7 +214,7 @@ items:
     pointsMultiplier: -1
   prolificVariableEvent17:
     id: 26
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increasePoints9"
     effect: "Gain 9 points."
     rollMin: 9
@@ -222,7 +222,7 @@ items:
     pointsMultiplier: 1
   prolificVariableEvent18:
     id: 27
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reduceSystemHealth8"
     effect: "Lose 8 system health."
     rollMin: 8
@@ -230,22 +230,22 @@ items:
     systemHealthMultiplier: -1
   prolificVariableEvent19:
     id: 28
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent20:
     id: 29
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent21:
     id: 30
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent22:
     id: 31
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increaseSystemHealth3"
     effect: "Gain 3 system health."
     rollMin: 3
@@ -253,7 +253,7 @@ items:
     systemHealthMultiplier: 1
   prolificVariableEvent23:
     id: 32
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reducePoints5"
     effect: "Lose 5 points."
     rollMin: 5
@@ -261,7 +261,7 @@ items:
     pointsMultiplier: -1
   prolificVariableEvent24:
     id: 33
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increaseSystemHealth6"
     effect: "Gain 6 system health."
     rollMin: 6
@@ -269,12 +269,12 @@ items:
     systemHealthMultiplier: 1
   prolificVariableEvent25:
     id: 34
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent26:
     id: 35
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increaseResources2"
     effect: "Gain 2 resources."
     rollMin: 2
@@ -282,7 +282,7 @@ items:
     resourcesMultiplier: 1
   prolificVariableEvent27:
     id: 36
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "increaseSystemHealth4"
     effect: "Gain 4 system health."
     rollMin: 4
@@ -290,12 +290,12 @@ items:
     systemHealthMultiplier: 1
   prolificVariableEvent28:
     id: 37
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
   prolificVariableEvent29:
     id: 38
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "reducePoints10"
     effect: "Lose 10 points."
     rollMin: 10
@@ -303,6 +303,6 @@ items:
     pointsMultiplier: -1
   prolificVariableEvent30:
     id: 39
-    gameType: prolific_variable
+    gameType: prolificVariable
     codeName: "lifeAsUsual"
     effect: "Life as usual, nothing happens."
