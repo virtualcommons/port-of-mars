@@ -4,13 +4,12 @@
       <div v-if="isVictory" class="mb-5">
         <h1 class="text-success">Success</h1>
         <p>
-          You've successfully passed the rigors and challenges of this Port of Mars solo trial.
-          Congratulations!
+          {{ victoryText }}
         </p>
       </div>
       <div v-else class="mb-5">
         <h1 class="text-danger">Game Over</h1>
-        <p>Unfortunately you were unable to withstand the perils of Mars. Please try again!</p>
+        {{ defeatText }}
       </div>
       <div class="d-flex mb-5">
         <div class="w-50 pr-3">
@@ -31,13 +30,13 @@
           </div>
         </div>
       </div>
-      <b-button variant="primary" size="lg" @click="reload" class="mr-3">
+      <b-button variant="primary" size="lg" @click="$emit('continue')" class="mr-3">
         <h4 class="mb-0">
-          <b-icon-arrow-clockwise />
-          Play again
+          <b-icon-arrow-clockwise v-if="!continueText" />
+          {{ continueText || "Play again" }}
         </h4>
       </b-button>
-      <b-button variant="secondary" size="lg" @click="gotoHighScorePage"
+      <b-button v-if="showHighScores" variant="secondary" size="lg" @click="gotoHighScorePage"
         ><h4 class="mb-0">
           <b-icon-trophy scale="0.75" />
           High Scores
@@ -61,14 +60,20 @@ export default class GameOver extends Vue {
   @Prop() status!: string;
   @Prop() points!: number;
   @Prop() round!: number;
+  @Prop({ default: true }) showHighScores!: boolean;
+  @Prop() continueText?: string;
+  @Prop({
+    default:
+      "You've successfully passed the rigors and challenges of this Port of Mars solo trial. Congratulations!",
+  })
+  victoryText!: string;
+  @Prop({
+    default: "Unfortunately you were unable to withstand the perils of Mars. Please try again!",
+  })
+  defeatText!: string;
 
   get isVictory() {
     return this.status === "victory";
-  }
-
-  reload() {
-    // FIXME: is a full refresh required or would `this.$router.go(0)` or equivalent cache-busting router call work?
-    window.location.reload();
   }
 
   gotoHighScorePage() {

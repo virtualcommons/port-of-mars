@@ -11,4 +11,10 @@ export class StudyAPI {
       return data;
     });
   }
+
+  async completeProlificStudy(): Promise<string> {
+    return await this.ajax.get(url("/study/prolific/complete"), ({ data }) => {
+      return data;
+    });
+  }
 }

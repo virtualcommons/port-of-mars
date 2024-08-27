@@ -50,3 +50,14 @@ studyRouter.get("/prolific/status", async (req: Request, res: Response, next) =>
     next(e);
   }
 });
+
+studyRouter.get("/prolific/complete", async (req: Request, res: Response, next) => {
+  try {
+    const services = getServices();
+    const user = req.user as User;
+    const url = await services.study.getProlificCompletionUrl(user);
+    res.json(url);
+  } catch (e) {
+    next(e);
+  }
+});

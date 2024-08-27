@@ -13,14 +13,22 @@
         :label="participantStatus.progress.label"
       />
     </b-progress>
-    {{ participantStatus.nextGameType }}
     <b-container class="h-100 solo-dashboard-container content-container p-0" no-gutters>
-      <Splash v-if="!started" @begin="begin" />
+      <Splash
+        v-if="!started && !isStudyComplete"
+        @begin="begin"
+        :gameType="participantStatus.nextGameType"
+      />
       <GameOver
-        v-else-if="isGameOver"
+        v-else-if="isGameOver || isStudyComplete"
         :status="state.status"
         :points="state.player.points"
         :round="state.round"
+        :continueText="isStudyComplete ? 'Return to Prolific' : 'Continue'"
+        :showHighScores="false"
+        victoryText=""
+        defeatText=""
+        @continue="handleContinue"
       />
       <Dashboard v-else :state="state" />
     </b-container>
@@ -28,12 +36,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide } from "vue-property-decorator";
+import { Vue, Watch, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { StudyAPI } from "@port-of-mars/client/api/study/request";
-import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
-import { SoloGameClientState, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
+import {
+  DEFAULT_STATE,
+  applySoloGameServerResponses,
+} from "@port-of-mars/client/api/sologame/response";
+import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologame";
 import Dashboard from "@port-of-mars/client/components/sologame/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/sologame/GameOver.vue";
 import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
@@ -63,49 +74,68 @@ export default class ProlificStudy extends Vue {
       label: "",
     },
   };
+  statusLoading = true;
 
-  state: SoloGameClientState = {
-    type: "freeplay",
-    status: "incomplete",
-    timeRemaining: 0,
-    systemHealth: 0,
-    round: 0,
-    treatmentParams: {
-      isNumberOfRoundsKnown: false,
-      isEventDeckKnown: false,
-      thresholdInformation: "unknown",
-      isLowResSystemHealth: false,
-    },
-    player: {
-      resources: 0,
-      points: 0,
-    },
-    visibleEventCards: [],
-    activeCardId: -1,
-    canInvest: true,
-    isRoundTransitioning: false,
-  };
+  state: SoloGameClientState = { ...DEFAULT_STATE };
 
   get isGameOver() {
     return ["victory", "defeat"].includes(this.state.status);
   }
 
+  get isStudyComplete() {
+    return (
+      !this.participantStatus.nextGameType &&
+      !this.participantStatus.activeGameType &&
+      !this.statusLoading
+    );
+  }
+
+  @Watch("isGameOver", { immediate: true })
+  async onGameOver() {
+    if (this.isGameOver) {
+      await this.fetchProlificParticipantStatus();
+    }
+  }
+
+  async handleContinue() {
+    await this.fetchProlificParticipantStatus();
+    if (this.participantStatus.nextGameType) {
+      this.started = false;
+      this.state = { ...DEFAULT_STATE };
+      this.api.reset();
+    } else {
+      const completionUrl = await this.studyApi.completeProlificStudy();
+      window.location.href = completionUrl;
+    }
+  }
+
   async begin() {
     try {
       await this.leave();
-      this.api.room = await this.$client.create(SOLO_ROOM_NAME, {
-        type: this.participantStatus.nextGameType,
-      });
+      await this.fetchProlificParticipantStatus();
+      const type = this.participantStatus.activeGameType || this.participantStatus.nextGameType;
+      console.log("Creating game room with type", type);
+      this.api.room = await this.$client.create(SOLO_ROOM_NAME, { type });
       applySoloGameServerResponses(this.api.room, this);
       this.started = true;
+      setTimeout(() => {
+        // wait a bit for the room to be initialized
+        this.fetchProlificParticipantStatus();
+      }, 3 * 1000);
     } catch (err) {
       console.log("Error creating game room");
       console.error(err);
     }
   }
 
-  async created() {
+  async fetchProlificParticipantStatus() {
+    this.statusLoading = true;
     this.participantStatus = await this.studyApi.getProlificParticipantStatus();
+    this.statusLoading = false;
+  }
+
+  async created() {
+    await this.fetchProlificParticipantStatus();
   }
 
   destroyed() {

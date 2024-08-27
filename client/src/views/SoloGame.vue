@@ -7,6 +7,7 @@
         :status="state.status"
         :points="state.player.points"
         :round="state.round"
+        @continue="handleContinue"
       />
       <Dashboard v-else :state="state" />
     </b-container>
@@ -17,8 +18,11 @@
 import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
-import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
-import { SoloGameClientState, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
+import {
+  DEFAULT_STATE,
+  applySoloGameServerResponses,
+} from "@port-of-mars/client/api/sologame/response";
+import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologame";
 import Dashboard from "@port-of-mars/client/components/sologame/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/sologame/GameOver.vue";
 import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
@@ -37,32 +41,15 @@ export default class SoloGame extends Vue {
   hasApi = false;
   started = false;
 
-  // FIXME: move this to a vuex store after splitting up the multiplayer game and
-  // onboarding/etc. stores
-  state: SoloGameClientState = {
-    type: "freeplay",
-    status: "incomplete",
-    timeRemaining: 0,
-    systemHealth: 0,
-    round: 0,
-    treatmentParams: {
-      isNumberOfRoundsKnown: false,
-      isEventDeckKnown: false,
-      thresholdInformation: "unknown",
-      isLowResSystemHealth: false,
-    },
-    player: {
-      resources: 0,
-      points: 0,
-    },
-    visibleEventCards: [],
-    activeCardId: -1,
-    canInvest: true,
-    isRoundTransitioning: false,
-  };
+  state: SoloGameClientState = { ...DEFAULT_STATE };
 
   get isGameOver() {
     return ["victory", "defeat"].includes(this.state.status);
+  }
+
+  handleContinue() {
+    this.started = false;
+    this.state = { ...DEFAULT_STATE };
   }
 
   async begin() {

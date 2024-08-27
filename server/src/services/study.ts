@@ -43,32 +43,40 @@ export class StudyService extends BaseService {
     ];
     let currentStep = 1;
 
-    const baselineGamePlayer = soloPlayers.find(p => p.game.type === "prolificBaseline");
-    const variableGamePlayer = soloPlayers.find(p => p.game.type === "prolificVariable");
-
-    if (baselineGamePlayer) {
-      if (baselineGamePlayer.game.status === "incomplete") {
-        // game 1 started
-        currentStep = 2;
-        activeGameType = "prolificBaseline";
+    const hasPlayedBaseline = !!soloPlayers.find(p => p.game.type === "prolificBaseline");
+    const hasPlayedVariable = !!soloPlayers.find(p => p.game.type === "prolificVariable");
+    if (hasPlayedVariable) {
+      const hasCompletedVariable = !!soloPlayers.find(
+        p =>
+          p.game.type === "prolificVariable" &&
+          (p.game.status === "victory" || p.game.status === "defeat")
+      );
+      if (hasCompletedVariable) {
+        // game 2 completed
+        currentStep = 5;
+        activeGameType = null;
         nextGameType = null;
       } else {
-        // game 1 completed
-        currentStep = 3;
-        activeGameType = null;
-        nextGameType = "prolificVariable";
-      }
-    }
-    if (variableGamePlayer) {
-      if (variableGamePlayer.game.status === "incomplete") {
         // game 2 started
         currentStep = 4;
         activeGameType = "prolificVariable";
         nextGameType = null;
-      } else {
-        // game 2 completed
-        currentStep = 5;
+      }
+    } else if (hasPlayedBaseline) {
+      const hasCompletedBaseline = !!soloPlayers.find(
+        p =>
+          p.game.type === "prolificBaseline" &&
+          (p.game.status === "victory" || p.game.status === "defeat")
+      );
+      if (hasCompletedBaseline) {
+        // game 1 completed
+        currentStep = 3;
         activeGameType = null;
+        nextGameType = "prolificVariable";
+      } else {
+        // game 1 started
+        currentStep = 2;
+        activeGameType = "prolificBaseline";
         nextGameType = null;
       }
     }
@@ -123,6 +131,33 @@ export class StudyService extends BaseService {
 
   async getProlificStudy(studyId: string): Promise<ProlificStudy | null> {
     return this.getRepository().findOneBy({ studyId });
+  }
+
+  async getProlificCompletionUrl(user: User): Promise<string> {
+    const participant = await this.getParticipantRepository().findOne({
+      where: { userId: user.id },
+      relations: ["study"],
+    });
+    if (!participant) {
+      throw new ServerError({
+        code: 404,
+        message: "Participant not found",
+        displayMessage: "Participant not found",
+      });
+    }
+    // sanity check: make sure the user has played 2 games
+    const numPlays = await this.em.getRepository(SoloPlayer).count({
+      where: { userId: user.id },
+      relations: ["game"],
+    });
+    if (numPlays < 2) {
+      throw new ServerError({
+        code: 403,
+        message: "Study not complete",
+        displayMessage: "Study not complete",
+      });
+    }
+    return `https://app.prolific.co/submissions/complete?cc=${participant.study.completionCode}`;
   }
 
   async createProlificStudy(

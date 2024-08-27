@@ -18,7 +18,7 @@
             :delta="0"
             v-model="lowResSystemHealth"
             :customTextDisplay="lowResSystemHealthText"
-            label="System Health (e)"
+            label="System Health"
             class="flex-grow-1"
             variant="green"
           />

@@ -1,6 +1,6 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { SetHiddenParams } from "@port-of-mars/shared/sologame";
+import { SetHiddenParams, SoloGameClientState } from "@port-of-mars/shared/sologame";
 
 type Schemify<T> = T & Schema;
 
@@ -67,3 +67,25 @@ export function applySoloGameServerResponses(room: Room, component: any) {
     component.state = { ...component.state, ...msg.data };
   });
 }
+
+export const DEFAULT_STATE: SoloGameClientState = {
+  type: "freeplay",
+  status: "incomplete",
+  timeRemaining: 0,
+  systemHealth: 0,
+  round: 0,
+  treatmentParams: {
+    isNumberOfRoundsKnown: false,
+    isEventDeckKnown: false,
+    thresholdInformation: "unknown",
+    isLowResSystemHealth: false,
+  },
+  player: {
+    resources: 0,
+    points: 0,
+  },
+  visibleEventCards: [],
+  activeCardId: -1,
+  canInvest: true,
+  isRoundTransitioning: false,
+};
