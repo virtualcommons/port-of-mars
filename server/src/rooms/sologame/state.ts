@@ -134,6 +134,6 @@ export class SoloGameState extends Schema {
     timeRemaining: 30,
     eventTimeout: 10,
     points: 0,
-    resources: 7,
+    resources: 10,
   };
 }
