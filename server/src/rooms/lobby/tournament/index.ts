@@ -108,13 +108,13 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   onAcceptInvitation(client: Client, message: AcceptInvitation) {
     logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
-    this.state.setClientAccepted(client.auth.username);
     const group = this.groupManager.getClientPendingGroup(client);
     // check that all clients in the group have accepted the invitation
     if (!group) {
       logger.warn(`no client group found for client ${client.auth.username}`);
       return;
     }
+    group.setClientAccepted(client.auth.username);
     if (group.allClientsAccepted()) {
       group.clearForceMoveTimeout();
       this.removeGroupFromLobby(group);
