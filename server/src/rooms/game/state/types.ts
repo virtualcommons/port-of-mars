@@ -42,6 +42,7 @@ export interface RoundSummary {
   marsEventIds: Array<string>;
   marsEventsProcessed: number;
   players: PlayerSetSummary;
+  roundIntroduction?: RoundIntroductionData;
 }
 
 export interface MarsEventDeckSerialized {
