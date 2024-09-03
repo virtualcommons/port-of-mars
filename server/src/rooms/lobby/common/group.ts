@@ -16,6 +16,13 @@ export class Group {
     this.clients = clients;
   }
 
+  setClientAccepted(username: string) {
+    const index = this.clients.findIndex((c: LobbyClient) => c.username === username);
+    if (index > -1) {
+      this.clients[index].accepted = true;
+    }
+  }
+
   allClientsAccepted() {
     return this.clients.every(client => client.accepted);
   }
