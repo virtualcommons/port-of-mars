@@ -148,6 +148,9 @@ export class EducatorService extends BaseService {
   }
 
   async getCompletedGamesForClassroom(classroomId: number): Promise<Array<Game>> {
+    // FIXME: the entire game object with all of the relations is huge and includes some sensitive data
+    // create a new data type game reports that includes only the necessary data to display
+    // an overview table and details for each game
     const query = this.em
       .getRepository(Game)
       .createQueryBuilder("game")
@@ -155,6 +158,7 @@ export class EducatorService extends BaseService {
       .leftJoinAndSelect("player.user", "user")
       .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
       .leftJoinAndSelect("tournamentRound.tournament", "tournament")
+      .leftJoinAndSelect("game.events", "gameEvent", "gameEvent.type = 'taken-round-snapshot'")
       .where("game.classroomId = :classroomId", { classroomId });
 
     return query.getMany();
