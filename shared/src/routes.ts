@@ -19,6 +19,7 @@ export const STUDENT_LOGIN_PAGE = "StudentLogin" as const;
 export const STUDENT_CONFIRM_PAGE = "StudentConfirm" as const;
 export const CLASSROOM_LOBBY_PAGE = "ClassroomLobby" as const;
 export const TEACHER_DASHBOARD_PAGE = "TeacherDashboard" as const;
+export const EDUCATOR_PRIVACY_PAGE = "EducatorPrivacy" as const;
 
 export type Page =
   | "Admin"
@@ -41,7 +42,8 @@ export type Page =
   | "StudentLogin"
   | "StudentConfirm"
   | "ClassroomLobby"
-  | "TeacherDashboard";
+  | "TeacherDashboard"
+  | "EducatorPrivacy";
 
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
@@ -64,6 +66,7 @@ export const PAGES: Array<Page> = [
   STUDENT_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
   TEACHER_DASHBOARD_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 ];
 
 export function getPagePath(page: Page): string {
@@ -246,6 +249,14 @@ export const PAGE_META: {
     meta: {
       requiresAuth: true,
       requiresTeacher: true,
+    },
+  },
+
+  [EDUCATOR_PRIVACY_PAGE]: {
+    path: "/educator-privacy",
+    name: EDUCATOR_PRIVACY_PAGE,
+    meta: {
+      requiresAuth: false,
     },
   },
 };

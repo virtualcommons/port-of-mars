@@ -299,4 +299,8 @@ export class EducatorService extends BaseService {
     });
     return repo.save(classroom);
   }
+
+  async getSystemHealthForRound() {}
+
+  async getChatLogForGame() {}
 }
