@@ -30,6 +30,15 @@
           Manual
         </b-nav-item>
         <b-nav-item
+          class="mx-2"
+          :to="educatorPrivacy"
+          target="_blank"
+          exact-active-class="active"
+          title="Educator Privacy Page"
+        >
+          Privacy Policy
+        </b-nav-item>
+        <b-nav-item
           v-if="isStudent && isVerified"
           class="mx-2"
           :to="classroomLobby"
@@ -83,6 +92,7 @@ import {
   STUDENT_LOGIN_PAGE,
   CLASSROOM_LOBBY_PAGE,
   TEACHER_DASHBOARD_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -108,6 +118,7 @@ export default class Navbar extends Vue {
   studentLogin = { name: STUDENT_LOGIN_PAGE };
   classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
   teacherDashboard = { name: TEACHER_DASHBOARD_PAGE };
+  educatorPrivacy = { name: EDUCATOR_PRIVACY_PAGE };
 
   get username() {
     return this.$tstore.state.user.username;

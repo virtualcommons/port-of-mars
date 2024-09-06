@@ -26,6 +26,7 @@ import StudentLogin from "@port-of-mars/client/views/StudentLogin.vue";
 import StudentConfirm from "@port-of-mars/client/views/StudentConfirm.vue";
 import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
 import TeacherDashboard from "@port-of-mars/client/views/TeacherDashboard.vue";
+import EducatorPrivacy from "@port-of-mars/client/views/EducatorPrivacy.vue";
 import store from "@port-of-mars/client/store";
 import { isEducatorMode } from "@port-of-mars/client/util";
 import {
@@ -50,6 +51,7 @@ import {
   STUDENT_CONFIRM_PAGE,
   CLASSROOM_LOBBY_PAGE,
   TEACHER_DASHBOARD_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -186,6 +188,7 @@ function getEducatorRouter() {
       { ...PAGE_META[STUDENT_CONFIRM_PAGE], component: StudentConfirm },
       { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
       { ...PAGE_META[TEACHER_DASHBOARD_PAGE], component: TeacherDashboard },
+      { ...PAGE_META[EDUCATOR_PRIVACY_PAGE], component: EducatorPrivacy },
     ],
   });
 
