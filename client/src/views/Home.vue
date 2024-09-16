@@ -10,34 +10,49 @@
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
-            <p>
+            <p class="mb-1">
               Port of Mars is an online, game-based, social science experiment set on the first
-              human community on the Red Planet. We are now in an open beta where anyone aged 18 and
-              over<AgeTooltip placement="right" /> can participate.
+              human community on the Red Planet. Play the original multiplayer game in free play
+              mode or the solo version for fun<sup>1</sup>, and sign up to be notified about future
+              Mars Madness tournaments.
+            </p>
+            <p class="text-muted mb-0">
+              <sup>1 </sup>
+              <small>
+                There is no monetary reward for participating in the original or solo game outside
+                of a scheduled tournament
+              </small>
+            </p>
+            <p class="text-muted">
+              <sup>2 </sup>
+              <small>You must be 18 or over to participate </small>
+              <AgeTooltip class="text-secondary" placement="right" />
             </p>
             <b-row class="mt-3">
               <b-col>
-                <b-button class="mt-3 mr-3" size="md" variant="secondary" :to="solo">
-                  <h4 class="p-1">Solo Mode</h4>
-                </b-button>
-                <b-button
-                  v-if="isFreePlayEnabled"
-                  class="mt-3 mr-3"
-                  size="md"
-                  variant="primary"
-                  :to="freePlayLobby"
-                >
-                  <h4 class="p-1">Free Play</h4>
-                </b-button>
-                <b-button
-                  class="mt-3"
-                  size="md"
-                  v-if="shouldShowTournamentBanner"
-                  variant="success"
-                  :to="tournamentDashboard"
-                >
-                  <h4 class="p-1">Join Mars Madness</h4>
-                </b-button>
+                <div>
+                  <b-button class="mt-3 mr-3" size="md" variant="secondary" :to="solo">
+                    <h4 class="p-1">Solo Mode</h4>
+                  </b-button>
+                  <b-button
+                    v-if="isFreePlayEnabled"
+                    class="mt-3 mr-3"
+                    size="md"
+                    variant="primary"
+                    :to="freePlayLobby"
+                  >
+                    <h4 class="p-1">Free Play</h4>
+                  </b-button>
+                  <b-button
+                    class="mt-3"
+                    size="md"
+                    v-if="shouldShowTournamentBanner"
+                    variant="success"
+                    :to="tournamentDashboard"
+                  >
+                    <h4 class="p-1">Join Mars Madness</h4>
+                  </b-button>
+                </div>
               </b-col>
             </b-row>
           </b-col>

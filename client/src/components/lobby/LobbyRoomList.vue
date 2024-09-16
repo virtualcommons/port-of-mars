@@ -91,6 +91,12 @@
         >
           <h4>Play vs Bots</h4>
         </b-button>
+        <p class="text-muted">
+          <small>
+            Participation outside of scheduled tournaments is purely for fun or practice and does
+            not result in any monetary reward.
+          </small>
+        </p>
         <MuteBanWarning class="mt-3"></MuteBanWarning>
       </div>
     </b-col>
