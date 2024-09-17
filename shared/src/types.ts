@@ -526,6 +526,7 @@ export interface DynamicSettingsData {
 export interface ProlificParticipantStatus {
   activeGameType: SoloGameType | null;
   nextGameType: SoloGameType | null;
+  nextGameInstructions?: string;
   progress: {
     max: number;
     current: number;

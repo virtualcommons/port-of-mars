@@ -93,6 +93,12 @@ items:
     isEventDeckKnown: true
     thresholdInformation: known
     isLowResSystemHealth: false
+    instructions: |
+      <h4>Game 1</h4>
+      <p>This game consists of a maximum of <strong>eight rounds</strong>. You can earn money by making investment decisions to keep <strong>System Health</strong> above 0. You get each round <strong>ten resource units</strong> which you can invest in System Health or keep them for yourselves. System Health declines each round with 5 units, and if System Health drops to 0, the game ends and you will receive 0 points for the whole game. If after eight rounds System Health is above 0, you receive the total number of points. Each point will be 1 cent in the final payment.</p>
+      <p>For example, if you invest 6 resource units in System Health, you earn 4 points and System Health increases by 6 units. At the start of the game System Health has 15 units, and the maximum level of System health is 25 units.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen. When you make an investment decision, you move directly to the next round. If you do not make an investment decision, you do not earn points.</p>
+      <p>If you are ready, click the start button.</p>
   # PROLIFIC VARIABLE TREATMENTS
   prolificVariableTreatment1:
     id: 14
@@ -101,6 +107,15 @@ items:
     isEventDeckKnown: true
     thresholdInformation: known
     isLowResSystemHealth: false
+    instructions: |
+      <h4>Game 2</h4>
+      <p>This game is an extension of game 1. Like game 1 you get 10 resource units each round which you can invest in System Health or keep them for yourselves. Again System Health declines each round with 5 units, and if System Health drops to 0, it is game over and you will not receive any points and thus not any earnings.</p>
+      <p>What is <i>different</i> in game 2 is the following:</p>
+      <p>In this game the maximum number of rounds will be 11. From round 2 onwards, random event cards are drawn that can impact the System Health, your points and the resources available to invest in System Health.</p>
+      <p>If System Health is 16 or higher, 1 event card is drawn. If System Health drops below 16, 2 event cards are drawn, and if System Health drops below 9, 3 event cards are drawn.</p>
+      <p>The possible event cards will be listed on the screen at the right.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen.</p>
+      <p>If you are ready, click the start button.</p>
   prolificVariableTreatment2:
     id: 15
     gameType: prolificVariable
@@ -108,6 +123,14 @@ items:
     isEventDeckKnown: false
     thresholdInformation: known
     isLowResSystemHealth: false
+    instructions: |
+      <h4>Game 2</h4>
+      <p>This game is an extension of game 1. Like game 1 you get 10 resource units each round which you can invest in System Health or keep them for yourselves. Again System Health declines each round with 5 units, and if System Health drops to 0, it is game over and you will not receive any points and thus not any earnings.</p>
+      <p>What is <i>different</i> in game 2 is the following:</p>
+      <p>In this game the maximum number of rounds will be 11. From round 2 onwards, random event cards are drawn that can impact the System Health, your points and the resources available to invest in System Health.</p>
+      <p>If System Health is 16 or higher, 1 event card is drawn. If System Health drops below 16, 2 event cards are drawn, and if System Health drops below 9, 3 event cards are drawn.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen.</p>
+      <p>If you are ready, click the start button.</p>
   prolificVariableTreatment3:
     id: 16
     gameType: prolificVariable
@@ -115,6 +138,14 @@ items:
     isEventDeckKnown: false
     thresholdInformation: known
     isLowResSystemHealth: true
+    instructions: |
+      <h4>Game 2</h4>
+      <p>This game is an extension of game 1. Like game 1 you get 10 resource units each round which you can invest in System Health or keep them for yourselves. Again System Health declines each round with 5 units, and if System Health drops to 0, it is game over and you will not receive any points and thus not any earnings.</p>
+      <p>What is <i>different</i> in game 2 is the following:</p>
+      <p>In this game the maximum number of rounds will be 11. From round 2 onwards, random event cards are drawn that can impact the system health, your points and the resources available to invest in System Health.</p>
+      <p>If System Health is 16 or higher, 1 event card is drawn. If System Health drops below 16, 2 event cards are drawn, and if System Health drops below 9, 3 event cards are drawn.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen.</p>
+      <p>If you are ready, click the start button.</p>
   prolificVariableTreatment4:
     id: 17
     gameType: prolificVariable
@@ -122,6 +153,15 @@ items:
     isEventDeckKnown: true
     thresholdInformation: known
     isLowResSystemHealth: false
+    instructions: |
+      <h4>Game 2</h4>
+      <p>This game is an extension of game 1. Like game 1 you get 10 resource units each round which you can invest in System Health or keep them for yourselves. Again System Health declines each round with 5 units, and if System Health drops to 0, it is game over and you will not receive any points and thus not any earnings.</p>
+      <p>What is <i>different</i> in game 2 is the following:</p>
+      <p>In this game the maximum number of rounds is unknown but will between 6 and 14 rounds. From round 2 onwards, random event cards are drawn that can impact the System Health, your points and the resources available to invest in System Health.</p>
+      <p>If System Health is 16 or higher, 1 event card is drawn. If System Health drops below 16, 2 event cards are drawn, and if System Health drops below 9, 3 event cards are drawn.</p>
+      <p>The possible event cards will be listed on the screen at the right.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen.</p>
+      <p>If you are ready, click the start button.</p>
   prolificVariableTreatment5:
     id: 18
     gameType: prolificVariable
@@ -129,6 +169,15 @@ items:
     isEventDeckKnown: true
     thresholdInformation: range
     isLowResSystemHealth: false
+    instructions: |
+      <h4>Game 2</h4>
+      <p>This game is an extension of game 1. Like game 1 you get 10 resource units each round which you can invest in System Health or keep them for yourselves. Again System Health declines each round with 5 units, and if System Health drops to 0, it is game over and you will not receive any points and thus not any earnings.</p>
+      <p>What is <i>different</i> in game 2 is the following:</p>
+      <p>In this game the maximum number of rounds will be 11. From round 2 onwards, random event cards are drawn that can impact the system health, your points and the resources available to invest in System Health.</p>
+      <p>One event card will be drawn each round, but if System Health is below a certain level 1 extra card is drawn. You do not know this specific level, but it is somewhere between 12 and 18 units of System Health. If System Health drops even lower another extra event card will be drawn. You do not know this second level that triggers the additional card, but it is somewhere between 5 and 11 units of System Health.</p>
+      <p>The possible event cards will be listed on the screen at the right.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen.</p>
+      <p>If you are ready, click the start button.</p>
   prolificVariableTreatment6:
     id: 19
     gameType: prolificVariable
@@ -136,3 +185,11 @@ items:
     isEventDeckKnown: true
     thresholdInformation: unknown
     isLowResSystemHealth: false
+    instructions: |
+      <h4>Game 2</h4>
+      <p>This game is an extension of game 1. Like game 1 you get 10 resource units each round which you can invest in System Health or keep them for yourselves. Again System Health declines each round with 5 units, and if System Health drops to 0, it is game over and you will not receive any points and thus not any earnings.</p>
+      <p>What is <i>different</i> in game 2 is the following:</p>
+      <p>In this game the maximum number of rounds will be 11. From round 2 onwards, random event cards are drawn that can impact the system health, your points and the resources available to invest in System Health. The lower the System Health the more likely additional event cards are drawn.</p>
+      <p>The possible event cards will be listed on the screen at the right.</p>
+      <p>You get 15 seconds each round to make a decision using the controls at the right of the screen.</p>
+      <p>If you are ready, click the start button.</p>

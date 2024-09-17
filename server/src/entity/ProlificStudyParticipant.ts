@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ProlificStudy } from "./ProlificStudy";
 import { User } from "./User";
+import { SoloGameTreatment } from "./SoloGameTreatment";
 
 @Entity()
 export class ProlificStudyParticipant {
@@ -22,4 +23,16 @@ export class ProlificStudyParticipant {
 
   @Column()
   studyId!: number;
+
+  @ManyToOne(type => SoloGameTreatment)
+  prolificBaselineTreatment!: SoloGameTreatment;
+
+  @Column()
+  prolificBaselineTreatmentId!: number;
+
+  @ManyToOne(type => SoloGameTreatment)
+  prolificVariableTreatment!: SoloGameTreatment;
+
+  @Column()
+  prolificVariableTreatmentId!: number;
 }

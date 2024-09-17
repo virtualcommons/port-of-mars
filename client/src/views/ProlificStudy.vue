@@ -18,6 +18,7 @@
         v-if="!started && !isStudyComplete"
         @begin="begin"
         :gameType="participantStatus.nextGameType"
+        :instructions="participantStatus.nextGameInstructions"
       />
       <GameOver
         v-else-if="isGameOver || isStudyComplete"

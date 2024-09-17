@@ -62,7 +62,7 @@ export class SoloGameService extends BaseService {
     return deck;
   }
 
-  async getUserNextFreeplayTreatment(userId: number): Promise<TreatmentData> {
+  async getUserNextFreeplayTreatment(userId: number): Promise<SoloGameTreatment> {
     /**
      * get the next treatment (in order) that a user has not yet seen. If they have seen all
      * then return a random one.
@@ -103,21 +103,7 @@ export class SoloGameService extends BaseService {
     return treatmentRepo.findOneByOrFail({ id: randomTreatmentId });
   }
 
-  async getRandomTreatment(gameType: SoloGameType): Promise<TreatmentData> {
-    /**
-     * get a random treatment for a given game type
-     */
-    const treatmentRepo = this.em.getRepository(SoloGameTreatment);
-    const treatments = await treatmentRepo.find({
-      where: { gameType },
-    });
-    if (treatments.length === 0) {
-      throw new Error(`No treatments found for solo game type: ${gameType}`);
-    }
-    return treatments[getRandomIntInclusive(0, treatments.length - 1)];
-  }
-
-  async getTreatmentById(id: number): Promise<TreatmentData> {
+  async getTreatmentById(id: number): Promise<SoloGameTreatment> {
     return this.em.getRepository(SoloGameTreatment).findOneByOrFail({ id });
   }
 

@@ -1,13 +1,14 @@
 import {
   ProlificStudy,
   ProlificStudyParticipant,
+  SoloGameTreatment,
   SoloPlayer,
   User,
 } from "@port-of-mars/server/entity";
 import { Repository } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { generateUsername, ServerError } from "@port-of-mars/server/util";
+import { generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
 import { SoloGameType } from "@port-of-mars/shared/sologame";
 import { ProlificParticipantStatus } from "@port-of-mars/shared/types";
 
@@ -31,9 +32,14 @@ export class StudyService extends BaseService {
       where: { userId: user.id },
       relations: ["game"],
     });
+    const participant = await this.getParticipantRepository().findOneOrFail({
+      where: { userId: user.id },
+      relations: ["prolificBaselineTreatment", "prolificVariableTreatment"],
+    });
 
     let activeGameType: SoloGameType | null = null;
     let nextGameType: SoloGameType | null = "prolificBaseline";
+    let nextGameInstructions = participant.prolificBaselineTreatment.instructions;
     const steps = [
       "START GAME 1",
       "PLAYING GAME 1/2",
@@ -73,6 +79,7 @@ export class StudyService extends BaseService {
         currentStep = 3;
         activeGameType = null;
         nextGameType = "prolificVariable";
+        nextGameInstructions = participant.prolificVariableTreatment.instructions;
       } else {
         // game 1 started
         currentStep = 2;
@@ -84,6 +91,7 @@ export class StudyService extends BaseService {
     return {
       activeGameType,
       nextGameType,
+      nextGameInstructions,
       progress: {
         max: steps.length,
         current: currentStep,
@@ -121,12 +129,53 @@ export class StudyService extends BaseService {
       participant.user = user;
       participant.study = study;
       participant.prolificId = prolificId;
+      participant.prolificBaselineTreatment = await this.getRandomTreatmentFor("prolificBaseline");
+      participant.prolificVariableTreatment = await this.getRandomTreatmentFor("prolificVariable");
       logger.info(`Created new prolific participant ${prolificId} for study ${studyId}`);
       await this.getParticipantRepository().save(participant);
     } else {
       logger.info(`Found existing prolific participant ${prolificId} for study ${studyId}`);
     }
     return participant;
+  }
+
+  async getRandomTreatmentFor(
+    gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">
+  ): Promise<SoloGameTreatment> {
+    /**
+     * get a random treatment for a given prolific game type
+     */
+    const treatmentRepo = this.em.getRepository(SoloGameTreatment);
+    const treatments = await treatmentRepo.find({
+      where: { gameType },
+    });
+    if (treatments.length === 0) {
+      throw new Error(`No treatments found for solo game type: ${gameType}`);
+    }
+    return treatments[getRandomIntInclusive(0, treatments.length - 1)];
+  }
+
+  async getTreatmentForUser(
+    user: User,
+    gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">
+  ): Promise<SoloGameTreatment> {
+    /**
+     * get the treatment that a given user is assigned to for a given prolific game type
+     */
+    const participant = await this.getParticipantRepository().findOne({
+      where: { userId: user.id },
+      relations: ["prolificBaselineTreatment", "prolificVariableTreatment"],
+    });
+    if (!participant) {
+      throw new ServerError({
+        code: 404,
+        message: "Participant not found",
+        displayMessage: "Participant not found",
+      });
+    }
+    return gameType === "prolificBaseline"
+      ? participant.prolificBaselineTreatment
+      : participant.prolificVariableTreatment;
   }
 
   async getProlificStudy(studyId: string): Promise<ProlificStudy | null> {

@@ -190,28 +190,28 @@ items:
   prolificVariableEvent14:
     id: 23
     gameType: prolificVariable
-    codeName: "investSystemHealth8"
-    effect: "8 resources are immediately diverted to system health."
-    rollMin: 8
-    rollMax: 8
-    systemHealthMultiplier: 1
-    resourcesMultiplier: -1
-  prolificVariableEvent15:
-    id: 24
-    gameType: prolificVariable
     codeName: "reduceSystemHealth1"
     effect: "Lose 1 system health."
     rollMin: 1
     rollMax: 1
     systemHealthMultiplier: -1
-  prolificVariableEvent16:
-    id: 25
+  prolificVariableEvent15:
+    id: 24
     gameType: prolificVariable
     codeName: "reducePoints1"
     effect: "Lose 1 point."
     rollMin: 1
     rollMax: 1
     pointsMultiplier: -1
+  prolificVariableEvent16:
+    id: 25
+    gameType: prolificVariable
+    codeName: "investSystemHealth8"
+    effect: "8 resources are immediately diverted to system health."
+    rollMin: 8
+    rollMax: 8
+    systemHealthMultiplier: 1
+    resourcesMultiplier: -1
   prolificVariableEvent17:
     id: 26
     gameType: prolificVariable

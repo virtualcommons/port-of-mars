@@ -23,4 +23,7 @@ export class SoloGameTreatment {
 
   @Column({ default: false })
   isLowResSystemHealth!: boolean;
+
+  @Column({ nullable: true })
+  instructions?: string;
 }

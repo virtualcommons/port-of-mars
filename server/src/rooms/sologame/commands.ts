@@ -55,14 +55,15 @@ export class CreateDeckCmd extends CmdWithoutPayload {
 
 export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
   async execute({ user } = this.payload) {
-    const { sologame: service } = getServices();
     if (this.state.type === "freeplay") {
+      const { sologame: service } = getServices();
       this.state.treatmentParams = new TreatmentParams(
         await service.getUserNextFreeplayTreatment(user.id)
       );
     } else {
+      const { study: service } = getServices();
       this.state.treatmentParams = new TreatmentParams(
-        await service.getRandomTreatment(this.state.type)
+        await service.getTreatmentForUser(user, this.state.type)
       );
     }
   }
@@ -241,8 +242,8 @@ export class DrawCardsCmd extends CmdWithoutPayload {
   }
 
   getDrawCount() {
-    if (this.state.systemHealth > this.state.twoEventsThreshold) return 1;
-    if (this.state.systemHealth > this.state.threeEventsThreshold) return 2;
+    if (this.state.systemHealth >= this.state.twoEventsThreshold) return 1;
+    if (this.state.systemHealth >= this.state.threeEventsThreshold) return 2;
     return 3;
   }
 }
