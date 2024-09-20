@@ -22,6 +22,14 @@ export default {
     return state.user?.isAdmin;
   },
 
+  isTeacher(state: State): boolean {
+    return state.user?.isTeacher || false;
+  },
+
+  isStudent(state: State): boolean {
+    return state.user?.isStudent || false;
+  },
+
   hasConsented(state: State): boolean {
     return !!state.user?.dateConsented;
   },

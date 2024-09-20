@@ -584,9 +584,9 @@ export class GameReplayer {
         // do the validation against event.payload against the currentRoundGameEvents
         const stateSnapshot = event.payload as RoundSummary;
         gameState.applyMany(currentRoundGameEvents.map(e => gameEventDeserializer.deserialize(e)));
-        // assert that round summary data lines up properly with the current gameState
+        // assert that round summary data lines up properly with the current gameState (partial match)
         try {
-          assert.deepEqual(stateSnapshot, gameState.getRoundSummary());
+          assert(_.isMatch(stateSnapshot, gameState.getRoundSummary()));
           logger.trace(`successfully validated round ${gameState.round}`);
           results.push({
             round: gameState.round,

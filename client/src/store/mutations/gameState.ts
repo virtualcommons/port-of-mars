@@ -65,6 +65,8 @@ function SET_USER(state: State, payload: User) {
     "participantId",
     "dateConsented",
     "isVerified",
+    "isTeacher",
+    "isStudent",
   ]);
 }
 

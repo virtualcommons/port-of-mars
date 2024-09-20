@@ -14,6 +14,11 @@ export const HOME_PAGE = "Home" as const;
 export const ABOUT_PAGE = "About" as const;
 export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
+export const STUDENT_LOGIN_PAGE = "StudentLogin" as const;
+export const STUDENT_CONFIRM_PAGE = "StudentConfirm" as const;
+export const CLASSROOM_LOBBY_PAGE = "ClassroomLobby" as const;
+export const TEACHER_DASHBOARD_PAGE = "TeacherDashboard" as const;
+export const EDUCATOR_PRIVACY_PAGE = "EducatorPrivacy" as const;
 
 export type Page =
   | "Admin"
@@ -31,7 +36,12 @@ export type Page =
   | "Profile"
   | "Verify"
   | "Manual"
-  | "Privacy";
+  | "Privacy"
+  | "StudentLogin"
+  | "StudentConfirm"
+  | "ClassroomLobby"
+  | "TeacherDashboard"
+  | "EducatorPrivacy";
 
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
@@ -50,6 +60,10 @@ export const PAGES: Array<Page> = [
   HOME_PAGE,
   ABOUT_PAGE,
   PRIVACY_PAGE,
+  STUDENT_LOGIN_PAGE,
+  STUDENT_CONFIRM_PAGE,
+  TEACHER_DASHBOARD_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -65,6 +79,7 @@ export interface RouteMeta {
   requiresAuth: boolean;
   requiresConsent?: boolean;
   requiresAdmin?: boolean;
+  requiresTeacher?: boolean;
   requiresTournamentEnabled?: boolean;
   requiresFreePlayEnabled?: boolean;
 }
@@ -198,6 +213,43 @@ export const PAGE_META: {
     meta: {
       requiresAuth: true,
       requiresConsent: true,
+    },
+  },
+  [STUDENT_LOGIN_PAGE]: {
+    path: "/student-login",
+    name: STUDENT_LOGIN_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  [STUDENT_CONFIRM_PAGE]: {
+    path: "/student-confirm",
+    name: STUDENT_CONFIRM_PAGE,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  [CLASSROOM_LOBBY_PAGE]: {
+    path: "/classroom",
+    name: CLASSROOM_LOBBY_PAGE,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  [TEACHER_DASHBOARD_PAGE]: {
+    path: "/teacher-dashboard",
+    name: TEACHER_DASHBOARD_PAGE,
+    meta: {
+      requiresAuth: true,
+      requiresTeacher: true,
+    },
+  },
+
+  [EDUCATOR_PRIVACY_PAGE]: {
+    path: "/educator-privacy",
+    name: EDUCATOR_PRIVACY_PAGE,
+    meta: {
+      requiresAuth: false,
     },
   },
 };
