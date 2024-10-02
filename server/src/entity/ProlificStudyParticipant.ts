@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { ProlificStudy } from "./ProlificStudy";
 import { User } from "./User";
 import { SoloGameTreatment } from "./SoloGameTreatment";
+import { SoloPlayer } from "./SoloPlayer";
 
 @Entity()
 export class ProlificStudyParticipant {
@@ -35,4 +36,18 @@ export class ProlificStudyParticipant {
 
   @Column()
   prolificVariableTreatmentId!: number;
+
+  @OneToOne(type => SoloPlayer, { nullable: true })
+  @JoinColumn()
+  prolificBaselinePlayer!: SoloPlayer;
+
+  @Column({ nullable: true })
+  prolificBaselinePlayerId!: number;
+
+  @OneToOne(type => SoloPlayer, { nullable: true })
+  @JoinColumn()
+  prolificVariablePlayer!: SoloPlayer;
+
+  @Column({ nullable: true })
+  prolificVariablePlayerId!: number;
 }

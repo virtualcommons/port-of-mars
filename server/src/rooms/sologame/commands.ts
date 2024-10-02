@@ -92,8 +92,11 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
 
 export class PersistGameCmd extends CmdWithoutPayload {
   async execute() {
-    const { sologame: service } = getServices();
-    const game = await service.createGame(this.state);
+    const { sologame, study } = getServices();
+    const game = await sologame.createGame(this.state);
+    if (this.state.type === "prolificVariable" || this.state.type === "prolificBaseline") {
+      await study.setProlificParticipantPlayer(this.state.type, game.player);
+    }
     this.state.gameId = game.id;
     // keep track of deck card db ids after persisting the deck
     this.state.eventCardDeck.forEach((card, index) => {

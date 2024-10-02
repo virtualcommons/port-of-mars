@@ -139,6 +139,72 @@ export class StudyService extends BaseService {
     return participant;
   }
 
+  async setProlificParticipantPlayer(
+    gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">,
+    player: SoloPlayer
+  ): Promise<ProlificStudyParticipant> {
+    const participant = await this.getParticipantRepository().findOneOrFail({
+      where: { userId: player.userId },
+      relations: [`${gameType}Player`],
+    });
+    if (gameType === "prolificBaseline") {
+      participant.prolificBaselinePlayer = player;
+    } else {
+      participant.prolificVariablePlayer = player;
+    }
+    return this.getParticipantRepository().save(participant);
+  }
+
+  async getAllParticipantPoints(
+    studyId: string
+  ): Promise<Array<{ prolificId: string; points: number }>> {
+    const study = await this.getProlificStudy(studyId);
+    if (!study) {
+      throw new ServerError({
+        code: 404,
+        message: `Invalid study ID: ${studyId}`,
+        displayMessage: `Invalid study ID: ${studyId}`,
+      });
+    }
+    const participants = await this.getParticipantRepository().find({
+      where: { studyId: study.id },
+      relations: {
+        prolificBaselinePlayer: {
+          game: true,
+        },
+        prolificVariablePlayer: {
+          game: true,
+        },
+      },
+    });
+    return (
+      participants
+        // filter out participants who haven't fully completed both games
+        .filter(
+          p =>
+            p.prolificBaselinePlayer?.game &&
+            p.prolificVariablePlayer?.game &&
+            p.prolificBaselinePlayer.points &&
+            p.prolificVariablePlayer.points
+        )
+        // return an array of prolificId and total points earned, if they lost they get 0 points
+        .map(p => {
+          const prolificBaselinePoints =
+            p.prolificBaselinePlayer.game.status === "victory"
+              ? p.prolificBaselinePlayer.points!
+              : 0;
+          const prolificVariablePoints =
+            p.prolificVariablePlayer.game.status === "victory"
+              ? p.prolificVariablePlayer.points!
+              : 0;
+          return {
+            prolificId: p.prolificId,
+            points: prolificBaselinePoints + prolificVariablePoints,
+          };
+        })
+    );
+  }
+
   async getRandomTreatmentFor(
     gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">
   ): Promise<SoloGameTreatment> {

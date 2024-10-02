@@ -130,6 +130,7 @@ export class SoloGameService extends BaseService {
     return gameRepo.findOneOrFail({
       where: { id: game.id },
       relations: {
+        player: true,
         deck: {
           cards: true,
         },
