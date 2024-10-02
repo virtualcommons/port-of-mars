@@ -1,7 +1,7 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
-      <Navbar v-if="!isGamePage"></Navbar>
+      <Navbar v-if="showNav"></Navbar>
       <router-view :class="bodyClass" :key="topLevelPath"></router-view>
     </b-row>
   </b-container>
@@ -19,8 +19,8 @@ import {
   HOME_PAGE,
   ABOUT_PAGE,
   PRIVACY_PAGE,
+  PROLIFIC_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
-import _ from "lodash";
 Vue.use(BootstrapVue);
 
 @Component({
@@ -36,29 +36,31 @@ export default class App extends Vue {
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };
   privacy = { name: PRIVACY_PAGE };
+  study = { name: PROLIFIC_STUDY_PAGE };
 
   get topLevelPath() {
     return this.$route.path.split("/")[1];
   }
 
-  get isGamePage() {
-    if (_.isNil(this.$route.name)) {
-      return false;
-    } else {
-      return this.game.name === this.$route.name;
+  get showNav() {
+    switch (this.$route.name) {
+      case this.game.name:
+      case this.study.name:
+        return false;
+      default:
+        return true;
     }
   }
 
   get isScrollable() {
-    if (_.isNil(this.$route.name)) {
-      return false;
-    } else {
-      return (
-        this.manual.name === this.$route.name ||
-        this.home.name === this.$route.name ||
-        this.about.name === this.$route.name ||
-        this.privacy.name === this.$route.name
-      );
+    switch (this.$route.name) {
+      case this.manual.name:
+      case this.privacy.name:
+      case this.about.name:
+      case this.home.name:
+        return true;
+      default:
+        return false;
     }
   }
 
@@ -68,7 +70,7 @@ export default class App extends Vue {
       { "d-flex": !this.isScrollable },
       { "flex-grow-1": !this.isScrollable },
       { "h-auto": this.isScrollable },
-      { "body-content": !this.isGamePage },
+      { "body-content": this.showNav },
     ];
   }
 }

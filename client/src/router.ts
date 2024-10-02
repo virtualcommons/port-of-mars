@@ -22,6 +22,7 @@ import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
+import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -41,6 +42,7 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROFILE_PAGE,
+  PROLIFIC_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -91,6 +93,7 @@ const router = new VueRouter({
     { ...PAGE_META[ABOUT_PAGE], component: Home },
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
+    { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
   ],
 });
 
