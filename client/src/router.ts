@@ -6,6 +6,7 @@ import Games from "@port-of-mars/client/views/admin/Games.vue";
 import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
+import Educator from "@port-of-mars/client/views/admin/Educator.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
 import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
@@ -101,19 +102,6 @@ const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
 const FREE_PLAY_LOBBY_META = PAGE_META[FREE_PLAY_LOBBY_PAGE].meta;
 
 const sharedRoutes = [
-  // routes shared between educator and default mode
-  {
-    ...PAGE_META[ADMIN_PAGE],
-    component: Admin,
-    children: [
-      { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
-      { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
-      { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
-      { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
-      { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
-      { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
-    ],
-  },
   { ...PAGE_META[GAME_PAGE], component: Game },
   { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
   { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
@@ -121,11 +109,25 @@ const sharedRoutes = [
   { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
 ];
 
+const adminRoute = {
+  ...PAGE_META[ADMIN_PAGE],
+  component: Admin,
+  children: [
+    { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
+    { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
+    { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
+    { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
+    { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
+    { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
+  ],
+};
+
 function getDefaultRouter() {
   const router = new VueRouter({
     mode: "hash",
     routes: [
       ...sharedRoutes,
+      adminRoute,
       { ...PAGE_META[LOGIN_PAGE], component: Login },
       {
         ...PAGE_META[FREE_PLAY_LOBBY_PAGE],
@@ -182,6 +184,13 @@ function getEducatorRouter() {
     mode: "hash",
     routes: [
       ...sharedRoutes,
+      {
+        ...adminRoute,
+        children: [
+          ...adminRoute.children,
+          { path: "educator", name: "AdminEducator", component: Educator, meta: ADMIN_META },
+        ],
+      },
       // redirect straight to student login page
       { path: "", name: "Home", redirect: { name: STUDENT_LOGIN_PAGE } },
       { ...PAGE_META[STUDENT_LOGIN_PAGE], component: StudentLogin },

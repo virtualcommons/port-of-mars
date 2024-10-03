@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity/User";
-import { isAuthenticated } from "@port-of-mars/server/routes/middleware";
+import { isAuthenticated, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
 import { ValidationError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
 
@@ -237,6 +237,57 @@ educatorRouter.post(
       return;
     } catch (e) {
       logger.warn("Unable to start classroom games", e);
+      next(e);
+    }
+  }
+);
+
+//teacher specfic
+educatorRouter.post(
+  "/teacher/add",
+  isAdminAuthenticated,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as User;
+    const { username, name, email } = req.body;
+
+    try {
+      const services = getServices();
+      const teacher = await services.educator.createTeacher(email, username, name);
+      res.status(201).json(teacher);
+    } catch (e) {
+      logger.warn("Unable to add new teacher", e);
+      next(e);
+    }
+  }
+);
+
+educatorRouter.delete(
+  "/teacher/delete/:teacherId",
+  isAdminAuthenticated,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const teacherId = Number(req.params.teacherId);
+
+    try {
+      const services = getServices();
+      await services.educator.deleteTeacher(teacherId);
+      res.status(200).json({ message: "Teacher deleted successfully" });
+    } catch (e) {
+      logger.warn("Unable to delete teacher", e);
+      next(e);
+    }
+  }
+);
+
+educatorRouter.get(
+  "/teacher/list",
+  isAdminAuthenticated,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const services = getServices();
+      const teachers = await services.educator.getAllTeachers();
+      res.status(200).json(teachers);
+    } catch (e) {
+      logger.warn("Unable to fetch teachers list", e);
       next(e);
     }
   }

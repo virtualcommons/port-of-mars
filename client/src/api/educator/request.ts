@@ -7,6 +7,7 @@ import {
   StudentData,
   ActiveRoomData,
   ClassroomData,
+  TeacherData,
 } from "@port-of-mars/shared/types";
 
 export class EducatorAPI {
@@ -136,6 +137,39 @@ export class EducatorAPI {
       this.classroomUrl("/educator/completed-games", classroomId),
       ({ data, status }) => {
         return data;
+      }
+    );
+  }
+
+  // Teacher-related methods
+  async getTeachers(): Promise<Array<TeacherData>> {
+    return await this.ajax.get(url("/educator/teacher/list"), ({ data, status }) => {
+      return data;
+    });
+  }
+
+  async addTeacher(teacherData: { email: string; username: string; name: string }): Promise<any> {
+    const payload = { ...teacherData };
+    return await this.ajax.post(
+      url("/educator/teacher/add"),
+      ({ data, status }) => {
+        if (status === 201) {
+          return data;
+        } else {
+          throw new Error(data.message || "Failed to add teacher");
+        }
+      },
+      payload
+    );
+  }
+
+  async deleteTeacher(teacherId: number): Promise<void> {
+    return await this.ajax.delete(
+      url(`/educator/teacher/delete/${teacherId}`),
+      ({ data, status }) => {
+        if (status !== 200) {
+          throw new Error(data.message || "Failed to delete teacher");
+        }
       }
     );
   }
