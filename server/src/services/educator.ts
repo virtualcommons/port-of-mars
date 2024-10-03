@@ -10,6 +10,7 @@ import {
   InspectData,
   ActiveRoomData,
   // ClassroomData,
+  TeacherData,
 } from "@port-of-mars/shared/types";
 
 export class EducatorService extends BaseService {
@@ -266,7 +267,7 @@ export class EducatorService extends BaseService {
     return;
   }
 
-  async createTeacher(email: string, username: string, name: string) {
+  async createTeacher(email: string, username: string, name: string): Promise<Teacher> {
     const userRepo = this.em.getRepository(User);
     const teacherRepo = this.em.getRepository(Teacher);
     const user = await getServices().account.getOrCreateUser({ email, username, name });
@@ -303,4 +304,31 @@ export class EducatorService extends BaseService {
   async getSystemHealthForRound() {}
 
   async getChatLogForGame() {}
+  async deleteTeacher(teacherId: number): Promise<void> {
+    const teacherRepo = this.em.getRepository(Teacher);
+
+    const teacher = await teacherRepo.findOne({ where: { id: teacherId } });
+
+    if (!teacher) {
+      throw new ServerError({
+        code: 404,
+        message: "Teacher not found",
+      });
+    }
+
+    await teacherRepo.remove(teacher);
+    return;
+  }
+
+  async getAllTeachers(): Promise<Array<TeacherData>> {
+    const teacherRepo = this.em.getRepository(Teacher);
+    const teachers = await teacherRepo.find({ relations: ["user"] });
+
+    return teachers.map((teacher: Teacher) => ({
+      teacherId: teacher.id,
+      username: teacher.user.username,
+      name: teacher.user.name,
+      email: teacher.user.email,
+    }));
+  }
 }

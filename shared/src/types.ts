@@ -578,3 +578,10 @@ export interface ActiveRoomData {
   clients: number;
   elapsed: number;
 }
+
+export interface TeacherData {
+  teacherId: number;
+  username: string;
+  name: string;
+  email?: string;
+}
