@@ -4,9 +4,7 @@ import Vue from "vue";
 import VueGtag from "vue-gtag";
 import VueMeta from "vue-meta";
 import Vuex from "vuex";
-import * as Sentry from "@sentry/browser";
-import { Vue as VueIntegration } from "@sentry/integrations";
-import { Integrations } from "@sentry/tracing";
+import * as Sentry from "@sentry/vue";
 import { settings, isStagingOrProduction, SERVER_URL_WS } from "@port-of-mars/shared/settings";
 import { Ajax } from "@port-of-mars/client/plugins/ajax";
 import { TypedStore } from "@port-of-mars/client/plugins/tstore";
@@ -26,7 +24,10 @@ Vue.config.productionTip = false;
 if (isStagingOrProduction()) {
   Sentry.init({
     dsn: import.meta.env.SHARED_SENTRY_DSN,
-    integrations: [new VueIntegration({ Vue, tracing: true }), new Integrations.BrowserTracing()],
+    integrations: [
+      Sentry.browserTracingIntegration({ router }),
+      Sentry.vueIntegration({ Vue, tracingOptions: { trackComponents: true } }),
+    ],
     tracesSampleRate: 1,
   });
   Vue.use(

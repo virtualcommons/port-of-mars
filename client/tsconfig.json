@@ -17,6 +17,11 @@
       ],
       "@port-of-mars/shared/*": [
         "../shared/src/*"
+      ],
+      // behold the js ecosystem
+      // https://github.com/rollup/rollup/issues/5199
+      "rollup/parseAst": [
+        "./node_modules/rollup/dist/parseAst"
       ]
     },
     "lib": [
