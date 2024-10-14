@@ -78,7 +78,7 @@
   "dependencies": {
     "@colyseus/command": "^0.2.1",
     "@colyseus/schema": "^1.0.25",
-    "@sentry/node": "~5.29.2",
+    "@sentry/node": "^7.119.2",
     "@types/luxon": "^3.0.2",
     "async-mutex": "^0.4.0",
     "bcryptjs": "^2.4.3",

@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "@colyseus/schema": "^1.0.9",
-    "@sentry/browser": "^5.29.2",
-    "@sentry/integrations": "^5.29.2",
-    "@sentry/tracing": "^5.29.2",
+    "@sentry/browser": "^7.119.2",
+    "@sentry/tracing": "^7.119.2",
+    "@sentry/vue": "^7.119.2",
     "@vimeo/player": "^2.16.1",
     "animate.css": "^4.1.1",
     "bootstrap": "^4.5.3",
