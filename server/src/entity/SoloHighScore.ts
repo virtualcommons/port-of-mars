@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { User } from "./User";
 import { SoloGame } from "./SoloGame";
@@ -31,6 +32,7 @@ export class SoloHighScore {
   maxRound!: number;
 
   @OneToOne(type => SoloGame, { nullable: true })
+  @JoinColumn()
   game!: SoloGame;
 
   @Column({ nullable: true })
