@@ -1,0 +1,12 @@
+services:
+  redis:
+    volumes:
+      - ./docker/redis:/data
+  server:
+    build:
+      dockerfile: server/Dockerfile.prod
+      args:
+        NODE_ARG: production
+    image: port-of-mars/server:learn
+    ports:
+      - '8998:2567'

@@ -32,6 +32,7 @@
               dark
               sticky-header
               small
+              sort-icon-left
               class="h-100 m-0 custom-table"
               :fields="roomFields"
               :items="rooms"
@@ -95,7 +96,7 @@
           </div>
         </b-col>
         <!-- chat -->
-        <b-col cols="6" class="mh-100 p-2">
+        <b-col cols="6" class="mh-100">
           <h4 class="header-nowrap">Chat</h4>
           <div class="h-100-header w-100 content-container" style="overflow-y: auto">
             <Chat :messages="inspectData.chatMessages" :readOnly="true" :reportable="false" />

@@ -10,3 +10,4 @@ export * from "./quiz";
 export * from "./account";
 export * from "./status";
 export * from "./tournament";
+export * from "./educator";

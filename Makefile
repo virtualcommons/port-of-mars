@@ -68,8 +68,8 @@ release-version: .env
 
 docker-compose.yml: base.yml $(DEPLOY_ENVIRONMENT).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(DYNAMIC_SETTINGS_PATH) secrets $(PGPASS_PATH) release-version
 	case "$(DEPLOY_ENVIRONMENT)" in \
-	  dev|staging|prod) docker compose -f base.yml -f "$(DEPLOY_ENVIRONMENT).yml" config > docker-compose.yml;; \
-	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
+	  dev|staging|prod|learn) docker compose -f base.yml -f "$(DEPLOY_ENVIRONMENT).yml" config > docker-compose.yml;; \
+	  *) echo "invalid environment. must be either dev, staging, prod, or learn" 1>&2; exit 1;; \
 	esac
 
 .PHONY: build

@@ -3,12 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import {
-  LOGIN_PAGE,
-  FREE_PLAY_LOBBY_PAGE,
-  CONSENT_PAGE,
-  HOME_PAGE,
-} from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, CONSENT_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 import { initialUserState } from "@port-of-mars/shared/game/client/state";
@@ -35,6 +30,9 @@ export class AjaxResponseError extends Error {
 const SUBMISSION_ID = "submissionId";
 
 export class AjaxRequest {
+  // delete(arg0: string, arg1: { data: { classroomId: number; }; }) {
+  //   throw new Error("Method not implemented.");
+  // }
   constructor(private router: VueRouter, private store: TStore) {}
 
   _roomId?: RoomId;
@@ -51,24 +49,6 @@ export class AjaxRequest {
 
   get roomId() {
     return this._roomId;
-  }
-
-  async devLogin(formData: { username: string; password: string }, shouldSkipVerification = true) {
-    const devLoginUrl = url(`/auth/login?shouldSkipVerification=${shouldSkipVerification}`);
-    await this.post(
-      devLoginUrl,
-      ({ data, status }) => {
-        if (status === 200) {
-          this.store.commit("SET_USER", data.user);
-          // FIXME: not terribly important but we might want to move to the tournament dashboard if isTournamentEnabled
-          if (data.user.isVerified) this.router.push({ name: FREE_PLAY_LOBBY_PAGE });
-          else this.router.push({ name: CONSENT_PAGE });
-        } else {
-          return data;
-        }
-      },
-      formData
-    );
   }
 
   async forgetLoginCreds() {
@@ -115,16 +95,16 @@ export class AjaxRequest {
     return { data, status: response.status };
   }
 
-  async post(
+  async request(
+    method: "GET" | "POST" | "PUT" | "DELETE",
     path: string,
     done: (data: ResponseData) => Promise<any> | void,
     data?: any
-  ): AjaxResponse {
-    // FIXME: duplicated across post/get
+  ) {
     let response;
     try {
-      response = await fetch(path, {
-        method: "POST",
+      const options = {
+        method: method,
         cache: "no-cache",
         headers: {
           "Content-Type": "application/json",
@@ -132,8 +112,11 @@ export class AjaxRequest {
         credentials: "include",
         redirect: "follow",
         referrerPolicy: "no-referrer",
-        body: JSON.stringify(data),
-      });
+      } as RequestInit;
+      if (method !== "GET") {
+        options.body = JSON.stringify(data);
+      }
+      response = await fetch(path, options);
       const responseData = await this.handleResponse(response);
       return done(responseData);
     } catch (e) {
@@ -151,33 +134,20 @@ export class AjaxRequest {
     }
   }
 
-  async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
-    // FIXME: duplicated across post/get
-    let response;
-    try {
-      response = await fetch(path, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-      });
-      const responseData = await this.handleResponse(response);
-      return done(responseData);
-    } catch (e) {
-      if (e instanceof AjaxResponseError) {
-        throw e;
-      } else {
-        if (response && e instanceof Error) {
-          throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
-        } else {
-          console.error("Unhandled error in request, returning to home screen", e);
-          this.router.push({ name: HOME_PAGE });
-        }
-      }
-    }
+  async get(path: string, done: (data: ResponseData) => Promise<any> | void) {
+    return this.request("GET", path, done);
+  }
+
+  async post(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
+    return this.request("POST", path, done, data);
+  }
+
+  async update(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
+    return this.request("PUT", path, done, data);
+  }
+
+  async delete(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
+    return this.request("DELETE", path, done, data);
   }
 }
 

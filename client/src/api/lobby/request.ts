@@ -78,3 +78,5 @@ export class FreePlayLobbyRequestAPI extends LobbyRequestAPI {
 }
 
 export class TournamentLobbyRequestAPI extends LobbyRequestAPI {}
+
+export class ClassroomLobbyRequestAPI extends LobbyRequestAPI {}
