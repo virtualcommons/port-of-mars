@@ -162,7 +162,7 @@ import { DynamicSettingsData } from "@port-of-mars/shared/types";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 
 @Component({})
-export default class Reports extends Vue {
+export default class Settings extends Vue {
   api!: AdminAPI;
   form: DynamicSettingsData = {
     isTournamentEnabled: false,

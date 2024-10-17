@@ -6,6 +6,7 @@ import Games from "@port-of-mars/client/views/admin/Games.vue";
 import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
+import Studies from "@port-of-mars/client/views/admin/Studies.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
 import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
@@ -63,6 +64,7 @@ const router = new VueRouter({
         { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
         { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
         { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
+        { path: "studies", name: "AdminStudies", component: Studies, meta: ADMIN_META },
       ],
     },
     { ...PAGE_META[LOGIN_PAGE], component: Login },

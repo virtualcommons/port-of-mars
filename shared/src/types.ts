@@ -533,3 +533,16 @@ export interface ProlificParticipantStatus {
     label: string;
   };
 }
+
+export interface ProlificStudyData {
+  description: string;
+  studyId: string;
+  completionCode: string;
+  isActive: boolean;
+  participantPoints?: Array<ProlificParticipantPointData>;
+}
+
+export interface ProlificParticipantPointData {
+  prolificId: string;
+  points: number;
+}
