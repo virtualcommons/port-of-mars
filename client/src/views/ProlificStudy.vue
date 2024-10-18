@@ -39,6 +39,7 @@
 <script lang="ts">
 import { Vue, Watch, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
+import { cloneDeep } from "lodash";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { StudyAPI } from "@port-of-mars/client/api/study/request";
 import {
@@ -77,7 +78,7 @@ export default class ProlificStudy extends Vue {
   };
   statusLoading = true;
 
-  state: SoloGameClientState = { ...DEFAULT_STATE };
+  state: SoloGameClientState = cloneDeep(DEFAULT_STATE);
 
   get isGameOver() {
     return ["victory", "defeat"].includes(this.state.status);
@@ -102,7 +103,7 @@ export default class ProlificStudy extends Vue {
     await this.fetchProlificParticipantStatus();
     if (this.participantStatus.nextGameType) {
       this.started = false;
-      this.state = { ...DEFAULT_STATE };
+      Object.assign(this.state, cloneDeep(DEFAULT_STATE));
       this.api.reset();
     } else {
       const completionUrl = await this.studyApi.completeProlificStudy();

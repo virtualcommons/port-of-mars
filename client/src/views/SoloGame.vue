@@ -17,6 +17,7 @@
 <script lang="ts">
 import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
+import { cloneDeep } from "lodash";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import {
   DEFAULT_STATE,
@@ -41,7 +42,7 @@ export default class SoloGame extends Vue {
   hasApi = false;
   started = false;
 
-  state: SoloGameClientState = { ...DEFAULT_STATE };
+  state: SoloGameClientState = cloneDeep(DEFAULT_STATE);
 
   get isGameOver() {
     return ["victory", "defeat"].includes(this.state.status);
@@ -49,7 +50,7 @@ export default class SoloGame extends Vue {
 
   handleContinue() {
     this.started = false;
-    this.state = { ...DEFAULT_STATE };
+    Object.assign(this.state, cloneDeep(DEFAULT_STATE));
   }
 
   async begin() {
