@@ -2,10 +2,14 @@ import { Room } from "colyseus.js";
 import { EventContinue, Invest, SoloGameRequest } from "@port-of-mars/shared/sologame";
 
 export class SoloGameRequestAPI {
-  room!: Room;
+  room: Room | null = null;
 
   connect(room: Room) {
     this.room = room;
+  }
+
+  reset() {
+    this.room = null;
   }
 
   public leave() {
@@ -15,6 +19,9 @@ export class SoloGameRequestAPI {
   }
 
   public send(req: SoloGameRequest) {
+    if (!this.room) {
+      throw new Error("room not connected");
+    }
     this.room.send(req.kind, req);
   }
 

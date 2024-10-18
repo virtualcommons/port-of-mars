@@ -6,6 +6,7 @@ import Games from "@port-of-mars/client/views/admin/Games.vue";
 import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
+import Studies from "@port-of-mars/client/views/admin/Studies.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
 import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
@@ -22,6 +23,7 @@ import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
+import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -41,6 +43,7 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROFILE_PAGE,
+  PROLIFIC_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -61,6 +64,7 @@ const router = new VueRouter({
         { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
         { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
         { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
+        { path: "studies", name: "AdminStudies", component: Studies, meta: ADMIN_META },
       ],
     },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
@@ -91,6 +95,7 @@ const router = new VueRouter({
     { ...PAGE_META[ABOUT_PAGE], component: Home },
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
+    { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
   ],
 });
 

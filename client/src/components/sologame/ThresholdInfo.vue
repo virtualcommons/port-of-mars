@@ -25,7 +25,7 @@ export default class ThresholdInfo extends Vue {
 
   get twoEventsThresholdInfo(): string {
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      return `at or below ${this.state.twoEventsThreshold}`;
+      return `below ${this.state.twoEventsThreshold}`;
     } else {
       const range = this.state.twoEventsThresholdRange!;
       return `between ${range.min}-${range.max}`;
@@ -34,7 +34,7 @@ export default class ThresholdInfo extends Vue {
 
   get threeEventsThresholdInfo(): string {
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      return `at or below ${this.state.threeEventsThreshold}`;
+      return `below ${this.state.threeEventsThreshold}`;
     } else {
       const range = this.state.threeEventsThresholdRange!;
       return `between ${range.min}-${range.max}`;

@@ -7,6 +7,7 @@
         :status="state.status"
         :points="state.player.points"
         :round="state.round"
+        @continue="handleContinue"
       />
       <Dashboard v-else :state="state" />
     </b-container>
@@ -16,9 +17,13 @@
 <script lang="ts">
 import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
+import { cloneDeep } from "lodash";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
-import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
-import { SoloGameClientState, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
+import {
+  DEFAULT_STATE,
+  applySoloGameServerResponses,
+} from "@port-of-mars/client/api/sologame/response";
+import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologame";
 import Dashboard from "@port-of-mars/client/components/sologame/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/sologame/GameOver.vue";
 import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
@@ -37,36 +42,21 @@ export default class SoloGame extends Vue {
   hasApi = false;
   started = false;
 
-  // FIXME: move this to a vuex store after splitting up the multiplayer game and
-  // onboarding/etc. stores
-  state: SoloGameClientState = {
-    status: "incomplete",
-    timeRemaining: 0,
-    systemHealth: 0,
-    round: 0,
-    treatmentParams: {
-      isNumberOfRoundsKnown: false,
-      isEventDeckKnown: false,
-      thresholdInformation: "unknown",
-    },
-    player: {
-      resources: 0,
-      points: 0,
-    },
-    visibleEventCards: [],
-    activeCardId: -1,
-    canInvest: true,
-    isRoundTransitioning: false,
-  };
+  state: SoloGameClientState = cloneDeep(DEFAULT_STATE);
 
   get isGameOver() {
     return ["victory", "defeat"].includes(this.state.status);
   }
 
+  handleContinue() {
+    this.started = false;
+    Object.assign(this.state, cloneDeep(DEFAULT_STATE));
+  }
+
   async begin() {
     try {
       await this.leave();
-      this.api.room = await this.$client.create(SOLO_ROOM_NAME);
+      this.api.room = await this.$client.create(SOLO_ROOM_NAME, { type: "freeplay" });
       applySoloGameServerResponses(this.api.room, this);
       this.started = true;
     } catch (err) {

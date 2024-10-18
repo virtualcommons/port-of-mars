@@ -14,6 +14,7 @@ export const HOME_PAGE = "Home" as const;
 export const ABOUT_PAGE = "About" as const;
 export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
+export const PROLIFIC_STUDY_PAGE = "ProlificStudy" as const;
 
 export type Page =
   | "Admin"
@@ -31,6 +32,7 @@ export type Page =
   | "Profile"
   | "Verify"
   | "Manual"
+  | "ProlificStudy"
   | "Privacy";
 
 export const PAGES: Array<Page> = [
@@ -50,11 +52,8 @@ export const PAGES: Array<Page> = [
   HOME_PAGE,
   ABOUT_PAGE,
   PRIVACY_PAGE,
+  PROLIFIC_STUDY_PAGE,
 ];
-
-export function isPage(pageName: string): pageName is Page {
-  return PAGES.includes(pageName as Page);
-}
 
 export function getPagePath(page: Page): string {
   // FIXME: depends on mode: hash for vue router
@@ -195,6 +194,14 @@ export const PAGE_META: {
   [PROFILE_PAGE]: {
     path: "/profile",
     name: PROFILE_PAGE,
+    meta: {
+      requiresAuth: true,
+      requiresConsent: true,
+    },
+  },
+  [PROLIFIC_STUDY_PAGE]: {
+    path: "/prolific",
+    name: PROLIFIC_STUDY_PAGE,
     meta: {
       requiresAuth: true,
       requiresConsent: true,

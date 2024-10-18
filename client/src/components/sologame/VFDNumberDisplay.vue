@@ -19,7 +19,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class VFDNumberDisplay extends Vue {
-  @Prop({ default: 0 }) value!: number;
+  @Prop({ default: 0 }) value!: number | string;
   @Prop() digits?: number;
   @Prop({ default: false }) padZeros!: boolean;
   @Prop({ default: 3 }) size!: 1 | 2 | 3; // in rem
