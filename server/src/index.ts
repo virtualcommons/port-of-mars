@@ -221,9 +221,10 @@ async function createApp() {
   })();
 
   logger.info(
-    "starting (%s) server: [release version: %s, settings.host %s]",
+    "starting (%s) server: [release version: %s, educator mode: %s, settings.host %s]",
     NODE_ENV,
     sharedSettings.RELEASE_VERSION,
+    settings.isEducatorMode,
     settings.host
   );
   const port = Number(process.env.PORT || 2567);

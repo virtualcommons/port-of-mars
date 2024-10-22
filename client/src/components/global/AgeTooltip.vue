@@ -1,6 +1,6 @@
 <template>
   <span>
-    <a><b-icon-question-circle id="age-info-popover" scale=".8" /></a>
+    <a><b-icon-question-circle-fill id="age-info-popover" scale=".8" /></a>
     <b-popover target="age-info-popover" :placement="placement" triggers="hover focus">
       <template #title></template>
       This is a requirement to be able to participate in the Port of Mars research study. Read more
