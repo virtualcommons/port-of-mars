@@ -169,7 +169,10 @@ educatorRouter.get("/completed-games", async (req: Request, res: Response, next)
       res.status(403).json({ message: "Only teachers can get a list of completed games" });
       return;
     }
+    console.log("Fetching completed games for classroom with id: ", classroomId);
+
     const games = await services.educator.getCompletedGamesForClassroom(classroomId);
+    console.log("Completed games fetched: ", games);
     res.status(200).json(games);
   } catch (e) {
     logger.warn("Unable to get a list of finalized games for classroom");

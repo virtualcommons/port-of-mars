@@ -240,11 +240,12 @@ export default class TeacherDashboard extends Vue {
   };
 
   getHumanCount(players: AdminGameData["players"]) {
-    return players.filter(p => !p.user.isSystemBot).length;
+    // return players.filter(p => !p.user.isSystemBot).length;
+    return players.filter(p => p.user && p.user.isSystemBot === false).length;
   }
 
   getBotCount(players: AdminGameData["players"]) {
-    return players.filter(p => p.user.isSystemBot).length;
+    return players.filter(p => p.user && p.user.isSystemBot === true).length;
   }
 
   playerRowStyle(item: any, type: any) {
@@ -280,7 +281,21 @@ export default class TeacherDashboard extends Vue {
   async fetchCompletedGames() {
     if (this.selectedClassroom) {
       try {
-        this.completedGames = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
+        const games = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
+        console.log("game data received: ", games);
+
+        this.completedGames = games.map(
+          (game: { id: any; dateFinalized: any; status: any; players: any[] }) => ({
+            id: game.id,
+            dateFinalized: game.dateFinalized,
+            status: game.status,
+            players: game.players.map(player => ({
+              name: player.user?.name || "Unknown",
+              username: player.user?.username || "Unknown",
+              isSystemBot: player.user?.isSystemBot ?? false,
+            })),
+          })
+        );
         this.findHighScores();
         console.log("Completed games: " + this.completedGames.length);
       } catch (e) {
