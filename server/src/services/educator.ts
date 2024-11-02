@@ -157,12 +157,31 @@ export class EducatorService extends BaseService {
       .createQueryBuilder("game")
       .leftJoinAndSelect("game.players", "player")
       .leftJoinAndSelect("player.user", "user")
-      .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
-      .leftJoinAndSelect("tournamentRound.tournament", "tournament")
-      .leftJoinAndSelect("game.events", "gameEvent", "gameEvent.type = 'taken-round-snapshot'")
+      .select([
+        "game.id",
+        "game.dateFinalized",
+        "game.status",
+        "player.id",
+        "user.name",
+        "user.username",
+        "user.isSystemBot",
+      ])
       .where("game.classroomId = :classroomId", { classroomId });
+    const games = await query.getMany();
+    console.log("games data returned: ", games);
+    return games;
+    //OLD VERSION:
+    // const query = this.em
+    //   .getRepository(Game)
+    //   .createQueryBuilder("game")
+    //   .leftJoinAndSelect("game.players", "player")
+    //   .leftJoinAndSelect("player.user", "user")
+    //   .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
+    //   .leftJoinAndSelect("tournamentRound.tournament", "tournament")
+    //   .leftJoinAndSelect("game.events", "gameEvent", "gameEvent.type = 'taken-round-snapshot'")
+    //   .where("game.classroomId = :classroomId", { classroomId });
 
-    return query.getMany();
+    // return query.getMany();
   }
 
   async deleteClassroom(teacher: Teacher, classroomId: number, force = false): Promise<void> {
