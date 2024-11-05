@@ -270,6 +270,13 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
     await new Promise(resolve =>
       setTimeout(resolve, this.defaultParams.roundTransitionDuration * 1000)
     );
+    this.state.systemHealth = Math.max(
+      0,
+      this.state.systemHealth - this.defaultParams.systemHealthWear
+    );
+    if (this.state.systemHealth <= 0) {
+      return new EndGameCmd().setPayload({ status: "defeat" });
+    }
     return [
       new PersistRoundCmd().setPayload({
         systemHealthInvestment,
@@ -302,12 +309,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     }
 
     this.state.round += 1;
-    this.state.systemHealth = Math.max(0, this.state.systemHealth - defaults.systemHealthWear);
     this.state.updateRoundInitialValues();
-
-    if (this.state.systemHealth <= 0) {
-      return new EndGameCmd().setPayload({ status: "defeat" });
-    }
 
     this.state.player.resources = defaults.resources;
     this.state.timeRemaining = defaults.timeRemaining;
