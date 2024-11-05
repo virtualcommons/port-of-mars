@@ -604,3 +604,9 @@ export interface GameReport {
   chatMessages: ChatMessageData[];
   systemHealthByRound: number[];
 }
+
+// export interface StudentChatMessageData {
+//   dateCreated: string;
+//   roomId: string;
+//   message: string;
+// }
