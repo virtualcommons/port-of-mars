@@ -561,3 +561,9 @@ export interface TeacherData {
   name: string;
   email?: string;
 }
+
+// export interface StudentChatMessageData {
+//   dateCreated: string;
+//   roomId: string;
+//   message: string;
+// }

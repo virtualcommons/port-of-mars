@@ -61,8 +61,4 @@ ul,
 p {
   color: #fff;
 }
-
-ul {
-  padding-left: 2rem;
-}
 </style>
