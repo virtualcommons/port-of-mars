@@ -86,6 +86,6 @@ export const DEFAULT_STATE: SoloGameClientState = {
   },
   visibleEventCards: [],
   activeCardId: -1,
-  canInvest: true,
+  canInvest: false,
   isRoundTransitioning: false,
 };

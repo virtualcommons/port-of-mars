@@ -80,7 +80,7 @@ export class SoloGameState extends Schema {
 
   // @type("uint8") activeRoundCardIndex = -1;
   // @type("uint8") activeDeckCardIndex = -1;
-  @type("boolean") canInvest = true;
+  @type("boolean") canInvest = false;
   @type("boolean") isRoundTransitioning = false;
 
   gameId = 0;

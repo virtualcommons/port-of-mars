@@ -114,6 +114,7 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.player.resources = defaults.resources;
     this.state.updateRoundInitialValues();
     this.state.isRoundTransitioning = false;
+    this.state.canInvest = true;
 
     return [new SendHiddenParamsCmd()];
   }
@@ -144,6 +145,7 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
     });
   }
 }
+
 export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
     return (
@@ -275,7 +277,13 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
       this.state.systemHealth - this.defaultParams.systemHealthWear
     );
     if (this.state.systemHealth <= 0) {
-      return new EndGameCmd().setPayload({ status: "defeat" });
+      return [
+        new PersistRoundCmd().setPayload({
+          systemHealthInvestment,
+          pointsInvestment: surplus,
+        }),
+        new EndGameCmd().setPayload({ status: "defeat" }),
+      ];
     }
     return [
       new PersistRoundCmd().setPayload({
