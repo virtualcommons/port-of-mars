@@ -10,6 +10,11 @@ items:
     effect: "No special effect."
     drawMin: 10
     drawMax: 20
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   freeplayEvent2: # needs special casing (draw 2 more cards)
     id: 2
     gameType: freeplay
@@ -17,6 +22,13 @@ items:
     displayName: "Murphy's Law"
     flavorText: "Residents at Port of Mars know better than to ask, \"what ELSE could go wrong?\""
     effect: "Reveal 2 more events for this round."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   freeplayEvent3:
     id: 3
     gameType: freeplay
@@ -24,8 +36,12 @@ items:
     displayName: "Lost Time"
     flavorText: "Time flies when you're trying to stay alive."
     effect: "Lose {roll} resource{s} for this round."
+    drawMin: 1
+    drawMax: 1
     rollMin: 1
     rollMax: 8
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
     resourcesMultiplier: -1
   freeplayEvent4:
     id: 4
@@ -34,8 +50,12 @@ items:
     displayName: "Rich Deposit"
     flavorText: "A stroke of luck in an otherwise unlucky day."
     effect: "Gain {roll} resource{s} for this round."
+    drawMin: 1
+    drawMax: 1
     rollMin: 1
     rollMax: 8
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
     resourcesMultiplier: 1
   freeplayEvent5:
     id: 5
@@ -44,9 +64,12 @@ items:
     displayName: "Urgent Repairs"
     flavorText: "No pneumatic tires on mars, but there are always holes to patch."
     effect: "{roll} resource{s} are immediately diverted to system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 2
     rollMax: 7
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
     resourcesMultiplier: -1
   freeplayEvent6:
     id: 6
@@ -60,6 +83,8 @@ items:
     rollMin: 1
     rollMax: 10
     systemHealthMultiplier: -1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   freeplayEvent7:
     id: 7
     gameType: freeplay
@@ -72,6 +97,8 @@ items:
     rollMin: 1
     rollMax: 10
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   freeplayEvent8:
     id: 8
     gameType: freeplay
@@ -83,7 +110,9 @@ items:
     drawMax: 4
     rollMin: 1
     rollMax: 10
+    systemHealthMultiplier: 0
     pointsMultiplier: -1
+    resourcesMultiplier: 0
   freeplayEvent9:
     id: 9
     gameType: freeplay
@@ -95,214 +124,427 @@ items:
     drawMax: 4
     rollMin: 1
     rollMax: 10
+    systemHealthMultiplier: 0
     pointsMultiplier: 1
-
+    resourcesMultiplier: 0
   # PROLIFIC VARIABLE EVENT CARDS
   prolificVariableEvent1:
     id: 10
     gameType: prolificVariable
     codeName: "increaseSystemHealth7"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 7 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 7
     rollMax: 7
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent2:
     id: 11
     gameType: prolificVariable
     codeName: "reduceSystemHealth6"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 6 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 6
     rollMax: 6
     systemHealthMultiplier: -1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent3:
     id: 12
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent4:
     id: 13
     gameType: prolificVariable
     codeName: "increasePoints5"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 5 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 5
     rollMax: 5
+    systemHealthMultiplier: 0
     pointsMultiplier: 1
+    resourcesMultiplier: 0
   prolificVariableEvent5:
     id: 14
     gameType: prolificVariable
     codeName: "reduceSystemHealth5"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 5 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 5
     rollMax: 5
     systemHealthMultiplier: -1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent6:
     id: 15
     gameType: prolificVariable
     codeName: "increasePoints4"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 4 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 4
     rollMax: 4
+    systemHealthMultiplier: 0
     pointsMultiplier: 1
+    resourcesMultiplier: 0
   prolificVariableEvent7:
     id: 16
     gameType: prolificVariable
     codeName: "increasePoints2"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 2 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 2
     rollMax: 2
+    systemHealthMultiplier: 0
     pointsMultiplier: 1
+    resourcesMultiplier: 0
   prolificVariableEvent8:
     id: 17
     gameType: prolificVariable
     codeName: "reducePoints4"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 4 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 4
     rollMax: 4
+    systemHealthMultiplier: 0
     pointsMultiplier: -1
+    resourcesMultiplier: 0
   prolificVariableEvent9:
     id: 18
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent10:
     id: 19
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent11:
     id: 20
     gameType: prolificVariable
     codeName: "murphysLaw"
+    displayName: ""
+    flavorText: ""
     effect: "Reveal 2 more events for this round."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent12:
     id: 21
     gameType: prolificVariable
     codeName: "reduceResources6"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 6 resources."
+    drawMin: 1
+    drawMax: 1
     rollMin: 6
     rollMax: 6
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
     resourcesMultiplier: -1
   prolificVariableEvent13:
     id: 22
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent14:
     id: 23
     gameType: prolificVariable
     codeName: "reduceSystemHealth1"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 1 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 1
     rollMax: 1
     systemHealthMultiplier: -1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent15:
     id: 24
     gameType: prolificVariable
     codeName: "reducePoints1"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 1 point."
+    drawMin: 1
+    drawMax: 1
     rollMin: 1
     rollMax: 1
+    systemHealthMultiplier: 0
     pointsMultiplier: -1
+    resourcesMultiplier: 0
   prolificVariableEvent16:
     id: 25
     gameType: prolificVariable
     codeName: "investSystemHealth8"
+    displayName: ""
+    flavorText: ""
     effect: "8 resources are immediately diverted to system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 8
     rollMax: 8
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
     resourcesMultiplier: -1
   prolificVariableEvent17:
     id: 26
     gameType: prolificVariable
     codeName: "increasePoints9"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 9 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 9
     rollMax: 9
+    systemHealthMultiplier: 0
     pointsMultiplier: 1
+    resourcesMultiplier: 0
   prolificVariableEvent18:
     id: 27
     gameType: prolificVariable
     codeName: "reduceSystemHealth8"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 8 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 8
     rollMax: 8
     systemHealthMultiplier: -1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent19:
     id: 28
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent20:
     id: 29
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent21:
     id: 30
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent22:
     id: 31
     gameType: prolificVariable
     codeName: "increaseSystemHealth3"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 3 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 3
     rollMax: 3
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent23:
     id: 32
     gameType: prolificVariable
     codeName: "reducePoints5"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 5 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 5
     rollMax: 5
+    systemHealthMultiplier: 0
     pointsMultiplier: -1
+    resourcesMultiplier: 0
   prolificVariableEvent24:
     id: 33
     gameType: prolificVariable
     codeName: "increaseSystemHealth6"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 6 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 6
     rollMax: 6
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent25:
     id: 34
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent26:
     id: 35
     gameType: prolificVariable
     codeName: "increaseResources2"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 2 resources."
+    drawMin: 1
+    drawMax: 1
     rollMin: 2
     rollMax: 2
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
     resourcesMultiplier: 1
   prolificVariableEvent27:
     id: 36
     gameType: prolificVariable
     codeName: "increaseSystemHealth4"
+    displayName: ""
+    flavorText: ""
     effect: "Gain 4 system health."
+    drawMin: 1
+    drawMax: 1
     rollMin: 4
     rollMax: 4
     systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent28:
     id: 37
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
   prolificVariableEvent29:
     id: 38
     gameType: prolificVariable
     codeName: "reducePoints10"
+    displayName: ""
+    flavorText: ""
     effect: "Lose 10 points."
+    drawMin: 1
+    drawMax: 1
     rollMin: 10
     rollMax: 10
+    systemHealthMultiplier: 0
     pointsMultiplier: -1
+    resourcesMultiplier: 0
   prolificVariableEvent30:
     id: 39
     gameType: prolificVariable
     codeName: "lifeAsUsual"
+    displayName: ""
+    flavorText: ""
     effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
