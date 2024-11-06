@@ -15,6 +15,7 @@ import {
   ProlificParticipantStatus,
   ProlificStudyData,
 } from "@port-of-mars/shared/types";
+import { createObjectCsvWriter } from "csv-writer";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -337,5 +338,95 @@ export class StudyService extends BaseService {
     study.completionCode = completionCode;
     study.isActive = isActive;
     return repo.save(study);
+  }
+
+  async exportProlificGamesCsv(path: string, studyId: string) {
+    /**
+     * Exports a flat CSV of past games associated with the specified studies
+     * Includes gameId, gameType, playerId, userId, username, studyId, prolificId,
+     * status, points, dateCreated, and treatment details
+     */
+    const query = this.em
+      .getRepository(ProlificStudyParticipant)
+      .createQueryBuilder("participant")
+      .leftJoinAndSelect("participant.user", "user")
+      .leftJoinAndSelect("participant.study", "study")
+      .leftJoinAndSelect("participant.prolificBaselinePlayer", "baselinePlayer")
+      .leftJoinAndSelect("baselinePlayer.game", "baselineGame")
+      .leftJoinAndSelect("baselineGame.treatment", "baselineTreatment")
+      .leftJoinAndSelect("participant.prolificVariablePlayer", "variablePlayer")
+      .leftJoinAndSelect("variablePlayer.game", "variableGame")
+      .leftJoinAndSelect("variableGame.treatment", "variableTreatment")
+      .where("study.studyId = :studyId", { studyId });
+
+    const participants = await query.getMany();
+    const formattedGames = [];
+
+    for (const participant of participants) {
+      const user = participant.user;
+      const studyId = participant.study.studyId;
+      const prolificId = participant.prolificId;
+
+      const playerGames = [participant.prolificBaselinePlayer, participant.prolificVariablePlayer];
+
+      for (const player of playerGames) {
+        if (player && player.game) {
+          const game = player.game;
+          const treatment = game.treatment;
+          formattedGames.push({
+            gameId: game.id,
+            gameType: game.type,
+            playerId: player.id,
+            userId: user.id,
+            username: user.username,
+            studyId,
+            prolificId,
+            status: game.status,
+            points: player.points,
+            maxRound: game.maxRound,
+            treatmentId: treatment.id,
+            twoEventsThreshold: game.twoEventsThreshold,
+            threeEventsThreshold: game.threeEventsThreshold,
+            knownEventDeck: treatment.isEventDeckKnown,
+            knownEndRound: treatment.isNumberOfRoundsKnown,
+            thresholdInformation: treatment.thresholdInformation,
+            lowResSystemHealth: treatment.isLowResSystemHealth,
+            dateCreated: game.dateCreated.toISOString(),
+          });
+        }
+      }
+    }
+    if (formattedGames.length === 0) {
+      logger.warn("No games found for the specified studies.");
+      return;
+    }
+    const header = Object.keys(formattedGames[0]).map(name => ({ id: name, title: name }));
+    const writer = createObjectCsvWriter({ path, header });
+    await writer.writeRecords(formattedGames);
+    logger.info(`Solo game data for study ${studyId} exported successfully to ${path}`);
+  }
+
+  async getGameIdsForStudyId(studyId: string): Promise<number[]> {
+    const participants = await this.em
+      .getRepository(ProlificStudyParticipant)
+      .createQueryBuilder("participant")
+      .leftJoinAndSelect("participant.prolificBaselinePlayer", "baselinePlayer")
+      .leftJoinAndSelect("baselinePlayer.game", "baselineGame")
+      .leftJoinAndSelect("participant.prolificVariablePlayer", "variablePlayer")
+      .leftJoinAndSelect("variablePlayer.game", "variableGame")
+      .leftJoinAndSelect("participant.study", "study")
+      .where("study.studyId = :studyId", { studyId })
+      .getMany();
+
+    const gameIds = [];
+    for (const participant of participants) {
+      if (participant.prolificBaselinePlayer?.game) {
+        gameIds.push(participant.prolificBaselinePlayer.game.id);
+      }
+      if (participant.prolificVariablePlayer?.game) {
+        gameIds.push(participant.prolificVariablePlayer.game.id);
+      }
+    }
+    return gameIds;
   }
 }

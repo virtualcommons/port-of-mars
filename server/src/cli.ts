@@ -78,6 +78,27 @@ async function exportSoloData(em: EntityManager, type: SoloGameType, start?: str
   await getServices().sologame.exportInvestmentsCsv("/dump/solo/investments.csv", gameIds);
 }
 
+async function exportStudyData(em: EntityManager, studyIds: Array<string>) {
+  for (const studyId of studyIds) {
+    const gameIds = await getServices().study.getGameIdsForStudyId(studyId);
+    if (gameIds.length > 0) {
+      await mkdir(`/dump/study/${studyId}`, { recursive: true });
+      logger.info("Exporting %d games for study %s", gameIds.length, studyId);
+      await getServices().study.exportProlificGamesCsv(`/dump/study/${studyId}/games.csv`, studyId);
+      await getServices().sologame.exportEventCardsCsv(
+        `/dump/study/${studyId}/eventcards.csv`,
+        gameIds
+      );
+      await getServices().sologame.exportInvestmentsCsv(
+        `/dump/study/${studyId}/investments.csv`,
+        gameIds
+      );
+    } else {
+      logger.info("No games found for study %s", studyId);
+    }
+  }
+}
+
 async function exportTournament(em: EntityManager, tournamentId: number): Promise<void> {
   logger.debug("=====EXPORT TOURNAMENT [%d] DATA START=====", tournamentId);
   const s = getServices(em);
@@ -740,6 +761,15 @@ program
           .option("-e, --end <date>", "End date (YYYY-MM-DD)")
           .action(async cmd => {
             await withDataSource(async em => exportSoloData(em, cmd.type, cmd.start, cmd.end));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("study")
+          .description("export solo game data to flat CSV files for a given study or studies")
+          .option("-s, --studyIds <studyIds...>", "Specify one or more study IDs")
+          .action(async cmd => {
+            await withDataSource(async em => exportStudyData(em, cmd.studyIds));
           })
       )
   )
