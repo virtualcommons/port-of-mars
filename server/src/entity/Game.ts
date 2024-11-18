@@ -59,4 +59,7 @@ export class Game {
 
   @Column({ nullable: true })
   treatmentId?: number;
+
+  @Column({ nullable: true })
+  classroomId?: number;
 }

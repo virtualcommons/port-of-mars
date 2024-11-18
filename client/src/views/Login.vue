@@ -69,6 +69,7 @@ import { url } from "@port-of-mars/client/util";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { CONSENT_PAGE } from "@port-of-mars/shared/routes";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
+import { AuthAPI } from "@port-of-mars/client/api/auth/request";
 
 @Component({
   components: {
@@ -76,6 +77,8 @@ import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
   },
 })
 export default class Login extends Vue {
+  authApi!: AuthAPI;
+
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
   shouldSkipVerification: boolean = true;
@@ -85,6 +88,7 @@ export default class Login extends Vue {
   consent = { name: CONSENT_PAGE };
 
   async created() {
+    this.authApi = new AuthAPI(this.$store, this.$ajax, this.$router);
     this.isDevMode = isDevOrStaging();
   }
 
@@ -103,8 +107,7 @@ export default class Login extends Vue {
       password: "testing",
     };
     try {
-      console.log(this.shouldSkipVerification);
-      await this.$ajax.devLogin(devLoginData, this.shouldSkipVerification);
+      await this.authApi.devLogin(devLoginData, this.shouldSkipVerification);
     } catch (e) {
       if (e instanceof Error) {
         this.error = e.message;

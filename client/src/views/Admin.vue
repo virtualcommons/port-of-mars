@@ -19,6 +19,9 @@
         <b-nav-item class="nav-link" active-class="active" to="/admin/settings">
           Settings
         </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" to="/admin/educator">
+          Educator
+        </b-nav-item>
       </b-nav>
       <router-view
         class="h-100 backdrop"

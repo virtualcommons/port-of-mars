@@ -57,6 +57,12 @@ export class AccountService extends BaseService {
     return await this.getRepository().save(user);
   }
 
+  async setName(userId: number, name: string): Promise<User> {
+    const user = await this.findUserById(userId);
+    user.name = name;
+    return await this.getRepository().save(user);
+  }
+
   async muteOrBanByUsername(username: string, action: ModerationActionType): Promise<User> {
     const user = await this.findByUsername(username);
     if (action === MUTE) {
@@ -349,7 +355,12 @@ export class AccountService extends BaseService {
     return user;
   }
 
-  async getOrCreateUser(userData: { email: string; passportId?: string }): Promise<User> {
+  async getOrCreateUser(userData: {
+    email: string;
+    passportId?: string;
+    name?: string;
+    username?: string;
+  }): Promise<User> {
     let user: User | null = null;
     // try to find user by id
     if (userData.passportId) {
@@ -361,10 +372,10 @@ export class AccountService extends BaseService {
     }
     if (!user) {
       user = new User();
-      user.name = "";
       user.email = userData.email;
       user.passportId = userData.passportId ?? "";
-      user.username = await generateUsername();
+      user.username = userData.username || (await generateUsername());
+      user.name = userData.name || "";
       user.isSystemBot = false;
       logger.info("getOrCreateUser: not found, creating user %s", user.username);
       await this.getRepository().save(user);

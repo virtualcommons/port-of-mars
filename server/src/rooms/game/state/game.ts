@@ -192,6 +192,7 @@ export class GameState
       marsEventIds: _.map(this.marsEvents, e => e.id),
       marsEventsProcessed: this.marsEventsProcessed,
       players: this.players.getPlayerSetSummary(),
+      roundIntroduction: this.roundIntroduction.toJSON(),
     };
   }
 
