@@ -41,7 +41,7 @@
         <b-icon icon="plus-lg" scale="1.5" />
       </button>
       <VFDNumberDisplay
-        :value="value"
+        :value="customTextDisplay || value"
         :digits="2"
         class="ml-3"
         :size="numberSize"
@@ -71,6 +71,7 @@ export default class SegmentedBar extends Vue {
   @Prop({ default: "" }) label!: string;
   @Prop({ default: "lg" }) size!: "sm" | "md" | "lg";
   @Prop({ default: "green" }) variant!: "green" | "blue" | "red" | "yellow";
+  @Prop({ default: "" }) customTextDisplay!: string;
 
   dragging = false;
 

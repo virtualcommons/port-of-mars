@@ -28,7 +28,8 @@
     "lint:fix": "eslint --fix -c .eslintrc.js ./ ../shared --ext .ts",
     "style": "prettier --config ../.prettierrc --check './**/*.ts' '../shared/**/*.ts'",
     "style:fix": "prettier --config ../.prettierrc --write './**/*.ts' '../shared/**/*.ts'",
-    "load-fixtures": "fixtures load  --require ts-node/register --require tsconfig-paths/register -d src/datasource.ts ./fixtures"
+    "load-fixtures": "fixtures load  --require ts-node/register --require tsconfig-paths/register -d src/datasource.ts ./fixtures",
+    "load-fixtures:prod": "fixtures load  --require ts-node/register --require tsconfig-paths/register -d src/datasource.js ./fixtures"
   },
   "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
   "license": "MIT",

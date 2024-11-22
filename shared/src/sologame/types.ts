@@ -15,14 +15,35 @@ export interface EventCardData {
 export type ThresholdInformation = "unknown" | "range" | "known";
 
 export interface TreatmentData {
+  gameType: SoloGameType;
   isNumberOfRoundsKnown: boolean;
   isEventDeckKnown: boolean;
   thresholdInformation: ThresholdInformation;
+  isLowResSystemHealth: boolean;
 }
+
+export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
 
 export type SoloGameStatus = "incomplete" | "victory" | "defeat";
 
+export interface SoloGameParams {
+  maxRound: { min: number; max: number };
+  roundTransitionDuration: number;
+  twoEventsThreshold: { min: number; max: number };
+  threeEventsThreshold: { min: number; max: number };
+  twoEventsThresholdDisplayRange?: { min: number; max: number };
+  threeEventsThresholdDisplayRange?: { min: number; max: number };
+  systemHealthMax: number;
+  systemHealthWear: number;
+  startingSystemHealth: number;
+  timeRemaining: number;
+  eventTimeout: number;
+  points: number;
+  resources: number;
+}
+
 export interface SoloGameClientState {
+  type: SoloGameType;
   status: SoloGameStatus;
   timeRemaining: number;
   systemHealth: number;
@@ -36,6 +57,7 @@ export interface SoloGameClientState {
     isNumberOfRoundsKnown: boolean;
     isEventDeckKnown: boolean;
     thresholdInformation: "unknown" | "range" | "known";
+    isLowResSystemHealth: boolean;
   };
   player: {
     resources: number;

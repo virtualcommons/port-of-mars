@@ -33,6 +33,7 @@ import {
   tournamentRouter,
   statusRouter,
   statsRouter,
+  studyRouter,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
@@ -108,6 +109,28 @@ if (isDevOrStaging()) {
     )
   );
 }
+
+passport.use(
+  "local-prolific",
+  new LocalStrategy(
+    {
+      usernameField: "studyId",
+      passwordField: "prolificId",
+      passReqToCallback: true,
+    },
+    async function (req: any, studyId: string, prolificId: string, done: any) {
+      try {
+        const participant = await getServices().study.getOrCreateProlificParticipant(
+          prolificId,
+          studyId
+        );
+        return done(null, participant.user);
+      } catch (e) {
+        return done(e);
+      }
+    }
+  )
+);
 
 passport.serializeUser(function (user: Pick<User, "id">, done: any) {
   done(null, user.id);
@@ -202,6 +225,7 @@ async function createApp() {
   app.use("/quiz", quizRouter);
   app.use("/account", accountRouter);
   app.use("/status", statusRouter);
+  app.use("/study", studyRouter);
 
   const server = http.createServer(app);
   const gameServer = new Server({

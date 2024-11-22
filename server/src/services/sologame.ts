@@ -1,5 +1,10 @@
 import { BaseService } from "@port-of-mars/server/services/db";
-import { EventCardData, SoloGameStatus, TreatmentData } from "@port-of-mars/shared/sologame";
+import {
+  EventCardData,
+  SoloGameStatus,
+  SoloGameType,
+  TreatmentData,
+} from "@port-of-mars/shared/sologame";
 import {
   SoloGame,
   SoloGameRound,
@@ -19,11 +24,14 @@ import { getLogger } from "@port-of-mars/server/settings";
 const logger = getLogger(__filename);
 
 export class SoloGameService extends BaseService {
-  async drawEventCardDeck(): Promise<EventCardData[]> {
+  async drawEventCardDeck(gameType: SoloGameType): Promise<EventCardData[]> {
     /**
-     * draw a deck of event cards from the db
+     * draw a deck of event cards from the db (ordered by id)
      */
-    const cards = await this.em.getRepository(SoloMarsEventCard).find();
+    const cards = await this.em.getRepository(SoloMarsEventCard).find({
+      where: { gameType },
+      order: { id: "ASC" },
+    });
     const deck: EventCardData[] = [];
 
     for (const card of cards) {
@@ -54,13 +62,24 @@ export class SoloGameService extends BaseService {
     return deck;
   }
 
-  async getUserNextTreatment(userId: number): Promise<TreatmentData> {
+  async getUserNextFreeplayTreatment(userId: number): Promise<SoloGameTreatment> {
     /**
      * get the next treatment (in order) that a user has not yet seen. If they have seen all
      * then return a random one.
      */
+    const gameType = "freeplay";
     const treatmentRepo = this.em.getRepository(SoloGameTreatment);
-    const numTreatments = await treatmentRepo.count();
+    const availableTreatmentIds = (
+      await treatmentRepo.find({
+        select: ["id"],
+        where: { gameType },
+      })
+    ).map(t => t.id);
+    const numTreatments = availableTreatmentIds.length;
+
+    if (numTreatments === 0) {
+      throw new Error(`No treatments found for solo game type: ${gameType}`);
+    }
 
     const highestPlayedTreatment = (
       await this.em
@@ -71,16 +90,20 @@ export class SoloGameService extends BaseService {
         .select("COALESCE(MAX(soloGame.treatmentId), 0)", "max")
         .where("user.id = :userId", { userId })
         .andWhere("soloGame.status != :status", { status: "incomplete" })
+        .andWhere("soloGame.treatmentId IN (:...availableTreatmentIds)", {
+          availableTreatmentIds,
+        })
         .getRawOne()
     ).max;
 
     if (highestPlayedTreatment < numTreatments) {
       return treatmentRepo.findOneByOrFail({ id: highestPlayedTreatment + 1 });
     }
-    return treatmentRepo.findOneByOrFail({ id: getRandomIntInclusive(1, numTreatments) });
+    const randomTreatmentId = availableTreatmentIds[getRandomIntInclusive(0, numTreatments - 1)];
+    return treatmentRepo.findOneByOrFail({ id: randomTreatmentId });
   }
 
-  async getTreatmentById(id: number): Promise<TreatmentData> {
+  async getTreatmentById(id: number): Promise<SoloGameTreatment> {
     return this.em.getRepository(SoloGameTreatment).findOneByOrFail({ id });
   }
 
@@ -93,6 +116,7 @@ export class SoloGameService extends BaseService {
     const player = await this.createPlayer(state.player.userId);
     const game = gameRepo.create({
       player,
+      type: state.type,
       treatment: await this.findTreatment(state.treatmentParams),
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
@@ -106,6 +130,7 @@ export class SoloGameService extends BaseService {
     return gameRepo.findOneOrFail({
       where: { id: game.id },
       relations: {
+        player: true,
         deck: {
           cards: true,
         },
@@ -125,9 +150,11 @@ export class SoloGameService extends BaseService {
   async findTreatment(treatmentData: TreatmentData): Promise<SoloGameTreatment> {
     return this.em.getRepository(SoloGameTreatment).findOneOrFail({
       where: {
+        gameType: treatmentData.gameType,
         isNumberOfRoundsKnown: treatmentData.isNumberOfRoundsKnown,
         isEventDeckKnown: treatmentData.isEventDeckKnown,
         thresholdInformation: treatmentData.thresholdInformation,
+        isLowResSystemHealth: treatmentData.isLowResSystemHealth,
       },
     });
   }
@@ -213,15 +240,21 @@ export class SoloGameService extends BaseService {
     return round;
   }
 
-  async getGameIdsBetween(start: Date, end: Date): Promise<Array<number>> {
-    const query = this.em
+  async getGameIds(type: SoloGameType, start?: Date, end?: Date): Promise<Array<number>> {
+    /**
+     * get all game ids for games of a certain type that were created between start and end
+     */
+    let query = this.em
       .getRepository(SoloGame)
       .createQueryBuilder("game")
       .select("game.id")
-      .where("game.dateCreated BETWEEN :start AND :end", {
+      .where("game.type = :type", { type });
+    if (start && end) {
+      query = query.andWhere("game.dateCreated BETWEEN :start AND :end", {
         start: start.toISOString().split("T")[0],
         end: end.toISOString().split("T")[0],
       });
+    }
     const result = await query.getRawMany();
     return result.map(row => row.game_id);
   }
@@ -238,13 +271,14 @@ export class SoloGameService extends BaseService {
       .leftJoinAndSelect("game.player", "player")
       .leftJoinAndSelect("player.user", "user")
       .leftJoinAndSelect("game.treatment", "treatment");
-    if (gameIds) {
+    if (gameIds && gameIds.length > 0) {
       query = query.where("game.id IN (:...gameIds)", { gameIds });
     }
     try {
       const games = await query.getMany();
       const formattedGames = games.map(game => ({
         gameId: game.id,
+        gameType: game.type,
         userId: game.player.user.id,
         username: game.player.user.username,
         status: game.status,
@@ -255,6 +289,7 @@ export class SoloGameService extends BaseService {
         knownEventDeck: game.treatment.isEventDeckKnown,
         knownEndRound: game.treatment.isNumberOfRoundsKnown,
         thresholdInformation: game.treatment.thresholdInformation,
+        isLowResSystemHealth: game.treatment.isLowResSystemHealth,
         dateCreated: game.dateCreated.toISOString(),
       }));
       const header = Object.keys(formattedGames[0]).map(name => ({
@@ -300,10 +335,14 @@ export class SoloGameService extends BaseService {
         resourcesEffect: deckCard.resourcesEffect,
         pointsEffect: deckCard.pointsEffect,
       }));
-      const header = Object.keys(formattedDeckCards[0]).map(name => ({
-        id: name,
-        title: name,
-      }));
+      let header: any[] = [];
+      // if there are no cards, just write an empty file
+      if (formattedDeckCards.length > 0) {
+        header = Object.keys(formattedDeckCards[0]).map(name => ({
+          id: name,
+          title: name,
+        }));
+      }
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedDeckCards);
       logger.info(`Event cards data exported successfully to ${path}`);

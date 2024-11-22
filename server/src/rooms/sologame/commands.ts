@@ -4,10 +4,14 @@ import { User } from "@port-of-mars/server/entity";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
-import { EventCard, SoloGameState, TreatmentParams } from "./state";
+import { EventCard, TreatmentParams } from "./state";
 import { SoloGameStatus } from "@port-of-mars/shared/sologame";
 
-abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {}
+abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {
+  get defaultParams() {
+    return this.state.defaultParams;
+  }
+}
 abstract class CmdWithoutPayload extends Cmd<Record<string, never>> {}
 
 export class InitGameCmd extends Cmd<{ user: User }> {
@@ -36,21 +40,38 @@ export class SetPlayerCmd extends Cmd<{ user: User }> {
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
     const { sologame: service } = getServices();
-    const cards = _.shuffle(await service.drawEventCardDeck()).map(data => new EventCard(data));
-    this.state.eventCardDeck.push(...cards);
+    const cards = (await service.drawEventCardDeck(this.state.type)).map(
+      data => new EventCard(data)
+    );
+    if (this.state.type === "prolificVariable") {
+      // prolific configuration uses a fixed deck
+      this.state.eventCardDeck.push(...cards);
+    } else {
+      const shuffledCards = _.shuffle(cards);
+      this.state.eventCardDeck.push(...shuffledCards);
+    }
   }
 }
 
 export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
   async execute({ user } = this.payload) {
-    const { sologame: service } = getServices();
-    this.state.treatmentParams = new TreatmentParams(await service.getUserNextTreatment(user.id));
+    if (this.state.type === "freeplay") {
+      const { sologame: service } = getServices();
+      this.state.treatmentParams = new TreatmentParams(
+        await service.getUserNextFreeplayTreatment(user.id)
+      );
+    } else {
+      const { study: service } = getServices();
+      this.state.treatmentParams = new TreatmentParams(
+        await service.getTreatmentForUser(user, this.state.type)
+      );
+    }
   }
 }
 
 export class SetGameParamsCmd extends CmdWithoutPayload {
   execute() {
-    const defaults = SoloGameState.DEFAULTS;
+    const defaults = this.defaultParams;
     this.state.maxRound = getRandomIntInclusive(defaults.maxRound.min, defaults.maxRound.max);
     this.state.twoEventsThreshold = getRandomIntInclusive(
       defaults.twoEventsThreshold.min,
@@ -71,8 +92,11 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
 
 export class PersistGameCmd extends CmdWithoutPayload {
   async execute() {
-    const { sologame: service } = getServices();
-    const game = await service.createGame(this.state);
+    const { sologame, study } = getServices();
+    const game = await sologame.createGame(this.state);
+    if (this.state.type === "prolificVariable" || this.state.type === "prolificBaseline") {
+      await study.setProlificParticipantPlayer(this.state.type, game.player);
+    }
     this.state.gameId = game.id;
     // keep track of deck card db ids after persisting the deck
     this.state.eventCardDeck.forEach((card, index) => {
@@ -83,13 +107,14 @@ export class PersistGameCmd extends CmdWithoutPayload {
 
 export class SetFirstRoundCmd extends CmdWithoutPayload {
   execute() {
-    const defaults = SoloGameState.DEFAULTS;
+    const defaults = this.defaultParams;
     this.state.round = 1;
-    this.state.systemHealth = defaults.systemHealthMax - defaults.systemHealthWear;
+    this.state.systemHealth = defaults.startingSystemHealth;
     this.state.timeRemaining = defaults.timeRemaining;
     this.state.player.resources = defaults.resources;
     this.state.updateRoundInitialValues();
     this.state.isRoundTransitioning = false;
+    this.state.canInvest = true;
 
     return [new SendHiddenParamsCmd()];
   }
@@ -108,8 +133,11 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
       data.twoEventsThreshold = this.state.twoEventsThreshold;
       data.threeEventsThreshold = this.state.threeEventsThreshold;
     } else if (this.state.treatmentParams.thresholdInformation === "range") {
-      data.twoEventsThresholdRange = SoloGameState.DEFAULTS.twoEventsThreshold;
-      data.threeEventsThresholdRange = SoloGameState.DEFAULTS.threeEventsThreshold;
+      data.twoEventsThresholdRange =
+        this.defaultParams.twoEventsThresholdDisplayRange || this.defaultParams.twoEventsThreshold;
+      data.threeEventsThresholdRange =
+        this.defaultParams.threeEventsThresholdDisplayRange ||
+        this.defaultParams.threeEventsThreshold;
     }
     this.room.client.send("set-hidden-params", {
       kind: "set-hidden-params",
@@ -117,6 +145,7 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
     });
   }
 }
+
 export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
     return (
@@ -148,7 +177,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     this.state.systemHealth = Math.max(
       0,
       Math.min(
-        SoloGameState.DEFAULTS.systemHealthMax,
+        this.defaultParams.systemHealthMax,
         this.state.systemHealth + this.state.activeCard.systemHealthEffect
       )
     );
@@ -182,23 +211,20 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
   execute() {
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
-    }, SoloGameState.DEFAULTS.eventTimeout * 1000);
+    }, this.defaultParams.eventTimeout * 1000);
   }
 }
 
 export class DrawCardsCmd extends CmdWithoutPayload {
   execute() {
     let drawCount = this.getDrawCount();
-    // FIXME:
-    // this crashes if we run out of cards, should find a way to handle that (rare) case
-    // min of 30 cards max of 14 rounds, max of ~35 cards encountered though very unlikely
     this.drawRoundCards(drawCount);
     // draw 2 more if murphy's law is in play
     if (this.state.roundEventCards.some(card => card.isMurphysLaw)) {
       drawCount += 2;
       this.drawRoundCards(2);
     }
-    this.state.timeRemaining += SoloGameState.DEFAULTS.eventTimeout * drawCount;
+    this.state.timeRemaining += this.defaultParams.eventTimeout * drawCount;
     const nextRoundCard = this.state.nextRoundCard;
     if (nextRoundCard) {
       this.state.activeCardId = nextRoundCard.deckCardId;
@@ -221,8 +247,8 @@ export class DrawCardsCmd extends CmdWithoutPayload {
   }
 
   getDrawCount() {
-    if (this.state.systemHealth > this.state.twoEventsThreshold) return 1;
-    if (this.state.systemHealth > this.state.threeEventsThreshold) return 2;
+    if (this.state.systemHealth >= this.state.twoEventsThreshold) return 1;
+    if (this.state.systemHealth >= this.state.threeEventsThreshold) return 2;
     return 3;
   }
 }
@@ -235,17 +261,30 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
   async execute({ systemHealthInvestment } = this.payload) {
     const surplus = this.state.resources - systemHealthInvestment;
     this.state.systemHealth = Math.min(
-      SoloGameState.DEFAULTS.systemHealthMax,
+      this.defaultParams.systemHealthMax,
       this.state.systemHealth + systemHealthInvestment
     );
     this.state.player.points += surplus;
     // wait a bit for the round transition so we can see the investment before deducting wear+tear
-    this.state.timeRemaining = SoloGameState.DEFAULTS.roundTransitionDuration;
+    this.state.timeRemaining = this.defaultParams.roundTransitionDuration;
     this.state.isRoundTransitioning = true;
     this.state.canInvest = false;
     await new Promise(resolve =>
-      setTimeout(resolve, SoloGameState.DEFAULTS.roundTransitionDuration * 1000)
+      setTimeout(resolve, this.defaultParams.roundTransitionDuration * 1000)
     );
+    this.state.systemHealth = Math.max(
+      0,
+      this.state.systemHealth - this.defaultParams.systemHealthWear
+    );
+    if (this.state.systemHealth <= 0) {
+      return [
+        new PersistRoundCmd().setPayload({
+          systemHealthInvestment,
+          pointsInvestment: surplus,
+        }),
+        new EndGameCmd().setPayload({ status: "defeat" }),
+      ];
+    }
     return [
       new PersistRoundCmd().setPayload({
         systemHealthInvestment,
@@ -271,19 +310,14 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     this.state.canInvest = false; // disable investment until all cards are applied
     this.state.isRoundTransitioning = false;
 
-    const defaults = SoloGameState.DEFAULTS;
+    const defaults = this.defaultParams;
 
     if (this.state.round + 1 > this.state.maxRound) {
       return new EndGameCmd().setPayload({ status: "victory" });
     }
 
     this.state.round += 1;
-    this.state.systemHealth = Math.max(0, this.state.systemHealth - defaults.systemHealthWear);
     this.state.updateRoundInitialValues();
-
-    if (this.state.systemHealth <= 0) {
-      return new EndGameCmd().setPayload({ status: "defeat" });
-    }
 
     this.state.player.resources = defaults.resources;
     this.state.timeRemaining = defaults.timeRemaining;
@@ -292,7 +326,12 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
       card.inPlay = false;
     });
     this.state.updateVisibleCards();
-    return new DrawCardsCmd();
+    if (this.state.upcomingEventCards.length > 0) {
+      return new DrawCardsCmd();
+    } else {
+      this.state.canInvest = true;
+      this.state.activeCardId = -1;
+    }
   }
 }
 
