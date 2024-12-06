@@ -187,8 +187,10 @@ export class StudyService extends BaseService {
           p =>
             p.prolificBaselinePlayer?.game &&
             p.prolificVariablePlayer?.game &&
-            p.prolificBaselinePlayer.points &&
-            p.prolificVariablePlayer.points
+            p.prolificBaselinePlayer.points !== null &&
+            p.prolificBaselinePlayer.points !== undefined &&
+            p.prolificVariablePlayer.points !== null &&
+            p.prolificVariablePlayer.points !== undefined
         )
         // return an array of prolificId and total points earned, if they lost they get 0 points
         .map(p => {

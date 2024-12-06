@@ -36,12 +36,11 @@ export class SoloGameRoom extends Room<SoloGameState> {
         this.state.timeRemaining -= 1;
       } else if (!this.state.isRoundTransitioning) {
         this.dispatcher.dispatch(
-          new PersistRoundCmd().setPayload({
+          new InvestCmd().setPayload({
             systemHealthInvestment: 0,
-            pointsInvestment: 0,
+            clockRanOut: true,
           })
         );
-        this.dispatcher.dispatch(new SetNextRoundCmd());
       }
     }, 1000);
   }

@@ -253,13 +253,18 @@ export class DrawCardsCmd extends CmdWithoutPayload {
   }
 }
 
-export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
+export class InvestCmd extends Cmd<{ systemHealthInvestment: number; clockRanOut?: boolean }> {
   validate({ systemHealthInvestment } = this.payload) {
     return this.state.canInvest && systemHealthInvestment <= this.state.resources;
   }
 
-  async execute({ systemHealthInvestment } = this.payload) {
-    const surplus = this.state.resources - systemHealthInvestment;
+  async execute({ systemHealthInvestment, clockRanOut } = this.payload) {
+    let surplus = 0;
+    // if the clock ran out (as opposed to player-triggered investment), they get
+    // 0 points and 0 system health
+    if (!clockRanOut) {
+      surplus = this.state.resources - systemHealthInvestment;
+    }
     this.state.systemHealth = Math.min(
       this.defaultParams.systemHealthMax,
       this.state.systemHealth + systemHealthInvestment
