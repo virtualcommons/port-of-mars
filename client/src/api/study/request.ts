@@ -7,7 +7,10 @@ export class StudyAPI {
   constructor(public store: TStore, public ajax: AjaxRequest) {}
 
   async getProlificParticipantStatus(): Promise<ProlificParticipantStatus> {
-    return this.ajax.get(url("/study/prolific/status"), ({ data }) => {
+    return this.ajax.get(url("/study/prolific/status"), ({ data, status }) => {
+      if (status !== 200) {
+        return null;
+      }
       return data;
     });
   }

@@ -120,10 +120,9 @@ export default class ProlificStudy extends Vue {
       this.api.room = await this.$client.create(SOLO_ROOM_NAME, { type });
       applySoloGameServerResponses(this.api.room, this);
       this.started = true;
-      setTimeout(() => {
-        // wait a bit for the room to be initialized
+      this.api.room.onMessage("ready", () => {
         this.fetchProlificParticipantStatus();
-      }, 3 * 1000);
+      });
     } catch (err) {
       console.log("Error creating game room");
       console.error(err);
@@ -132,7 +131,10 @@ export default class ProlificStudy extends Vue {
 
   async fetchProlificParticipantStatus() {
     this.statusLoading = true;
-    this.participantStatus = await this.studyApi.getProlificParticipantStatus();
+    const status = await this.studyApi.getProlificParticipantStatus();
+    if (status) {
+      this.participantStatus = status;
+    }
     this.statusLoading = false;
   }
 

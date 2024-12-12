@@ -23,6 +23,7 @@ export class InitGameCmd extends Cmd<{ user: User }> {
       new SetGameParamsCmd(),
       new PersistGameCmd(),
       new SetFirstRoundCmd(),
+      new BroadcastReadyCmd(),
     ];
   }
 }
@@ -117,6 +118,12 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.canInvest = true;
 
     return [new SendHiddenParamsCmd()];
+  }
+}
+
+export class BroadcastReadyCmd extends CmdWithoutPayload {
+  execute() {
+    this.room.broadcast("ready", { kind: "ready" });
   }
 }
 

@@ -54,6 +54,15 @@ export class StudyService extends BaseService {
     ];
     let currentStep = 1;
 
+    // fail nicely if one of the games hasn't been initialized yet
+    if (soloPlayers.some(p => !p.game)) {
+      throw new ServerError({
+        code: 202,
+        message: "Game not yet initialized",
+        displayMessage: "Game not yet initialized",
+      });
+    }
+
     const hasPlayedBaseline = !!soloPlayers.find(p => p.game.type === "prolificBaseline");
     const hasPlayedVariable = !!soloPlayers.find(p => p.game.type === "prolificVariable");
     if (hasPlayedVariable) {
