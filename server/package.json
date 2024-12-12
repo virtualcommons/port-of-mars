@@ -83,7 +83,7 @@
     "@types/luxon": "^3.0.2",
     "async-mutex": "^0.4.0",
     "bcryptjs": "^2.4.3",
-    "colyseus": "^0.14.16",
+    "colyseus": "^0.15.56",
     "commander": "^9.0.0",
     "connect-redis": "^6.0.0",
     "cookie": "^1.0.0",
