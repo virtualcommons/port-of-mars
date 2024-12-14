@@ -55,7 +55,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import { CLASSROOM_LOBBY_PAGE, STUDENT_LOGIN_PAGE } from "@port-of-mars/shared/routes";
+import { CLASSROOM_LOBBY_PAGE, EDUCATOR_LOGIN_PAGE } from "@port-of-mars/shared/routes";
 
 @Component
 export default class StudentConfirm extends Vue {
@@ -88,7 +88,7 @@ export default class StudentConfirm extends Vue {
   async created() {
     const data = await this.educatorApi.authStudent();
     if (!data) {
-      this.$router.push({ name: STUDENT_LOGIN_PAGE });
+      this.$router.push({ name: EDUCATOR_LOGIN_PAGE });
     } else {
       this.rejoinCode = data.rejoinCode;
     }
