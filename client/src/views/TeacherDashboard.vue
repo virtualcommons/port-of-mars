@@ -3,28 +3,46 @@
     <div class="h-100 w-100 d-flex flex-column">
       <Messages class="position-fixed p-3"></Messages>
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-3">
-        <!--Classrooms Sidebar-->
-        <b-col cols="2">
-          <h4 class="row header-nowrap my-2 ml-1">Classrooms</h4>
-          <div class="classrooms">
-            <b-tabs pills vertical nav-wrapper-class="w-100">
-              <b-tab
-                v-for="classroom in classrooms"
-                :key="classroom.id"
-                :title="classroom.descriptor"
-                @click="selectClassroom(classroom.id)"
-              ></b-tab>
-            </b-tabs>
+        <!-- Sidebar -->
+        <b-col cols="2" class="d-flex flex-column justify-content-between">
+          <div>
+            <h4 class="row header-nowrap my-2 ml-1">Classrooms</h4>
+            <div class="classrooms">
+              <b-tabs pills vertical nav-wrapper-class="w-100">
+                <b-tab
+                  v-for="classroom in classrooms"
+                  :key="classroom.id"
+                  :title="classroom.descriptor"
+                  @click="selectClassroom(classroom.id)"
+                ></b-tab>
+              </b-tabs>
+            </div>
+            <b-button v-b-modal.add-classroom-modal variant="success" class="w-100 mt-2">
+              <h4 class="mb-0">New<b-icon-plus></b-icon-plus></h4>
+            </b-button>
           </div>
-          <b-button v-b-modal.add-classroom-modal variant="success" class="w-100 mt-2">
-            <h4 class="mb-0">New<b-icon-plus></b-icon-plus></h4>
-          </b-button>
+          <div>
+            <b-button
+              v-if="classrooms.length > 0"
+              variant="link"
+              class="text-decoration-none p-0 d-flex align-items-center"
+              @click="$bvModal.show('welcome-info-modal')"
+            >
+              <b-icon-info-circle class="float-left mr-2 mb-1"></b-icon-info-circle>
+              Information
+            </b-button>
+          </div>
         </b-col>
-        <!--Main dashboard-->
+
         <b-col cols="10" class="content-container h-100 w-100 p-3 overflow-hidden">
-          <div v-if="selectedClassroom && classrooms.length > 0">
+          <div v-if="classrooms.length > 0 && selectedClassroom">
             <h4>{{ selectedClassroom?.descriptor }}</h4>
-            <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
+            <h4>
+              Game Code:
+              <span class="badge bg-white text-primary p-2 ml-1">
+                {{ selectedClassroom.authToken }}
+              </span>
+            </h4>
             <b-row>
               <b-tabs pills card v-model="dashboardTabs" class="w-100" lazy>
                 <b-tab title="Students">
@@ -46,8 +64,8 @@
                       v-b-modal.rename-classroom-modal
                     >
                       <b-icon-pencil-square class="float-left mr-1"></b-icon-pencil-square>
-                      Rename Classroom</b-button
-                    >
+                      Rename Classroom
+                    </b-button>
                     <b-button
                       :pressed="false"
                       class="text-nowrap"
@@ -55,21 +73,66 @@
                       v-b-modal.delete-confirm-modal
                     >
                       <b-icon-trash-fill class="float-left mr-1"></b-icon-trash-fill>
-                      Delete Classroom</b-button
-                    >
+                      Delete Classroom
+                    </b-button>
                   </b-row>
                 </b-tab>
               </b-tabs>
             </b-row>
           </div>
           <div v-else>
-            <h3 class="mt-2">No Classrooms Available</h3>
-            <p>Please add a classroom using the button on the left</p>
+            <h4 class="font-weight-bold text-center mb-4" style="color: var(--light-shade)">
+              Welcome to the teacher dashboard
+            </h4>
+            <p style="color: white">
+              The game is built on the premise that when people share a common resource, they will
+              have to cooperate to manage it sustainably. You may be aware of the “tragedy of the
+              commons”? The Port of Mars demonstrates the challenges of managing a shared resource,
+              but it does not have to lead to a tragedy. Will your students overcome those
+              challenges? And how does this relate to everyday challenges they experience?
+            </p>
+            <p style="color: white">
+              In the lesson plan
+              <a
+                href="https://docs.google.com/document/d/15VYUrirOInXZ1Dr9xTUSg-KjSycVFhwa0upMbi7mUyw/edit?usp=sharing"
+                target="_blank"
+                rel="noopener"
+              >
+                here
+              </a>
+              , we provide more background and suggestions for activities to do in class, including
+              some assessment methods.
+            </p>
+            <p style="color: white">
+              To get started, you need to create a classroom. You will get a number called a game
+              code that your students can use to log in. If the total number of students
+              participating is not a multiple of five, some students will play with a group that
+              includes nice bots.
+            </p>
+            <p style="color: white">
+              You control when the game starts. It would be helpful if the students watched the
+              tutorial video and the manual. There might be some questions in the beginning since it
+              is not easy to manage a habitat on Mars. The game typically lasts between 30 and 60
+              minutes.
+            </p>
+            <p style="color: white">
+              Once the games are played, you can see some basic statistics of the groups such as how
+              system health changed over time, and how many points the different students earned.
+              This can be used in a discussion with the students. Why did some groups manage to keep
+              their habitat running for all the rounds while other groups had their system health
+              dropping to 0 within a few rounds (game over)?
+            </p>
+            <p style="color: white">
+              We provide, at the moment, the most essential information for you to use the game in
+              class. Depending on the requests we get, extensions will be made. Let us know if you
+              have questions or suggestions, and send them to
+              <a href="mailto:PORTMARS@ASU.EDU">PORTMARS@ASU.EDU</a>.
+            </p>
           </div>
         </b-col>
       </b-row>
     </div>
-    <!--add clasroom modal-->
+    <!--add classroom modal-->
     <b-modal
       id="add-classroom-modal"
       size="lg"
@@ -158,6 +221,63 @@
       @ok="deleteClassroom"
     >
       <span>Are you sure you want to delete this classroom? This action cannot be undone.</span>
+    </b-modal>
+    <!--welcome info modal-->
+    <b-modal
+      id="welcome-info-modal"
+      size="lg"
+      centered
+      body-bg-variant="dark"
+      header-bg-variant="dark"
+      header-class="pb-0 border-bottom-0"
+      footer-class="pt-0 border-top-0"
+      footer-bg-variant="dark"
+    >
+      <h4 class="font-weight-bold text-center mb-4" style="color: var(--light-shade)">
+        Welcome to the teacher dashboard
+      </h4>
+      <p>
+        The game is built on the premise that when people share a common resource, they will have to
+        cooperate to manage it sustainably. You may be aware of the “tragedy of the commons”? The
+        Port of Mars demonstrates the challenges of managing a shared resource, but it does not have
+        to lead to a tragedy. Will your students overcome those challenges? And how does this relate
+        to everyday challenges they experience?
+      </p>
+      <p>
+        In the lesson plan
+        <a
+          href="https://docs.google.com/document/d/15VYUrirOInXZ1Dr9xTUSg-KjSycVFhwa0upMbi7mUyw/edit?usp=sharing"
+          target="_blank"
+          rel="noopener"
+        >
+          here
+        </a>
+        , we provide more background and suggestions for activities to do in class, including some
+        assessment methods.
+      </p>
+      <p>
+        To get started, you need to create a classroom. You will get a number that your students can
+        use to log in. If the total number of students participating is not a multiple of five, some
+        students will play with a group that includes nice bots.
+      </p>
+      <p>
+        You control when the game starts. It would be helpful if the students watched the tutorial
+        video and the manual. There might be some questions in the beginning since it is not easy to
+        manage a habitat on Mars. The game typically lasts between 30 and 60 minutes.
+      </p>
+      <p>
+        Once the games are played, you can see some basic statistics of the groups such as how
+        system health changed over time, and how many points the different students earned. This can
+        be used in a discussion with the students. Why did some groups manage to keep their habitat
+        running for all the rounds while other groups had their system health dropping to 0 within a
+        few rounds (game over)?
+      </p>
+      <p>
+        We provide, at the moment, the most essential information for you to use the game in class.
+        Depending on the requests we get, extensions will be made. Let us know if you have questions
+        or suggestions, and send them to
+        <a href="mailto:PORTMARS@ASU.EDU">PORTMARS@ASU.EDU</a>.
+      </p>
     </b-modal>
   </b-container>
 </template>

@@ -111,7 +111,7 @@ import {
   LEADERBOARD_PAGE,
   PROFILE_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
-  STUDENT_LOGIN_PAGE,
+  EDUCATOR_LOGIN_PAGE,
   CLASSROOM_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
@@ -136,7 +136,7 @@ export default class Navbar extends Vue {
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   profile = { name: PROFILE_PAGE };
-  studentLogin = { name: STUDENT_LOGIN_PAGE };
+  educatorLogin = { name: EDUCATOR_LOGIN_PAGE };
   classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
 
   get username() {

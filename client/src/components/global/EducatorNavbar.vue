@@ -68,7 +68,7 @@
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </div>
-        <b-button v-else title="Sign In" variant="primary" :to="studentLogin">Sign In</b-button>
+        <b-button v-else title="Sign In" variant="primary" :to="educatorLogin">Sign In</b-button>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -89,7 +89,7 @@ import {
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
-  STUDENT_LOGIN_PAGE,
+  EDUCATOR_LOGIN_PAGE,
   CLASSROOM_LOBBY_PAGE,
   TEACHER_DASHBOARD_PAGE,
   EDUCATOR_PRIVACY_PAGE,
@@ -115,7 +115,7 @@ export default class Navbar extends Vue {
   history = { name: PLAYER_HISTORY_PAGE };
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
-  studentLogin = { name: STUDENT_LOGIN_PAGE };
+  educatorLogin = { name: EDUCATOR_LOGIN_PAGE };
   classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
   teacherDashboard = { name: TEACHER_DASHBOARD_PAGE };
   educatorPrivacy = { name: EDUCATOR_PRIVACY_PAGE };
