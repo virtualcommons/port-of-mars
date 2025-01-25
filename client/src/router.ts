@@ -23,7 +23,7 @@ import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
-import StudentLogin from "@port-of-mars/client/views/StudentLogin.vue";
+import EducatorLogin from "@port-of-mars/client/views/EducatorLogin.vue";
 import StudentConfirm from "@port-of-mars/client/views/StudentConfirm.vue";
 import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
 import TeacherDashboard from "@port-of-mars/client/views/TeacherDashboard.vue";
@@ -48,7 +48,7 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROFILE_PAGE,
-  STUDENT_LOGIN_PAGE,
+  EDUCATOR_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
   CLASSROOM_LOBBY_PAGE,
   TEACHER_DASHBOARD_PAGE,
@@ -192,8 +192,8 @@ function getEducatorRouter() {
         ],
       },
       // redirect straight to student login page
-      { path: "", name: "Home", redirect: { name: STUDENT_LOGIN_PAGE } },
-      { ...PAGE_META[STUDENT_LOGIN_PAGE], component: StudentLogin },
+      { path: "", name: "Home", redirect: { name: EDUCATOR_LOGIN_PAGE } },
+      { ...PAGE_META[EDUCATOR_LOGIN_PAGE], component: EducatorLogin },
       { ...PAGE_META[STUDENT_CONFIRM_PAGE], component: StudentConfirm },
       { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
       { ...PAGE_META[TEACHER_DASHBOARD_PAGE], component: TeacherDashboard },
@@ -204,12 +204,12 @@ function getEducatorRouter() {
   router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
     initStoreOnFirstRoute(from, next);
     if (to.meta.requiresAuth && !isAuthenticated()) {
-      next({ name: STUDENT_LOGIN_PAGE });
+      next({ name: EDUCATOR_LOGIN_PAGE });
     } else if (to.meta.requiresAdmin && !isAdmin()) {
-      next({ name: STUDENT_LOGIN_PAGE });
+      next({ name: EDUCATOR_LOGIN_PAGE });
     } else if (to.meta.requiresTeacher && !isTeacher()) {
-      next({ name: STUDENT_LOGIN_PAGE });
-    } else if (to.name === STUDENT_LOGIN_PAGE && isAuthenticated()) {
+      next({ name: EDUCATOR_LOGIN_PAGE });
+    } else if (to.name === EDUCATOR_LOGIN_PAGE && isAuthenticated()) {
       next({ name: CLASSROOM_LOBBY_PAGE });
     } else if (to.name === CLASSROOM_LOBBY_PAGE && isTeacher()) {
       next({ name: TEACHER_DASHBOARD_PAGE });

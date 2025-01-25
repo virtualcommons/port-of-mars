@@ -39,15 +39,22 @@
         >.
       </p>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Inject, Vue, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
+import Footer from "@port-of-mars/client/components/global/Footer.vue";
 
-export default class educatorPrivacy extends Vue {}
+@Component({
+  //FIXME: create a different footer spec. for educator version?
+  components: {
+    Footer,
+  },
+})
+export default class EducatorPrivacy extends Vue {}
 </script>
 
 <style lang="scss" scoped>
@@ -60,9 +67,5 @@ h4,
 ul,
 p {
   color: #fff;
-}
-
-ul {
-  padding-left: 2rem;
 }
 </style>

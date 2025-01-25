@@ -3,7 +3,7 @@
     <div v-if="completedGames.length < 1" class="empty-container">
       <p>Reports will display once games have concluded.</p>
     </div>
-    <b-row>
+    <b-row v-else>
       <!-- finished games -->
       <b-col v-if="!inspectedCompletedGame">
         <h4>Completed Games</h4>
@@ -20,7 +20,7 @@
             :sort-desc="true"
           >
             <template #cell(dateFinalized)="data">
-              {{ new Date(data.item.dateFinalized).toLocaleTimeString() }}
+              {{ new Date(data.item.dateFinalized).toLocaleString() }}
             </template>
             <template #cell(status)="data">
               <b-badge :variant="data.item.status === 'victory' ? 'success' : 'danger'">
@@ -33,6 +33,13 @@
                 :key="'human' + i"
               />
               <b-icon-laptop v-for="i in getBotCount(data.item.players)" :key="'bot' + i" />
+            </template>
+            <template #cell(highScore)="data">
+              {{ data.item.highScore }}
+              <b-badge v-if="data.item.highScore === highestScore" variant="success"
+                >winner <b-icon-award></b-icon-award
+              ></b-badge>
+              <p class="empty-container justify-content-start" v-else>Unavailable</p>
             </template>
 
             <template #cell(inspect)="data">
@@ -49,29 +56,31 @@
         </div>
       </b-col>
       <!-- selected game stats -->
-      <b-row v-else class="w-100 h-100 pl-3">
+      <b-row v-else class="w-100 h-100 m-0 justify-content-center">
         <b-col cols="4">
-          <b-button class="m-2" variant="light" @click="inspectedCompletedGame = null">
-            Return <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
-          </b-button>
-          <b-dropdown text="Select Stat to View" variant="outline-primary" lazy>
-            <b-dropdown-item-button @click="stat = 'Points'"
-              >Player Points Stats</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="stat = 'System'"
-              >System Health Stats</b-dropdown-item-button
-            >
-            <b-dropdown-item-button @click="stat = 'Chat'">Chat History</b-dropdown-item-button>
-          </b-dropdown>
-          <b-row class="ml-1 justify-content-between">
+          <div class="mb-1">
+            <b-button class="mr-3" variant="light" @click="inspectedCompletedGame = null">
+              Return <b-icon-box-arrow-left class="float-left mr-2"></b-icon-box-arrow-left>
+            </b-button>
+            <b-dropdown text="Select Stat to View" variant="outline-primary" lazy>
+              <b-dropdown-item-button @click="stat = 'Points'"
+                >Player Points Stats</b-dropdown-item-button
+              >
+              <b-dropdown-item-button @click="stat = 'System'"
+                >System Health Stats</b-dropdown-item-button
+              >
+              <b-dropdown-item-button @click="stat = 'Chat'">Chat History</b-dropdown-item-button>
+            </b-dropdown>
+          </div>
+          <b-row class="ml-1">
             <h4 class="header-nowrap mt-3">Game #{{ inspectedCompletedGame.id }} Stats</h4>
           </b-row>
-          <div class="content-container" style="max-height: 55vh">
+          <div class="content-container">
             <b-table
               dark
               sticky-header
               class="m-0 custom-table"
-              style="overflow-y: auto; overflow-x: hidden; max-height: 50vh"
+              style="overflow-y: auto; overflow-x: hidden; max-height: 60vh"
               :tbody-tr-attr="playerRowStyle"
               :fields="playerFields"
               :items="inspectedCompletedGame.players"
@@ -96,20 +105,23 @@
                     inspectedCompletedGame.highScore &&
                     data.item.points === inspectedCompletedGame.highScore
                   "
-                  >winner</b-badge
-                >
+                  >winner <b-icon-award></b-icon-award
+                ></b-badge>
               </template>
             </b-table>
           </div>
         </b-col>
-        <b-col cols="8" class="p-3">
-          <div v-if="stat == 'Points'" style="height: 60vh; overflow-x: auto">
+        <b-col cols="8" class="p-3" style="overflow-x: auto">
+          <div v-if="stat == 'Points'">
             <LineChart :data="playerChartData" :options="playerChartOptions" />
           </div>
-          <div v-if="stat == 'System'" style="height: 60vh; overflow-x: auto">
+          <div v-if="stat == 'System'">
             <LineChart :data="systemHealthChart" :options="systemChartOptions" />
           </div>
-          <div v-if="stat == 'Chat'"></div>
+          <div v-if="stat == 'Chat'">
+            <h4>Chat History</h4>
+            <div class="content-container" style="height: 60vh"></div>
+          </div>
         </b-col>
       </b-row>
     </b-row>
@@ -157,6 +169,9 @@ export default class TeacherDashboard extends Vue {
   highestScore = 0;
   stat = "Points";
 
+  completedGames: AdminGameData[] = [];
+  inspectedCompletedGame: AdminGameData | null = null;
+  // inspectedChatLogs: StudentChatMessageData[] = [];
   completedGames: GameReport[] = [];
   inspectedCompletedGame: GameReport | null = null;
 
@@ -181,29 +196,27 @@ export default class TeacherDashboard extends Vue {
   };
 
   playerChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        font: { size: 24 },
+        font: { size: 22 },
         padding: { bottom: 10 },
         text: "Total Player Points per Round",
       },
-      legend: {},
+      legend: { labels: { boxWidth: 30, padding: 15 } },
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItems: any) {
+            return `Round: ${tooltipItems[0].label}`;
+          },
+        },
+      },
     },
     scales: {
       x: {
         title: {
           display: true,
           text: "Rounds",
-          font: { size: 14 },
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Points",
           font: { size: 14 },
         },
       },
@@ -218,16 +231,24 @@ export default class TeacherDashboard extends Vue {
     ],
   };
   systemChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
-        font: { size: 24 },
+        font: { size: 22 },
         padding: { bottom: 10 },
         text: "System Health Status per Round",
       },
       legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItems: any) {
+            return `Round: ${tooltipItems[0].label}`;
+          },
+          label: function (tooltipItem: any) {
+            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}%`;
+          },
+        },
+      },
     },
     scales: {
       x: {
