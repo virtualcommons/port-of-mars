@@ -28,15 +28,19 @@
               </b-badge>
             </template>
             <template #cell(players)="data">
-              <b-icon-person-fill v-for="i in getHumanCount(data.item.players)" :key="'bot' + i" />
-              <b-icon-laptop v-for="i in getBotCount(data.item.players)" :key="'human' + i" />
+              <b-icon-person-fill
+                v-for="i in getHumanCount(data.item.players)"
+                :key="'human' + i"
+              />
+              <b-icon-laptop v-for="i in getBotCount(data.item.players)" :key="'bot' + i" />
             </template>
+
             <template #cell(inspect)="data">
               <b-button
                 variant="light"
                 size="sm"
                 class="float-right"
-                @click="inspectedCompletedGame = data.item"
+                @click="inspectGame(data.item)"
                 >Inspect Stats
                 <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
               </b-button>
@@ -75,19 +79,20 @@
               :sort-desc="true"
             >
               <template #cell(username)="data">
-                <b-icon-laptop v-if="data.item.user.isSystemBot"></b-icon-laptop>
+                <b-icon-laptop v-if="data.item.isSystemBot"></b-icon-laptop>
                 <b-icon-person-fill v-else></b-icon-person-fill>
-                {{ data.item.user.username }}
-                <p style="margin-left: 1.3rem; margin-bottom: 0" v-if="!data.item.user.isSystemBot">
-                  {{ data.item.user.name }}
+                {{ data.item.username || "Unknown" }}
+                <p style="margin-left: 1.3rem; margin-bottom: 0" v-if="!data.item.isSystemBot">
+                  {{ data.item.name || "Unknown" }}
                 </p>
               </template>
+
               <template #cell(points)="data">
                 {{ data.item.points }}
                 <b-badge
                   variant="success"
                   v-if="
-                    isEligibleForPrize(data.item.user) &&
+                    isEligibleForPrize(data.item) &&
                     inspectedCompletedGame.highScore &&
                     data.item.points === inspectedCompletedGame.highScore
                   "
@@ -115,8 +120,16 @@
 import { Component, Inject, Vue, Prop } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import { AdminGameData, ClientSafeUser, ClassroomData } from "@port-of-mars/shared/types";
+import {
+  AdminGameData,
+  ClientSafeUser,
+  ClassroomData,
+  GameReport,
+  GamePlayer,
+  ENTREPRENEUR,
+} from "@port-of-mars/shared/types";
 import { Line as LineChart } from "vue-chartjs";
+
 import {
   Chart as ChartJS,
   Title,
@@ -127,6 +140,7 @@ import {
   CategoryScale,
   PointElement,
 } from "chart.js"; //Need to remove any unused imports later
+import Game from "@port-of-mars/client/views/Game.vue";
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
 ChartJS.defaults.color = "rgb(241, 224, 197)";
 ChartJS.defaults.font.family = "Ruda";
@@ -143,8 +157,8 @@ export default class TeacherDashboard extends Vue {
   highestScore = 0;
   stat = "Points";
 
-  completedGames: AdminGameData[] = [];
-  inspectedCompletedGame: AdminGameData | null = null;
+  completedGames: GameReport[] = [];
+  inspectedCompletedGame: GameReport | null = null;
 
   completedGameFields = [
     { key: "id", label: "Game ID" },
@@ -156,22 +170,16 @@ export default class TeacherDashboard extends Vue {
   ];
 
   playerFields = [
-    { key: "username", label: "Username" },
+    { key: "name", label: "Name" },
     { key: "role", label: "Role" },
     { key: "points", label: "Points" },
   ];
 
-  //Mock data for player points stats
   playerChartData = {
-    labels: ["0", "1", "2", "3", "4", "5"],
-    datasets: [
-      { label: "OrbitingQuagga5472", borderColor: "#aa2929af", data: [0, 2, 5, 6, 6, 8] },
-      { label: "IllustriousAxolotl8430", borderColor: "#6f248694", data: [0, 5, 6, 9, 12, 12] },
-      { label: "IllustriousAxolotl8430", borderColor: "#437cae9a", data: [0, 2, 3, 4, 5, 5] },
-      { label: "StellarGiraffe3352", borderColor: "#67411da8", data: [0, 4, 6, 7, 9, 10] },
-      { label: "AuroralIguana1167", borderColor: "#c7a72898", data: [0, 3, 6, 7, 7, 9] },
-    ],
+    labels: [] as string[],
+    datasets: [] as { label: string; borderColor: string; data: number[] }[],
   };
+
   playerChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -239,13 +247,51 @@ export default class TeacherDashboard extends Vue {
     },
   };
 
-  getHumanCount(players: AdminGameData["players"]) {
-    // return players.filter(p => !p.user.isSystemBot).length;
-    return players.filter(p => p.user && p.user.isSystemBot === false).length;
+  generatePlayerChartData() {
+    if (!this.inspectedCompletedGame) return;
+
+    const players = this.inspectedCompletedGame.players;
+    console.log("Players: ", players);
+
+    const playerColors = {
+      Curator: "#67411da8",
+      Researcher: "#437cae9a",
+      Pioneer: "#6f248694",
+      Politician: "#aa2929af",
+      Entrepreneur: "#c7a72898",
+    };
+
+    const maxRounds = Math.max(...players.map(player => player.pointsByRound.length));
+    console.log("max rounds: ", maxRounds);
+
+    this.playerChartData.labels = Array.from({ length: maxRounds }, (_, i) => (i + 1).toString());
+
+    this.playerChartData.datasets = players.map(player => {
+      console.log("Player ${player.username} points:", player.pointsByRound); // Debug
+      const playerColor = playerColors[player.role] || "#000000";
+      console.log("Player role: ", player.role);
+      return {
+        label: player.username,
+        borderColor: playerColor,
+        data: player.pointsByRound || [],
+      };
+    });
+
+    console.log("Chart generated:", this.playerChartData);
   }
 
-  getBotCount(players: AdminGameData["players"]) {
-    return players.filter(p => p.user && p.user.isSystemBot === true).length;
+  inspectGame(game: GameReport) {
+    console.log(game);
+    this.inspectedCompletedGame = game;
+    this.generatePlayerChartData();
+  }
+
+  getHumanCount(players: GamePlayer[]) {
+    return players.filter(player => !player.isSystemBot).length;
+  }
+
+  getBotCount(players: GamePlayer[]) {
+    return players.filter(player => player.isSystemBot).length;
   }
 
   playerRowStyle(item: any, type: any) {
@@ -259,11 +305,12 @@ export default class TeacherDashboard extends Vue {
   findHighScores() {
     this.highestScore = 0;
     this.completedGames
-      .filter((game: AdminGameData) => game.status === "victory")
-      .forEach((game: AdminGameData) => {
-        game.players.forEach((player: any) => {
-          if (this.isEligibleForPrize(player.user)) {
-            if (player.points > (game.highScore ?? 0)) {
+      .filter((game: GameReport) => game.status === "victory")
+      .forEach((game: GameReport) => {
+        game.players.forEach((player: GamePlayer) => {
+          if (this.isEligibleForPrize(player)) {
+            const points = player.points ?? 0;
+            if (points > (game.highScore ?? 0)) {
               game.highScore = player.points;
             }
           }
@@ -274,30 +321,17 @@ export default class TeacherDashboard extends Vue {
       });
   }
 
-  isEligibleForPrize(user: ClientSafeUser) {
-    return !user.isSystemBot && user.isVerified;
+  isEligibleForPrize(player: GamePlayer) {
+    return !player.isSystemBot;
   }
 
   async fetchCompletedGames() {
     if (this.selectedClassroom) {
       try {
-        const games = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
-        console.log("game data received: ", games);
+        this.completedGames = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
+        console.log("game data received: ", this.completedGames);
 
-        this.completedGames = games.map(
-          (game: { id: any; dateFinalized: any; status: any; players: any[] }) => ({
-            id: game.id,
-            dateFinalized: game.dateFinalized,
-            status: game.status,
-            players: game.players.map(player => ({
-              name: player.user?.name || "Unknown",
-              username: player.user?.username || "Unknown",
-              isSystemBot: player.user?.isSystemBot ?? false,
-            })),
-          })
-        );
         this.findHighScores();
-        console.log("Completed games: " + this.completedGames.length);
       } catch (e) {
         console.error("Failed to fetched completed games", e);
       }
