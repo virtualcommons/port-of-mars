@@ -585,3 +585,22 @@ export interface TeacherData {
   name: string;
   email?: string;
 }
+
+export interface GamePlayer {
+  name: string;
+  username: string;
+  isSystemBot: boolean;
+  points?: number;
+  role: Role;
+  pointsByRound: number[];
+}
+
+export interface GameReport {
+  id: number;
+  dateFinalized: string;
+  status: GameStatus;
+  players: GamePlayer[];
+  highScore?: number;
+  chatMessages: ChatMessageData[];
+  systemHealthByRound: number[];
+}

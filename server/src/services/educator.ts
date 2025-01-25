@@ -5,12 +5,15 @@ import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
 import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
+import { PlayerSummary, RoundSummary } from "@port-of-mars/server/rooms/game/state";
+
 import {
   StudentData,
   InspectData,
   ActiveRoomData,
   // ClassroomData,
   TeacherData,
+  GameReport,
 } from "@port-of-mars/shared/types";
 
 export class EducatorService extends BaseService {
@@ -148,40 +151,89 @@ export class EducatorService extends BaseService {
     }
   }
 
-  async getCompletedGamesForClassroom(classroomId: number): Promise<Array<Game>> {
-    // FIXME: the entire game object with all of the relations is huge and includes some sensitive data
-    // create a new data type game reports that includes only the necessary data to display
-    // an overview table and details for each game
+  async getCompletedGamesForClassroom(classroomId: number): Promise<any[]> {
     const query = this.em
       .getRepository(Game)
       .createQueryBuilder("game")
       .leftJoinAndSelect("game.players", "player")
       .leftJoinAndSelect("player.user", "user")
-      .select([
-        "game.id",
-        "game.dateFinalized",
-        "game.status",
-        "player.id",
-        "user.name",
-        "user.username",
-        "user.isSystemBot",
-      ])
+      .leftJoinAndSelect(
+        "game.events",
+        "gameEvent",
+        "gameEvent.type = 'taken-round-snapshot' OR gameEvent.type = 'sent-chat-message'"
+      )
       .where("game.classroomId = :classroomId", { classroomId });
-    const games = await query.getMany();
-    console.log("games data returned: ", games);
-    return games;
-    //OLD VERSION:
-    // const query = this.em
-    //   .getRepository(Game)
-    //   .createQueryBuilder("game")
-    //   .leftJoinAndSelect("game.players", "player")
-    //   .leftJoinAndSelect("player.user", "user")
-    //   .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
-    //   .leftJoinAndSelect("tournamentRound.tournament", "tournament")
-    //   .leftJoinAndSelect("game.events", "gameEvent", "gameEvent.type = 'taken-round-snapshot'")
-    //   .where("game.classroomId = :classroomId", { classroomId });
 
-    // return query.getMany();
+    const games = await query.getMany();
+
+    return games.map(game => {
+      const roundSnapshots: RoundSummary[] = game.events
+        .filter(event => event.type === "taken-round-snapshot")
+        .map(event => {
+          return typeof event.payload === "string" ? JSON.parse(event.payload) : event.payload;
+        });
+      console.log("Parsed roundSnapshots:", roundSnapshots);
+
+      const playerPointsMap: { [username: string]: number[] } = {};
+
+      for (const player of game.players) {
+        const username = player.user?.username || "Unknown";
+        playerPointsMap[username] = Array(roundSnapshots.length).fill(0);
+      }
+      console.log("Initialized playerPointsMap:", playerPointsMap);
+
+      for (let roundIndex = 0; roundIndex < roundSnapshots.length; roundIndex++) {
+        const snapshot = roundSnapshots[roundIndex];
+
+        if (!snapshot.players) continue;
+        console.log(`Processing round ${roundIndex + 1}:`, snapshot.players);
+
+        for (const playerSnapshot of Object.values(snapshot.players)) {
+          console.log("Player Snapshot:", playerSnapshot);
+          const matchingPlayer = game.players.find(player => player.role === playerSnapshot.role);
+          const username = matchingPlayer?.user?.username || "Unknown";
+          const points = (playerSnapshot as any).victoryPoints ?? 0;
+
+          if (!playerPointsMap[username]) {
+            playerPointsMap[username] = Array(roundSnapshots.length).fill(0);
+          }
+          playerPointsMap[username][roundIndex] = points;
+          console.log(
+            `Assigned ${points} points for player '${username}' in round ${roundIndex + 1}`
+          );
+        }
+      }
+
+      console.log("Final playerPointsMap:", playerPointsMap);
+
+      const playersWithPointsByRound = game.players.map(player => {
+        const username = player.user?.username || "Unknown";
+        const pointsByRound = playerPointsMap[username] || [];
+
+        console.log(
+          `Player: ${username}, Total Points: ${player.points}, Points By Round:`,
+          pointsByRound
+        );
+
+        return {
+          name: player.user?.name || "Unknown",
+          username: username,
+          isSystemBot: player.user?.isSystemBot ?? false,
+          points: player.points || 0,
+          role: player.role,
+          pointsByRound: pointsByRound,
+        };
+      });
+
+      games.sort((a, b) => a.id - b.id);
+
+      return {
+        id: game.id,
+        dateFinalized: game.dateFinalized?.toISOString() || "",
+        status: game.status,
+        players: playersWithPointsByRound,
+      };
+    });
   }
 
   async deleteClassroom(teacher: Teacher, classroomId: number, force = false): Promise<void> {
