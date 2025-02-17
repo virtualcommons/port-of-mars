@@ -16,6 +16,7 @@ export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
 export const PROLIFIC_STUDY_PAGE = "ProlificStudy" as const;
 export const MULTIPLAYER_STUDY_PAGE = "MultiplayerStudy" as const;
+export const MULTIPLAYER_LOBBY_PAGE = "MultiplayerLobby" as const;
 
 export type Page =
   | "Admin"
@@ -35,6 +36,7 @@ export type Page =
   | "Manual"
   | "ProlificStudy"
   | "MultiplayerStudy"
+  | "MultiplayerLobby"
   | "Privacy";
 
 export const PAGES: Array<Page> = [
@@ -56,6 +58,7 @@ export const PAGES: Array<Page> = [
   PRIVACY_PAGE,
   PROLIFIC_STUDY_PAGE,
   MULTIPLAYER_STUDY_PAGE,
+  MULTIPLAYER_LOBBY_PAGE,
 ];
 
 export function getPagePath(page: Page): string {
@@ -214,6 +217,14 @@ export const PAGE_META: {
   [MULTIPLAYER_STUDY_PAGE]: {
     path: "/multiplayer",
     name: MULTIPLAYER_STUDY_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  // FIXME: temporary
+  [MULTIPLAYER_LOBBY_PAGE]: {
+    path: "/multiplayer-lobby",
+    name: MULTIPLAYER_LOBBY_PAGE,
     meta: {
       requiresAuth: false,
     },
