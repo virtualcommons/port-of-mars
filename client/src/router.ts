@@ -25,7 +25,6 @@ import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
-import StudentLogin from "@port-of-mars/client/views/StudentLogin.vue";
 import EducatorLogin from "@port-of-mars/client/views/EducatorLogin.vue";
 import StudentConfirm from "@port-of-mars/client/views/StudentConfirm.vue";
 import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
@@ -52,7 +51,6 @@ import {
   PRIVACY_PAGE,
   PROFILE_PAGE,
   PROLIFIC_STUDY_PAGE,
-  STUDENT_LOGIN_PAGE,
   EDUCATOR_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
   CLASSROOM_LOBBY_PAGE,
@@ -108,19 +106,6 @@ const FREE_PLAY_LOBBY_META = PAGE_META[FREE_PLAY_LOBBY_PAGE].meta;
 
 const sharedRoutes = [
   // routes shared between educator and default mode
-  {
-    ...PAGE_META[ADMIN_PAGE],
-    component: Admin,
-    children: [
-      { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
-      { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
-      { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
-      { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
-      { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
-      { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
-      { path: "studies", name: "AdminStudies", component: Studies, meta: ADMIN_META },
-    ],
-  },
   { ...PAGE_META[GAME_PAGE], component: Game },
   { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
   { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
@@ -146,7 +131,13 @@ function getDefaultRouter() {
     mode: "hash",
     routes: [
       ...sharedRoutes,
-      adminRoute,
+      {
+        ...adminRoute,
+        children: [
+          ...adminRoute.children,
+          { path: "studies", name: "AdminStudies", component: Studies, meta: ADMIN_META },
+        ],
+      },
       { ...PAGE_META[LOGIN_PAGE], component: Login },
       {
         ...PAGE_META[FREE_PLAY_LOBBY_PAGE],

@@ -1,7 +1,7 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
-      <ClassroomNavbar v-if="isEducatorMode"></ClassroomNavbar>
+      <EducatorNavbar v-if="isEducatorMode"></EducatorNavbar>
       <Navbar v-else-if="showNav"></Navbar>
       <router-view :class="bodyClass" :key="topLevelPath"></router-view>
     </b-row>

@@ -15,7 +15,6 @@ export const ABOUT_PAGE = "About" as const;
 export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
 export const PROLIFIC_STUDY_PAGE = "ProlificStudy" as const;
-export const STUDENT_LOGIN_PAGE = "StudentLogin" as const;
 export const EDUCATOR_LOGIN_PAGE = "EducatorLogin" as const;
 export const STUDENT_CONFIRM_PAGE = "StudentConfirm" as const;
 export const CLASSROOM_LOBBY_PAGE = "ClassroomLobby" as const;
@@ -64,7 +63,6 @@ export const PAGES: Array<Page> = [
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROLIFIC_STUDY_PAGE,
-  STUDENT_LOGIN_PAGE,
   EDUCATOR_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
   TEACHER_DASHBOARD_PAGE,
@@ -222,13 +220,6 @@ export const PAGE_META: {
     meta: {
       requiresAuth: true,
       requiresConsent: true,
-    },
-  },
-  [STUDENT_LOGIN_PAGE]: {
-    path: "/student-login",
-    name: STUDENT_LOGIN_PAGE,
-    meta: {
-      requiresAuth: false,
     },
   },
   [EDUCATOR_LOGIN_PAGE]: {
