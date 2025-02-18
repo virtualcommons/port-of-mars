@@ -51,6 +51,7 @@ export class ComputeSoloRoundInitialValues1701805620516 implements MigrationInte
   private async computeMissingInitialValues(queryRunner: QueryRunner): Promise<void> {
     // fetch all existing games with rounds, cards, decisions
     const games = await queryRunner.manager.find(SoloGame, {
+      select: ["id", "rounds"],
       relations: {
         rounds: {
           cards: true,
