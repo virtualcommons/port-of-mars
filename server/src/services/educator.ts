@@ -2,19 +2,12 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { matchMaker } from "colyseus";
 import { Teacher, Classroom, Student, User, Game } from "@port-of-mars/server/entity";
 import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
-import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
+import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
-import { PlayerSummary, RoundSummary } from "@port-of-mars/server/rooms/game/state";
+import { RoundSummary } from "@port-of-mars/server/rooms/game/state";
 
-import {
-  StudentData,
-  InspectData,
-  ActiveRoomData,
-  // ClassroomData,
-  TeacherData,
-  GameReport,
-} from "@port-of-mars/shared/types";
+import { StudentData, InspectData, ActiveRoomData, TeacherData } from "@port-of-mars/shared/types";
 
 export class EducatorService extends BaseService {
   async getTeacherByUserId(userId: number, withUser = false): Promise<Teacher | null> {

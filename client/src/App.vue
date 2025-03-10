@@ -22,6 +22,7 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROLIFIC_STUDY_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isEducatorMode } from "@port-of-mars/shared/settings";
 Vue.use(BootstrapVue);
@@ -40,6 +41,7 @@ export default class App extends Vue {
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };
   privacy = { name: PRIVACY_PAGE };
+  educatorPrivacy = { name: EDUCATOR_PRIVACY_PAGE };
   study = { name: PROLIFIC_STUDY_PAGE };
 
   get topLevelPath() {
@@ -63,6 +65,7 @@ export default class App extends Vue {
   get isScrollable() {
     switch (this.$route.name) {
       case this.manual.name:
+      case this.educatorPrivacy.name:
       case this.privacy.name:
       case this.about.name:
       case this.home.name:

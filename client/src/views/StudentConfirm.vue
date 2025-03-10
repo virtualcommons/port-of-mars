@@ -9,19 +9,14 @@
       @submit.stop.prevent="handleSubmit"
     >
       <h4>Welcome, {{ username }}</h4>
-      <p class="mb-4">Please enter your name to continue to the classroom lobby</p>
+      <p class="mb-4">
+        Please enter the identifier given to you by your teacher to continue to the classroom lobby
+      </p>
       <b-form-input
-        v-model="firstName"
+        v-model="identifier"
         class="w-100 mb-3 text-center"
         size="lg"
-        placeholder="First name"
-        required
-      ></b-form-input>
-      <b-form-input
-        v-model="lastName"
-        class="w-100 mb-3 text-center"
-        size="lg"
-        placeholder="Last name"
+        placeholder="Identifier"
         required
       ></b-form-input>
       <p class="mt-3">
@@ -61,8 +56,7 @@ import { CLASSROOM_LOBBY_PAGE, EDUCATOR_LOGIN_PAGE } from "@port-of-mars/shared/
 export default class StudentConfirm extends Vue {
   educatorApi: EducatorAPI = new EducatorAPI(this.$store, this.$ajax);
 
-  firstName = "";
-  lastName = "";
+  identifier = "";
   rejoinCode = "";
   confirmedRejoinCode = false;
 
@@ -71,13 +65,13 @@ export default class StudentConfirm extends Vue {
   }
 
   get isFormValid() {
-    return this.firstName.trim() !== "" && this.lastName.trim() !== "";
+    return this.identifier.trim() !== "";
   }
 
   async handleSubmit() {
     try {
       await this.educatorApi.confirmStudent({
-        name: `${this.firstName} ${this.lastName}`,
+        name: this.identifier,
       });
       this.$router.push({ name: CLASSROOM_LOBBY_PAGE });
     } catch (e) {

@@ -65,7 +65,7 @@ export default class TeacherDashboard extends Vue {
 
   studentFields = [
     { key: "username", label: "Username" },
-    { key: "name", label: "Student Name", sortable: true },
+    { key: "name", label: "Student Identifier", sortable: true },
     { key: "inLobby", label: "In Lobby", sortable: true },
   ];
 

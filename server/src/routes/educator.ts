@@ -208,7 +208,7 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
 
     if (!data.name) {
       throw new ValidationError({
-        displayMessage: "Student name is required",
+        displayMessage: "Student identifier is required",
       });
     }
     await getServices().educator.setStudentName(user.id, data.name);
@@ -251,7 +251,6 @@ educatorRouter.post(
   "/teacher/add",
   isAdminAuthenticated,
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as User;
     const { username, name, email } = req.body;
 
     try {
