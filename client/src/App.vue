@@ -24,7 +24,7 @@ import {
   PROLIFIC_STUDY_PAGE,
   EDUCATOR_PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
-import { isEducatorMode } from "@port-of-mars/shared/settings";
+import { isEducatorMode } from "@port-of-mars/client/util";
 Vue.use(BootstrapVue);
 
 @Component({
