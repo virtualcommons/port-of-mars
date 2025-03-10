@@ -84,10 +84,10 @@ function hasConsented() {
   return store.getters.hasConsented;
 }
 
-function initStoreOnFirstRoute(from: any, next: NavigationGuardNext) {
+async function initStoreOnFirstRoute(from: any, next: NavigationGuardNext) {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
-    store
+    await store
       .dispatch("init")
       .then(user => {
         console.log("store init returned user: ", user);
@@ -166,8 +166,8 @@ function getDefaultRouter() {
     ],
   });
 
-  router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
-    initStoreOnFirstRoute(from, next);
+  router.beforeEach(async (to: any, from: any, next: NavigationGuardNext) => {
+    await initStoreOnFirstRoute(from, next);
     // somewhat ugly but alternatives are worse, consider cleaning up the whole router
     // setup at some point as its been gradually outgrowing the original design
     if (to.meta.requiresAuth && !isAuthenticated()) {
@@ -212,8 +212,8 @@ function getEducatorRouter() {
     ],
   });
 
-  router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
-    initStoreOnFirstRoute(from, next);
+  router.beforeEach(async (to: any, from: any, next: NavigationGuardNext) => {
+    await initStoreOnFirstRoute(from, next);
     if (to.meta.requiresAuth && !isAuthenticated()) {
       next({ name: EDUCATOR_LOGIN_PAGE });
     } else if (to.meta.requiresAdmin && !isAdmin()) {
@@ -221,7 +221,11 @@ function getEducatorRouter() {
     } else if (to.meta.requiresTeacher && !isTeacher()) {
       next({ name: EDUCATOR_LOGIN_PAGE });
     } else if (to.name === EDUCATOR_LOGIN_PAGE && isAuthenticated()) {
-      next({ name: CLASSROOM_LOBBY_PAGE });
+      if (isTeacher()) {
+        next({ name: TEACHER_DASHBOARD_PAGE });
+      } else {
+        next({ name: CLASSROOM_LOBBY_PAGE });
+      }
     } else if (to.name === CLASSROOM_LOBBY_PAGE && isTeacher()) {
       next({ name: TEACHER_DASHBOARD_PAGE });
     } else {

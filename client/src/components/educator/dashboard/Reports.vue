@@ -131,14 +131,7 @@
 import { Component, Inject, Vue, Prop } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import {
-  AdminGameData,
-  ClientSafeUser,
-  ClassroomData,
-  GameReport,
-  GamePlayer,
-  ENTREPRENEUR,
-} from "@port-of-mars/shared/types";
+import { ClassroomData, GameReport, GamePlayer } from "@port-of-mars/shared/types";
 import { Line as LineChart } from "vue-chartjs";
 
 import {
@@ -151,7 +144,6 @@ import {
   CategoryScale,
   PointElement,
 } from "chart.js"; //Need to remove any unused imports later
-import Game from "@port-of-mars/client/views/Game.vue";
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
 ChartJS.defaults.color = "rgb(241, 224, 197)";
 ChartJS.defaults.font.family = "Ruda";
@@ -356,7 +348,7 @@ export default class TeacherDashboard extends Vue {
   async refresh() {
     this.pollingIntervalId = window.setInterval(async () => {
       await this.fetchCompletedGames();
-    }, 5 * 1000);
+    }, 30 * 1000);
   }
 
   beforeDestroy() {
