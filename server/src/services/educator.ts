@@ -167,6 +167,44 @@ export class EducatorService extends BaseService {
         });
       console.log("Parsed roundSnapshots:", roundSnapshots);
 
+      //fixme
+      const chatLogs = game.events
+        .filter(event => event.type === "sent-chat-message")
+        .map(event => {
+          const messageData =
+            typeof event.payload === "string" ? JSON.parse(event.payload) : event.payload;
+          const matchingPlayer = game.players.find(
+            player =>
+              player.user?.username === messageData.sender || player.role === messageData.role
+          );
+
+          const sender = matchingPlayer?.user?.username || messageData.sender || "Unknown";
+          const playerRole = matchingPlayer?.role || "Unknown";
+          const roundIndex = roundSnapshots.findIndex(
+            snapshot =>
+              snapshot.players && Object.values(snapshot.players).some(p => p.role === playerRole)
+          );
+          const round = roundIndex >= 0 ? roundIndex + 1 : 0;
+
+          return {
+            // sender: messageData.sender || "Unknown",
+            // message: messageData.message || "",
+            // timestamp: new Date(event.dateCreated).toLocaleString(),
+            sender: sender,
+            message: messageData.message || "",
+            role: playerRole,
+            dateCreated: new Date(event.dateCreated).toLocaleString(),
+            round: round,
+          };
+        });
+
+      console.log("Chat History Extracted: ", chatLogs);
+
+      const systemHealthByRound: number[] = roundSnapshots.map(
+        snapshot => snapshot.systemHealth ?? 0
+      );
+      console.log("Extracted System Healthby round from Snapshot:", systemHealthByRound);
+
       const playerPointsMap: { [username: string]: number[] } = {};
 
       for (const player of game.players) {
@@ -179,10 +217,10 @@ export class EducatorService extends BaseService {
         const snapshot = roundSnapshots[roundIndex];
 
         if (!snapshot.players) continue;
-        console.log(`Processing round ${roundIndex + 1}:`, snapshot.players);
+        //console.log(`Processing round ${roundIndex + 1}:`, snapshot.players);
 
         for (const playerSnapshot of Object.values(snapshot.players)) {
-          console.log("Player Snapshot:", playerSnapshot);
+          // console.log("Player Snapshot:", playerSnapshot);
           const matchingPlayer = game.players.find(player => player.role === playerSnapshot.role);
           const username = matchingPlayer?.user?.username || "Unknown";
           const points = (playerSnapshot as any).victoryPoints ?? 0;
@@ -191,9 +229,9 @@ export class EducatorService extends BaseService {
             playerPointsMap[username] = Array(roundSnapshots.length).fill(0);
           }
           playerPointsMap[username][roundIndex] = points;
-          console.log(
-            `Assigned ${points} points for player '${username}' in round ${roundIndex + 1}`
-          );
+          // console.log(
+          //   `Assigned ${points} points for player '${username}' in round ${roundIndex + 1}`
+          // );
         }
       }
 
@@ -225,6 +263,8 @@ export class EducatorService extends BaseService {
         dateFinalized: game.dateFinalized?.toISOString() || "",
         status: game.status,
         players: playersWithPointsByRound,
+        systemHealthByRound: systemHealthByRound,
+        chatMessages: chatLogs,
       };
     });
   }

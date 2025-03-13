@@ -117,9 +117,22 @@
           <div v-if="stat == 'System'">
             <LineChart :data="systemHealthChart" :options="systemChartOptions" />
           </div>
+
           <div v-if="stat == 'Chat'">
             <h4>Chat History</h4>
-            <div class="content-container" style="height: 60vh"></div>
+            <div class="chat-container" style="height: 60vh">
+              <div v-if="chatMessages.length === 0">
+                <p>No chat history available for this game.</p>
+              </div>
+              <div v-else>
+                <ChatMessage
+                  v-for="(log, index) in chatMessages"
+                  :key="index"
+                  :message="log"
+                  :showUsername="true"
+                />
+              </div>
+            </div>
           </div>
         </b-col>
       </b-row>
@@ -131,7 +144,17 @@
 import { Component, Inject, Vue, Prop } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import { ClassroomData, GameReport, GamePlayer } from "@port-of-mars/shared/types";
+import {
+  AdminGameData,
+  ClientSafeUser,
+  ClassroomData,
+  GameReport,
+  GamePlayer,
+  ENTREPRENEUR,
+  ChatMessageData,
+} from "@port-of-mars/shared/types";
+import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
+
 import { Line as LineChart } from "vue-chartjs";
 
 import {
@@ -144,12 +167,15 @@ import {
   CategoryScale,
   PointElement,
 } from "chart.js"; //Need to remove any unused imports later
+import Game from "@port-of-mars/client/views/Game.vue";
+import { min } from "lodash";
+import chat from "@port-of-mars/client/store/mutations/chat";
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
 ChartJS.defaults.color = "rgb(241, 224, 197)";
 ChartJS.defaults.font.family = "Ruda";
 
 @Component({
-  components: { LineChart },
+  components: { LineChart, ChatMessage },
 })
 export default class TeacherDashboard extends Vue {
   @Inject() readonly $client!: Client;
@@ -177,6 +203,8 @@ export default class TeacherDashboard extends Vue {
     { key: "role", label: "Role" },
     { key: "points", label: "Points" },
   ];
+
+  chatMessages: ChatMessageData[] = [];
 
   playerChartData = {
     labels: [] as string[],
@@ -211,13 +239,11 @@ export default class TeacherDashboard extends Vue {
     },
   };
 
-  // Mock data for system health stats
   systemHealthChart = {
-    labels: ["0", "1", "2", "3", "4", "5"],
-    datasets: [
-      { label: "System Health", borderColor: "#5f8d4b", data: [100, 75, 60, 55, 42, 20, 0] },
-    ],
+    labels: [],
+    datasets: [] as { label: string; borderColor: string; data: number[] }[],
   };
+
   systemChartOptions = {
     plugins: {
       title: {
@@ -246,8 +272,47 @@ export default class TeacherDashboard extends Vue {
           font: { size: 14 },
         },
       },
+      y: {
+        title: {
+          display: true,
+          text: "Health (%)",
+          font: { size: 14 },
+        },
+        min: 0,
+        max: 100,
+      },
     },
   };
+
+  //fixme;
+  generateSystemHealthChartData() {
+    if (!this.inspectedCompletedGame) return;
+
+    if (!("systemHealthByRound" in this.inspectedCompletedGame)) {
+      console.error("systemHealthByRound is missing from the game data.");
+      return;
+    }
+
+    const systemHealth = this.inspectedCompletedGame.systemHealthByRound;
+    console.log("System Health Data: ", systemHealth);
+
+    if (!systemHealth || systemHealth.length == 0) {
+      console.log("No system health data available");
+      return;
+    }
+
+    this.systemHealthChart.labels = Array.from({ length: systemHealth.length }, (_, i) =>
+      (i + 1).toString()
+    );
+
+    this.systemHealthChart.datasets = [
+      {
+        label: "System Health",
+        borderColor: "#5f8d4b",
+        data: systemHealth,
+      },
+    ];
+  }
 
   generatePlayerChartData() {
     if (!this.inspectedCompletedGame) return;
@@ -282,10 +347,30 @@ export default class TeacherDashboard extends Vue {
     console.log("Chart generated:", this.playerChartData);
   }
 
+  watch = {
+    chatMessages(newChat: any) {
+      console.log("chat history updated:", newChat);
+    },
+  };
+
   inspectGame(game: GameReport) {
     console.log(game);
+    if (!game.chatMessages) {
+      console.error("Error: chatMessages undefined");
+      return;
+    }
     this.inspectedCompletedGame = game;
+    console.log(game);
+    this.chatMessages = [...game.chatMessages];
+
+    console.log("✅ Game-wide chat history loaded:", this.chatMessages);
+
+    //generate charts
     this.generatePlayerChartData();
+    this.generateSystemHealthChartData();
+
+    //set default
+    this.stat = "Points";
   }
 
   getHumanCount(players: GamePlayer[]) {
@@ -331,6 +416,7 @@ export default class TeacherDashboard extends Vue {
     if (this.selectedClassroom) {
       try {
         this.completedGames = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
+
         console.log("game data received: ", this.completedGames);
 
         this.findHighScores();

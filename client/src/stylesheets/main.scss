@@ -245,6 +245,13 @@ button {
   border: 0.2rem solid $light-shade-25;
 }
 
+.chat-container {
+  background-color: $dark-shade-75;
+  border: 0.2rem solid $light-shade-25;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 .light-shade-05-border {
   border: 0.05rem solid var(--light-shade-05);
 }

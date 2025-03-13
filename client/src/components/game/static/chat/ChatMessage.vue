@@ -33,7 +33,11 @@ export default class ChatMessage extends Vue {
   showUsername!: boolean;
 
   get username() {
-    return this.$tstore.state.players[this.message.role as Role].username;
+    return (
+      this.$tstore.state.players[this.message.role as Role]?.username ||
+      this.message.sender ||
+      "Unknown"
+    );
   }
 
   toDate(unixTimestamp: number): any {
