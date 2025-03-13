@@ -144,15 +144,7 @@
 import { Component, Inject, Vue, Prop } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import {
-  AdminGameData,
-  ClientSafeUser,
-  ClassroomData,
-  GameReport,
-  GamePlayer,
-  ENTREPRENEUR,
-  ChatMessageData,
-} from "@port-of-mars/shared/types";
+import { ClassroomData, GameReport, GamePlayer, ChatMessageData } from "@port-of-mars/shared/types";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 
 import { Line as LineChart } from "vue-chartjs";
@@ -166,10 +158,8 @@ import {
   LinearScale,
   CategoryScale,
   PointElement,
-} from "chart.js"; //Need to remove any unused imports later
-import Game from "@port-of-mars/client/views/Game.vue";
-import { min } from "lodash";
-import chat from "@port-of-mars/client/store/mutations/chat";
+} from "chart.js";
+
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement);
 ChartJS.defaults.color = "rgb(241, 224, 197)";
 ChartJS.defaults.font.family = "Ruda";
@@ -240,7 +230,7 @@ export default class TeacherDashboard extends Vue {
   };
 
   systemHealthChart = {
-    labels: [],
+    labels: [] as string[],
     datasets: [] as { label: string; borderColor: string; data: number[] }[],
   };
 
@@ -284,7 +274,6 @@ export default class TeacherDashboard extends Vue {
     },
   };
 
-  //fixme;
   generateSystemHealthChartData() {
     if (!this.inspectedCompletedGame) return;
 
@@ -334,7 +323,7 @@ export default class TeacherDashboard extends Vue {
     this.playerChartData.labels = Array.from({ length: maxRounds }, (_, i) => (i + 1).toString());
 
     this.playerChartData.datasets = players.map(player => {
-      console.log("Player ${player.username} points:", player.pointsByRound); // Debug
+      console.log("Player ${player.username} points:", player.pointsByRound);
       const playerColor = playerColors[player.role] || "#000000";
       console.log("Player role: ", player.role);
       return {
@@ -363,13 +352,9 @@ export default class TeacherDashboard extends Vue {
     console.log(game);
     this.chatMessages = [...game.chatMessages];
 
-    console.log("✅ Game-wide chat history loaded:", this.chatMessages);
-
-    //generate charts
     this.generatePlayerChartData();
     this.generateSystemHealthChartData();
 
-    //set default
     this.stat = "Points";
   }
 
