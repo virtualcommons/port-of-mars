@@ -7,6 +7,7 @@ import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
 import Studies from "@port-of-mars/client/views/admin/Studies.vue";
+import Educator from "@port-of-mars/client/views/admin/Educator.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
 import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
@@ -24,7 +25,13 @@ import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
+import EducatorLogin from "@port-of-mars/client/views/EducatorLogin.vue";
+import StudentConfirm from "@port-of-mars/client/views/StudentConfirm.vue";
+import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
+import TeacherDashboard from "@port-of-mars/client/views/TeacherDashboard.vue";
+import EducatorPrivacy from "@port-of-mars/client/views/EducatorPrivacy.vue";
 import store from "@port-of-mars/client/store";
+import { isEducatorMode } from "@port-of-mars/client/util";
 import {
   ADMIN_PAGE,
   PAGE_META,
@@ -44,60 +51,14 @@ import {
   PRIVACY_PAGE,
   PROFILE_PAGE,
   PROLIFIC_STUDY_PAGE,
+  EDUCATOR_LOGIN_PAGE,
+  STUDENT_CONFIRM_PAGE,
+  CLASSROOM_LOBBY_PAGE,
+  TEACHER_DASHBOARD_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
-
-const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
-const FREE_PLAY_LOBBY_META = PAGE_META[FREE_PLAY_LOBBY_PAGE].meta;
-
-const router = new VueRouter({
-  mode: "hash",
-  routes: [
-    {
-      ...PAGE_META[ADMIN_PAGE],
-      component: Admin,
-      children: [
-        { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
-        { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
-        { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
-        { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
-        { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
-        { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
-        { path: "studies", name: "AdminStudies", component: Studies, meta: ADMIN_META },
-      ],
-    },
-    { ...PAGE_META[LOGIN_PAGE], component: Login },
-    {
-      ...PAGE_META[FREE_PLAY_LOBBY_PAGE],
-      component: FreePlayLobby,
-      children: [
-        { path: "", name: "FreePlayLobby", component: LobbyRoomList, meta: FREE_PLAY_LOBBY_META },
-        {
-          path: "room/:id",
-          name: "FreePlayLobbyRoom",
-          component: LobbyRoom,
-          meta: FREE_PLAY_LOBBY_META,
-          props: true,
-        },
-      ],
-    },
-    { ...PAGE_META[TOURNAMENT_LOBBY_PAGE], component: TournamentLobby },
-    { ...PAGE_META[TOURNAMENT_DASHBOARD_PAGE], component: TournamentDashboard },
-    { ...PAGE_META[GAME_PAGE], component: Game },
-    { ...PAGE_META[SOLO_GAME_PAGE], component: SoloGame },
-    { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
-    { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
-    { ...PAGE_META[CONSENT_PAGE], component: Consent },
-    { ...PAGE_META[VERIFY_PAGE], component: Verify },
-    { ...PAGE_META[MANUAL_PAGE], component: Manual },
-    { ...PAGE_META[HOME_PAGE], component: Home },
-    { ...PAGE_META[ABOUT_PAGE], component: Home },
-    { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
-    { ...PAGE_META[PROFILE_PAGE], component: Profile },
-    { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
-  ],
-});
 
 function isFreePlayEnabled() {
   return store.state.isFreePlayEnabled;
@@ -115,14 +76,18 @@ function isAdmin() {
   return store.getters.isAdmin;
 }
 
+function isTeacher() {
+  return store.getters.isTeacher;
+}
+
 function hasConsented() {
   return store.getters.hasConsented;
 }
 
-router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
+async function initStoreOnFirstRoute(from: any, next: NavigationGuardNext) {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
-    store
+    await store
       .dispatch("init")
       .then(user => {
         console.log("store init returned user: ", user);
@@ -134,26 +99,142 @@ router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
   } else {
     next();
   }
-});
+}
 
-router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
-  // somewhat ugly but alternatives are worse, consider cleaning up the whole router
-  // setup at some point as its been gradually outgrowing the original design
-  if (to.meta.requiresAuth && !isAuthenticated()) {
-    next({ name: LOGIN_PAGE });
-  } else if (to.meta.requiresConsent && !hasConsented()) {
-    next({ name: CONSENT_PAGE });
-  } else if (to.meta.requiresAdmin && !isAdmin()) {
-    next({ name: HOME_PAGE });
-  } else if (to.meta.requiresTournamentEnabled && !isTournamentEnabled()) {
-    next({ name: HOME_PAGE });
-  } else if (to.meta.requiresFreePlayEnabled && !isFreePlayEnabled()) {
-    next({ name: HOME_PAGE });
-  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
-    next({ name: HOME_PAGE });
-  } else {
-    next();
-  }
-});
+const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
+const FREE_PLAY_LOBBY_META = PAGE_META[FREE_PLAY_LOBBY_PAGE].meta;
 
+const sharedRoutes = [
+  // routes shared between educator and default mode
+  { ...PAGE_META[GAME_PAGE], component: Game },
+  { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
+  { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
+  { ...PAGE_META[MANUAL_PAGE], component: Manual },
+  { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
+];
+
+const adminRoute = {
+  ...PAGE_META[ADMIN_PAGE],
+  component: Admin,
+  children: [
+    { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
+    { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
+    { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
+    { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
+    { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
+    { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
+  ],
+};
+
+function getDefaultRouter() {
+  const router = new VueRouter({
+    mode: "hash",
+    routes: [
+      ...sharedRoutes,
+      {
+        ...adminRoute,
+        children: [
+          ...adminRoute.children,
+          { path: "studies", name: "AdminStudies", component: Studies, meta: ADMIN_META },
+        ],
+      },
+      { ...PAGE_META[LOGIN_PAGE], component: Login },
+      {
+        ...PAGE_META[FREE_PLAY_LOBBY_PAGE],
+        component: FreePlayLobby,
+        children: [
+          { path: "", name: "FreePlayLobby", component: LobbyRoomList, meta: FREE_PLAY_LOBBY_META },
+          {
+            path: "room/:id",
+            name: "FreePlayLobbyRoom",
+            component: LobbyRoom,
+            meta: FREE_PLAY_LOBBY_META,
+            props: true,
+          },
+        ],
+      },
+      { ...PAGE_META[TOURNAMENT_LOBBY_PAGE], component: TournamentLobby },
+      { ...PAGE_META[TOURNAMENT_DASHBOARD_PAGE], component: TournamentDashboard },
+      { ...PAGE_META[SOLO_GAME_PAGE], component: SoloGame },
+      { ...PAGE_META[CONSENT_PAGE], component: Consent },
+      { ...PAGE_META[VERIFY_PAGE], component: Verify },
+      { ...PAGE_META[MANUAL_PAGE], component: Manual },
+      { ...PAGE_META[HOME_PAGE], component: Home },
+      { ...PAGE_META[ABOUT_PAGE], component: Home },
+      { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
+      { ...PAGE_META[PROFILE_PAGE], component: Profile },
+    ],
+  });
+
+  router.beforeEach(async (to: any, from: any, next: NavigationGuardNext) => {
+    await initStoreOnFirstRoute(from, next);
+    // somewhat ugly but alternatives are worse, consider cleaning up the whole router
+    // setup at some point as its been gradually outgrowing the original design
+    if (to.meta.requiresAuth && !isAuthenticated()) {
+      next({ name: LOGIN_PAGE });
+    } else if (to.meta.requiresConsent && !hasConsented()) {
+      next({ name: CONSENT_PAGE });
+    } else if (to.meta.requiresAdmin && !isAdmin()) {
+      next({ name: HOME_PAGE });
+    } else if (to.meta.requiresTournamentEnabled && !isTournamentEnabled()) {
+      next({ name: HOME_PAGE });
+    } else if (to.meta.requiresFreePlayEnabled && !isFreePlayEnabled()) {
+      next({ name: HOME_PAGE });
+    } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
+      next({ name: HOME_PAGE });
+    } else {
+      next();
+    }
+  });
+
+  return router;
+}
+
+function getEducatorRouter() {
+  const router = new VueRouter({
+    mode: "hash",
+    routes: [
+      ...sharedRoutes,
+      {
+        ...adminRoute,
+        children: [
+          ...adminRoute.children,
+          { path: "educator", name: "AdminEducator", component: Educator, meta: ADMIN_META },
+        ],
+      },
+      // redirect straight to student login page
+      { path: "", name: "Home", redirect: { name: EDUCATOR_LOGIN_PAGE } },
+      { ...PAGE_META[EDUCATOR_LOGIN_PAGE], component: EducatorLogin },
+      { ...PAGE_META[STUDENT_CONFIRM_PAGE], component: StudentConfirm },
+      { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
+      { ...PAGE_META[TEACHER_DASHBOARD_PAGE], component: TeacherDashboard },
+      { ...PAGE_META[EDUCATOR_PRIVACY_PAGE], component: EducatorPrivacy },
+    ],
+  });
+
+  router.beforeEach(async (to: any, from: any, next: NavigationGuardNext) => {
+    await initStoreOnFirstRoute(from, next);
+    if (to.meta.requiresAuth && !isAuthenticated()) {
+      next({ name: EDUCATOR_LOGIN_PAGE });
+    } else if (to.meta.requiresAdmin && !isAdmin()) {
+      next({ name: EDUCATOR_LOGIN_PAGE });
+    } else if (to.meta.requiresTeacher && !isTeacher()) {
+      next({ name: EDUCATOR_LOGIN_PAGE });
+    } else if (to.name === EDUCATOR_LOGIN_PAGE && isAuthenticated()) {
+      if (isTeacher()) {
+        next({ name: TEACHER_DASHBOARD_PAGE });
+      } else {
+        next({ name: CLASSROOM_LOBBY_PAGE });
+      }
+    } else if (to.name === CLASSROOM_LOBBY_PAGE && isTeacher()) {
+      next({ name: TEACHER_DASHBOARD_PAGE });
+    } else {
+      next();
+    }
+  });
+
+  return router;
+}
+
+const router = isEducatorMode() ? getEducatorRouter() : getDefaultRouter();
 export default router;

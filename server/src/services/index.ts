@@ -9,6 +9,7 @@ import { StatsService } from "@port-of-mars/server/services/stats";
 import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
 import { SoloGameService } from "@port-of-mars/server/services/sologame";
+import { EducatorService } from "@port-of-mars/server/services/educator";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
 import dataSource from "@port-of-mars/server/datasource";
 import { createClient, RedisClient } from "redis";
@@ -103,6 +104,14 @@ export class ServiceProvider {
       this._study = new StudyService(this);
     }
     return this._study;
+  }
+
+  private _educator?: EducatorService;
+  get educator() {
+    if (!this._educator) {
+      this._educator = new EducatorService(this);
+    }
+    return this._educator;
   }
 
   private _settings?: RedisSettings;

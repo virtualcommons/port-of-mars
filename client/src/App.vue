@@ -1,7 +1,8 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
-      <Navbar v-if="showNav"></Navbar>
+      <EducatorNavbar v-if="isEducatorMode && showNav"></EducatorNavbar>
+      <Navbar v-else-if="showNav"></Navbar>
       <router-view :class="bodyClass" :key="topLevelPath"></router-view>
     </b-row>
   </b-container>
@@ -11,6 +12,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
 import Navbar from "@port-of-mars/client/components/global/Navbar.vue";
+import EducatorNavbar from "@port-of-mars/client/components/global/EducatorNavbar.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import {
   GAME_PAGE,
@@ -20,12 +22,15 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROLIFIC_STUDY_PAGE,
+  EDUCATOR_PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
+import { isEducatorMode } from "@port-of-mars/client/util";
 Vue.use(BootstrapVue);
 
 @Component({
   components: {
     Navbar,
+    EducatorNavbar,
     Footer,
   },
 })
@@ -36,6 +41,7 @@ export default class App extends Vue {
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };
   privacy = { name: PRIVACY_PAGE };
+  educatorPrivacy = { name: EDUCATOR_PRIVACY_PAGE };
   study = { name: PROLIFIC_STUDY_PAGE };
 
   get topLevelPath() {
@@ -52,9 +58,14 @@ export default class App extends Vue {
     }
   }
 
+  get isEducatorMode() {
+    return isEducatorMode();
+  }
+
   get isScrollable() {
     switch (this.$route.name) {
       case this.manual.name:
+      case this.educatorPrivacy.name:
       case this.privacy.name:
       case this.about.name:
       case this.home.name:

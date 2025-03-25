@@ -13,8 +13,12 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
-
-import { settings as sharedSettings, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
+import {
+  settings as sharedSettings,
+  isDev,
+  isDevOrStaging,
+  isEducatorMode,
+} from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom } from "@port-of-mars/server/rooms/game";
@@ -34,9 +38,11 @@ import {
   statusRouter,
   statsRouter,
   studyRouter,
+  educatorRouter,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
+import { ClassroomLobbyRoom } from "./rooms/lobby/classroom";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -94,6 +100,7 @@ passport.use(
 
 if (isDevOrStaging()) {
   passport.use(
+    "local-dev",
     new LocalStrategy(
       {
         passReqToCallback: true,
@@ -104,7 +111,80 @@ if (isDevOrStaging()) {
           username,
           shouldSkipVerification
         );
-        await done(null, user);
+        return done(null, user);
+      }
+    )
+  );
+}
+
+if (isEducatorMode()) {
+  passport.use(
+    "local-student",
+    new LocalStrategy(
+      {
+        usernameField: "classroomAuthToken",
+        passwordField: "password",
+        passReqToCallback: true,
+      },
+      async function (req: any, classroomAuthToken: string, password: string, done: any) {
+        logger.debug("creating student with classroomAuthToken: %s", classroomAuthToken);
+        try {
+          const user = await getServices().educator.createStudent(classroomAuthToken);
+          return done(null, user);
+        } catch (e) {
+          return done(e);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "local-rejoin",
+    new LocalStrategy(
+      {
+        usernameField: "rejoinCode",
+        passwordField: "password",
+        passReqToCallback: true,
+      },
+      async function (req: any, rejoinCode: string, password: string, done: any) {
+        try {
+          const student = await getServices().educator.getStudentByRejoinCode(rejoinCode, true);
+          if (!student) {
+            return done(null, false, {
+              message: "Invalid rejoin code",
+            });
+          }
+          return done(null, student.user);
+        } catch (e) {
+          return done(e);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "local-teacher",
+    new LocalStrategy(
+      {
+        usernameField: "username",
+        passwordField: "password",
+        passReqToCallback: true,
+      },
+      async function (req: any, username: string, password: string, done: any) {
+        try {
+          const teacher = await getServices().educator.getTeacherByUsernameAndPassword(
+            username,
+            password
+          );
+          if (!teacher) {
+            return done(null, false, {
+              message: "Incorrect username or password",
+            });
+          }
+          return done(null, teacher.user);
+        } catch (error) {
+          return done(error);
+        }
       }
     )
   );
@@ -164,9 +244,10 @@ async function createApp() {
   })();
 
   logger.info(
-    "starting (%s) server: [release version: %s, settings.host %s]",
+    "starting (%s) server: [release version: %s, educator mode: %s, settings.host %s]",
     NODE_ENV,
     sharedSettings.RELEASE_VERSION,
+    settings.isEducatorMode,
     settings.host
   );
   const port = Number(process.env.PORT || 2567);
@@ -226,6 +307,9 @@ async function createApp() {
   app.use("/account", accountRouter);
   app.use("/status", statusRouter);
   app.use("/study", studyRouter);
+  if (isEducatorMode()) {
+    app.use("/educator", educatorRouter);
+  }
 
   const server = http.createServer(app);
   const gameServer = new Server({
@@ -237,6 +321,9 @@ async function createApp() {
   });
 
   // register your room handlers
+  if (isEducatorMode()) {
+    gameServer.define(ClassroomLobbyRoom.NAME, ClassroomLobbyRoom);
+  }
   gameServer.define(GameRoom.NAME, GameRoom);
   gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
   gameServer.define(TournamentLobbyRoom.NAME, TournamentLobbyRoom);

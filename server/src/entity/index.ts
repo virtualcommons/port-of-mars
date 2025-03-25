@@ -22,3 +22,6 @@ export * from "./SoloPlayer";
 export * from "./SoloPlayerDecision";
 export * from "./ProlificStudy";
 export * from "./ProlificStudyParticipant";
+export * from "./Student";
+export * from "./Teacher";
+export * from "./Classroom";

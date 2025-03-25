@@ -4,7 +4,7 @@ import {
   MailgunEmailer,
 } from "@port-of-mars/server/services/email/emailers";
 import { LogService, DevLogging, Logging } from "@port-of-mars/server/services/logging";
-import { BASE_URL, SERVER_URL_HTTP } from "@port-of-mars/shared/settings";
+import { BASE_URL, SERVER_URL_HTTP, isEducatorMode } from "@port-of-mars/shared/settings";
 import * as fs from "fs";
 
 const readSecret = (filename: string): string => {
@@ -27,6 +27,7 @@ export interface AppSettings {
   };
   supportEmail: string;
   isProduction: boolean;
+  isEducatorMode: boolean;
 }
 
 const dev: () => AppSettings = () => ({
@@ -45,6 +46,7 @@ const dev: () => AppSettings = () => ({
   },
   supportEmail: "portmars@asu.edu",
   isProduction: false,
+  isEducatorMode: isEducatorMode(),
 });
 
 const staging: () => AppSettings = () => {
@@ -69,14 +71,27 @@ const prod: () => AppSettings = () => {
   };
 };
 
+const learn: () => AppSettings = () => {
+  const prodSettings = prod();
+  return {
+    ...prodSettings,
+    host: BASE_URL || "https://learn.portofmars.asu.edu",
+    serverHost: BASE_URL || "https://learn.portofmars.asu.edu",
+    isProduction: true,
+  };
+};
+
 function getSettings(): AppSettings {
   const env = process.env.NODE_ENV;
   if (["development", "test"].includes(env || "")) {
     return dev();
   } else if (env === "staging") {
     return staging();
+  } else if (isEducatorMode()) {
+    return learn();
+  } else {
+    return prod();
   }
-  return prod();
 }
 
 export function getLogger(filename: string): LogService {

@@ -142,6 +142,10 @@ async function onCreate(
   room.setState(new GameState(options));
   room.setPrivate(true);
   room.persister = new DBPersister();
+  // if we have a classroomId, make it available in queries
+  if (options.classroomId) {
+    room.setMetadata({ classroomId: options.classroomId });
+  }
   room.onMessage("*", (client, type, message) => {
     // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
     // lots of small onMessages coupled with Commands that modify the state (within the Command itself, not here)
@@ -205,6 +209,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
   autoDispose = false;
   persister!: Persister;
+  classroomId?: number;
 
   async onAuth(
     client: Client,
@@ -218,12 +223,15 @@ export class GameRoom extends Room<GameState> implements Game {
       if (user) {
         const username = user.username;
         logger.debug(`GameRoom.onAuth found user ${username}`);
-        // save user ip address
-        const ip = (
-          (request.headers["x-forwarded-for"] || request.socket.remoteAddress) ??
-          ""
-        ).toString();
-        await getServices().account.setLastPlayerIp(user.id, ip);
+        // save user ip address, unless its educator mode
+        if (!this.classroomId) {
+          const ip = (
+            (request.headers["x-forwarded-for"] || request.socket.remoteAddress) ??
+            ""
+          ).toString();
+          await getServices().account.setLastPlayerIp(user.id, ip);
+        }
+
         if (this.state.hasUser(username)) {
           return user;
         }
@@ -237,6 +245,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   async onCreate(options: GameOpts): Promise<void> {
+    this.classroomId = options.classroomId;
     await onCreate(this, options, true);
   }
 

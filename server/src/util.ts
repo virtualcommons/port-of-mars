@@ -95,7 +95,11 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>, type: GameType): Promise<GameOpts> {
+export async function buildGameOpts(
+  usernames: Array<string>,
+  type: GameType,
+  classroomId?: number
+): Promise<GameOpts> {
   const services = getServices();
   const currentTournamentRound = await services.tournament.getCurrentTournamentRoundByType(type);
   assert.strictEqual(usernames.length, ROLES.length);
@@ -127,6 +131,7 @@ export async function buildGameOpts(usernames: Array<string>, type: GameType): P
     numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
     tournamentRoundId: currentTournamentRound.id,
     treatmentId: treatment?.id,
+    classroomId: type === "classroom" ? classroomId : undefined,
     type,
   };
 }
@@ -164,7 +169,31 @@ export class ValidationError extends ServerError {
   }
 }
 
+export function evenlyPartition(numStudents: number, maxGroupSize: number): number[] {
+  // special case for 6 students for now, probably a better way to generalize this
+  if (numStudents === 6 && maxGroupSize === 5) return [3, 3];
+
+  const groupSizes = [];
+  const fullGroups = Math.floor(numStudents / maxGroupSize);
+  const leftOver = numStudents % maxGroupSize;
+  for (let i = 0; i < fullGroups; i++) {
+    groupSizes.push(maxGroupSize);
+  }
+  if (leftOver > 0) {
+    groupSizes.push(leftOver);
+  }
+  for (let i = groupSizes.length - 1; i > 0; i--) {
+    while (groupSizes[i] < maxGroupSize - 1) {
+      groupSizes[i] += 1;
+      groupSizes[i - 1] -= 1;
+    }
+  }
+  return groupSizes;
+}
+
 export async function generateUsername() {
+  // FIXME: take in N param for numbers to tack on the end, default 4
+  // also this should just generate the username and leave the service to check uniqueness
   let isUnique = false;
   let username = "";
   while (!isUnique) {
@@ -176,6 +205,31 @@ export async function generateUsername() {
   }
 
   return username;
+}
+
+export function generateCode(
+  length: number,
+  charset?: "alphabetic" | "numeric" | "alphanumeric"
+): string {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  const numbers = "0123456789";
+  let characters = "";
+  let code = "";
+  switch (charset) {
+    case "alphabetic":
+      characters = alphabet;
+      break;
+    case "numeric":
+      characters = numbers;
+      break;
+    default: // alphanumeric by default
+      characters = alphabet + numbers;
+  }
+  while (code.length !== length) {
+    const index = Math.floor(Math.random() * characters.length);
+    code += characters.charAt(index);
+  }
+  return code;
 }
 
 const NOUNS = [
