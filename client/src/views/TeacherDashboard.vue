@@ -22,15 +22,23 @@
             </b-button>
           </div>
           <div>
-            <b-button
-              v-if="classrooms.length > 0"
-              variant="link"
-              class="text-decoration-none p-0 d-flex align-items-center"
-              @click="$bvModal.show('welcome-info-modal')"
-            >
-              <b-icon-info-circle class="float-left mr-2 mb-1"></b-icon-info-circle>
-              Information
-            </b-button>
+            <p class="mt-2">
+              Here, you find the information you need as a teacher to manage the games in your class
+              and information about the background of the game and sustainability concepts behind
+              the game design.
+            </p>
+            <div>
+              <b-button
+                v-if="classrooms.length > 0"
+                variant="link"
+                class="text-decoration-none p-0 d-flex align-items-center"
+                @click="$bvModal.show('welcome-info-modal')"
+                style="font-size: 1.3rem; font-weight: bold"
+              >
+                <b-icon-info-circle class="float-left mr-2 mb-1"></b-icon-info-circle>
+                Read More
+              </b-button>
+            </div>
           </div>
         </b-col>
 
@@ -80,55 +88,7 @@
               </b-tabs>
             </b-row>
           </div>
-          <div v-else>
-            <h4 class="font-weight-bold text-center mb-4" style="color: var(--light-shade)">
-              Welcome to the teacher dashboard
-            </h4>
-            <p style="color: white">
-              The game is built on the premise that when people share a common resource, they will
-              have to cooperate to manage it sustainably. You may be aware of the “tragedy of the
-              commons”? The Port of Mars demonstrates the challenges of managing a shared resource,
-              but it does not have to lead to a tragedy. Will your students overcome those
-              challenges? And how does this relate to everyday challenges they experience?
-            </p>
-            <p style="color: white">
-              In the lesson plan
-              <a
-                href="https://docs.google.com/document/d/15VYUrirOInXZ1Dr9xTUSg-KjSycVFhwa0upMbi7mUyw/edit?usp=sharing"
-                target="_blank"
-                rel="noopener"
-              >
-                here
-              </a>
-              , we provide more background and suggestions for activities to do in class, including
-              some assessment methods.
-            </p>
-            <p style="color: white">
-              To get started, you need to create a classroom. You will get a number called a game
-              code that your students can use to log in. If the total number of students
-              participating is not a multiple of five, some students will play with a group that
-              includes nice bots.
-            </p>
-            <p style="color: white">
-              You control when the game starts. It would be helpful if the students watched the
-              tutorial video and the manual. There might be some questions in the beginning since it
-              is not easy to manage a habitat on Mars. The game typically lasts between 30 and 60
-              minutes.
-            </p>
-            <p style="color: white">
-              Once the games are played, you can see some basic statistics of the groups such as how
-              system health changed over time, and how many points the different students earned.
-              This can be used in a discussion with the students. Why did some groups manage to keep
-              their habitat running for all the rounds while other groups had their system health
-              dropping to 0 within a few rounds (game over)?
-            </p>
-            <p style="color: white">
-              We provide, at the moment, the most essential information for you to use the game in
-              class. Depending on the requests we get, extensions will be made. Let us know if you
-              have questions or suggestions, and send them to
-              <a href="mailto:PORTMARS@ASU.EDU">PORTMARS@ASU.EDU</a>.
-            </p>
-          </div>
+          <TeacherInfo v-else class="text-white" style="max-width: 60rem" />
         </b-col>
       </b-row>
     </div>
@@ -233,51 +193,7 @@
       footer-class="pt-0 border-top-0"
       footer-bg-variant="dark"
     >
-      <h4 class="font-weight-bold text-center mb-4" style="color: var(--light-shade)">
-        Welcome to the teacher dashboard
-      </h4>
-      <p>
-        The game is built on the premise that when people share a common resource, they will have to
-        cooperate to manage it sustainably. You may be aware of the “tragedy of the commons”? The
-        Port of Mars demonstrates the challenges of managing a shared resource, but it does not have
-        to lead to a tragedy. Will your students overcome those challenges? And how does this relate
-        to everyday challenges they experience?
-      </p>
-      <p>
-        In the lesson plan
-        <a
-          href="https://docs.google.com/document/d/15VYUrirOInXZ1Dr9xTUSg-KjSycVFhwa0upMbi7mUyw/edit?usp=sharing"
-          target="_blank"
-          rel="noopener"
-        >
-          here
-        </a>
-        , we provide more background and suggestions for activities to do in class, including some
-        assessment methods.
-      </p>
-      <p>
-        To get started, you need to create a classroom. You will get a number that your students can
-        use to log in. If the total number of students participating is not a multiple of five, some
-        students will play with a group that includes nice bots.
-      </p>
-      <p>
-        You control when the game starts. It would be helpful if the students watched the tutorial
-        video and the manual. There might be some questions in the beginning since it is not easy to
-        manage a habitat on Mars. The game typically lasts between 30 and 60 minutes.
-      </p>
-      <p>
-        Once the games are played, you can see some basic statistics of the groups such as how
-        system health changed over time, and how many points the different students earned. This can
-        be used in a discussion with the students. Why did some groups manage to keep their habitat
-        running for all the rounds while other groups had their system health dropping to 0 within a
-        few rounds (game over)?
-      </p>
-      <p>
-        We provide, at the moment, the most essential information for you to use the game in class.
-        Depending on the requests we get, extensions will be made. Let us know if you have questions
-        or suggestions, and send them to
-        <a href="mailto:PORTMARS@ASU.EDU">PORTMARS@ASU.EDU</a>.
-      </p>
+      <TeacherInfo />
     </b-modal>
   </b-container>
 </template>
@@ -292,6 +208,7 @@ import Students from "@port-of-mars/client/components/educator/dashboard/Student
 import Groups from "@port-of-mars/client/components/educator/dashboard/Groups.vue";
 import Reports from "@port-of-mars/client/components/educator/dashboard/Reports.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
+import TeacherInfo from "@port-of-mars/client/components/educator/dashboard/TeacherInfo.vue";
 import { ClassroomData } from "@port-of-mars/shared/types";
 
 @Component({
@@ -302,6 +219,7 @@ import { ClassroomData } from "@port-of-mars/shared/types";
     Students,
     Groups,
     Reports,
+    TeacherInfo,
   },
 })
 export default class TeacherDashboard extends Vue {
