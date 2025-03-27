@@ -23,8 +23,9 @@ import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
-import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
-import MultiplayerStudy from "@port-of-mars/client/views/MultiplayerStudy.vue";
+import ProlificSoloStudy from "@port-of-mars/client/views/ProlificSoloStudy.vue";
+import ProlificMultiplayerStudy from "@port-of-mars/client/views/ProlificMultiplayerStudy.vue";
+import LiteLobby from "@port-of-mars/client/views/LiteLobby.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -44,8 +45,9 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROFILE_PAGE,
-  PROLIFIC_STUDY_PAGE,
-  MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_SOLO_STUDY_PAGE,
+  PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  LITE_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -97,8 +99,9 @@ const router = new VueRouter({
     { ...PAGE_META[ABOUT_PAGE], component: Home },
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
-    { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
-    { ...PAGE_META[MULTIPLAYER_STUDY_PAGE], component: MultiplayerStudy },
+    { ...PAGE_META[PROLIFIC_SOLO_STUDY_PAGE], component: ProlificSoloStudy },
+    { ...PAGE_META[PROLIFIC_MULTIPLAYER_STUDY_PAGE], component: ProlificMultiplayerStudy },
+    { ...PAGE_META[LITE_LOBBY_PAGE], component: LiteLobby },
   ],
 });
 

@@ -62,9 +62,9 @@ export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
         await service.getUserNextFreeplayTreatment(user.id)
       );
     } else {
-      const { study: service } = getServices();
+      const { soloStudy } = getServices();
       this.state.treatmentParams = new TreatmentParams(
-        await service.getTreatmentForUser(user, this.state.type)
+        await soloStudy.getTreatmentForUser(user, this.state.type)
       );
     }
   }
@@ -93,10 +93,10 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
 
 export class PersistGameCmd extends CmdWithoutPayload {
   async execute() {
-    const { sologame, study } = getServices();
+    const { sologame, soloStudy } = getServices();
     const game = await sologame.createGame(this.state);
     if (this.state.type === "prolificVariable" || this.state.type === "prolificBaseline") {
-      await study.setProlificParticipantPlayer(this.state.type, game.player);
+      await soloStudy.setProlificParticipantPlayer(this.state.type, game.player);
     }
     this.state.gameId = game.id;
     // keep track of deck card db ids after persisting the deck

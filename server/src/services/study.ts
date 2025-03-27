@@ -1,6 +1,10 @@
 import {
-  ProlificStudy,
-  ProlificStudyParticipant,
+  BaseProlificStudy,
+  BaseProlificStudyParticipant,
+  ProlificMultiplayerStudy,
+  ProlificMultiplayerStudyParticipant,
+  ProlificSoloStudy,
+  ProlificSoloStudyParticipant,
   SoloGameTreatment,
   SoloPlayer,
   User,
@@ -12,27 +16,121 @@ import { generateUsername, getRandomIntInclusive, ServerError } from "@port-of-m
 import { SoloGameType } from "@port-of-mars/shared/sologame";
 import {
   ProlificParticipantPointData,
-  ProlificParticipantStatus,
+  ProlificSoloParticipantStatus,
   ProlificStudyData,
 } from "@port-of-mars/shared/types";
 import { createObjectCsvWriter } from "csv-writer";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class StudyService extends BaseService {
-  getRepository(): Repository<ProlificStudy> {
-    return this.em.getRepository(ProlificStudy);
-  }
-
-  getParticipantRepository(): Repository<ProlificStudyParticipant> {
-    return this.em.getRepository(ProlificStudyParticipant);
-  }
+export abstract class BaseStudyService extends BaseService {
+  abstract getRepository(): Repository<BaseProlificStudy>;
+  abstract getParticipantRepository(): Repository<BaseProlificStudyParticipant>;
+  abstract getProlificParticipantStatus(user: User): Promise<any>;
+  abstract getOrCreateProlificParticipant(
+    prolificId: string,
+    studyId: string
+  ): Promise<BaseProlificStudyParticipant>;
+  abstract checkHasCompletedStudy(user: User): Promise<void>;
+  abstract getAllParticipantPoints(studyId: string): Promise<ProlificParticipantPointData[]>;
 
   getUserRepository(): Repository<User> {
     return this.em.getRepository(User);
   }
 
-  async getProlificParticipantStatus(user: User): Promise<ProlificParticipantStatus> {
+  async getProlificStudy(studyId: string): Promise<BaseProlificStudy | null> {
+    return this.getRepository().findOneBy({ studyId });
+  }
+
+  async getAllProlificStudies(): Promise<ProlificStudyData[]> {
+    try {
+      const studies = await this.getRepository().find();
+
+      return studies.map((study: BaseProlificStudy) => ({
+        description: study.description || "",
+        studyId: study.studyId,
+        completionCode: study.completionCode,
+        isActive: study.isActive,
+      }));
+    } catch (error) {
+      console.error("Error fetching all prolific studies:", error);
+      throw new ServerError({
+        code: 500,
+        message: "Failed to fetch all prolific studies",
+        displayMessage: "Unable to retrieve studies at this time.",
+      });
+    }
+  }
+
+  async getProlificCompletionUrl(user: User): Promise<string> {
+    const participant = await this.getParticipantRepository().findOne({
+      where: { userId: user.id },
+      relations: ["study"],
+    });
+    if (!participant) {
+      throw new ServerError({
+        code: 404,
+        message: "Participant not found",
+        displayMessage: "Participant not found",
+      });
+    }
+    await this.checkHasCompletedStudy(user);
+    return `https://app.prolific.co/submissions/complete?cc=${participant.study.completionCode}`;
+  }
+
+  async createProlificStudy(
+    studyId: string,
+    completionCode: string,
+    description?: string,
+    isActive = true
+  ): Promise<BaseProlificStudy> {
+    const repo = this.getRepository();
+    const study = repo.create({
+      studyId,
+      completionCode,
+      description,
+      isActive,
+    });
+    return repo.save(study);
+  }
+
+  async deleteProlificStudy(studyId: string): Promise<void> {
+    const study = await this.getRepository().findOneBy({ studyId });
+    if (!study) {
+      throw new Error(`Study with ID ${studyId} not found.`);
+    }
+    await this.getRepository().remove(study);
+  }
+
+  async updateProlificStudy(
+    studyId: string,
+    completionCode: string,
+    description?: string,
+    isActive = true
+  ): Promise<BaseProlificStudy> {
+    logger.debug(`Updating study ${studyId}`);
+    const repo = this.getRepository();
+    const study = await repo.findOneBy({ studyId });
+    if (!study) {
+      throw new Error(`Study with ID ${studyId} not found.`);
+    }
+    study.description = description || study.description;
+    study.completionCode = completionCode;
+    study.isActive = isActive;
+    return repo.save(study);
+  }
+}
+
+export class SoloStudyService extends BaseStudyService {
+  getRepository(): Repository<ProlificSoloStudy> {
+    return this.em.getRepository(ProlificSoloStudy);
+  }
+
+  getParticipantRepository(): Repository<ProlificSoloStudyParticipant> {
+    return this.em.getRepository(ProlificSoloStudyParticipant);
+  }
+
+  async getProlificParticipantStatus(user: User): Promise<ProlificSoloParticipantStatus> {
     const soloPlayers = await this.em.getRepository(SoloPlayer).find({
       where: { userId: user.id },
       relations: ["game"],
@@ -117,8 +215,8 @@ export class StudyService extends BaseService {
   async getOrCreateProlificParticipant(
     prolificId: string,
     studyId: string
-  ): Promise<ProlificStudyParticipant> {
-    const study = await this.getProlificStudy(studyId);
+  ): Promise<ProlificSoloStudyParticipant> {
+    const study = (await this.getProlificStudy(studyId)) as ProlificSoloStudy;
     if (!study) {
       throw new ServerError({
         code: 404,
@@ -139,7 +237,7 @@ export class StudyService extends BaseService {
       user.isSystemBot = false;
       await this.getUserRepository().save(user);
       // create a new participant record and link to user
-      participant = new ProlificStudyParticipant();
+      participant = new ProlificSoloStudyParticipant();
       participant.user = user;
       participant.study = study;
       participant.prolificId = prolificId;
@@ -156,7 +254,7 @@ export class StudyService extends BaseService {
   async setProlificParticipantPlayer(
     gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">,
     player: SoloPlayer
-  ): Promise<ProlificStudyParticipant> {
+  ): Promise<ProlificSoloStudyParticipant> {
     const participant = await this.getParticipantRepository().findOneOrFail({
       where: { userId: player.userId },
       relations: [`${gameType}Player`],
@@ -258,42 +356,7 @@ export class StudyService extends BaseService {
       : participant.prolificVariableTreatment;
   }
 
-  async getProlificStudy(studyId: string): Promise<ProlificStudy | null> {
-    return this.getRepository().findOneBy({ studyId });
-  }
-
-  async getAllProlificStudies(): Promise<ProlificStudyData[]> {
-    try {
-      const studies = await this.getRepository().find();
-
-      return studies.map((study: ProlificStudy) => ({
-        description: study.description || "",
-        studyId: study.studyId,
-        completionCode: study.completionCode,
-        isActive: study.isActive,
-      }));
-    } catch (error) {
-      console.error("Error fetching all prolific studies:", error);
-      throw new ServerError({
-        code: 500,
-        message: "Failed to fetch all prolific studies",
-        displayMessage: "Unable to retrieve studies at this time.",
-      });
-    }
-  }
-
-  async getProlificCompletionUrl(user: User): Promise<string> {
-    const participant = await this.getParticipantRepository().findOne({
-      where: { userId: user.id },
-      relations: ["study"],
-    });
-    if (!participant) {
-      throw new ServerError({
-        code: 404,
-        message: "Participant not found",
-        displayMessage: "Participant not found",
-      });
-    }
+  async checkHasCompletedStudy(user: User): Promise<void> {
     // sanity check: make sure the user has played 2 games
     const numPlays = await this.em.getRepository(SoloPlayer).count({
       where: { userId: user.id },
@@ -306,49 +369,6 @@ export class StudyService extends BaseService {
         displayMessage: "Study not complete",
       });
     }
-    return `https://app.prolific.co/submissions/complete?cc=${participant.study.completionCode}`;
-  }
-
-  async createProlificStudy(
-    studyId: string,
-    completionCode: string,
-    description?: string,
-    isActive = true
-  ): Promise<ProlificStudy> {
-    const repo = this.getRepository();
-    const study = repo.create({
-      studyId,
-      completionCode,
-      description,
-      isActive,
-    });
-    return repo.save(study);
-  }
-
-  async deleteProlificStudy(studyId: string): Promise<void> {
-    const study = await this.getRepository().findOneBy({ studyId });
-    if (!study) {
-      throw new Error(`Study with ID ${studyId} not found.`);
-    }
-    await this.getRepository().remove(study);
-  }
-
-  async updateProlificStudy(
-    studyId: string,
-    completionCode: string,
-    description?: string,
-    isActive = true
-  ): Promise<ProlificStudy> {
-    logger.debug(`Updating study ${studyId}`);
-    const repo = this.getRepository();
-    const study = await repo.findOneBy({ studyId });
-    if (!study) {
-      throw new Error(`Study with ID ${studyId} not found.`);
-    }
-    study.description = description || study.description;
-    study.completionCode = completionCode;
-    study.isActive = isActive;
-    return repo.save(study);
   }
 
   async exportProlificGamesCsv(path: string, studyId: string) {
@@ -358,7 +378,7 @@ export class StudyService extends BaseService {
      * status, points, dateCreated, and treatment details
      */
     const query = this.em
-      .getRepository(ProlificStudyParticipant)
+      .getRepository(ProlificSoloStudyParticipant)
       .createQueryBuilder("participant")
       .leftJoinAndSelect("participant.user", "user")
       .leftJoinAndSelect("participant.study", "study")
@@ -419,7 +439,7 @@ export class StudyService extends BaseService {
 
   async getGameIdsForStudyId(studyId: string): Promise<number[]> {
     const participants = await this.em
-      .getRepository(ProlificStudyParticipant)
+      .getRepository(ProlificSoloStudyParticipant)
       .createQueryBuilder("participant")
       .leftJoinAndSelect("participant.prolificBaselinePlayer", "baselinePlayer")
       .leftJoinAndSelect("baselinePlayer.game", "baselineGame")
@@ -439,5 +459,78 @@ export class StudyService extends BaseService {
       }
     }
     return gameIds;
+  }
+}
+
+export class MultiplayerStudyService extends BaseStudyService {
+  // TODO: implement for MultiplayerStudy and MultiplayerStudyParticipant
+  getRepository(): Repository<ProlificMultiplayerStudy> {
+    return this.em.getRepository(ProlificMultiplayerStudy);
+  }
+
+  getParticipantRepository(): Repository<ProlificMultiplayerStudyParticipant> {
+    return this.em.getRepository(ProlificMultiplayerStudyParticipant);
+  }
+
+  async getProlificParticipantStatus(user: User): Promise<any> {
+    // TODO:
+  }
+
+  async getOrCreateProlificParticipant(
+    prolificId: string,
+    studyId: string
+  ): Promise<ProlificMultiplayerStudyParticipant> {
+    const study = (await this.getProlificStudy(studyId)) as ProlificMultiplayerStudy;
+    if (!study) {
+      throw new ServerError({
+        code: 404,
+        message: `Invalid study ID: ${studyId}`,
+        displayMessage: `Invalid study ID: ${studyId}`,
+      });
+    }
+    let participant = await this.getParticipantRepository().findOne({
+      where: { prolificId, study: { studyId } },
+      relations: ["user", "study"],
+    });
+    if (!participant) {
+      // create a new user if not found
+      const user = new User();
+      user.username = await generateUsername();
+      user.name = "";
+      user.dateConsented = new Date(); // assuming this happens externally
+      user.isSystemBot = false;
+      await this.getUserRepository().save(user);
+      // create a new participant record and link to user
+      participant = new ProlificMultiplayerStudyParticipant();
+      participant.user = user;
+      participant.study = study;
+      participant.prolificId = prolificId;
+      // TODO: add in treatments
+      logger.info(`Created new prolific participant ${prolificId} for study ${studyId}`);
+      await this.getParticipantRepository().save(participant);
+    } else {
+      logger.info(`Found existing prolific participant ${prolificId} for study ${studyId}`);
+    }
+    return participant;
+  }
+
+  async checkHasCompletedStudy(user: User): Promise<void> {
+    // TODO: sanity check: make sure the user has played the game
+    // const numPlays = await this.em.getRepository(PlayerEntity).count({
+    //   where: { userId: user.id },
+    //   relations: ["game"],
+    // });
+    // if (numPlays < 1) {
+    //   throw new ServerError({
+    //     code: 403,
+    //     message: "Study not complete",
+    //     displayMessage: "Study not complete",
+    //   });
+    // }
+  }
+
+  async getAllParticipantPoints(studyId: string): Promise<ProlificParticipantPointData[]> {
+    // TODO:
+    return [];
   }
 }

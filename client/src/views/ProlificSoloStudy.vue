@@ -50,24 +50,24 @@ import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologa
 import Dashboard from "@port-of-mars/client/components/sologame/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/sologame/GameOver.vue";
 import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
-import { ProlificParticipantStatus } from "@port-of-mars/shared/types";
+import { ProlificSoloParticipantStatus } from "@port-of-mars/shared/types";
 
 @Component({
-  name: "ProlificStudy",
+  name: "ProlificSoloStudy",
   components: {
     Dashboard,
     Splash,
     GameOver,
   },
 })
-export default class ProlificStudy extends Vue {
+export default class ProlificSoloStudy extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api: SoloGameRequestAPI = new SoloGameRequestAPI();
   hasApi = false;
   started = false;
-  studyApi = new StudyAPI(this.$store, this.$ajax);
+  studyApi = new StudyAPI(this.$store, this.$ajax, "solo");
 
-  participantStatus: ProlificParticipantStatus = {
+  participantStatus: ProlificSoloParticipantStatus = {
     activeGameType: null,
     nextGameType: null,
     progress: {

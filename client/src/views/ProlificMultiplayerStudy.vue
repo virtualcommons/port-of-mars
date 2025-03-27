@@ -1,8 +1,8 @@
 <template>
   <div class="backdrop d-flex justify-content-center align-items-center">
-    <b-container 
+    <b-container
       class="h-100 solo-dashboard-container content-container p-4 d-flex flex-column justify-content-center align-items-center text-center"
-      style="width: auto; max-width: 60%; height: auto; max-height: 60%;" 
+      style="width: auto; max-width: 60%; height: auto; max-height: 60%"
       no-gutters
     >
       <Splash
@@ -18,6 +18,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Splash from "@port-of-mars/client/components/triogame/Splash.vue";
+import { LITE_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: "MultiplayerStudy",
@@ -25,7 +26,7 @@ import Splash from "@port-of-mars/client/components/triogame/Splash.vue";
     Splash,
   },
 })
-export default class MultiplayerStudy extends Vue {
+export default class ProlificMultiplayerStudy extends Vue {
   started = false;
   isStudyComplete = false;
 
@@ -35,7 +36,8 @@ export default class MultiplayerStudy extends Vue {
       current: 50,
       label: "50%",
     },
-    nextGameInstructions: "Collaborate with other players to manage your habitat and achieve your goals.",
+    nextGameInstructions:
+      "Collaborate with other players to manage your habitat and achieve your goals.",
   };
 
   begin() {
@@ -44,8 +46,7 @@ export default class MultiplayerStudy extends Vue {
   }
 
   handlePressedStart() {
-    console.log("Navigating to MultiplayerLobby...");
-    this.$router.push("/multiplayer-lobby"); 
+    this.$router.push({ name: LITE_LOBBY_PAGE });
   }
 }
 </script>

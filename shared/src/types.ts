@@ -523,7 +523,7 @@ export interface DynamicSettingsData {
   announcementBannerText: string;
 }
 
-export interface ProlificParticipantStatus {
+export interface ProlificSoloParticipantStatus {
   activeGameType: SoloGameType | null;
   nextGameType: SoloGameType | null;
   nextGameInstructions?: string;
@@ -533,6 +533,8 @@ export interface ProlificParticipantStatus {
     label: string;
   };
 }
+
+export type StudyMode = "solo" | "multiplayer";
 
 export interface ProlificStudyData {
   description: string;

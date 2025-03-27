@@ -80,11 +80,14 @@ async function exportSoloData(em: EntityManager, type: SoloGameType, start?: str
 
 async function exportStudyData(em: EntityManager, studyIds: Array<string>) {
   for (const studyId of studyIds) {
-    const gameIds = await getServices().study.getGameIdsForStudyId(studyId);
+    const gameIds = await getServices().soloStudy.getGameIdsForStudyId(studyId);
     if (gameIds.length > 0) {
       await mkdir(`/dump/study/${studyId}`, { recursive: true });
       logger.info("Exporting %d games for study %s", gameIds.length, studyId);
-      await getServices().study.exportProlificGamesCsv(`/dump/study/${studyId}/games.csv`, studyId);
+      await getServices().soloStudy.exportProlificGamesCsv(
+        `/dump/study/${studyId}/games.csv`,
+        studyId
+      );
       await getServices().sologame.exportEventCardsCsv(
         `/dump/study/${studyId}/eventcards.csv`,
         gameIds
@@ -888,7 +891,7 @@ program
           .description("create a tournament")
           .action(async cmd => {
             await withDataSource(async em =>
-              getServices(em).study.createProlificStudy(
+              getServices(em).soloStudy.createProlificStudy(
                 cmd.studyId,
                 cmd.completionCode,
                 cmd.description

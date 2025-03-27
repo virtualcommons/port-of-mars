@@ -19,7 +19,7 @@ import {
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
-import { TrioGameState } from "../rooms/triogame/state";
+// import { TrioGameState } from "../rooms/triogame/state";
 
 const logger = getLogger(__filename);
 
@@ -110,36 +110,36 @@ export class TrioGameService extends BaseService {
   //TODO: make a build game opts function to call from lobbies
   async buildGameOpts(usernames: Array<string>) {}
 
-  async createGame(state: TrioGameState): Promise<SoloGame> {
-    /**
-     * create a new SoloGame in the db and return it
-     */
-    const gameRepo = this.em.getRepository(SoloGame);
-    const playerRepo = this.em.getRepository(SoloPlayer);
-    const player = await this.createPlayer(state.player.userId); //FIXME:
-    const game = gameRepo.create({
-      player,
-      type: state.type,
-      treatment: await this.findTreatment(state.treatmentParams),
-      deck: await this.createDeck(state.eventCardDeck),
-      status: state.status,
-      maxRound: state.maxRound,
-      twoEventsThreshold: state.twoEventsThreshold,
-      threeEventsThreshold: state.threeEventsThreshold,
-    });
-    await gameRepo.save(game);
-    player.gameId = game.id;
-    await playerRepo.save(player);
-    return gameRepo.findOneOrFail({
-      where: { id: game.id },
-      relations: {
-        player: true,
-        deck: {
-          cards: true,
-        },
-      },
-    });
-  }
+  // async createGame(state: TrioGameState): Promise<SoloGame> {
+  //   /**
+  //    * create a new SoloGame in the db and return it
+  //    */
+  //   const gameRepo = this.em.getRepository(SoloGame);
+  //   const playerRepo = this.em.getRepository(SoloPlayer);
+  //   const player = await this.createPlayer(state.player.userId); //FIXME:
+  //   const game = gameRepo.create({
+  //     player,
+  //     type: state.type,
+  //     treatment: await this.findTreatment(state.treatmentParams),
+  //     deck: await this.createDeck(state.eventCardDeck),
+  //     status: state.status,
+  //     maxRound: state.maxRound,
+  //     twoEventsThreshold: state.twoEventsThreshold,
+  //     threeEventsThreshold: state.threeEventsThreshold,
+  //   });
+  //   await gameRepo.save(game);
+  //   player.gameId = game.id;
+  //   await playerRepo.save(player);
+  //   return gameRepo.findOneOrFail({
+  //     where: { id: game.id },
+  //     relations: {
+  //       player: true,
+  //       deck: {
+  //         cards: true,
+  //       },
+  //     },
+  //   });
+  // }
 
   async createPlayer(userId: number): Promise<SoloPlayer> {
     const repo = this.em.getRepository(SoloPlayer);
@@ -205,43 +205,43 @@ export class TrioGameService extends BaseService {
     }
   }
 
-  async createRound(
-    state: TrioGameState,
-    systemHealthInvestment: number,
-    pointsInvestment: number
-  ) {
-    /**
-     * finalize/persist a game round by creating a new SoloGameRound tied to the SoloGame
-     * with id = gameId
-     */
-    const roundRepo = this.em.getRepository(SoloGameRound);
-    const decisionRepo = this.em.getRepository(SoloPlayerDecision);
-    const deckCardRepo = this.em.getRepository(SoloMarsEventDeckCard);
-    const decision = decisionRepo.create({
-      systemHealthInvestment,
-      pointsInvestment,
-    });
-    await decisionRepo.save(decision);
-    const round = roundRepo.create({
-      gameId: state.gameId,
-      roundNumber: state.round,
-      initialSystemHealth: state.roundInitialSystemHealth,
-      initialPoints: state.roundInitialPoints,
-      decision,
-    });
-    await roundRepo.save(round);
+  // async createRound(
+  //   state: TrioGameState,
+  //   systemHealthInvestment: number,
+  //   pointsInvestment: number
+  // ) {
+  //   /**
+  //    * finalize/persist a game round by creating a new SoloGameRound tied to the SoloGame
+  //    * with id = gameId
+  //    */
+  //   const roundRepo = this.em.getRepository(SoloGameRound);
+  //   const decisionRepo = this.em.getRepository(SoloPlayerDecision);
+  //   const deckCardRepo = this.em.getRepository(SoloMarsEventDeckCard);
+  //   const decision = decisionRepo.create({
+  //     systemHealthInvestment,
+  //     pointsInvestment,
+  //   });
+  //   await decisionRepo.save(decision);
+  //   const round = roundRepo.create({
+  //     gameId: state.gameId,
+  //     roundNumber: state.round,
+  //     initialSystemHealth: state.roundInitialSystemHealth,
+  //     initialPoints: state.roundInitialPoints,
+  //     decision,
+  //   });
+  //   await roundRepo.save(round);
 
-    // additionally, set the round on all cards that were drawn this round
-    const cards = state.roundEventCards;
-    for (const card of cards) {
-      const deckCard = await deckCardRepo.findOneByOrFail({ id: card.deckCardId });
-      if (deckCard) {
-        deckCard.round = round;
-        await deckCardRepo.save(deckCard);
-      }
-    }
-    return round;
-  }
+  //   // additionally, set the round on all cards that were drawn this round
+  //   const cards = state.roundEventCards;
+  //   for (const card of cards) {
+  //     const deckCard = await deckCardRepo.findOneByOrFail({ id: card.deckCardId });
+  //     if (deckCard) {
+  //       deckCard.round = round;
+  //       await deckCardRepo.save(deckCard);
+  //     }
+  //   }
+  //   return round;
+  // }
 
   async getGameIds(type: SoloGameType, start?: Date, end?: Date): Promise<Array<number>> {
     /**

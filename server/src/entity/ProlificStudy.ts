@@ -1,8 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { ProlificStudyParticipant } from "./ProlificStudyParticipant";
+import {
+  BaseProlificStudyParticipant,
+  ProlificMultiplayerStudyParticipant,
+  ProlificSoloStudyParticipant,
+} from "./ProlificStudyParticipant";
 
-@Entity()
-export class ProlificStudy {
+export abstract class BaseProlificStudy {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -21,6 +24,17 @@ export class ProlificStudy {
   @Column()
   completionCode!: string;
 
-  @OneToMany(type => ProlificStudyParticipant, participant => participant.study)
-  participants!: Array<ProlificStudyParticipant>;
+  abstract participants: Array<BaseProlificStudyParticipant>;
+}
+
+@Entity()
+export class ProlificSoloStudy extends BaseProlificStudy {
+  @OneToMany(type => ProlificSoloStudyParticipant, participant => participant.study)
+  participants!: Array<ProlificSoloStudyParticipant>;
+}
+
+@Entity()
+export class ProlificMultiplayerStudy extends BaseProlificStudy {
+  @OneToMany(type => ProlificMultiplayerStudyParticipant, participant => participant.study)
+  participants!: Array<ProlificMultiplayerStudyParticipant>;
 }

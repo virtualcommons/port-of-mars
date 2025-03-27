@@ -14,9 +14,9 @@ export const HOME_PAGE = "Home" as const;
 export const ABOUT_PAGE = "About" as const;
 export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
-export const PROLIFIC_STUDY_PAGE = "ProlificStudy" as const;
-export const MULTIPLAYER_STUDY_PAGE = "MultiplayerStudy" as const;
-export const MULTIPLAYER_LOBBY_PAGE = "MultiplayerLobby" as const;
+export const PROLIFIC_SOLO_STUDY_PAGE = "ProlificSoloStudy" as const;
+export const PROLIFIC_MULTIPLAYER_STUDY_PAGE = "ProlificMultiplayerStudy" as const;
+export const LITE_LOBBY_PAGE = "LiteLobby" as const;
 
 export type Page =
   | "Admin"
@@ -34,9 +34,9 @@ export type Page =
   | "Profile"
   | "Verify"
   | "Manual"
-  | "ProlificStudy"
-  | "MultiplayerStudy"
-  | "MultiplayerLobby"
+  | "ProlificSoloStudy"
+  | "ProlificMultiplayerStudy"
+  | "LiteLobby"
   | "Privacy";
 
 export const PAGES: Array<Page> = [
@@ -56,9 +56,9 @@ export const PAGES: Array<Page> = [
   HOME_PAGE,
   ABOUT_PAGE,
   PRIVACY_PAGE,
-  PROLIFIC_STUDY_PAGE,
-  MULTIPLAYER_STUDY_PAGE,
-  MULTIPLAYER_LOBBY_PAGE,
+  PROLIFIC_SOLO_STUDY_PAGE,
+  PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  LITE_LOBBY_PAGE,
 ];
 
 export function getPagePath(page: Page): string {
@@ -205,27 +205,27 @@ export const PAGE_META: {
       requiresConsent: true,
     },
   },
-  [PROLIFIC_STUDY_PAGE]: {
-    path: "/prolific",
-    name: PROLIFIC_STUDY_PAGE,
+  [PROLIFIC_SOLO_STUDY_PAGE]: {
+    path: "/prolific-solo",
+    name: PROLIFIC_SOLO_STUDY_PAGE,
     meta: {
       requiresAuth: true,
       requiresConsent: true,
     },
   },
-  // FIXME: temporary
-  [MULTIPLAYER_STUDY_PAGE]: {
-    path: "/multiplayer",
-    name: MULTIPLAYER_STUDY_PAGE,
+  [PROLIFIC_MULTIPLAYER_STUDY_PAGE]: {
+    path: "/prolific-multiplayer",
+    name: PROLIFIC_MULTIPLAYER_STUDY_PAGE,
     meta: {
+      // FIXME: temporary
       requiresAuth: false,
     },
   },
-  // FIXME: temporary
-  [MULTIPLAYER_LOBBY_PAGE]: {
-    path: "/multiplayer-lobby",
-    name: MULTIPLAYER_LOBBY_PAGE,
+  [LITE_LOBBY_PAGE]: {
+    path: "/lite-lobby",
+    name: LITE_LOBBY_PAGE,
     meta: {
+      // FIXME: temporary
       requiresAuth: false,
     },
   },

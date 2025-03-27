@@ -1,11 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ProlificStudy } from "./ProlificStudy";
+import { BaseProlificStudy, ProlificSoloStudy, ProlificMultiplayerStudy } from "./ProlificStudy";
 import { User } from "./User";
 import { SoloGameTreatment } from "./SoloGameTreatment";
 import { SoloPlayer } from "./SoloPlayer";
 
-@Entity()
-export class ProlificStudyParticipant {
+export abstract class BaseProlificStudyParticipant {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -19,11 +18,16 @@ export class ProlificStudyParticipant {
   @Column()
   prolificId!: string;
 
-  @ManyToOne(type => ProlificStudy, study => study.participants, { nullable: false })
-  study!: ProlificStudy;
+  abstract study: BaseProlificStudy;
 
   @Column()
   studyId!: number;
+}
+
+@Entity()
+export class ProlificSoloStudyParticipant extends BaseProlificStudyParticipant {
+  @ManyToOne(type => ProlificSoloStudy, study => study.participants, { nullable: false })
+  study!: ProlificSoloStudy;
 
   @ManyToOne(type => SoloGameTreatment)
   prolificBaselineTreatment!: SoloGameTreatment;
@@ -50,4 +54,12 @@ export class ProlificStudyParticipant {
 
   @Column({ nullable: true })
   prolificVariablePlayerId!: number;
+}
+
+@Entity()
+export class ProlificMultiplayerStudyParticipant extends BaseProlificStudyParticipant {
+  @ManyToOne(type => ProlificMultiplayerStudy, study => study.participants, { nullable: false })
+  study!: ProlificMultiplayerStudy;
+
+  // FIXME: add the relations to player/treatment
 }

@@ -10,10 +10,10 @@ import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
 import { SoloGameService } from "@port-of-mars/server/services/sologame";
 import { TrioGameService } from "@port-of-mars/server/services/triogame";
+import { SoloStudyService, MultiplayerStudyService } from "@port-of-mars/server/services/study";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
 import dataSource from "@port-of-mars/server/datasource";
 import { createClient, RedisClient } from "redis";
-import { StudyService } from "./study";
 
 export class ServiceProvider {
   constructor(public em: EntityManager) {}
@@ -106,12 +106,20 @@ export class ServiceProvider {
     return this._admin;
   }
 
-  private _study?: StudyService;
-  get study() {
-    if (!this._study) {
-      this._study = new StudyService(this);
+  private _soloStudy?: SoloStudyService;
+  get soloStudy() {
+    if (!this._soloStudy) {
+      this._soloStudy = new SoloStudyService(this);
     }
-    return this._study;
+    return this._soloStudy;
+  }
+
+  private _multiplayerStudy?: MultiplayerStudyService;
+  get multiplayerStudy() {
+    if (!this._multiplayerStudy) {
+      this._multiplayerStudy = new MultiplayerStudyService(this);
+    }
+    return this._multiplayerStudy;
   }
 
   private _settings?: RedisSettings;

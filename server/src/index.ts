@@ -111,7 +111,7 @@ if (isDevOrStaging()) {
 }
 
 passport.use(
-  "local-prolific",
+  "local-prolific-solo",
   new LocalStrategy(
     {
       usernameField: "studyId",
@@ -120,7 +120,29 @@ passport.use(
     },
     async function (req: any, studyId: string, prolificId: string, done: any) {
       try {
-        const participant = await getServices().study.getOrCreateProlificParticipant(
+        const participant = await getServices().soloStudy.getOrCreateProlificParticipant(
+          prolificId,
+          studyId
+        );
+        return done(null, participant.user);
+      } catch (e) {
+        return done(e);
+      }
+    }
+  )
+);
+
+passport.use(
+  "local-prolific-multiplayer",
+  new LocalStrategy(
+    {
+      usernameField: "studyId",
+      passwordField: "prolificId",
+      passReqToCallback: true,
+    },
+    async function (req: any, studyId: string, prolificId: string, done: any) {
+      try {
+        const participant = await getServices().multiplayerStudy.getOrCreateProlificParticipant(
           prolificId,
           studyId
         );
