@@ -17,8 +17,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { settings as sharedSettings, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
-import { GameRoom } from "@port-of-mars/server/rooms/game";
-import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
+import { GameRoom } from "@port-of-mars/server/rooms/pom/game";
+import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { User } from "@port-of-mars/server/entity";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { TournamentLobbyRoom } from "@port-of-mars/server/rooms/lobby/tournament";

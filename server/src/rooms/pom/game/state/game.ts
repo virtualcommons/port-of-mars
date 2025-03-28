@@ -21,17 +21,17 @@ import _ from "lodash";
 import * as assert from "assert";
 import { isProduction } from "@port-of-mars/shared/settings";
 import { settings } from "@port-of-mars/server/settings";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
-import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/game/types";
-import MarsEventsDeck from "@port-of-mars/server/rooms/game/state/marsevents/MarsEventDeck";
-import { MarsEvent } from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
-import { Player, PlayerSet } from "@port-of-mars/server/rooms/game/state/player";
-import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/game/state/systemhealth";
-import { Trade } from "@port-of-mars/server/rooms/game/state/trade";
-import { ChatMessage, MarsLogMessage } from "@port-of-mars/server/rooms/game/state/message";
-import { RoundIntroduction } from "@port-of-mars/server/rooms/game/state/roundintroduction";
-import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment";
-import { GameSerialized, RoundSummary } from "@port-of-mars/server/rooms/game/state/types";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
+import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/pom/game/types";
+import MarsEventsDeck from "@port-of-mars/server/rooms/pom/game/state/marsevents/MarsEventDeck";
+import { MarsEvent } from "@port-of-mars/server/rooms/pom/game/state/marsevents/MarsEvent";
+import { Player, PlayerSet } from "@port-of-mars/server/rooms/pom/game/state/player";
+import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/pom/game/state/systemhealth";
+import { Trade } from "@port-of-mars/server/rooms/pom/game/state/trade";
+import { ChatMessage, MarsLogMessage } from "@port-of-mars/server/rooms/pom/game/state/message";
+import { RoundIntroduction } from "@port-of-mars/server/rooms/pom/game/state/roundintroduction";
+import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/pom/game/state/accomplishment";
+import { GameSerialized, RoundSummary } from "@port-of-mars/server/rooms/pom/game/state/types";
 
 const logger = settings.logging.getLogger(__filename);
 

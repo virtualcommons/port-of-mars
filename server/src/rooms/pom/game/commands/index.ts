@@ -1,6 +1,6 @@
 import * as req from "@port-of-mars/shared/game/requests";
 import { InvestmentData, Phase, TradeData } from "@port-of-mars/shared/types";
-import { GameState, Player, Trade } from "@port-of-mars/server/rooms/game/state";
+import { GameState, Player, Trade } from "@port-of-mars/server/rooms/pom/game/state";
 import {
   AcceptedTradeRequest,
   AddedSystemHealthContributions,
@@ -43,10 +43,10 @@ import {
   ExitedPurchasePhase,
   ServerCanceledTradeRequest,
   TakenRoundSnapshot,
-} from "@port-of-mars/server/rooms/game/events";
+} from "@port-of-mars/server/rooms/pom/game/events";
 import { getAccomplishmentByID } from "@port-of-mars/server/data/Accomplishment";
-import { Command } from "@port-of-mars/server/rooms/game/commands/types";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
+import { Command } from "@port-of-mars/server/rooms/pom/game/commands/types";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
 import { settings } from "@port-of-mars/server/settings";
 import { v4 as uuidv4 } from "uuid";
 import { VoteHeroOrPariahRoleData } from "@port-of-mars/shared/game/requests";

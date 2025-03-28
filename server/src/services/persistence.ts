@@ -4,8 +4,8 @@ import { EntityManager, In } from "typeorm";
 import _ from "lodash";
 
 import { Game, GameEvent, Player, TournamentRoundInvite, User } from "@port-of-mars/server/entity";
-import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
+import * as ge from "@port-of-mars/server/rooms/pom/game/events/types";
+import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/pom/game/types";
 import { getServices, ServiceProvider } from "@port-of-mars/server/services/index";
 import { getLogger } from "@port-of-mars/server/settings";
 import { settings } from "@port-of-mars/shared/settings";

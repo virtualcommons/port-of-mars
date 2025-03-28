@@ -9,7 +9,7 @@ import {
   SoloPlayerDecision,
   User,
 } from "@port-of-mars/server/entity";
-import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
+import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
 import { EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { createUsers, initTransaction, rollbackTransaction } from "../common";
@@ -18,8 +18,8 @@ import {
   InitGameCmd,
   SetPlayerCmd,
   SetTreatmentParamsCmd,
-} from "@port-of-mars/server/rooms/sologame/commands";
-import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
+} from "@port-of-mars/server/rooms/pomlite/solo/commands";
+import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { Dispatcher } from "@colyseus/command";
 import { SoloGameService } from "@port-of-mars/server/services/sologame";
 import { getLogger } from "@port-of-mars/server/settings";

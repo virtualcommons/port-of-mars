@@ -15,23 +15,26 @@ import {
   RESOURCES,
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
-import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
+import { SimpleBot } from "@port-of-mars/server/rooms/pom/game/state/bot";
 import { settings } from "@port-of-mars/server/settings";
-import { GameState } from "@port-of-mars/server/rooms/game/state/game";
+import { GameState } from "@port-of-mars/server/rooms/pom/game/state/game";
 import {
   SystemHealthChanges,
   PurchasedSystemHealth,
-} from "@port-of-mars/server/rooms/game/state/systemhealth";
-import { AccomplishmentSet } from "@port-of-mars/server/rooms/game/state/accomplishment";
-import { ResourceInventory, ResourceCosts } from "@port-of-mars/server/rooms/game/state/resource";
+} from "@port-of-mars/server/rooms/pom/game/state/systemhealth";
+import { AccomplishmentSet } from "@port-of-mars/server/rooms/pom/game/state/accomplishment";
+import {
+  ResourceInventory,
+  ResourceCosts,
+} from "@port-of-mars/server/rooms/pom/game/state/resource";
 import {
   PlayerSetSerialized,
   PlayerSerialized,
   PlayerSummary,
   PlayerSetSummary,
-} from "@port-of-mars/server/rooms/game/state/types";
-import { GameStateOpts, PlayerOptsData } from "@port-of-mars/server/rooms/game/types";
+} from "@port-of-mars/server/rooms/pom/game/state/types";
+import { GameStateOpts, PlayerOptsData } from "@port-of-mars/server/rooms/pom/game/types";
 
 const logger = settings.logging.getLogger(__filename);
 

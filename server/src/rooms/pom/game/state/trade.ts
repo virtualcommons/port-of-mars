@@ -7,8 +7,8 @@ import {
   TradeStatus,
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
-import { ResourceInventory } from "@port-of-mars/server/rooms/game/state/resource";
-import { GameState } from "@port-of-mars/server/rooms/game/state/game";
+import { ResourceInventory } from "@port-of-mars/server/rooms/pom/game/state/resource";
+import { GameState } from "@port-of-mars/server/rooms/pom/game/state/game";
 
 export class TradeAmount extends Schema {
   constructor(role: Role, resourceAmount: ResourceAmountData) {

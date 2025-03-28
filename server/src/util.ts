@@ -2,11 +2,11 @@ import _ from "lodash";
 import * as assert from "assert";
 import { Builder, Loader, Parser, Resolver, fixturesIterator } from "typeorm-fixtures-cli/dist";
 import { ROLES, DashboardMessage, GameType } from "@port-of-mars/shared/types";
-import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/game/types";
+import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/pom/game/types";
 import {
   getFixedMarsEventDeck,
   getRandomizedMarsEventDeck,
-} from "@port-of-mars/server/rooms/game/state/marsevents/common";
+} from "@port-of-mars/server/rooms/pom/game/state/marsevents/common";
 import { Page, getPagePath } from "@port-of-mars/shared/routes";
 import { getLogger, settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";

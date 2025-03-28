@@ -17,7 +17,7 @@ import {
   User,
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
-import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
+import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
 

@@ -4,7 +4,7 @@ import {
   ActionOrdering,
   GameState,
   SystemHealthMarsEvent,
-} from "@port-of-mars/server/rooms/game/state";
+} from "@port-of-mars/server/rooms/pom/game/state";
 import {
   CURATOR,
   ENTREPRENEUR,

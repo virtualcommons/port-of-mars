@@ -1,6 +1,6 @@
 import { MarsEventData, MarsEventOverride } from "@port-of-mars/shared/types";
 import _ from "lodash";
-import { GameState } from "@port-of-mars/server/rooms/game/state";
+import { GameState } from "@port-of-mars/server/rooms/pom/game/state";
 import { MarsEventDeckItem, getDefaultMarsEventDeck } from "@port-of-mars/server/data/MarsEvents";
 
 export interface MarsEventStateConstructor {

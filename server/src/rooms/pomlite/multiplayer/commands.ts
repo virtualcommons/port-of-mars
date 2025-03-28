@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Command } from "@colyseus/command";
 import { User } from "@port-of-mars/server/entity";
-import { TrioGameRoom } from "@port-of-mars/server/rooms/triogame";
+import { TrioGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { EventCard, Player, TreatmentParams } from "./state";

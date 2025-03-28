@@ -1,4 +1,4 @@
-import { GameState } from "@port-of-mars/server/rooms/game/state";
+import { GameState } from "@port-of-mars/server/rooms/pom/game/state";
 import { Role, ServerRole } from "@port-of-mars/shared/types";
 import { Responses } from "@port-of-mars/shared/game/responses";
 

@@ -11,7 +11,10 @@ import {
   VictoryPointSummarizer,
 } from "@port-of-mars/server/services/replay";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
-import { EnteredDefeatPhase, EnteredVictoryPhase } from "@port-of-mars/server/rooms/game/events";
+import {
+  EnteredDefeatPhase,
+  EnteredVictoryPhase,
+} from "@port-of-mars/server/rooms/pom/game/events";
 import { MarsEventOverride, Phase } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
 import {

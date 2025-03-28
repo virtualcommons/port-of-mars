@@ -1,10 +1,10 @@
 import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 import { RoundIntroductionData } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/shared/settings";
-import { Player } from "@port-of-mars/server/rooms/game/state/player";
-import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/game/state/systemhealth";
-import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment";
-import { Trade } from "@port-of-mars/server/rooms/game/state/trade";
+import { Player } from "@port-of-mars/server/rooms/pom/game/state/player";
+import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/pom/game/state/systemhealth";
+import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/pom/game/state/accomplishment";
+import { Trade } from "@port-of-mars/server/rooms/pom/game/state/trade";
 
 export class RoundIntroduction
   extends Schema

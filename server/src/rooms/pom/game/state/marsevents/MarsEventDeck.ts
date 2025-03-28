@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { MarsEventData } from "@port-of-mars/shared/types";
-import { MarsEventDeckSerialized } from "@port-of-mars/server/rooms/game/state";
+import { MarsEventDeckSerialized } from "@port-of-mars/server/rooms/pom/game/state";
 
 export default class MarsEventsDeck {
   position: number;

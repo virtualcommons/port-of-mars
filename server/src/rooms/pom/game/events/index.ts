@@ -10,8 +10,8 @@ import {
   ServerRole,
   TradeData,
 } from "@port-of-mars/shared/types";
-import { GameSerialized, GameState, RoundSummary } from "@port-of-mars/server/rooms/game/state";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
+import { GameSerialized, GameState, RoundSummary } from "@port-of-mars/server/rooms/pom/game/state";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
 import {
   BondingThroughAdversity,
   BreakdownOfTrust,
@@ -20,7 +20,7 @@ import {
   EffortsWasted,
   HeroOrPariah,
   PersonalGain,
-} from "@port-of-mars/server/rooms/game/state/marsevents/state";
+} from "@port-of-mars/server/rooms/pom/game/state/marsevents/state";
 import * as entities from "@port-of-mars/server/entity/GameEvent";
 import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";

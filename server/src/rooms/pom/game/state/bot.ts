@@ -6,8 +6,8 @@ import {
   Role,
   ROLES,
 } from "@port-of-mars/shared/types";
-import { Bot, GameState, Player } from "@port-of-mars/server/rooms/game/state/index";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
+import { Bot, GameState, Player } from "@port-of-mars/server/rooms/pom/game/state/index";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
 import {
   AcceptedTradeRequest,
   RejectedTradeRequest,
@@ -23,13 +23,13 @@ import {
   VotedForPhilanthropist,
   VoteHeroOrPariah,
   VoteHeroOrPariahRole,
-} from "@port-of-mars/server/rooms/game/events";
+} from "@port-of-mars/server/rooms/pom/game/events";
 import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
 import {
   downCastEventState,
   HeroOrPariah,
-} from "@port-of-mars/server/rooms/game/state/marsevents/state";
+} from "@port-of-mars/server/rooms/pom/game/state/marsevents/state";
 import { canPlayerMakeTrade } from "@port-of-mars/shared/validation";
 
 const logger = getLogger(__filename);

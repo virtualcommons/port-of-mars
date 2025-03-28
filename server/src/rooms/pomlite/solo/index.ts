@@ -1,62 +1,50 @@
 import { Client, Delayed, Room } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import * as http from "http";
-import { TrioGameState, Player } from "@port-of-mars/server/rooms/triogame/state";
+import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import {
-  ApplyCardCmd,
-  InitGameCmd,
-  SetPlayerCmd,
-  ProcessRoundCmd,
-  PlayerInvestCmd,
-} from "./commands";
+import { ApplyCardCmd, InitGameCmd, InvestCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
-import { EventContinue, Invest } from "@port-of-mars/shared/sologame";
-import { TrioGameOpts } from "@port-of-mars/server/rooms/triogame/types";
+import { EventContinue, Invest, SOLO_ROOM_NAME, SoloGameType } from "@port-of-mars/shared/sologame";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class TrioGameRoom extends Room<TrioGameState> {
+export class SoloGameRoom extends Room<SoloGameState> {
   public static get NAME() {
-    return "trio_game_room";
+    return SOLO_ROOM_NAME;
   }
-
   autoDispose = true;
-  maxClients = 3;
-  patchRate = 1000 / 5;
+  maxClients = 1;
+  patchRate = 1000 / 5; // sends state to client 5 times per second
 
   dispatcher = new Dispatcher(this);
   eventTimeout: Delayed | null = null;
 
-  async onCreate(options: TrioGameOpts) {
-    logger.trace("TrioGameRoom '%s' created", this.roomId);
-    this.setState(new TrioGameState(options));
+  get client() {
+    return this.clients[0];
+  }
+
+  onCreate(options: { type?: SoloGameType }) {
+    logger.trace("SoloGameRoom '%s' created", this.roomId);
+    this.setState(new SoloGameState());
     this.state.type = options.type || "freeplay";
     this.setPrivate(true);
     this.registerAllHandlers();
-    new InitGameCmd().setPayload({ users: options.users });
     this.clock.setInterval(() => {
       if (this.state.timeRemaining > 0) {
         this.state.timeRemaining -= 1;
       } else if (!this.state.isRoundTransitioning) {
-        this.state.players.forEach(player => {
-          player.pendingInvestment = null;
-          player.pointsEarned = null;
-          this.dispatcher.dispatch(
-            new PlayerInvestCmd().setPayload({
-              systemHealthInvestment: 0,
-              clockRanOut: true,
-              player: player,
-            })
-          );
-        });
-        this.dispatcher.dispatch(new ProcessRoundCmd());
+        this.dispatcher.dispatch(
+          new InvestCmd().setPayload({
+            systemHealthInvestment: 0,
+            clockRanOut: true,
+          })
+        );
       }
     }, 1000);
   }
 
-  // maybe add a safeguard to ensure client belongs to this room
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
@@ -72,17 +60,13 @@ export class TrioGameRoom extends Room<TrioGameState> {
     return false;
   }
 
-  getPlayer(client: Client): Player {
-    return this.state.getPlayer(client.auth.username);
-  }
-
   onJoin(client: Client, options: any, auth: User) {
-    logger.trace("Client %s joined TrioGameRoom %s", auth.username, this.roomId);
-    this.dispatcher.dispatch(new SetPlayerCmd().setPayload({ users: [auth] }));
+    logger.trace("Client %s joined SoloGameRoom %s", auth.username, this.roomId);
+    this.dispatcher.dispatch(new InitGameCmd().setPayload({ user: auth }));
   }
 
-  async onDispose(): Promise<void> {
-    logger.trace("Disposing of TrioGameRoom '%s'", this.roomId);
+  onDispose() {
+    logger.trace("Disposing of SoloGameRoom '%s'", this.roomId);
     this.dispatcher.stop();
   }
 
@@ -91,9 +75,8 @@ export class TrioGameRoom extends Room<TrioGameState> {
       this.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
     });
     this.onMessage("invest", (client, message: Invest) => {
-      this.state.getPlayer();
       this.dispatcher.dispatch(
-        new PlayerInvestCmd().setPayload({
+        new InvestCmd().setPayload({
           systemHealthInvestment: message.systemHealthInvestment,
         })
       );

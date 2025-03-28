@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 import { SoloGame, SoloGameRound } from "@port-of-mars/server/entity";
-import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
+import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
 
 const WEAR_AND_TEAR = SoloGameState.STATIC_PARAMS.systemHealthWear;
 const MAX_SYSTEM_HEALTH = SoloGameState.STATIC_PARAMS.systemHealthMax;

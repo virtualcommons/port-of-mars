@@ -15,7 +15,7 @@ import { settings } from "@port-of-mars/server/settings";
 import {
   AccomplishmentSetSerialized,
   AccomplishmentSetSummary,
-} from "@port-of-mars/server/rooms/game/state/types";
+} from "@port-of-mars/server/rooms/pom/game/state/types";
 
 const logger = settings.logging.getLogger(__filename);
 

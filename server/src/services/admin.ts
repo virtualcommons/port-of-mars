@@ -1,5 +1,5 @@
 import { matchMaker } from "colyseus";
-import { GameRoom } from "@port-of-mars/server/rooms/game";
+import { GameRoom } from "@port-of-mars/server/rooms/pom/game";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { ChatReport, ModerationAction } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";

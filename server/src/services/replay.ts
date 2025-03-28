@@ -1,5 +1,5 @@
 import { strict as assert } from "assert";
-import { GameSerialized, GameState, RoundSummary } from "@port-of-mars/server/rooms/game/state";
+import { GameSerialized, GameState, RoundSummary } from "@port-of-mars/server/rooms/pom/game/state";
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import * as entity from "@port-of-mars/server/entity";
 import {
@@ -18,7 +18,7 @@ import {
   VotedForPersonalGain,
   // Efforts Wasted
   StagedDiscardOfPurchasedAccomplishment,
-} from "@port-of-mars/server/rooms/game/events";
+} from "@port-of-mars/server/rooms/pom/game/events";
 import _ from "lodash";
 import { getLogger } from "@port-of-mars/server/settings";
 import {
@@ -37,7 +37,7 @@ import {
   ServerRole,
 } from "@port-of-mars/shared/types";
 import { createObjectCsvWriter } from "csv-writer";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
 import { getAllAccomplishments } from "@port-of-mars/server/data/Accomplishment";
 import { Player, TournamentRoundInvite, User } from "@port-of-mars/server/entity";
 
