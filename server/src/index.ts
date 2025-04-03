@@ -22,6 +22,7 @@ import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { User } from "@port-of-mars/server/entity";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { TournamentLobbyRoom } from "@port-of-mars/server/rooms/lobby/tournament";
+import { LiteLobbyRoom } from "@port-of-mars/server/rooms/lobby/lite";
 import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
@@ -263,6 +264,7 @@ async function createApp() {
   gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
   gameServer.define(TournamentLobbyRoom.NAME, TournamentLobbyRoom);
   gameServer.define(SoloGameRoom.NAME, SoloGameRoom);
+  gameServer.define(LiteLobbyRoom.NAME, LiteLobbyRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
   // Final error handling middleware
