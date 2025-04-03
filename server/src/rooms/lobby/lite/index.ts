@@ -9,6 +9,7 @@ import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
 import { User } from "@port-of-mars/server/entity";
 import { Group, GroupManager } from "@port-of-mars/server/rooms/lobby/common/group";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
+import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -19,7 +20,7 @@ const logger = settings.logging.getLogger(__filename);
  */
 export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
   roomName = LITE_LOBBY_NAME;
-  groupSize = 1; // FIXME: group size should be centralized/configurable somewhere
+  groupSize = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
   static get NAME() {
     return LITE_LOBBY_NAME;
   }

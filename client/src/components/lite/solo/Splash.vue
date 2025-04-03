@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import SegmentedBar from "@port-of-mars/client/components/sologame/SegmentedBar.vue";
+import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";
 
 @Component({
   components: {

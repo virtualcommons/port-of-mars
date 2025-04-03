@@ -217,16 +217,16 @@ export const PAGE_META: {
     path: "/prolific-multiplayer",
     name: PROLIFIC_MULTIPLAYER_STUDY_PAGE,
     meta: {
-      // FIXME: temporary
-      requiresAuth: false,
+      requiresAuth: true,
+      requiresConsent: true,
     },
   },
   [LITE_LOBBY_PAGE]: {
     path: "/lite-lobby",
     name: LITE_LOBBY_PAGE,
     meta: {
-      // FIXME: temporary
-      requiresAuth: false,
+      requiresAuth: true,
+      requiresConsent: true,
     },
   },
 };

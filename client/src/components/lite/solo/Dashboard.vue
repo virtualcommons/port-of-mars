@@ -133,15 +133,15 @@
 import { Vue, Component, Inject, Prop } from "vue-property-decorator";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { SoloGameClientState } from "@port-of-mars/shared/sologame";
-import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
-import EventModal from "@port-of-mars/client/components/sologame/EventModal.vue";
-import SegmentedBar from "@port-of-mars/client/components/sologame/SegmentedBar.vue";
-import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
-import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
-import Clock from "@port-of-mars/client/components/sologame/Clock.vue";
-import ThresholdInfo from "@port-of-mars/client/components/sologame/ThresholdInfo.vue";
-import VFDNumberDisplay from "@port-of-mars/client/components/sologame/VFDNumberDisplay.vue";
-import HealthGained from "@port-of-mars/client/components/sologame/HealthGained.vue";
+import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
+import EventModal from "@port-of-mars/client/components/lite/EventModal.vue";
+import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";
+import Deck from "@port-of-mars/client/components/lite/Deck.vue";
+import Investment from "@port-of-mars/client/components/lite/Investment.vue";
+import Clock from "@port-of-mars/client/components/lite/Clock.vue";
+import ThresholdInfo from "@port-of-mars/client/components/lite/ThresholdInfo.vue";
+import VFDNumberDisplay from "@port-of-mars/client/components/lite/VFDNumberDisplay.vue";
+import HealthGained from "@port-of-mars/client/components/lite/HealthGained.vue";
 
 @Component({
   components: {

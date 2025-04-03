@@ -47,9 +47,9 @@ import {
   applySoloGameServerResponses,
 } from "@port-of-mars/client/api/sologame/response";
 import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologame";
-import Dashboard from "@port-of-mars/client/components/sologame/Dashboard.vue";
-import GameOver from "@port-of-mars/client/components/sologame/GameOver.vue";
-import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
+import Dashboard from "@port-of-mars/client/components/lite/solo/Dashboard.vue";
+import GameOver from "@port-of-mars/client/components/lite/solo/GameOver.vue";
+import Splash from "@port-of-mars/client/components/lite/solo/Splash.vue";
 import { ProlificSoloParticipantStatus } from "@port-of-mars/shared/types";
 
 @Component({
