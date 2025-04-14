@@ -7,19 +7,19 @@ import {
     OneToOne,
     OneToMany,
     ManyToOne,
-  } from "typeorm";
-  import { SoloGameTreatment } from "./SoloGameTreatment";
-  import { TrioGameTreatment } from "./TrioGameTreatment";
-  import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
-  import { TrioMarsEventDeck } from "./TrioMarsEventDeck";
-  import { SoloPlayer } from "./SoloPlayer";
-  import { TrioPlayer } from "./TrioPlayer";
-  import { SoloGameRound } from "./SoloGameRound";
-  import { TrioGameRound } from "./TrioGameRound";
-  import { SoloGameStatus, SoloGameType } from "@port-of-mars/shared/sologame";
-  import { TrioGameStatus, TrioGameType } from "@port-of-mars/shared/triogame";
+} from "typeorm";
+import { SoloGameTreatment } from "./LiteGameTreatment";
+import { TrioGameTreatment } from "./LiteGameTreatment";
+import { SoloMarsEventDeck } from "./LiteMarsEventDeck";
+import { TrioMarsEventDeck } from "./LiteMarsEventDeck";
+import { SoloPlayer } from "./LitePlayer";
+import { TrioPlayer } from "./LitePlayer";
+import { SoloGameRound } from "./LiteGameRound";
+import { TrioGameRound } from "./LiteGameRound";
+import { SoloGameStatus, SoloGameType } from "@port-of-mars/shared/sologame";
+import { TrioGameStatus, TrioGameType } from "@port-of-mars/shared/triogame";
   
-  export abstract class BaseLiteGame {
+export abstract class BaseLiteGame {
     @PrimaryGeneratedColumn()
     id!: number;
   
@@ -37,10 +37,10 @@ import {
   
     @Column({ default: 0 })
     maxRound!: number;
-  }
+}
   
-  @Entity()
-  export class SoloGame extends BaseLiteGame {
+@Entity()
+export class SoloGame extends BaseLiteGame {
     @OneToOne(() => SoloPlayer, player => player.game)
     @JoinColumn()
     player!: SoloPlayer;
@@ -70,10 +70,10 @@ import {
   
     @Column()
     threeEventsThreshold!: number;
-  }
+}
   
-  @Entity()
-  export class TrioGame extends BaseLiteGame {
+@Entity()
+export class TrioGame extends BaseLiteGame {
     @OneToMany(() => TrioPlayer, player => player.game)
     players!: TrioPlayer[];
   
@@ -96,5 +96,5 @@ import {
   
     @Column()
     votingRoundsThreshold!: number;
-  }
+}
   
