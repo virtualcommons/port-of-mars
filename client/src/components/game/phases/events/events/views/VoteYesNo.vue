@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({})
 export default class VoteYesNo extends Vue {

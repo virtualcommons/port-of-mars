@@ -18,12 +18,12 @@
 import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { cloneDeep } from "lodash";
-import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
+import { SoloGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
 import {
   DEFAULT_STATE,
   applySoloGameServerResponses,
-} from "@port-of-mars/client/api/sologame/response";
-import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologame";
+} from "@port-of-mars/client/api/pomlite/solo/response";
+import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/lite";
 import Dashboard from "@port-of-mars/client/components/lite/solo/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/lite/solo/GameOver.vue";
 import Splash from "@port-of-mars/client/components/lite/solo/Splash.vue";

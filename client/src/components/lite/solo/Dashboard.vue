@@ -42,6 +42,7 @@
               <ThresholdInfo
                 v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
                 :state="state"
+                :thresholdInformation="state.treatmentParams.thresholdInformation"
               />
               <div v-else class="d-flex flex-column align-items-center justify-content-center">
                 <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
@@ -131,8 +132,8 @@
 
 <script lang="ts">
 import { Vue, Component, Inject, Prop } from "vue-property-decorator";
-import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
-import { SoloGameClientState } from "@port-of-mars/shared/sologame";
+import { SoloGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
+import { SoloGameClientState } from "@port-of-mars/shared/lite";
 import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
 import EventModal from "@port-of-mars/client/components/lite/EventModal.vue";
 import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";

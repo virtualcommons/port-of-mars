@@ -1,11 +1,11 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
 import {
   EventCardData,
-  SoloGameParams,
-  SoloGameStatus,
+  LiteGameParams,
+  LiteGameStatus,
   SoloGameType,
   TreatmentData,
-} from "@port-of-mars/shared/sologame";
+} from "@port-of-mars/shared/lite";
 
 export class EventCard extends Schema {
   id = 0;
@@ -64,7 +64,7 @@ export class TreatmentParams extends Schema {
 
 export class SoloGameState extends Schema {
   @type("string") type: SoloGameType = "freeplay";
-  @type("string") status: SoloGameStatus = "incomplete";
+  @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
     SoloGameState.DEFAULTS.freeplay.systemHealthMax -
     SoloGameState.DEFAULTS.freeplay.systemHealthWear;
@@ -147,7 +147,7 @@ export class SoloGameState extends Schema {
     resources: 10,
   };
 
-  static DEFAULTS: Record<SoloGameType, SoloGameParams> = {
+  static DEFAULTS: Record<SoloGameType, LiteGameParams> = {
     freeplay: {
       maxRound: { min: 6, max: 14 },
       roundTransitionDuration: 3,

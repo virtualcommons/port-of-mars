@@ -5,7 +5,7 @@ import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { EventCard, TreatmentParams } from "./state";
-import { SoloGameStatus } from "@port-of-mars/shared/sologame";
+import { LiteGameStatus } from "@port-of-mars/shared/lite";
 
 abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {
   get defaultParams() {
@@ -347,7 +347,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
   }
 }
 
-export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
+export class EndGameCmd extends Cmd<{ status: LiteGameStatus }> {
   async execute({ status } = this.payload) {
     this.clock.clear();
     // wait for a few seconds so the client can see the final state

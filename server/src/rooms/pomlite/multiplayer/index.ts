@@ -1,41 +1,52 @@
 import { Client, Delayed, Room } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import * as http from "http";
-import { TrioGameState, Player } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import { MultiplayerGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import {
-  ApplyCardCmd,
-  InitGameCmd,
-  SetPlayerCmd,
-  ProcessRoundCmd,
-  PlayerInvestCmd,
-} from "./commands";
+import { InitGameCmd, ProcessRoundCmd, PlayerInvestCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
-import { EventContinue, Invest } from "@port-of-mars/shared/sologame";
-import { TrioGameOpts } from "@port-of-mars/server/rooms/pomlite/multiplayer/types";
+import { Invest, MultiplayerGameType } from "@port-of-mars/shared/lite";
+import { settings as sharedSettings } from "@port-of-mars/shared/settings";
+import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class TrioGameRoom extends Room<TrioGameState> {
+export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
   public static get NAME() {
-    return "trio_game_room";
+    return "multiplayer_game_room";
   }
 
   autoDispose = true;
-  maxClients = 3;
+  // FIXME: this should be based on the game type, we can do this by
+  // throwing it in the data structure that holds events, etc for each type
+  maxClients = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
   patchRate = 1000 / 5;
 
   dispatcher = new Dispatcher(this);
   eventTimeout: Delayed | null = null;
 
-  async onCreate(options: TrioGameOpts) {
-    logger.trace("TrioGameRoom '%s' created", this.roomId);
-    this.setState(new TrioGameState(options));
-    this.state.type = options.type || "freeplay";
+  private assignRoles(users: Array<LitePlayerUser>): LiteRoleAssignment {
+    const roles = MultiplayerGameState.DEFAULTS.prolific.availableRoles!;
+    const roleMap = new Map<Role, LitePlayerUser>();
+    users.forEach((user, index) => {
+      const role = roles[index % roles.length];
+      roleMap.set(role, user);
+    });
+    return roleMap;
+  }
+
+  async onCreate(options: { type?: MultiplayerGameType; users: Array<LitePlayerUser> }) {
+    logger.trace("MultiplayerGameRoom '%s' created", this.roomId);
+    const type = options.type || "prolific";
+    const userRoles = this.assignRoles(options.users);
+    this.setState(new MultiplayerGameState({ type, userRoles }));
+    // TODO: for the variance, we'll just assign a random/incrementing treatment to a game
+    // and then in service.drawEventCardDeck() we'll just use the treatment to determine
+    // draw amount for life as usual
     this.setPrivate(true);
     this.registerAllHandlers();
-    new InitGameCmd().setPayload({ users: options.users });
+    this.dispatcher.dispatch(new InitGameCmd());
     this.clock.setInterval(() => {
       if (this.state.timeRemaining > 0) {
         this.state.timeRemaining -= 1;
@@ -72,29 +83,22 @@ export class TrioGameRoom extends Room<TrioGameState> {
     return false;
   }
 
-  getPlayer(client: Client): Player {
-    return this.state.getPlayer(client.auth.username);
-  }
-
   onJoin(client: Client, options: any, auth: User) {
-    logger.trace("Client %s joined TrioGameRoom %s", auth.username, this.roomId);
-    this.dispatcher.dispatch(new SetPlayerCmd().setPayload({ users: [auth] }));
+    logger.trace("Client %s joined MultiplayerGameRoom %s", auth.username, this.roomId);
   }
 
   async onDispose(): Promise<void> {
-    logger.trace("Disposing of TrioGameRoom '%s'", this.roomId);
+    logger.trace("Disposing of MultiplayerGameRoom '%s'", this.roomId);
     this.dispatcher.stop();
   }
 
   registerAllHandlers() {
-    this.onMessage("event-continue", (client, message: EventContinue) => {
-      this.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
-    });
-    this.onMessage("invest", (client, message: Invest) => {
-      this.state.getPlayer();
+    this.onMessage("invest", (client: Client, message: Invest) => {
+      const player = this.state.getPlayer(client);
       this.dispatcher.dispatch(
         new PlayerInvestCmd().setPayload({
           systemHealthInvestment: message.systemHealthInvestment,
+          player,
         })
       );
     });

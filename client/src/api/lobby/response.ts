@@ -6,7 +6,7 @@ import {
   FREE_PLAY_LOBBY_PAGE,
   GAME_PAGE,
   LITE_LOBBY_PAGE,
-  SOLO_GAME_PAGE,
+  LITE_MULTIPLAYER_GAME_PAGE,
   TOURNAMENT_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
@@ -108,11 +108,11 @@ export function applyLiteLobbyResponses(room: Room, component: any) {
   });
 
   room.onMessage("removed-client-from-lobby", () => {
-    router.push({ name: SOLO_GAME_PAGE });
+    router.push({ name: LITE_MULTIPLAYER_GAME_PAGE });
   });
 
   room.onMessage("join-existing-game", () => {
-    router.push({ name: SOLO_GAME_PAGE });
+    router.push({ name: LITE_MULTIPLAYER_GAME_PAGE });
   });
 
   room.state.clients.onAdd = (e: Schemify<LobbyClientData>) => {

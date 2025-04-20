@@ -67,7 +67,7 @@ import TradeOptions from "@port-of-mars/client/components/game/phases/trade/Trad
 import { ResourceAmountData, Role, TradeAmountData } from "@port-of-mars/shared/types";
 import { isZeroTrade, makeTradeSafe, canPlayerMakeTrade } from "@port-of-mars/shared/validation";
 import { SendTradeRequestData } from "@port-of-mars/shared/game";
-import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
+import { AbstractGameAPI } from "@port-of-mars/client/api/pom/game/types";
 
 @Component({
   components: {

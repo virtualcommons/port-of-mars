@@ -1,18 +1,19 @@
 import { Schema, ArraySchema, type, MapSchema } from "@colyseus/schema";
 import {
   EventCardData,
-  SoloGameParams,
-  SoloGameStatus,
+  MultiplayerGameType,
+  LiteGameParams,
+  LiteGameStatus,
   SoloGameType,
   TreatmentData,
-} from "@port-of-mars/shared/sologame";
-import { Role } from "@port-of-mars/shared/types";
-import { TrioGameOpts } from "./types";
+} from "@port-of-mars/shared/lite";
+import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
 import { isProduction } from "@port-of-mars/shared/settings";
 import { settings } from "@port-of-mars/server/settings";
 import { User } from "@port-of-mars/server/entity/User";
 
 import * as assert from "assert";
+import { Client } from "colyseus";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -49,42 +50,25 @@ export class EventCard extends Schema {
 export class Player extends Schema {
   userId = 0;
   @type("string") username = "";
-  @type("uint8") resources = TrioGameState.DEFAULTS.freeplay.resources;
-  @type("uint8") points = TrioGameState.DEFAULTS.freeplay.points;
+  @type("string") role: Role = "Politician";
+  @type("uint8") resources = MultiplayerGameState.DEFAULTS.freeplay.resources;
+  @type("uint8") points = MultiplayerGameState.DEFAULTS.freeplay.points;
   @type("uint8") pendingInvestment: number | null = null;
   @type("uint8") pointsEarned: number | null = null;
+  @type("boolean") isReady = false;
 }
 
-export class TreatmentParams extends Schema {
-  @type("string") gameType: SoloGameType = "freeplay";
-  @type("boolean") isNumberOfRoundsKnown = false;
-  @type("boolean") isEventDeckKnown = false;
-  @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
-  @type("boolean") isLowResSystemHealth = false;
-
-  constructor(data?: TreatmentData) {
-    super();
-    if (!data) return;
-    this.gameType = data.gameType;
-    this.isNumberOfRoundsKnown = data.isNumberOfRoundsKnown;
-    this.isEventDeckKnown = data.isEventDeckKnown;
-    this.thresholdInformation = data.thresholdInformation;
-    this.isLowResSystemHealth = data.isLowResSystemHealth;
-  }
-}
-
-export class TrioGameState extends Schema {
-  @type("string") type: SoloGameType = "freeplay";
-  @type("string") status: SoloGameStatus = "incomplete";
+export class MultiplayerGameState extends Schema {
+  @type("string") type: MultiplayerGameType = "prolific";
+  @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
-    TrioGameState.DEFAULTS.freeplay.systemHealthMax -
-    TrioGameState.DEFAULTS.freeplay.systemHealthWear;
-  @type("uint8") timeRemaining = TrioGameState.DEFAULTS.freeplay.timeRemaining;
+    MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax -
+    MultiplayerGameState.DEFAULTS.freeplay.systemHealthWear;
+  @type("uint8") timeRemaining = MultiplayerGameState.DEFAULTS.freeplay.timeRemaining;
   @type("uint8") round = 1;
-  @type(TreatmentParams) treatmentParams = new TreatmentParams();
 
-  @type([Player]) players = new ArraySchema<Player>();
-  @type("string") roles = new MapSchema<string>(); // <role title, username>
+  @type("int8") numPlayers = 3;
+  @type({ map: Player }) players = new MapSchema<Player>(); // track by client.auth.id.toString() (db id)
 
   // @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
 
@@ -97,25 +81,33 @@ export class TrioGameState extends Schema {
   @type("boolean") canInvest = false;
   @type("boolean") isRoundTransitioning = false;
 
-  constructor(data: TrioGameOpts) {
+  // assumes these aren't ever hidden properties in the multiplayer lite version
+  @type("int8") maxRound = MultiplayerGameState.DEFAULTS.freeplay.maxRound.max;
+  @type("int8") twoEventsThreshold = MultiplayerGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
+  @type("int8") threeEventsThreshold =
+    MultiplayerGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
+  // this one doesn't have to be a schema property since visibleEventCards already mirrors it
+  eventCardDeck: Array<EventCard> = [];
+
+  constructor(data: { userRoles: LiteRoleAssignment; type: MultiplayerGameType }) {
     super();
-    if (isProduction()) {
-      assert.equal(data.users.length, 3, "Must have three players");
-    }
-    this.users = data.users;
     this.type = data.type;
+    this.userRoles = data.userRoles;
+    // set players
+    for (const [role, user] of this.userRoles) {
+      const player = new Player();
+      player.userId = user.id;
+      player.username = user.username;
+      player.role = role;
+      player.points = 0;
+      this.players.set(user.id.toString(), player);
+    }
   }
 
+  userRoles: LiteRoleAssignment;
   gameId!: number;
-  users: Array<User> = [];
-  availableRoles: Array<Role> = ["Politician", "Entrepreneur", "Researcher"]; // temporarily subset of roles for trio version
-  roundInitialSystemHealth = TrioGameState.DEFAULTS.freeplay.systemHealthMax;
+  roundInitialSystemHealth = MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax;
   roundInitialPoints: Array<number> = [];
-  // hidden properties
-  maxRound = TrioGameState.DEFAULTS.freeplay.maxRound.max;
-  twoEventsThreshold = TrioGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
-  threeEventsThreshold = TrioGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
-  eventCardDeck: Array<EventCard> = [];
 
   get points() {
     const points: number[] = [];
@@ -157,22 +149,20 @@ export class TrioGameState extends Schema {
   updateVisibleCards() {
     // update visible cards, needs to be called after making changes to the deck that should be
     // reflected on the client
-    if (this.treatmentParams.isEventDeckKnown) {
-      // probably a more efficient way to do this
-      this.visibleEventCards = new ArraySchema(...this.eventCardDeck);
-    } else {
-      this.visibleEventCards = new ArraySchema(...this.roundEventCards);
-    }
+    this.visibleEventCards = new ArraySchema(...this.eventCardDeck);
   }
 
-  getPlayer(username: string): Player {
-    this.players.forEach(player => {
-      if (player.username == username) {
-        return player;
-      }
-    });
-    logger.fatal("TrioGameState.getPlayer: Unable to find player with username %s", username);
-    throw new Error(`No player found with ${username}`);
+  getPlayer(client: Client): Player {
+    // get a player by their auth user id
+    const player = this.players.get(client.auth.id.toString());
+    if (player) {
+      return player;
+    }
+    logger.fatal(
+      "MultiplayerGameState.getPlayer: Unable to find player with id %s",
+      client.auth.id
+    );
+    throw new Error(`No player found with id ${client.auth.id}`);
   }
 
   playersInvested(): boolean {
@@ -185,17 +175,11 @@ export class TrioGameState extends Schema {
   }
 
   get defaultParams() {
-    return TrioGameState.DEFAULTS[this.type];
+    return MultiplayerGameState.DEFAULTS[this.type];
   }
 
-  static STATIC_PARAMS = {
-    systemHealthMax: 25,
-    systemHealthWear: 5,
-    points: 0,
-    resources: 10,
-  };
-
-  static DEFAULTS: Record<SoloGameType, SoloGameParams> = {
+  static DEFAULTS: Record<MultiplayerGameType, LiteGameParams> = {
+    // unused for now
     freeplay: {
       maxRound: { min: 6, max: 14 },
       roundTransitionDuration: 3,
@@ -204,29 +188,26 @@ export class TrioGameState extends Schema {
       timeRemaining: 30,
       eventTimeout: 10,
       startingSystemHealth: 20,
-      ...TrioGameState.STATIC_PARAMS,
+      systemHealthMax: 25,
+      systemHealthWear: 5,
+      points: 0,
+      resources: 10,
+      availableRoles: ["Politician", "Entrepreneur", "Researcher"],
     },
-    prolificBaseline: {
+    // FIXME: come up with some good settings
+    prolific: {
       maxRound: { min: 8, max: 8 },
-      roundTransitionDuration: 1,
-      twoEventsThreshold: { min: -1, max: -1 },
-      threeEventsThreshold: { min: -2, max: -2 },
-      timeRemaining: 15,
+      roundTransitionDuration: 3,
+      twoEventsThreshold: { min: 48, max: 48 },
+      threeEventsThreshold: { min: 27, max: 27 },
+      timeRemaining: 20,
       eventTimeout: 5,
-      startingSystemHealth: 15,
-      ...TrioGameState.STATIC_PARAMS,
-    },
-    prolificVariable: {
-      maxRound: { min: 11, max: 11 },
-      roundTransitionDuration: 1,
-      twoEventsThreshold: { min: 16, max: 16 },
-      threeEventsThreshold: { min: 9, max: 9 },
-      twoEventsThresholdDisplayRange: { min: 12, max: 18 },
-      threeEventsThresholdDisplayRange: { min: 5, max: 11 },
-      timeRemaining: 15,
-      eventTimeout: 5,
-      startingSystemHealth: 15,
-      ...TrioGameState.STATIC_PARAMS,
+      startingSystemHealth: 45,
+      systemHealthMax: 60,
+      systemHealthWear: 15,
+      points: 0,
+      resources: 10,
+      availableRoles: ["Politician", "Entrepreneur", "Researcher"],
     },
   };
 }

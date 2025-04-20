@@ -71,7 +71,7 @@ import PhaseSwitcher from "@port-of-mars/client/components/game/PhaseSwitcher.vu
 import ProfileMenu from "@port-of-mars/client/components/game/static/popups/ProfileMenu.vue";
 import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
 import ChatMarsLog from "@port-of-mars/client/components/game/ChatMarsLog.vue";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({
   components: {

@@ -8,4 +8,5 @@ export interface Invest {
   systemHealthInvestment: number;
 }
 
+export type MultiplayerGameRequest = Invest;
 export type SoloGameRequest = EventContinue | Invest;

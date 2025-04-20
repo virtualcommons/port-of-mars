@@ -16,15 +16,16 @@
 </template>
 
 <script lang="ts">
-import { SoloGameClientState } from "@port-of-mars/shared/sologame";
+import { BaseLiteGameClientState } from "@port-of-mars/shared/lite";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class ThresholdInfo extends Vue {
-  @Prop() state!: SoloGameClientState;
+  @Prop() state!: BaseLiteGameClientState;
+  @Prop() thresholdInformation!: "known" | "range";
 
   get twoEventsThresholdInfo(): string {
-    if (this.state.treatmentParams.thresholdInformation === "known") {
+    if (this.thresholdInformation === "known") {
       return `below ${this.state.twoEventsThreshold}`;
     } else {
       const range = this.state.twoEventsThresholdRange!;
@@ -33,7 +34,7 @@ export default class ThresholdInfo extends Vue {
   }
 
   get threeEventsThresholdInfo(): string {
-    if (this.state.treatmentParams.thresholdInformation === "known") {
+    if (this.thresholdInformation === "known") {
       return `below ${this.state.threeEventsThreshold}`;
     } else {
       const range = this.state.threeEventsThresholdRange!;
@@ -42,7 +43,7 @@ export default class ThresholdInfo extends Vue {
   }
 
   get loaded() {
-    if (this.state.treatmentParams.thresholdInformation === "range") {
+    if (this.thresholdInformation === "range") {
       return !!this.state.twoEventsThresholdRange;
     }
     return true;

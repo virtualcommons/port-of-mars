@@ -1,5 +1,5 @@
 import { Room } from "colyseus.js";
-import { EventContinue, Invest, SoloGameRequest } from "@port-of-mars/shared/sologame";
+import { EventContinue, Invest, SoloGameRequest } from "@port-of-mars/shared/lite";
 
 export class SoloGameRequestAPI {
   room: Room | null = null;

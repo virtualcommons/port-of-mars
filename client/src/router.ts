@@ -26,6 +26,7 @@ import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificSoloStudy from "@port-of-mars/client/views/ProlificSoloStudy.vue";
 import ProlificMultiplayerStudy from "@port-of-mars/client/views/ProlificMultiplayerStudy.vue";
 import LiteLobby from "@port-of-mars/client/views/LiteLobby.vue";
+import LiteMultiplayerGame from "@port-of-mars/client/views/LiteMultiplayerGame.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -48,6 +49,7 @@ import {
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
   LITE_LOBBY_PAGE,
+  LITE_MULTIPLAYER_GAME_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -102,6 +104,7 @@ const router = new VueRouter({
     { ...PAGE_META[PROLIFIC_SOLO_STUDY_PAGE], component: ProlificSoloStudy },
     { ...PAGE_META[PROLIFIC_MULTIPLAYER_STUDY_PAGE], component: ProlificMultiplayerStudy },
     { ...PAGE_META[LITE_LOBBY_PAGE], component: LiteLobby },
+    { ...PAGE_META[LITE_MULTIPLAYER_GAME_PAGE], component: LiteMultiplayerGame },
   ],
 });
 

@@ -1,10 +1,10 @@
 import { BaseService } from "@port-of-mars/server/services/db";
 import {
   EventCardData,
-  SoloGameStatus,
+  LiteGameStatus,
   SoloGameType,
   TreatmentData,
-} from "@port-of-mars/shared/sologame";
+} from "@port-of-mars/shared/lite";
 import {
   SoloGame,
   SoloGameRound,
@@ -19,7 +19,7 @@ import {
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
-// import { TrioGameState } from "../rooms/triogame/state";
+// import { MultiplayerGameState } from "../rooms/triogame/state";
 
 const logger = getLogger(__filename);
 
@@ -110,7 +110,7 @@ export class TrioGameService extends BaseService {
   //TODO: make a build game opts function to call from lobbies
   async buildGameOpts(usernames: Array<string>) {}
 
-  // async createGame(state: TrioGameState): Promise<SoloGame> {
+  // async createGame(state: MultiplayerGameState): Promise<SoloGame> {
   //   /**
   //    * create a new SoloGame in the db and return it
   //    */
@@ -182,7 +182,7 @@ export class TrioGameService extends BaseService {
     return deck;
   }
 
-  async updateGameStatus(gameId: number, status: SoloGameStatus) {
+  async updateGameStatus(gameId: number, status: LiteGameStatus) {
     const repo = this.em.getRepository(SoloGame);
     const game = await repo.findOneByOrFail({ id: gameId });
     game.status = status;
@@ -193,7 +193,7 @@ export class TrioGameService extends BaseService {
     gameId: number,
     points: number,
     maxRound: number,
-    status: SoloGameStatus
+    status: LiteGameStatus
   ) {
     const repo = this.em.getRepository(SoloPlayer);
     const player = await repo.findOneByOrFail({ gameId });
@@ -206,7 +206,7 @@ export class TrioGameService extends BaseService {
   }
 
   // async createRound(
-  //   state: TrioGameState,
+  //   state: MultiplayerGameState,
   //   systemHealthInvestment: number,
   //   pointsInvestment: number
   // ) {

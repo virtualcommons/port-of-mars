@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { SoloGameType, ThresholdInformation } from "@port-of-mars/shared/sologame/types";
+import { SoloGameType, ThresholdInformation } from "@port-of-mars/shared/lite/types";
 
 @Entity()
 export class SoloGameTreatment {

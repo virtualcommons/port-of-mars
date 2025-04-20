@@ -77,7 +77,7 @@ import {
   InvestmentData,
   RESOURCES,
 } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import InvestmentCard from "@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue";
 import * as _ from "lodash";
 import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue";

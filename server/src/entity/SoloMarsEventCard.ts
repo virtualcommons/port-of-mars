@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { SoloGameType } from "@port-of-mars/shared/sologame";
+import { SoloGameType } from "@port-of-mars/shared/lite";
 
 @Entity()
 export class SoloMarsEventCard {

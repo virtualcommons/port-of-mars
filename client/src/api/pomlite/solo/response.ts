@@ -1,6 +1,6 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { SetHiddenParams, SoloGameClientState } from "@port-of-mars/shared/sologame";
+import { SetHiddenParams, SoloGameClientState } from "@port-of-mars/shared/lite";
 
 type Schemify<T> = T & Schema;
 

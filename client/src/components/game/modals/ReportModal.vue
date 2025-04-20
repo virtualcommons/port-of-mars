@@ -27,7 +27,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, Inject } from "vue-property-decorator";
 import { ChatMessageData } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 
 @Component({

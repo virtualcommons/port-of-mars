@@ -6,7 +6,7 @@
       style="width: auto; max-width: 60%; height: auto; max-height: 60%"
       no-gutters
     >
-      <Splash v-if="!started && !isStudyComplete" @pressed-start="handlePressedStart" />
+      <Splash @pressed-start="handlePressedStart" />
     </b-container>
   </div>
 </template>
@@ -25,9 +25,6 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
   },
 })
 export default class ProlificMultiplayerStudy extends Vue {
-  started = false;
-  isStudyComplete = false;
-
   async created() {
     // TODO:
     // - make sure user is a participant

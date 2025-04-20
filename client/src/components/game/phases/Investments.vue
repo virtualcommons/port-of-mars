@@ -62,7 +62,7 @@ import {
   ResourceCostData,
   Role,
 } from "@port-of-mars/shared/types";
-import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
+import { AbstractGameAPI } from "@port-of-mars/client/api/pom/game/types";
 import TimeBlockMeter from "./investment/TimeBlockMeter.vue";
 import InvestmentCard from "./investment/InvestmentCard.vue";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";

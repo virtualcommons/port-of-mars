@@ -10,6 +10,8 @@ import { User } from "@port-of-mars/server/entity";
 import { Group, GroupManager } from "@port-of-mars/server/rooms/lobby/common/group";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { settings as sharedSettings } from "@port-of-mars/shared/settings";
+import { MultiplayerGameRoom } from "../../pomlite/multiplayer";
+import { LitePlayerUser } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -20,6 +22,10 @@ const logger = settings.logging.getLogger(__filename);
  */
 export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
   roomName = LITE_LOBBY_NAME;
+  // FIXME: this should be based on the game type, we can do this by
+  // throwing it in the data structure that holds events, etc for each type
+  // FIXME: also include the multiplayer game type here somehow so we know
+  // which to use and then pass it into the game room options
   groupSize = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
   static get NAME() {
     return LITE_LOBBY_NAME;
@@ -72,11 +78,18 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     }
   }
 
-  // FIXME: implemented for sologame, use multiplayer
   async sendGroupInvitations(group: Group) {
-    // const usernames = group.clients.map(client => client.username);
-    // const gameOpts = await buildLiteMultiplayerGameOpts(usernames);
-    const room = await matchMaker.createRoom(SoloGameRoom.NAME, { type: "prolificBaseline" });
+    const playerUsers: Array<LitePlayerUser> = group.clients.map(client => {
+      return {
+        username: client.username,
+        id: client.id,
+      };
+    });
+    const type = "prolific"; // FIXME: this shouldn't be hardcoded
+    const room = await matchMaker.createRoom(MultiplayerGameRoom.NAME, {
+      type,
+      users: playerUsers,
+    });
     logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection
     group.clients.forEach((lobbyClient: LobbyClient) => {
@@ -87,8 +100,8 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     });
   }
 
-  // FIXME: implemented for sologame, use multiplayer
   async canUserJoin(user: User) {
+    // FIXME: check if user is a study participant that has not played a game yet
     return true;
     const services = getServices();
     const activeGame = await services.game.getActiveGameRoomId(user.id, "tournament");

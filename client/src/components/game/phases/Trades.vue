@@ -56,7 +56,7 @@
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
 import ActiveTrade from "./trade/ActiveTrade.vue";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import { Phase } from "@port-of-mars/shared/types";
 import TradeRequestModal from "@port-of-mars/client/components/game/modals/TradeRequestModal.vue";
 

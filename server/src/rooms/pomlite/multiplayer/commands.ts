@@ -1,26 +1,24 @@
 import _ from "lodash";
 import { Command } from "@colyseus/command";
 import { User } from "@port-of-mars/server/entity";
-import { TrioGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
+import { MultiplayerGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
-import { EventCard, Player, TreatmentParams } from "./state";
-import { SoloGameStatus } from "@port-of-mars/shared/sologame";
+import { EventCard, Player } from "./state";
+import { LiteGameStatus } from "@port-of-mars/shared/lite";
 import { Role } from "@port-of-mars/shared/types";
 
-abstract class Cmd<Payload> extends Command<TrioGameRoom, Payload> {
+abstract class Cmd<Payload> extends Command<MultiplayerGameRoom, Payload> {
   get defaultParams() {
     return this.state.defaultParams;
   }
 }
 abstract class CmdWithoutPayload extends Cmd<Record<string, never>> {}
 
-export class InitGameCmd extends Cmd<{ users: Array<User> }> {
-  execute({ users } = this.payload) {
+export class InitGameCmd extends CmdWithoutPayload {
+  execute() {
     return [
-      new SetPlayerCmd().setPayload({ users }),
       new CreateDeckCmd(),
-      new SetTreatmentParamsCmd().setPayload({ users }),
       new SetGameParamsCmd(),
       new PersistGameCmd(),
       new SetFirstRoundCmd(),
@@ -29,55 +27,19 @@ export class InitGameCmd extends Cmd<{ users: Array<User> }> {
   }
 }
 
-export class SetPlayerCmd extends Cmd<{ users: User[] }> {
-  execute({ users } = this.payload) {
-    users.map(user => {
-      this.state.players.push(
-        new Player({
-          userId: user.id,
-          username: user.username,
-          points: 0,
-        })
-      );
-    });
-
-    // shuffle roles and randomly assign to players in game state
-    const shuffledRoles = _.shuffle(this.state.availableRoles);
-    this.state.players.slice(0, 3).forEach((player, index) => {
-      this.state.roles.set(shuffledRoles[index], player.username);
-    });
-  }
-}
-
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
-    const { triogame: service } = getServices();
-    const cards = (await service.drawEventCardDeck(this.state.type)).map(
+    const { sologame: service } = getServices();
+    // FIXME: temporary, replace with the multiplayer draw
+    const cards = (await service.drawEventCardDeck("prolificBaseline")).map(
       data => new EventCard(data)
     );
-    if (this.state.type === "prolificVariable") {
+    if (this.state.type === "prolific") {
       // prolific configuration uses a fixed deck
       this.state.eventCardDeck.push(...cards);
     } else {
       const shuffledCards = _.shuffle(cards);
       this.state.eventCardDeck.push(...shuffledCards);
-    }
-  }
-}
-
-//FIXME: isolate getting treatment according to user in services
-export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
-  async execute({ user } = this.payload) {
-    if (this.state.type === "freeplay") {
-      const { triogame: service } = getServices();
-      this.state.treatmentParams = new TreatmentParams(
-        await service.getUserNextFreeplayTreatment(user.id)
-      );
-    } else {
-      const { study: service } = getServices();
-      this.state.treatmentParams = new TreatmentParams(
-        await service.getTreatmentForUser(user, this.state.type)
-      );
     }
   }
 }
@@ -104,18 +66,18 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
 }
 
 export class PersistGameCmd extends CmdWithoutPayload {
+  // TODO: db is not finalized
   async execute() {
-    const { triogame, study } = getServices();
-    const game = await triogame.createGame(this.state);
-
-    if (this.state.type === "prolificVariable" || this.state.type === "prolificBaseline") {
-      await study.setProlificParticipantPlayer(this.state.type, game.player);
-    }
-    this.state.gameId = game.id;
-    // keep track of deck card db ids after persisting the deck
-    this.state.eventCardDeck.forEach((card, index) => {
-      card.deckCardId = game.deck.cards[index].id;
-    });
+    // const { triogame, study } = getServices();
+    // const game = await triogame.createGame(this.state);
+    // if (this.state.type === "prolificVariable" || this.state.type === "prolificBaseline") {
+    //   await study.setProlificParticipantPlayer(this.state.type, game.player);
+    // }
+    // this.state.gameId = game.id;
+    // // keep track of deck card db ids after persisting the deck
+    // this.state.eventCardDeck.forEach((card, index) => {
+    //   card.deckCardId = game.deck.cards[index].id;
+    // });
   }
 }
 
@@ -143,24 +105,13 @@ export class BroadcastReadyCmd extends CmdWithoutPayload {
 }
 
 export class SendHiddenParamsCmd extends CmdWithoutPayload {
+  // these aren't really hidden in this version
   execute() {
     const data: any = {};
-    if (this.state.treatmentParams.isEventDeckKnown) {
-      data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
-    }
-    if (this.state.treatmentParams.isNumberOfRoundsKnown) {
-      data.maxRound = this.state.maxRound;
-    }
-    if (this.state.treatmentParams.thresholdInformation === "known") {
-      data.twoEventsThreshold = this.state.twoEventsThreshold;
-      data.threeEventsThreshold = this.state.threeEventsThreshold;
-    } else if (this.state.treatmentParams.thresholdInformation === "range") {
-      data.twoEventsThresholdRange =
-        this.defaultParams.twoEventsThresholdDisplayRange || this.defaultParams.twoEventsThreshold;
-      data.threeEventsThresholdRange =
-        this.defaultParams.threeEventsThresholdDisplayRange ||
-        this.defaultParams.threeEventsThreshold;
-    }
+    data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
+    data.maxRound = this.state.maxRound;
+    data.twoEventsThreshold = this.state.twoEventsThreshold;
+    data.threeEventsThreshold = this.state.threeEventsThreshold;
     this.room.clients.forEach(client => {
       client.send("set-hidden-params", {
         kind: "set-hidden-params",
@@ -179,6 +130,8 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     );
   }
 
+  // FIXME: there needs to be a lot more special-case handling here
+  // for the cards that affect only certain players, require voting, etc.
   async execute({ playerSkipped } = this.payload) {
     if (!this.state.activeCard) return;
 
@@ -288,14 +241,12 @@ export class PlayerInvestCmd extends Cmd<{
     return this.state.canInvest && systemHealthInvestment <= player.resources;
   }
   async execute({ systemHealthInvestment, clockRanOut, player } = this.payload) {
-    let surplus = 0;
-    if (!clockRanOut) {
-      surplus = player.resources - systemHealthInvestment;
+    player.pendingInvestment = systemHealthInvestment;
+    // check if all players have a pending investment, if so, process the round
+    if (Array.from(this.state.players.values()).every(p => p.pendingInvestment != null)) {
+      this.state.canInvest = false;
+      return [new ProcessRoundCmd()];
     }
-    const index = this.state.players.findIndex(p => p.username == player.username);
-    this.state.players[index].points += surplus;
-    this.state.players[index].pendingInvestment = systemHealthInvestment;
-    this.state.players[index].pointsEarned = surplus;
   }
 }
 
@@ -305,6 +256,11 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
     this.state.players.forEach(player => {
       if (player.pendingInvestment != null) {
         totalSystemHealthInvestment += player.pendingInvestment;
+        const surplus = player.resources - player.pendingInvestment;
+        player.points += surplus;
+        player.pointsEarned = surplus;
+        // reset pending investment
+        player.pendingInvestment = null;
       }
     });
     this.state.systemHealth = Math.min(
@@ -332,10 +288,10 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
 }
 
 export class PersistRoundCmd extends CmdWithoutPayload {
+  // TODO: db is not finalized
   async execute() {
-    const { triogame: service } = getServices();
-    //FIXME: change how round gets saved in the db
-    await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
+    // const { triogame: service } = getServices();
+    // await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
   }
 }
 
@@ -372,7 +328,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
   }
 }
 
-export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
+export class EndGameCmd extends Cmd<{ status: LiteGameStatus }> {
   //FIXME: change the game type status
   async execute({ status } = this.payload) {
     this.clock.clear();
@@ -380,18 +336,17 @@ export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     this.state.status = status;
-    const { triogame: service } = getServices();
-    await service.updateGameStatus(this.state.gameId, status);
-    await Promise.all(
-      this.state.players.map(player => {
-        service.updatePlayerPoints(
-          this.state.gameId,
-          player.points,
-          this.state.maxRound,
-          this.state.status
-        );
-      })
-    );
+    // TODO: db is not finalized
+    // const { triogame: service } = getServices();
+    // await service.updateGameStatus(this.state.gameId, status);
+    this.state.players.forEach(async player => {
+      // await service.updatePlayerPoints(
+      //   this.state.gameId,
+      //   player.points,
+      //   this.state.maxRound,
+      //   status
+      // );
+    });
 
     // wait for the update to be sent to the client
     await new Promise(resolve => setTimeout(resolve, 5000));

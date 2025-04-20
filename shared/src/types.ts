@@ -1,5 +1,5 @@
 import { Page } from "@port-of-mars/shared/routes";
-import { SoloGameType } from "@port-of-mars/shared/sologame/types";
+import { SoloGameType } from "@port-of-mars/shared/lite/types";
 
 export type Dictionary<T> = { [key: string]: T };
 
@@ -19,6 +19,8 @@ export const BAN = "ban" as const;
 export const NONE = "none" as const;
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
+export type LitePlayerUser = { username: string; id: number };
+export type LiteRoleAssignment = Map<Role, LitePlayerUser>;
 export interface ClientSafeUser {
   id: number;
   email?: string;

@@ -1,3 +1,5 @@
+import { Role } from "../types";
+
 export interface EventCardData {
   id: number;
   deckCardId?: number;
@@ -24,9 +26,11 @@ export interface TreatmentData {
 
 export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
 
-export type SoloGameStatus = "incomplete" | "victory" | "defeat";
+export type MultiplayerGameType = "freeplay" | "prolific";
 
-export interface SoloGameParams {
+export type LiteGameStatus = "incomplete" | "victory" | "defeat";
+
+export interface LiteGameParams {
   maxRound: { min: number; max: number };
   roundTransitionDuration: number;
   twoEventsThreshold: { min: number; max: number };
@@ -40,11 +44,16 @@ export interface SoloGameParams {
   eventTimeout: number;
   points: number;
   resources: number;
+  availableRoles?: Array<Role>;
 }
 
-export interface SoloGameClientState {
-  type: SoloGameType;
-  status: SoloGameStatus;
+export interface BaseLiteGameClientState {
+  type: string;
+  status: LiteGameStatus;
+  player: {
+    resources: number;
+    points: number;
+  };
   timeRemaining: number;
   systemHealth: number;
   twoEventsThreshold?: number;
@@ -53,18 +62,37 @@ export interface SoloGameClientState {
   threeEventsThresholdRange?: { min: number; max: number };
   maxRound?: number;
   round: number;
+  visibleEventCards: Array<EventCardData>;
+  activeCardId: number;
+  canInvest: boolean;
+  isRoundTransitioning: boolean;
+}
+
+export interface SoloGameClientState extends BaseLiteGameClientState {
+  type: SoloGameType;
   treatmentParams: {
     isNumberOfRoundsKnown: boolean;
     isEventDeckKnown: boolean;
     thresholdInformation: "unknown" | "range" | "known";
     isLowResSystemHealth: boolean;
   };
-  player: {
-    resources: number;
-    points: number;
-  };
-  visibleEventCards: Array<EventCardData>;
-  activeCardId: number;
-  canInvest: boolean;
-  isRoundTransitioning: boolean;
+}
+
+export interface MultiplayerLiteGamePlayer {
+  username: string;
+  role: Role;
+  resources: number;
+  points: number;
+  pendingInvestment: number | null;
+  pointsEarned: number | null;
+  isReady: boolean;
+}
+
+export interface MultiplayerLiteGameClientState extends BaseLiteGameClientState {
+  type: MultiplayerGameType;
+  players: Map<string, MultiplayerLiteGamePlayer>;
+  numPlayers: number;
+  maxRound: number;
+  twoEventsThreshold: number;
+  threeEventsThreshold: number;
 }

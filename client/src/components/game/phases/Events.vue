@@ -47,7 +47,7 @@ import EventCard from "./events/EventCard.vue";
 import EventContainer from "./events/events/EventContainer.vue";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
 import { MarsEventData, Phase } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({
   components: {

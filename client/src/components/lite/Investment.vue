@@ -26,7 +26,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";
-import { SoloGameClientState } from "@port-of-mars/shared/sologame";
+import { BaseLiteGameClientState } from "@port-of-mars/shared/lite";
 
 @Component({
   components: {
@@ -34,7 +34,7 @@ import { SoloGameClientState } from "@port-of-mars/shared/sologame";
   },
 })
 export default class Investment extends Vue {
-  @Prop() state!: SoloGameClientState;
+  @Prop() state!: BaseLiteGameClientState;
   @Prop({ default: 0 }) readonly value!: number;
 
   get pendingSystemHealthInvestment(): number {

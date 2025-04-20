@@ -141,7 +141,7 @@ import {
   Resource,
   ResourceAmountData,
 } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
 import AccomplishmentModal from "@port-of-mars/client/components/game/modals/AccomplishmentModal.vue";
 import * as _ from "lodash";

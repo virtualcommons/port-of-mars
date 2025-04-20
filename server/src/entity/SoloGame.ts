@@ -12,7 +12,7 @@ import { SoloGameTreatment } from "./SoloGameTreatment";
 import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
 import { SoloPlayer } from "./SoloPlayer";
 import { SoloGameRound } from "./SoloGameRound";
-import { SoloGameStatus, SoloGameType } from "@port-of-mars/shared/sologame";
+import { LiteGameStatus, SoloGameType } from "@port-of-mars/shared/lite";
 
 @Entity()
 export class SoloGame {
@@ -53,7 +53,7 @@ export class SoloGame {
     type: "enum",
     enum: ["incomplete", "victory", "defeat"],
   })
-  status!: SoloGameStatus;
+  status!: LiteGameStatus;
 
   @Column({ default: 0 })
   maxRound!: number;

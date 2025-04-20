@@ -13,7 +13,7 @@ import { Repository } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
-import { SoloGameType } from "@port-of-mars/shared/sologame";
+import { SoloGameType } from "@port-of-mars/shared/lite";
 import {
   ProlificParticipantPointData,
   ProlificSoloParticipantStatus,
@@ -505,7 +505,7 @@ export class MultiplayerStudyService extends BaseStudyService {
       participant.user = user;
       participant.study = study;
       participant.prolificId = prolificId;
-      // TODO: add in treatments
+      // TODO: add in treatments -- actually this should happen when a game starts
       logger.info(`Created new prolific participant ${prolificId} for study ${studyId}`);
       await this.getParticipantRepository().save(participant);
     } else {

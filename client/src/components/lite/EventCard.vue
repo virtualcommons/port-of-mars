@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { EventCardData } from "@port-of-mars/shared/sologame";
+import { EventCardData } from "@port-of-mars/shared/lite";
 
 @Component({})
 export default class EventCard extends Vue {

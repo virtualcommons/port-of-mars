@@ -1,10 +1,10 @@
 import { BaseService } from "@port-of-mars/server/services/db";
 import {
   EventCardData,
-  SoloGameStatus,
+  LiteGameStatus,
   SoloGameType,
   TreatmentData,
-} from "@port-of-mars/shared/sologame";
+} from "@port-of-mars/shared/lite";
 import {
   SoloGame,
   SoloGameRound,
@@ -179,7 +179,7 @@ export class SoloGameService extends BaseService {
     return deck;
   }
 
-  async updateGameStatus(gameId: number, status: SoloGameStatus) {
+  async updateGameStatus(gameId: number, status: LiteGameStatus) {
     const repo = this.em.getRepository(SoloGame);
     const game = await repo.findOneByOrFail({ id: gameId });
     game.status = status;
@@ -190,7 +190,7 @@ export class SoloGameService extends BaseService {
     gameId: number,
     points: number,
     maxRound: number,
-    status: SoloGameStatus
+    status: LiteGameStatus
   ) {
     const repo = this.em.getRepository(SoloPlayer);
     const player = await repo.findOneByOrFail({ gameId });

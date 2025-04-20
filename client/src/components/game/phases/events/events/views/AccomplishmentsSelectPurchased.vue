@@ -47,7 +47,7 @@ import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishm
 import EventNoChange from "@port-of-mars/client/components/game/phases/events/events/EventNoChange.vue";
 import { AccomplishmentCardType } from "@port-of-mars/client/types/cards";
 import { AccomplishmentData, MarsEventData, RESEARCHER } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({
   components: {

@@ -33,7 +33,7 @@ import appDataSource from "@port-of-mars/server/datasource";
 import { program } from "commander";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { EntityManager } from "typeorm";
-import { SoloGameType } from "@port-of-mars/shared/sologame";
+import { SoloGameType } from "@port-of-mars/shared/lite";
 /*
 import { promisify } from "util";
 
