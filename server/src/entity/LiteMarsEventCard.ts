@@ -4,7 +4,6 @@ import {
     PrimaryGeneratedColumn,
 } from "typeorm";
 import { SoloGameType } from "@port-of-mars/shared/sologame";
-import { TrioGameType } from "@port-of-mars/shared/triogame";
   
 export abstract class BaseLiteMarsEventCard {
     @PrimaryGeneratedColumn()
@@ -50,9 +49,4 @@ export class SoloMarsEventCard extends BaseLiteMarsEventCard {
     gameType!: SoloGameType;
 }
   
-@Entity()
-export class TrioMarsEventCard extends BaseLiteMarsEventCard {
-    @Column({ default: "freeplay" })
-    gameType!: TrioGameType;
-}
   

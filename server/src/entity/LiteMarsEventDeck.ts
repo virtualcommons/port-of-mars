@@ -5,7 +5,7 @@ import {
     JoinColumn,
 } from "typeorm";
 import { SoloMarsEventDeckCard } from "./LiteMarsEventDeckCard";
-import { TrioMarsEventDeckCard } from "./LiteMarsEventDeckCard";
+import { MultiplayerMarsEventDeckCard } from "./LiteMarsEventDeckCard";
   
 export abstract class BaseLiteMarsEventDeck {
     @PrimaryGeneratedColumn()
@@ -20,9 +20,9 @@ export class SoloMarsEventDeck extends BaseLiteMarsEventDeck {
 }
 
 @Entity()
-export class TrioMarsEventDeck extends BaseLiteMarsEventDeck {
-    @OneToMany(() => TrioMarsEventDeckCard, card => card.deck, { nullable: true })
+export class MultiplayerMarsEventDeck extends BaseLiteMarsEventDeck {
+    @OneToMany(() => MultiplayerMarsEventDeckCard, card => card.deck, { nullable: true })
     @JoinColumn()
-    cards!: TrioMarsEventDeckCard[];
+    cards!: MultiplayerMarsEventDeckCard[];
 }
   

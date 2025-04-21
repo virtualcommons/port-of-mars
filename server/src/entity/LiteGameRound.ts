@@ -9,11 +9,11 @@ import {
     JoinColumn,
 } from "typeorm";
 import { SoloGame } from "./LiteGame";
-import { TrioGame } from "./LiteGame";
+import { MultiplayerGame } from "./LiteGame";
 import { SoloPlayerDecision } from "./LitePlayerDecision";
-import { TrioPlayerDecision } from "./LitePlayerDecision";
+import { MultiplayerPlayerDecision } from "./LitePlayerDecision";
 import { SoloMarsEventDeckCard } from "./LiteMarsEventDeckCard";
-import { TrioMarsEventDeckCard } from "./LiteMarsEventDeckCard";
+import { MultiplayerMarsEventDeckCard } from "./LiteMarsEventDeckCard";
   
 export abstract class BaseLiteGameRound {
     @PrimaryGeneratedColumn()
@@ -50,18 +50,18 @@ export class SoloGameRound extends BaseLiteGameRound {
 }
   
 @Entity()
-export class TrioGameRound extends BaseLiteGameRound {
+export class MultiplayerGameRound extends BaseLiteGameRound {
     @Column()
     gameId!: number;
   
-    @ManyToOne(() => TrioGame, game => game.rounds)
+    @ManyToOne(() => MultiplayerGame, game => game.rounds)
     @JoinColumn({ name: "gameId" })
-    game!: TrioGame;
+    game!: MultiplayerGame;
   
-    @OneToMany(() => TrioMarsEventDeckCard, card => card.round)
-    cards!: TrioMarsEventDeckCard[];
+    @OneToMany(() => MultiplayerMarsEventDeckCard, card => card.round)
+    cards!: MultiplayerMarsEventDeckCard[];
   
-    @OneToMany(() => TrioPlayerDecision, decision => decision.round)
-    decisions!: TrioPlayerDecision[];
+    @OneToMany(() => MultiplayerPlayerDecision, decision => decision.round)
+    decisions!: MultiplayerPlayerDecision[];
 }
   

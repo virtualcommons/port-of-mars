@@ -9,7 +9,7 @@ import {
  } from "typeorm";
 import { User } from "./User";
 import { SoloGame } from "./LiteGame";
-import { TrioGame } from "./LiteGame";
+import { MultiplayerGame } from "./LiteGame";
   
 export abstract class BaseLitePlayer {
     @PrimaryGeneratedColumn()
@@ -42,10 +42,10 @@ export class SoloPlayer extends BaseLitePlayer {
 }
   
 @Entity()
-export class TrioPlayer extends BaseLitePlayer {
-    @ManyToOne(type => TrioGame, game => game.players, { nullable: true })
+export class MultiplayerPlayer extends BaseLitePlayer {
+    @ManyToOne(type => MultiplayerGame, game => game.players, { nullable: true })
     @JoinColumn()
-    game!: TrioGame;
+    game!: MultiplayerGame;
   
     @Column({ nullable: true })
     gameId!: number;

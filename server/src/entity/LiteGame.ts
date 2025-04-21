@@ -9,15 +9,15 @@ import {
     ManyToOne,
 } from "typeorm";
 import { SoloGameTreatment } from "./LiteGameTreatment";
-import { TrioGameTreatment } from "./LiteGameTreatment";
+import { MultiplayerGameTreatment } from "./LiteGameTreatment";
 import { SoloMarsEventDeck } from "./LiteMarsEventDeck";
-import { TrioMarsEventDeck } from "./LiteMarsEventDeck";
+import { MultiplayerMarsEventDeck } from "./LiteMarsEventDeck";
 import { SoloPlayer } from "./LitePlayer";
-import { TrioPlayer } from "./LitePlayer";
+import { MultiplayerPlayer } from "./LitePlayer";
 import { SoloGameRound } from "./LiteGameRound";
-import { TrioGameRound } from "./LiteGameRound";
+import { MultiplayerGameRound } from "./LiteGameRound";
 import { SoloGameStatus, SoloGameType } from "@port-of-mars/shared/sologame";
-import { TrioGameStatus, TrioGameType } from "@port-of-mars/shared/triogame";
+import { MultiplayerGameStatus, MultiplayerGameType } from "@port-of-mars/shared/triogame";
   
 export abstract class BaseLiteGame {
     @PrimaryGeneratedColumn()
@@ -27,13 +27,13 @@ export abstract class BaseLiteGame {
     dateCreated!: Date;
   
     @Column({ default: "freeplay" })
-    type!: SoloGameType | TrioGameType;
+    type!: SoloGameType | MultiplayerGameType;
   
     @Column({
       type: "enum",
       enum: ["incomplete", "victory", "defeat"],
     })
-    status!: SoloGameStatus | TrioGameStatus;
+    status!: SoloGameStatus | MultiplayerGameStatus;
   
     @Column({ default: 0 })
     maxRound!: number;
@@ -73,23 +73,22 @@ export class SoloGame extends BaseLiteGame {
 }
   
 @Entity()
-export class TrioGame extends BaseLiteGame {
-    @OneToMany(() => TrioPlayer, player => player.game)
-    players!: TrioPlayer[];
+export class MultiplayerGame extends BaseLiteGame {
+    @OneToMany(() => MultiplayerPlayer, player => player.game)
+    players!: MultiplayerPlayer[];
   
-    @ManyToOne(() => TrioGameTreatment, { nullable: false })
-    @JoinColumn()
-    treatment!: TrioGameTreatment;
+    @Column()
+    treatmentIndex!: string;
   
     @Column()
     treatmentId!: number;
   
-    @OneToMany(() => TrioGameRound, round => round.game)
-    rounds!: TrioGameRound[];
+    @OneToMany(() => MultiplayerGameRound, round => round.game)
+    rounds!: MultiplayerGameRound[];
   
-    @ManyToOne(() => TrioMarsEventDeck, { nullable: false })
+    @ManyToOne(() => MultiplayerMarsEventDeck, { nullable: false })
     @JoinColumn()
-    deck!: TrioMarsEventDeck;
+    deck!: MultiplayerMarsEventDeck;
   
     @Column()
     deckId!: number;

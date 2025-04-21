@@ -5,9 +5,9 @@ import {
     ManyToOne,
     JoinColumn,
 } from "typeorm";
-import { TrioGameRound } from "./LiteGameRound";
-import { TrioPlayer } from "./LitePlayer";
-import { TrioMarsEventDeck } from "./TrioMarsEventDeck";
+import { MultiplayerGameRound } from "./LiteGameRound";
+import { MultiplayerPlayer } from "./LitePlayer";
+import { MultiplayerMarsEventDeck } from "./MultiplayerMarsEventDeck";
   
 export abstract class BaseLitePlayerDecision {
     @PrimaryGeneratedColumn()
@@ -24,20 +24,20 @@ export abstract class BaseLitePlayerDecision {
 export class SoloPlayerDecision extends BaseLitePlayerDecision {}
   
 @Entity()
-export class TrioPlayerDecision extends BaseLitePlayerDecision {
-    @ManyToOne(() => TrioGameRound, round => round.decisions)
-    round!: TrioGameRound;
+export class MultiplayerPlayerDecision extends BaseLitePlayerDecision {
+    @ManyToOne(() => MultiplayerGameRound, round => round.decisions)
+    round!: MultiplayerGameRound;
   
-    @ManyToOne(() => TrioPlayer, player => player.decisions)
-    player!: TrioPlayer;
+    @ManyToOne(() => MultiplayerPlayer, player => player.decisions)
+    player!: MultiplayerPlayer;
   
     @Column()
     vote!: string;
   
-    @ManyToOne(() => TrioPlayer, { nullable: true })
-    votedPlayer!: TrioPlayer;
+    @ManyToOne(() => MultiplayerPlayer, { nullable: true })
+    votedPlayer!: MultiplayerPlayer;
   
-    @ManyToOne(() => TrioMarsEventDeck, { nullable: true })
-    event!: TrioMarsEventDeck;
+    @ManyToOne(() => MultiplayerMarsEventDeck, { nullable: true })
+    event!: MultiplayerMarsEventDeck;
 }
   

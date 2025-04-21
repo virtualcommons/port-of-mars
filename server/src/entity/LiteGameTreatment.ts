@@ -3,14 +3,7 @@ import {
     Entity,
     PrimaryGeneratedColumn,
 } from "typeorm";
-import {
-    SoloGameType,
-    ThresholdInformation as SoloThresholdInfo,
-} from "@port-of-mars/shared/sologame/types";
-import {
-    TrioGameType,
-    ThresholdInformation as TrioThresholdInfo,
-} from "@port-of-mars/shared/triogame/types";
+import { SoloGameType, ThresholdInformation } from "@port-of-mars/shared/sologame/types";
   
 export abstract class BaseLiteGameTreatment {
   @PrimaryGeneratedColumn()
@@ -38,17 +31,5 @@ export class SoloGameTreatment extends BaseLiteGameTreatment {
     type: "enum",
     enum: ["unknown", "range", "known"],
   })
-  thresholdInformation!: SoloThresholdInfo;
-}
-
-@Entity()
-export class TrioGameTreatment extends BaseLiteGameTreatment {
-  @Column({ default: "freeplay" })
-  gameType!: TrioGameType;
-
-  @Column({
-    type: "enum",
-    enum: ["unknown", "range", "known"],
-  })
-  thresholdInformation!: TrioThresholdInfo;
+  thresholdInformation!: ThresholdInformation;
 }

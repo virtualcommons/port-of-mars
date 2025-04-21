@@ -5,10 +5,9 @@ import {
     CreateDateColumn,
     ManyToOne,
 } from "typeorm";
-import { SoloMarsEventDeck, TrioMarsEventDeck } from "./LiteMarsEventDeck";
-import { SoloGameRound, TrioGameRound } from "./LiteGameRound";
+import { SoloMarsEventDeck, MultiplayerMarsEventDeck } from "./LiteMarsEventDeck";
+import { SoloGameRound, MultiplayerGameRound } from "./LiteGameRound";
 import { SoloMarsEventCard } from "./LiteMarsEventCard";
-import { TrioMarsEventCard } from "./LiteMarsEventCard";
   
 export abstract class BaseLiteMarsEventDeckCard {
     @PrimaryGeneratedColumn()
@@ -52,17 +51,17 @@ export class SoloMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
 }
 
 @Entity()
-export class TrioMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
-    @ManyToOne(() => TrioMarsEventDeck, deck => deck.cards, { nullable: true })
-    deck!: TrioMarsEventDeck;
+export class MultiplayerMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
+    @ManyToOne(() => MultiplayerMarsEventDeck, deck => deck.cards, { nullable: true })
+    deck!: MultiplayerMarsEventDeck;
   
     @Column()
     deckId!: number;
   
-    @ManyToOne(() => TrioMarsEventCard)
-    card!: TrioMarsEventCard;
+    // @ManyToOne(() => MultiplayerMarsEventCard)
+    // card!: MultiplayerMarsEventCard;
   
-    @ManyToOne(() => TrioGameRound, round => round.cards, { nullable: true })
-    round!: TrioGameRound;
+    @ManyToOne(() => MultiplayerGameRound, round => round.cards, { nullable: true })
+    round!: MultiplayerGameRound;
 }
   
