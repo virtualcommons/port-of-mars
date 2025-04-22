@@ -30,5 +30,5 @@ export abstract class BaseLiteGameTreatment {
 @Entity()
 export class SoloGameTreatment extends BaseLiteGameTreatment {}
 
-// @Entity()
-// export class LiteGameTreatment extends BaseLiteGameTreatment {}
+@Entity()
+export class LiteGameTreatment extends BaseLiteGameTreatment {}

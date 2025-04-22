@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
-// import { LiteGameRound } from "./LiteGameRound";
-// import { LitePlayer } from "./LitePlayer";
-// import { LiteMarsEventDeck } from "./LiteMarsEventDeck";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { LitePlayer } from "./LitePlayer";
+import { LiteGameRound } from "./LiteGameRound";
 
 export abstract class BaseLitePlayerDecision {
   @PrimaryGeneratedColumn()
@@ -17,20 +16,17 @@ export abstract class BaseLitePlayerDecision {
 @Entity()
 export class SoloPlayerDecision extends BaseLitePlayerDecision {}
 
-// @Entity()
-// export class LitePlayerDecision extends BaseLitePlayerDecision {
-//   @ManyToOne(() => LiteGameRound, round => round.decisions)
-//   round!: LiteGameRound;
+@Entity()
+export class LitePlayerDecision extends BaseLitePlayerDecision {
+  @ManyToOne(() => LiteGameRound, round => round.decisions, { nullable: true })
+  round!: LiteGameRound;
 
-//   @ManyToOne(() => LitePlayer, player => player.decisions)
-//   player!: LitePlayer;
+  @Column()
+  roundId!: number;
 
-//   @Column()
-//   vote!: string;
+  @ManyToOne(() => LitePlayer, player => player.decisions, { nullable: true })
+  player!: LitePlayer;
 
-//   @ManyToOne(() => LitePlayer, { nullable: true })
-//   votedPlayer!: LitePlayer;
-
-//   @ManyToOne(() => LiteMarsEventDeck, { nullable: true })
-//   event!: LiteMarsEventDeck;
-// }
+  @Column()
+  playerId!: number;
+}

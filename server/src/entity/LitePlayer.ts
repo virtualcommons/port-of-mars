@@ -6,10 +6,13 @@ import {
   ManyToOne,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
-import { SoloGame } from "./LiteGame";
-// import { LiteGame } from "./LiteGame";
+import { SoloGame, LiteGame } from "./LiteGame";
+import { Role, ROLES } from "@port-of-mars/shared/types";
+import { LitePlayerDecision } from "./LitePlayerDecision";
+import { LitePlayerVote } from "./LitePlayerVote";
 
 export abstract class BaseLitePlayer {
   @PrimaryGeneratedColumn()
@@ -41,12 +44,24 @@ export class SoloPlayer extends BaseLitePlayer {
   gameId!: number;
 }
 
-// @Entity()
-// export class LitePlayer extends BaseLitePlayer {
-//   @ManyToOne(type => LiteGame, game => game.players, { nullable: true })
-//   @JoinColumn()
-//   game!: LiteGame;
+@Entity()
+export class LitePlayer extends BaseLitePlayer {
+  @ManyToOne(type => LiteGame, game => game.players, { nullable: true })
+  @JoinColumn()
+  game!: LiteGame;
 
-//   @Column({ nullable: true })
-//   gameId!: number;
-// }
+  @Column({ nullable: true })
+  gameId!: number;
+
+  @Column({
+    type: "enum",
+    enum: ROLES,
+  })
+  role!: Role;
+
+  @OneToMany(() => LitePlayerDecision, decision => decision.player)
+  decisions!: LitePlayerDecision[];
+
+  @OneToMany(() => LitePlayerVote, vote => vote.player)
+  votes!: LitePlayerVote[];
+}

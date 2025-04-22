@@ -8,14 +8,10 @@ import {
   OneToMany,
   ManyToOne,
 } from "typeorm";
-import { SoloGameTreatment } from "./LiteGameTreatment";
-// import { LiteGameTreatment } from "./LiteGameTreatment";
-import { SoloMarsEventDeck } from "./LiteMarsEventDeck";
-// import { LiteMarsEventDeck } from "./LiteMarsEventDeck";
-import { SoloPlayer } from "./LitePlayer";
-// import { LitePlayer } from "./LitePlayer";
-import { SoloGameRound } from "./LiteGameRound";
-// import { LiteGameRound } from "./LiteGameRound";
+import { LiteGameTreatment, SoloGameTreatment } from "./LiteGameTreatment";
+import { LiteMarsEventDeck, SoloMarsEventDeck } from "./LiteMarsEventDeck";
+import { LitePlayer, SoloPlayer } from "./LitePlayer";
+import { LiteGameRound, SoloGameRound } from "./LiteGameRound";
 import { LiteGameStatus, LiteGameType } from "@port-of-mars/shared/lite";
 
 export abstract class BaseLiteGame {
@@ -71,28 +67,31 @@ export class SoloGame extends BaseLiteGame {
   threeEventsThreshold!: number;
 }
 
-// @Entity()
-// export class LiteGame extends BaseLiteGame {
-//   @OneToMany(() => LitePlayer, player => player.game)
-//   players!: LitePlayer[];
+@Entity()
+export class LiteGame extends BaseLiteGame {
+  @OneToMany(() => LitePlayer, player => player.game)
+  players!: LitePlayer[];
 
-//   @ManyToOne(() => LiteGameTreatment, { nullable: false })
-//   @JoinColumn()
-//   treatment!: LiteGameTreatment;
+  @ManyToOne(() => LiteGameTreatment, { nullable: false })
+  @JoinColumn()
+  treatment!: LiteGameTreatment;
 
-//   @Column()
-//   treatmentId!: number;
+  @Column()
+  treatmentId!: number;
 
-//   @OneToMany(() => LiteGameRound, round => round.game)
-//   rounds!: LiteGameRound[];
+  @OneToMany(() => LiteGameRound, round => round.game)
+  rounds!: LiteGameRound[];
 
-//   @ManyToOne(() => LiteMarsEventDeck, { nullable: false })
-//   @JoinColumn()
-//   deck!: LiteMarsEventDeck;
+  @OneToOne(() => LiteMarsEventDeck, { nullable: false })
+  @JoinColumn()
+  deck!: LiteMarsEventDeck;
 
-//   @Column()
-//   deckId!: number;
+  @Column()
+  deckId!: number;
 
-//   @Column()
-//   votingRoundsThreshold!: number;
-// }
+  @Column()
+  twoEventsThreshold!: number;
+
+  @Column()
+  threeEventsThreshold!: number;
+}

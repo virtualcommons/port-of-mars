@@ -1,7 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from "typeorm";
-import { SoloMarsEventDeck } from "./LiteMarsEventDeck";
-import { SoloGameRound } from "./LiteGameRound";
-import { SoloMarsEventCard } from "./LiteMarsEventCard";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import { LiteMarsEventDeck, SoloMarsEventDeck } from "./LiteMarsEventDeck";
+import { LiteGameRound, SoloGameRound } from "./LiteGameRound";
+import { LiteMarsEventCard, SoloMarsEventCard } from "./LiteMarsEventCard";
+import { LitePlayerVote } from "./LitePlayerVote";
 
 export abstract class BaseLiteMarsEventDeckCard {
   @PrimaryGeneratedColumn()
@@ -44,17 +52,20 @@ export class SoloMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
   round!: SoloGameRound;
 }
 
-// @Entity()
-// export class LiteMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
-//   @ManyToOne(() => LiteMarsEventDeck, deck => deck.cards, { nullable: true })
-//   deck!: LiteMarsEventDeck;
+@Entity()
+export class LiteMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
+  @ManyToOne(() => LiteMarsEventDeck, deck => deck.cards, { nullable: true })
+  deck!: LiteMarsEventDeck;
 
-//   @Column()
-//   deckId!: number;
+  @Column()
+  deckId!: number;
 
-//   // @ManyToOne(() => LiteMarsEventCard)
-//   // card!: LiteMarsEventCard;
+  @ManyToOne(() => LiteMarsEventCard)
+  card!: LiteMarsEventCard;
 
-//   @ManyToOne(() => LiteGameRound, round => round.cards, { nullable: true })
-//   round!: LiteGameRound;
-// }
+  @ManyToOne(() => LiteGameRound, round => round.cards, { nullable: true })
+  round!: LiteGameRound;
+
+  @OneToMany(() => LitePlayerVote, vote => vote.deckCard)
+  votes!: LitePlayerVote[];
+}

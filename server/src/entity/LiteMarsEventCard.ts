@@ -1,9 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { LiteGameType } from "@port-of-mars/shared/lite";
+import { Role, ROLES } from "@port-of-mars/shared/types";
 
 export abstract class BaseLiteMarsEventCard {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ default: "freeplay" })
+  gameType!: LiteGameType;
 
   @Column()
   codeName!: string;
@@ -40,7 +44,17 @@ export abstract class BaseLiteMarsEventCard {
 }
 
 @Entity()
-export class SoloMarsEventCard extends BaseLiteMarsEventCard {
-  @Column({ default: "freeplay" })
-  gameType!: LiteGameType;
+export class SoloMarsEventCard extends BaseLiteMarsEventCard {}
+
+@Entity()
+export class LiteMarsEventCard extends BaseLiteMarsEventCard {
+  @Column({
+    type: "enum",
+    enum: ROLES,
+    nullable: true,
+  })
+  affectedRole?: Role;
+
+  @Column({ default: false })
+  requiresVote!: boolean;
 }

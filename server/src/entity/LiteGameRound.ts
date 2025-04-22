@@ -8,12 +8,10 @@ import {
   OneToMany,
   JoinColumn,
 } from "typeorm";
-import { SoloGame } from "./LiteGame";
-// import { LiteGame } from "./LiteGame";
-import { SoloPlayerDecision } from "./LitePlayerDecision";
-// import { LitePlayerDecision } from "./LitePlayerDecision";
-import { SoloMarsEventDeckCard } from "./LiteMarsEventDeckCard";
-// import { LiteMarsEventDeckCard } from "./LiteMarsEventDeckCard";
+import { LiteGame, SoloGame } from "./LiteGame";
+import { LitePlayerDecision, SoloPlayerDecision } from "./LitePlayerDecision";
+import { LiteMarsEventDeckCard, SoloMarsEventDeckCard } from "./LiteMarsEventDeckCard";
+import { LitePlayerVote } from "./LitePlayerVote";
 
 export abstract class BaseLiteGameRound {
   @PrimaryGeneratedColumn()
@@ -49,18 +47,21 @@ export class SoloGameRound extends BaseLiteGameRound {
   decision!: SoloPlayerDecision;
 }
 
-// @Entity()
-// export class LiteGameRound extends BaseLiteGameRound {
-//   @Column()
-//   gameId!: number;
+@Entity()
+export class LiteGameRound extends BaseLiteGameRound {
+  @Column()
+  gameId!: number;
 
-//   @ManyToOne(() => LiteGame, game => game.rounds)
-//   @JoinColumn({ name: "gameId" })
-//   game!: LiteGame;
+  @ManyToOne(() => LiteGame, game => game.rounds)
+  @JoinColumn({ name: "gameId" })
+  game!: LiteGame;
 
-//   @OneToMany(() => LiteMarsEventDeckCard, card => card.round)
-//   cards!: LiteMarsEventDeckCard[];
+  @OneToMany(() => LiteMarsEventDeckCard, card => card.round)
+  cards!: LiteMarsEventDeckCard[];
 
-//   @OneToMany(() => LitePlayerDecision, decision => decision.round)
-//   decisions!: LitePlayerDecision[];
-// }
+  @OneToMany(() => LitePlayerDecision, decision => decision.round)
+  decisions!: LitePlayerDecision[];
+
+  @OneToMany(() => LitePlayerVote, vote => vote.round)
+  votes!: LitePlayerVote[];
+}

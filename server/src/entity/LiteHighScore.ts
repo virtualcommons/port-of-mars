@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 import { SoloGame } from "./LiteGame";
+import { LitePlayer } from "./LitePlayer";
 
 export abstract class BaseLiteHighScore {
   @PrimaryGeneratedColumn()
@@ -45,4 +46,13 @@ export class SoloHighScore extends BaseLiteHighScore {
 
   @Column({ nullable: true })
   gameId!: number;
+}
+
+@Entity()
+export class LiteHighScore extends BaseLiteHighScore {
+  @ManyToOne(type => LitePlayer, { nullable: true })
+  player!: LitePlayer;
+
+  @Column({ nullable: true })
+  playerId!: number;
 }
