@@ -7,7 +7,22 @@
     />
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-        <div class="d-flex flex-shrink-1 m-2 mt-3">
+        <div
+          v-if="state.treatmentParams.isLowResSystemHealth"
+          class="d-flex flex-shrink-1 m-2 mt-3"
+        >
+          <SegmentedBar
+            :min="0"
+            :max="5"
+            :delta="0"
+            v-model="lowResSystemHealth"
+            :customTextDisplay="lowResSystemHealthText"
+            label="System Health"
+            class="flex-grow-1"
+            variant="green"
+          />
+        </div>
+        <div v-else class="d-flex flex-shrink-1 m-2 mt-3">
           <SegmentedBar
             :min="0"
             :max="25"
@@ -21,9 +36,19 @@
         <div
           class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50 justify-content-center"
         >
-          <div class="cell-grow mw-35">
+          <div v-if="!isProlificBaselineGame" class="cell-grow mw-35">
             <div>
-              <ThresholdInfo :state="state" thresholdInformation="known" />
+              <ThresholdInfo
+                v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
+                :state="state"
+                :thresholdInformation="state.treatmentParams.thresholdInformation"
+              />
+              <div v-else class="d-flex flex-column align-items-center justify-content-center">
+                <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
+                <h4 class="text-danger text-uppercase text-center">
+                  Threshold Sensors Unavailable
+                </h4>
+              </div>
             </div>
           </div>
           <div class="cell-grow mw-35 d-flex flex-column justify-content-center">
@@ -48,8 +73,8 @@
               <div class="vfd-container p-2">
                 <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
               </div>
-              <h4 class="mx-2">/</h4>
-              <div class="vfd-container p-2">
+              <h4 v-if="state.treatmentParams.isNumberOfRoundsKnown" class="mx-2">/</h4>
+              <div v-if="state.treatmentParams.isNumberOfRoundsKnown" class="vfd-container p-2">
                 <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
               </div>
             </div>
@@ -92,7 +117,11 @@
           </div>
         </div>
       </div>
-      <div class="cell-shrink mw-25" style="min-width: 25%; padding: 0.5em">
+      <div
+        v-if="!isProlificBaselineGame"
+        class="cell-shrink mw-25"
+        style="min-width: 25%; padding: 0.5em"
+      >
         <h4>Events</h4>
         <Deck :events="state.visibleEventCards" @active-card-changed="handleActiveCardChange" />
       </div>
@@ -138,6 +167,29 @@ export default class Dashboard extends Vue {
 
   get activeCard() {
     return this.state.visibleEventCards.find(card => card.deckCardId === this.state.activeCardId);
+  }
+
+  get isProlificBaselineGame() {
+    return this.state.type === "prolificBaseline";
+  }
+
+  get lowResSystemHealth() {
+    if (this.state.systemHealth === 0) {
+      return 0;
+    }
+    return Math.floor((this.state.systemHealth - 1) / 5) + 1;
+  }
+
+  get lowResSystemHealthText() {
+    const map: Record<number, string> = {
+      0: "FATAL",
+      1: "CRITICAL",
+      2: "POOR!",
+      3: "OKAY!",
+      4: "GOOD!",
+      5: "GREAT",
+    };
+    return map[this.lowResSystemHealth];
   }
 
   handleInvest(investment: number) {

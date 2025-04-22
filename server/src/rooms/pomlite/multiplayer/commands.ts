@@ -34,12 +34,22 @@ export class CreateDeckCmd extends CmdWithoutPayload {
     const cards = (await service.drawEventCardDeck("prolificBaseline")).map(
       data => new EventCard(data)
     );
-    if (this.state.type === "prolific") {
+    if (this.state.type === "prolificVariable") {
       // prolific configuration uses a fixed deck
       this.state.eventCardDeck.push(...cards);
     } else {
       const shuffledCards = _.shuffle(cards);
       this.state.eventCardDeck.push(...shuffledCards);
+    }
+  }
+}
+
+export class SetTreatmentParamsCmd extends CmdWithoutPayload {
+  async execute() {
+    if (this.state.type === "freeplay") {
+      // get the treatment for the game and set it for each participant!!
+    } else {
+      // get the treatment for the game and set it for each participant!!
     }
   }
 }
@@ -105,13 +115,24 @@ export class BroadcastReadyCmd extends CmdWithoutPayload {
 }
 
 export class SendHiddenParamsCmd extends CmdWithoutPayload {
-  // these aren't really hidden in this version
   execute() {
     const data: any = {};
-    data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
-    data.maxRound = this.state.maxRound;
-    data.twoEventsThreshold = this.state.twoEventsThreshold;
-    data.threeEventsThreshold = this.state.threeEventsThreshold;
+    if (this.state.treatmentParams.isEventDeckKnown) {
+      data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
+    }
+    if (this.state.treatmentParams.isNumberOfRoundsKnown) {
+      data.maxRound = this.state.maxRound;
+    }
+    if (this.state.treatmentParams.thresholdInformation === "known") {
+      data.twoEventsThreshold = this.state.twoEventsThreshold;
+      data.threeEventsThreshold = this.state.threeEventsThreshold;
+    } else if (this.state.treatmentParams.thresholdInformation === "range") {
+      data.twoEventsThresholdRange =
+        this.defaultParams.twoEventsThresholdDisplayRange || this.defaultParams.twoEventsThreshold;
+      data.threeEventsThresholdRange =
+        this.defaultParams.threeEventsThresholdDisplayRange ||
+        this.defaultParams.threeEventsThreshold;
+    }
     this.room.clients.forEach(client => {
       client.send("set-hidden-params", {
         kind: "set-hidden-params",
@@ -243,7 +264,7 @@ export class PlayerInvestCmd extends Cmd<{
   async execute({ systemHealthInvestment, clockRanOut, player } = this.payload) {
     player.pendingInvestment = systemHealthInvestment;
     // check if all players have a pending investment, if so, process the round
-    if (Array.from(this.state.players.values()).every(p => p.pendingInvestment != null)) {
+    if (Array.from(this.state.players.values()).every(p => p.pendingInvestment >= 0)) {
       this.state.canInvest = false;
       return [new ProcessRoundCmd()];
     }
@@ -254,13 +275,13 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
   async execute() {
     let totalSystemHealthInvestment = 0;
     this.state.players.forEach(player => {
-      if (player.pendingInvestment != null) {
+      if (player.pendingInvestment >= 0) {
         totalSystemHealthInvestment += player.pendingInvestment;
         const surplus = player.resources - player.pendingInvestment;
         player.points += surplus;
         player.pointsEarned = surplus;
         // reset pending investment
-        player.pendingInvestment = null;
+        player.pendingInvestment = -1;
       }
     });
     this.state.systemHealth = Math.min(

@@ -33,7 +33,7 @@ import appDataSource from "@port-of-mars/server/datasource";
 import { program } from "commander";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { EntityManager } from "typeorm";
-import { SoloGameType } from "@port-of-mars/shared/lite";
+import { LiteGameType } from "@port-of-mars/shared/lite";
 /*
 import { promisify } from "util";
 
@@ -58,7 +58,7 @@ async function withDataSource<T>(func: (em: EntityManager) => Promise<T>): Promi
   }
 }
 
-async function exportSoloData(em: EntityManager, type: SoloGameType, start?: string, end?: string) {
+async function exportSoloData(em: EntityManager, type: LiteGameType, start?: string, end?: string) {
   const soloGameService = getServices().sologame;
   await mkdir("/dump/solo", { recursive: true });
   let startDate;

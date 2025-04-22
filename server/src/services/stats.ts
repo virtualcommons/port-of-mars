@@ -8,7 +8,7 @@ import {
 import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { SoloHighScore } from "@port-of-mars/server/entity/SoloHighScore";
-import { SoloGameType } from "@port-of-mars/shared/lite";
+import { LiteGameType } from "@port-of-mars/shared/lite";
 
 export class StatsService extends BaseService {
   /* Player stats */
@@ -147,7 +147,7 @@ export class StatsService extends BaseService {
 
   async getSoloHighScoreData(
     limit: number,
-    gameType: SoloGameType = "freeplay"
+    gameType: LiteGameType = "freeplay"
   ): Promise<SoloHighScoreData> {
     // get the top players in the solo highscores table
     const highscoresData = await this.em

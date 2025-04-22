@@ -1,10 +1,9 @@
 import { Schema, ArraySchema, type, MapSchema } from "@colyseus/schema";
 import {
   EventCardData,
-  MultiplayerGameType,
   LiteGameParams,
+  LiteGameType,
   LiteGameStatus,
-  SoloGameType,
   TreatmentData,
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
@@ -53,43 +52,60 @@ export class Player extends Schema {
   @type("string") role: Role = "Politician";
   @type("uint8") resources = MultiplayerGameState.DEFAULTS.freeplay.resources;
   @type("uint8") points = MultiplayerGameState.DEFAULTS.freeplay.points;
-  @type("uint8") pendingInvestment: number | null = null;
-  @type("uint8") pointsEarned: number | null = null;
+  @type("int8") pendingInvestment = -1;
+  @type("uint8") pointsEarned = 0;
   @type("boolean") isReady = false;
 }
 
+export class TreatmentParams extends Schema {
+  @type("string") gameType: LiteGameType = "prolificBaseline";
+  @type("boolean") isNumberOfRoundsKnown = false;
+  @type("boolean") isEventDeckKnown = false;
+  @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
+  @type("boolean") isLowResSystemHealth = false;
+
+  constructor(data?: TreatmentData) {
+    super();
+    if (!data) return;
+    this.gameType = data.gameType as LiteGameType;
+    this.isNumberOfRoundsKnown = data.isNumberOfRoundsKnown;
+    this.isEventDeckKnown = data.isEventDeckKnown;
+    this.thresholdInformation = data.thresholdInformation;
+    this.isLowResSystemHealth = data.isLowResSystemHealth;
+  }
+}
+
 export class MultiplayerGameState extends Schema {
-  @type("string") type: MultiplayerGameType = "prolific";
+  @type("string") type: LiteGameType = "prolificBaseline";
   @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
     MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax -
     MultiplayerGameState.DEFAULTS.freeplay.systemHealthWear;
   @type("uint8") timeRemaining = MultiplayerGameState.DEFAULTS.freeplay.timeRemaining;
   @type("uint8") round = 1;
+  @type(TreatmentParams) treatmentParams = new TreatmentParams();
 
   @type("int8") numPlayers = 3;
   @type({ map: Player }) players = new MapSchema<Player>(); // track by client.auth.id.toString() (db id)
-
-  // @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
 
   // mirrors deck when deck is visible, otherwise show round cards
   @type([EventCard]) visibleEventCards = new ArraySchema<EventCard>();
   @type("int32") activeCardId = -1; // refers to the deckCardId of the active (shown in modal) card
 
-  // @type("uint8") activeRoundCardIndex = -1;
-  // @type("uint8") activeDeckCardIndex = -1;
   @type("boolean") canInvest = false;
   @type("boolean") isRoundTransitioning = false;
 
-  // assumes these aren't ever hidden properties in the multiplayer lite version
-  @type("int8") maxRound = MultiplayerGameState.DEFAULTS.freeplay.maxRound.max;
-  @type("int8") twoEventsThreshold = MultiplayerGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
-  @type("int8") threeEventsThreshold =
-    MultiplayerGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
+  gameId = 0;
+  userRoles: LiteRoleAssignment;
+  roundInitialSystemHealth = MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax;
+
+  maxRound = MultiplayerGameState.DEFAULTS.freeplay.maxRound.max;
+  twoEventsThreshold = MultiplayerGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
+  threeEventsThreshold = MultiplayerGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
   // this one doesn't have to be a schema property since visibleEventCards already mirrors it
   eventCardDeck: Array<EventCard> = [];
 
-  constructor(data: { userRoles: LiteRoleAssignment; type: MultiplayerGameType }) {
+  constructor(data: { userRoles: LiteRoleAssignment; type: LiteGameType }) {
     super();
     this.type = data.type;
     this.userRoles = data.userRoles;
@@ -103,11 +119,6 @@ export class MultiplayerGameState extends Schema {
       this.players.set(user.id.toString(), player);
     }
   }
-
-  userRoles: LiteRoleAssignment;
-  gameId!: number;
-  roundInitialSystemHealth = MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax;
-  roundInitialPoints: Array<number> = [];
 
   get points() {
     const points: number[] = [];
@@ -143,13 +154,17 @@ export class MultiplayerGameState extends Schema {
 
   updateRoundInitialValues() {
     this.roundInitialSystemHealth = this.systemHealth;
-    this.roundInitialPoints = this.points;
   }
 
   updateVisibleCards() {
     // update visible cards, needs to be called after making changes to the deck that should be
     // reflected on the client
-    this.visibleEventCards = new ArraySchema(...this.eventCardDeck);
+    if (this.treatmentParams.isEventDeckKnown) {
+      // probably a more efficient way to do this
+      this.visibleEventCards = new ArraySchema(...this.eventCardDeck);
+    } else {
+      this.visibleEventCards = new ArraySchema(...this.roundEventCards);
+    }
   }
 
   getPlayer(client: Client): Player {
@@ -178,7 +193,7 @@ export class MultiplayerGameState extends Schema {
     return MultiplayerGameState.DEFAULTS[this.type];
   }
 
-  static DEFAULTS: Record<MultiplayerGameType, LiteGameParams> = {
+  static DEFAULTS: Record<LiteGameType, LiteGameParams> = {
     // unused for now
     freeplay: {
       maxRound: { min: 6, max: 14 },
@@ -194,12 +209,27 @@ export class MultiplayerGameState extends Schema {
       resources: 10,
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
     },
-    // FIXME: come up with some good settings
-    prolific: {
+    prolificBaseline: {
       maxRound: { min: 8, max: 8 },
-      roundTransitionDuration: 3,
+      roundTransitionDuration: 2,
+      twoEventsThreshold: { min: -1, max: -1 },
+      threeEventsThreshold: { min: -2, max: -2 },
+      timeRemaining: 20,
+      eventTimeout: 5,
+      startingSystemHealth: 45,
+      systemHealthMax: 60,
+      systemHealthWear: 15,
+      points: 0,
+      resources: 10,
+      availableRoles: ["Politician", "Entrepreneur", "Researcher"],
+    },
+    prolificVariable: {
+      maxRound: { min: 8, max: 8 },
+      roundTransitionDuration: 2,
       twoEventsThreshold: { min: 48, max: 48 },
       threeEventsThreshold: { min: 27, max: 27 },
+      twoEventsThresholdDisplayRange: { min: 36, max: 54 },
+      threeEventsThresholdDisplayRange: { min: 15, max: 33 },
       timeRemaining: 20,
       eventTimeout: 5,
       startingSystemHealth: 45,

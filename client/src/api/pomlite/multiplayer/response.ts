@@ -1,6 +1,7 @@
-import { Client, Room } from "colyseus.js";
+import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { MultiplayerLiteGameClientState } from "@port-of-mars/shared/lite";
+import { MultiplayerLiteGameClientState, SetHiddenParams } from "@port-of-mars/shared/lite";
+import { ClientSafeUser } from "@port-of-mars/shared/types";
 
 type Schemify<T> = T & Schema;
 
@@ -8,7 +9,11 @@ function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
-export function applyMultiplayerGameServerResponses(room: Room, component: any, client: Client) {
+export function applyMultiplayerGameServerResponses(
+  room: Room,
+  component: any,
+  user: ClientSafeUser
+) {
   // const store = component.$tstore;
   // const router = component.$router;
   room.onError((code: number, message?: string) => {
@@ -28,6 +33,15 @@ export function applyMultiplayerGameServerResponses(room: Room, component: any, 
     });
   }
 
+  room.state.treatmentParams.onChange = (changes: DataChange[]) => {
+    applyChanges(component.state.treatmentParams, changes, [
+      "isNumberOfRoundsKnown",
+      "isEventDeckKnown",
+      "thresholdInformation",
+      "isLowResSystemHealth",
+    ]);
+  };
+
   room.state.onChange = (changes: DataChange[]) => {
     applyChanges(component.state, changes, [
       "type",
@@ -39,9 +53,6 @@ export function applyMultiplayerGameServerResponses(room: Room, component: any, 
       "isRoundTransitioning",
       "status",
       "numPlayers",
-      "maxRound",
-      "twoEventsThreshold",
-      "threeEventsThreshold",
     ]);
   };
 
@@ -53,10 +64,14 @@ export function applyMultiplayerGameServerResponses(room: Room, component: any, 
     component.state.visibleEventCards.shift();
   };
 
+  room.onMessage("set-hidden-params", (msg: SetHiddenParams) => {
+    component.state = { ...component.state, ...msg.data };
+  });
+
   room.state.players.onAdd = (player: any, userId: string) => {
     const p = deschemify(player);
     // if p is the 'self' player, set the state.player (match by username)
-    if (p.username === client.auth.username) {
+    if (userId === user.id.toString()) {
       component.state.player = p;
     }
     component.state.players.set(userId, p);
@@ -64,9 +79,8 @@ export function applyMultiplayerGameServerResponses(room: Room, component: any, 
   room.state.players.onChange = room.state.players.onAdd; // same as onAdd
 
   room.state.players.onRemove = (player: any, userId: string) => {
-    const p = deschemify(player);
     // if p is the 'self' player, reset the state.player
-    if (p.username === client.auth.username) {
+    if (userId === user.id.toString()) {
       component.state.player = {
         resources: 0,
         points: 0,
@@ -77,20 +91,23 @@ export function applyMultiplayerGameServerResponses(room: Room, component: any, 
 }
 
 export const DEFAULT_STATE: MultiplayerLiteGameClientState = {
-  type: "prolific",
+  type: "prolificBaseline",
   status: "incomplete",
   timeRemaining: 0,
   systemHealth: 0,
   round: 0,
+  treatmentParams: {
+    isNumberOfRoundsKnown: false,
+    isEventDeckKnown: false,
+    thresholdInformation: "unknown",
+    isLowResSystemHealth: false,
+  },
+  players: new Map(),
+  numPlayers: 1,
   player: {
     resources: 0,
     points: 0,
   },
-  players: new Map(),
-  numPlayers: 1,
-  maxRound: 8,
-  twoEventsThreshold: 50,
-  threeEventsThreshold: 25,
   visibleEventCards: [],
   activeCardId: -1,
   canInvest: false,

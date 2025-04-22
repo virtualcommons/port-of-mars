@@ -6,7 +6,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { ApplyCardCmd, InitGameCmd, InvestCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
-import { EventContinue, Invest, SOLO_ROOM_NAME, SoloGameType } from "@port-of-mars/shared/lite";
+import { EventContinue, Invest, SOLO_ROOM_NAME, LiteGameType } from "@port-of-mars/shared/lite";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -25,7 +25,7 @@ export class SoloGameRoom extends Room<SoloGameState> {
     return this.clients[0];
   }
 
-  onCreate(options: { type?: SoloGameType }) {
+  onCreate(options: { type?: LiteGameType }) {
     logger.trace("SoloGameRoom '%s' created", this.roomId);
     this.setState(new SoloGameState());
     this.state.type = options.type || "freeplay";

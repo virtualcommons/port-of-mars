@@ -1,7 +1,6 @@
 <template>
   <div class="backdrop d-flex justify-content-center align-items-center">
     <b-container class="h-100 dashboard-container content-container p-0" no-gutters>
-      <!-- FIXME: there needs to be a self player -->
       <GameOver
         v-if="isGameOver"
         :status="state.status"
@@ -54,8 +53,6 @@ export default class LiteMultiplayerGame extends Vue {
   }
 
   async created() {
-    // TODO: join the room, copy from Game.vue
-    // but how do we get the roomId?
     this.api.room?.leave();
     let gameRoom: Room;
     const cachedRoomId = this.$ajax.roomId;
@@ -67,7 +64,7 @@ export default class LiteMultiplayerGame extends Vue {
     }
     try {
       gameRoom = await this.$client.joinById(cachedRoomId);
-      applyMultiplayerGameServerResponses(gameRoom, this, this.$client);
+      applyMultiplayerGameServerResponses(gameRoom, this, this.$tstore.state.user);
       this.api.connect(gameRoom);
       this.hasApi = true;
       this.started = true;

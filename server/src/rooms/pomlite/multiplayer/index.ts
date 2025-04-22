@@ -6,7 +6,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { InitGameCmd, ProcessRoundCmd, PlayerInvestCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
-import { Invest, MultiplayerGameType } from "@port-of-mars/shared/lite";
+import { Invest, LiteGameType } from "@port-of-mars/shared/lite";
 import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
 
@@ -27,7 +27,7 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
   eventTimeout: Delayed | null = null;
 
   private assignRoles(users: Array<LitePlayerUser>): LiteRoleAssignment {
-    const roles = MultiplayerGameState.DEFAULTS.prolific.availableRoles!;
+    const roles = MultiplayerGameState.DEFAULTS.prolificBaseline.availableRoles!;
     const roleMap = new Map<Role, LitePlayerUser>();
     users.forEach((user, index) => {
       const role = roles[index % roles.length];
@@ -36,14 +36,11 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
     return roleMap;
   }
 
-  async onCreate(options: { type?: MultiplayerGameType; users: Array<LitePlayerUser> }) {
+  async onCreate(options: { type?: LiteGameType; users: Array<LitePlayerUser> }) {
     logger.trace("MultiplayerGameRoom '%s' created", this.roomId);
-    const type = options.type || "prolific";
+    const type = options.type || "prolificBaseline";
     const userRoles = this.assignRoles(options.users);
     this.setState(new MultiplayerGameState({ type, userRoles }));
-    // TODO: for the variance, we'll just assign a random/incrementing treatment to a game
-    // and then in service.drawEventCardDeck() we'll just use the treatment to determine
-    // draw amount for life as usual
     this.setPrivate(true);
     this.registerAllHandlers();
     this.dispatcher.dispatch(new InitGameCmd());
@@ -52,8 +49,9 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
         this.state.timeRemaining -= 1;
       } else if (!this.state.isRoundTransitioning) {
         this.state.players.forEach(player => {
-          player.pendingInvestment = null;
-          player.pointsEarned = null;
+          // FIXME: what should this be?????
+          player.pendingInvestment = 0;
+          player.pointsEarned = 0;
           this.dispatcher.dispatch(
             new PlayerInvestCmd().setPayload({
               systemHealthInvestment: 0,

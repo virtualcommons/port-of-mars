@@ -17,16 +17,14 @@ export interface EventCardData {
 export type ThresholdInformation = "unknown" | "range" | "known";
 
 export interface TreatmentData {
-  gameType: SoloGameType;
+  gameType: LiteGameType;
   isNumberOfRoundsKnown: boolean;
   isEventDeckKnown: boolean;
   thresholdInformation: ThresholdInformation;
   isLowResSystemHealth: boolean;
 }
 
-export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
-
-export type MultiplayerGameType = "freeplay" | "prolific";
+export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
 
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
@@ -47,12 +45,18 @@ export interface LiteGameParams {
   availableRoles?: Array<Role>;
 }
 
-export interface BaseLiteGameClientState {
-  type: string;
+export interface SoloGameClientState {
+  type: LiteGameType;
   status: LiteGameStatus;
   player: {
     resources: number;
     points: number;
+  };
+  treatmentParams: {
+    isNumberOfRoundsKnown: boolean;
+    isEventDeckKnown: boolean;
+    thresholdInformation: "unknown" | "range" | "known";
+    isLowResSystemHealth: boolean;
   };
   timeRemaining: number;
   systemHealth: number;
@@ -68,16 +72,6 @@ export interface BaseLiteGameClientState {
   isRoundTransitioning: boolean;
 }
 
-export interface SoloGameClientState extends BaseLiteGameClientState {
-  type: SoloGameType;
-  treatmentParams: {
-    isNumberOfRoundsKnown: boolean;
-    isEventDeckKnown: boolean;
-    thresholdInformation: "unknown" | "range" | "known";
-    isLowResSystemHealth: boolean;
-  };
-}
-
 export interface MultiplayerLiteGamePlayer {
   username: string;
   role: Role;
@@ -88,11 +82,7 @@ export interface MultiplayerLiteGamePlayer {
   isReady: boolean;
 }
 
-export interface MultiplayerLiteGameClientState extends BaseLiteGameClientState {
-  type: MultiplayerGameType;
+export interface MultiplayerLiteGameClientState extends SoloGameClientState {
   players: Map<string, MultiplayerLiteGamePlayer>;
   numPlayers: number;
-  maxRound: number;
-  twoEventsThreshold: number;
-  threeEventsThreshold: number;
 }

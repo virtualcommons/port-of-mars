@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { SoloGameType } from "@port-of-mars/shared/lite";
+import { LiteGameType } from "@port-of-mars/shared/lite";
 
 @Entity()
 export class SoloMarsEventCard {
@@ -7,7 +7,7 @@ export class SoloMarsEventCard {
   id!: number;
 
   @Column({ default: "freeplay" })
-  gameType!: SoloGameType;
+  gameType!: LiteGameType;
 
   @Column()
   codeName!: string;

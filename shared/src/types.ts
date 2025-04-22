@@ -1,5 +1,5 @@
 import { Page } from "@port-of-mars/shared/routes";
-import { SoloGameType } from "@port-of-mars/shared/lite/types";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 export type Dictionary<T> = { [key: string]: T };
 
@@ -526,8 +526,8 @@ export interface DynamicSettingsData {
 }
 
 export interface ProlificSoloParticipantStatus {
-  activeGameType: SoloGameType | null;
-  nextGameType: SoloGameType | null;
+  activeGameType: LiteGameType | null;
+  nextGameType: LiteGameType | null;
   nextGameInstructions?: string;
   progress: {
     max: number;

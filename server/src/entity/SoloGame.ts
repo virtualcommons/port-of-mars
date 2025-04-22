@@ -12,7 +12,7 @@ import { SoloGameTreatment } from "./SoloGameTreatment";
 import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
 import { SoloPlayer } from "./SoloPlayer";
 import { SoloGameRound } from "./SoloGameRound";
-import { LiteGameStatus, SoloGameType } from "@port-of-mars/shared/lite";
+import { LiteGameStatus, LiteGameType } from "@port-of-mars/shared/lite";
 
 @Entity()
 export class SoloGame {
@@ -47,7 +47,7 @@ export class SoloGame {
   deckId!: number;
 
   @Column({ default: "freeplay" })
-  type!: SoloGameType;
+  type!: LiteGameType;
 
   @Column({
     type: "enum",

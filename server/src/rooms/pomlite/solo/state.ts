@@ -3,7 +3,7 @@ import {
   EventCardData,
   LiteGameParams,
   LiteGameStatus,
-  SoloGameType,
+  LiteGameType,
   TreatmentData,
 } from "@port-of-mars/shared/lite";
 
@@ -45,7 +45,7 @@ export class Player extends Schema {
 }
 
 export class TreatmentParams extends Schema {
-  @type("string") gameType: SoloGameType = "freeplay";
+  @type("string") gameType: LiteGameType = "freeplay";
   @type("boolean") isNumberOfRoundsKnown = false;
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
@@ -63,7 +63,7 @@ export class TreatmentParams extends Schema {
 }
 
 export class SoloGameState extends Schema {
-  @type("string") type: SoloGameType = "freeplay";
+  @type("string") type: LiteGameType = "freeplay";
   @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
     SoloGameState.DEFAULTS.freeplay.systemHealthMax -
@@ -147,7 +147,7 @@ export class SoloGameState extends Schema {
     resources: 10,
   };
 
-  static DEFAULTS: Record<SoloGameType, LiteGameParams> = {
+  static DEFAULTS: Record<LiteGameType, LiteGameParams> = {
     freeplay: {
       maxRound: { min: 6, max: 14 },
       roundTransitionDuration: 3,

@@ -13,7 +13,7 @@ import { Repository } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
-import { SoloGameType } from "@port-of-mars/shared/lite";
+import { LiteGameType } from "@port-of-mars/shared/lite";
 import {
   ProlificParticipantPointData,
   ProlificSoloParticipantStatus,
@@ -140,8 +140,8 @@ export class SoloStudyService extends BaseStudyService {
       relations: ["prolificBaselineTreatment", "prolificVariableTreatment"],
     });
 
-    let activeGameType: SoloGameType | null = null;
-    let nextGameType: SoloGameType | null = "prolificBaseline";
+    let activeGameType: LiteGameType | null = null;
+    let nextGameType: LiteGameType | null = "prolificBaseline";
     let nextGameInstructions = participant.prolificBaselineTreatment.instructions;
     const steps = [
       "START GAME 1",
@@ -252,7 +252,7 @@ export class SoloStudyService extends BaseStudyService {
   }
 
   async setProlificParticipantPlayer(
-    gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">,
+    gameType: Extract<LiteGameType, "prolificBaseline" | "prolificVariable">,
     player: SoloPlayer
   ): Promise<ProlificSoloStudyParticipant> {
     const participant = await this.getParticipantRepository().findOneOrFail({
@@ -318,7 +318,7 @@ export class SoloStudyService extends BaseStudyService {
   }
 
   async getRandomTreatmentFor(
-    gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">
+    gameType: Extract<LiteGameType, "prolificBaseline" | "prolificVariable">
   ): Promise<SoloGameTreatment> {
     /**
      * get a random treatment for a given prolific game type
@@ -335,7 +335,7 @@ export class SoloStudyService extends BaseStudyService {
 
   async getTreatmentForUser(
     user: User,
-    gameType: Extract<SoloGameType, "prolificBaseline" | "prolificVariable">
+    gameType: Extract<LiteGameType, "prolificBaseline" | "prolificVariable">
   ): Promise<SoloGameTreatment> {
     /**
      * get the treatment that a given user is assigned to for a given prolific game type

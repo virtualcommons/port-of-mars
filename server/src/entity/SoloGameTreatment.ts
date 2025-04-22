@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { SoloGameType, ThresholdInformation } from "@port-of-mars/shared/lite/types";
+import { LiteGameType, ThresholdInformation } from "@port-of-mars/shared/lite/types";
 
 @Entity()
 export class SoloGameTreatment {
@@ -7,7 +7,7 @@ export class SoloGameTreatment {
   id!: number;
 
   @Column({ default: "freeplay" })
-  gameType!: SoloGameType;
+  gameType!: LiteGameType;
 
   @Column()
   isNumberOfRoundsKnown!: boolean;

@@ -2,7 +2,7 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import {
   EventCardData,
   LiteGameStatus,
-  SoloGameType,
+  LiteGameType,
   TreatmentData,
 } from "@port-of-mars/shared/lite";
 import {
@@ -24,7 +24,7 @@ import { getLogger } from "@port-of-mars/server/settings";
 const logger = getLogger(__filename);
 
 export class SoloGameService extends BaseService {
-  async drawEventCardDeck(gameType: SoloGameType): Promise<EventCardData[]> {
+  async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
     /**
      * draw a deck of event cards from the db (ordered by id)
      */
@@ -240,7 +240,7 @@ export class SoloGameService extends BaseService {
     return round;
   }
 
-  async getGameIds(type: SoloGameType, start?: Date, end?: Date): Promise<Array<number>> {
+  async getGameIds(type: LiteGameType, start?: Date, end?: Date): Promise<Array<number>> {
     /**
      * get all game ids for games of a certain type that were created between start and end
      */

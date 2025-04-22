@@ -35,7 +35,6 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   private mutex = new Mutex();
 
-  // FIXME: implemented for sologame, use multiplayer
   groupManager = new GroupManager(this.groupSize);
 
   get queue() {
@@ -85,7 +84,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
         id: client.id,
       };
     });
-    const type = "prolific"; // FIXME: this shouldn't be hardcoded
+    const type = "prolificBaseline"; // FIXME: this shouldn't be hardcoded
     const room = await matchMaker.createRoom(MultiplayerGameRoom.NAME, {
       type,
       users: playerUsers,
