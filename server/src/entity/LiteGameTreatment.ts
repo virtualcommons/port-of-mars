@@ -1,19 +1,24 @@
-import {
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-} from "typeorm";
-import { SoloGameType, ThresholdInformation } from "@port-of-mars/shared/sologame/types";
-  
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { LiteGameType, ThresholdInformation } from "@port-of-mars/shared/lite/types";
+
 export abstract class BaseLiteGameTreatment {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ default: "freeplay" })
+  gameType!: LiteGameType;
 
   @Column()
   isNumberOfRoundsKnown!: boolean;
 
   @Column()
   isEventDeckKnown!: boolean;
+
+  @Column({
+    type: "enum",
+    enum: ["unknown", "range", "known"],
+  })
+  thresholdInformation!: ThresholdInformation;
 
   @Column({ default: false })
   isLowResSystemHealth!: boolean;
@@ -23,13 +28,7 @@ export abstract class BaseLiteGameTreatment {
 }
 
 @Entity()
-export class SoloGameTreatment extends BaseLiteGameTreatment {
-  @Column({ default: "freeplay" })
-  gameType!: SoloGameType;
+export class SoloGameTreatment extends BaseLiteGameTreatment {}
 
-  @Column({
-    type: "enum",
-    enum: ["unknown", "range", "known"],
-  })
-  thresholdInformation!: ThresholdInformation;
-}
+// @Entity()
+// export class LiteGameTreatment extends BaseLiteGameTreatment {}

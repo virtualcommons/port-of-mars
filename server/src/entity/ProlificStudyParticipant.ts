@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseProlificStudy, ProlificSoloStudy, ProlificMultiplayerStudy } from "./ProlificStudy";
 import { User } from "./User";
-import { SoloGameTreatment } from "./SoloGameTreatment";
-import { SoloPlayer } from "./SoloPlayer";
+import { SoloGameTreatment } from "./LiteGameTreatment";
+import { SoloPlayer } from "./LitePlayer";
 
 export abstract class BaseProlificStudyParticipant {
   @PrimaryGeneratedColumn()

@@ -7,7 +7,7 @@ import {
 } from "@port-of-mars/shared/types";
 import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { SoloHighScore } from "@port-of-mars/server/entity/SoloHighScore";
+import { SoloHighScore } from "@port-of-mars/server/entity";
 import { LiteGameType } from "@port-of-mars/shared/lite";
 
 export class StatsService extends BaseService {
