@@ -132,7 +132,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject, Prop } from "vue-property-decorator";
-import { SoloGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
+import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
 import { SoloGameClientState } from "@port-of-mars/shared/lite";
 import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
 import EventModal from "@port-of-mars/client/components/lite/EventModal.vue";
@@ -158,7 +158,7 @@ import HealthGained from "@port-of-mars/client/components/lite/HealthGained.vue"
   },
 })
 export default class Dashboard extends Vue {
-  @Inject() readonly api!: SoloGameRequestAPI;
+  @Inject() readonly api!: LiteGameRequestAPI;
   @Prop() state!: SoloGameClientState;
 
   pendingSystemHealthInvestment = 0;

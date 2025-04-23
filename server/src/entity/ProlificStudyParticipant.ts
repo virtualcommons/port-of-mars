@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { BaseProlificStudy, ProlificSoloStudy, ProlificMultiplayerStudy } from "./ProlificStudy";
 import { User } from "./User";
 import { SoloGameTreatment } from "./LiteGameTreatment";
-import { SoloPlayer } from "./LitePlayer";
+import { LitePlayer, SoloPlayer } from "./LitePlayer";
 
 export abstract class BaseProlificStudyParticipant {
   @PrimaryGeneratedColumn()
@@ -61,5 +61,17 @@ export class ProlificMultiplayerStudyParticipant extends BaseProlificStudyPartic
   @ManyToOne(type => ProlificMultiplayerStudy, study => study.participants, { nullable: false })
   study!: ProlificMultiplayerStudy;
 
-  // FIXME: add the relations to player/treatment
+  @OneToOne(() => LitePlayer, { nullable: true })
+  @JoinColumn()
+  prolificBaselinePlayer!: LitePlayer;
+
+  @Column({ nullable: true })
+  prolificBaselinePlayerId!: number;
+
+  @OneToOne(() => LitePlayer, { nullable: true })
+  @JoinColumn()
+  prolificVariablePlayer!: LitePlayer;
+
+  @Column({ nullable: true })
+  prolificVariablePlayerId!: number;
 }

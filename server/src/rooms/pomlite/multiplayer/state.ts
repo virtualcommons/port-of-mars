@@ -7,12 +7,8 @@ import {
   TreatmentData,
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
-import { isProduction } from "@port-of-mars/shared/settings";
-import { settings } from "@port-of-mars/server/settings";
-import { User } from "@port-of-mars/server/entity/User";
-
-import * as assert from "assert";
 import { Client } from "colyseus";
+import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -53,8 +49,9 @@ export class Player extends Schema {
   @type("uint8") resources = MultiplayerGameState.DEFAULTS.freeplay.resources;
   @type("uint8") points = MultiplayerGameState.DEFAULTS.freeplay.points;
   @type("int8") pendingInvestment = -1;
+  @type("boolean") hasInvested = false;
   @type("uint8") pointsEarned = 0;
-  @type("boolean") isReady = false;
+  @type("boolean") isReadyToStart = false;
 }
 
 export class TreatmentParams extends Schema {
@@ -76,6 +73,7 @@ export class TreatmentParams extends Schema {
 }
 
 export class MultiplayerGameState extends Schema {
+  @type("boolean") isWaitingToStart = true;
   @type("string") type: LiteGameType = "prolificBaseline";
   @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
@@ -210,6 +208,7 @@ export class MultiplayerGameState extends Schema {
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
     },
     prolificBaseline: {
+      nextGameType: "prolificVariable",
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 2,
       twoEventsThreshold: { min: -1, max: -1 },

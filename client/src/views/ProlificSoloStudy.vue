@@ -40,7 +40,7 @@
 import { Vue, Watch, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { cloneDeep } from "lodash";
-import { SoloGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
+import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
 import { StudyAPI } from "@port-of-mars/client/api/study/request";
 import {
   DEFAULT_STATE,
@@ -62,7 +62,7 @@ import { ProlificSoloParticipantStatus } from "@port-of-mars/shared/types";
 })
 export default class ProlificSoloStudy extends Vue {
   @Inject() readonly $client!: Client;
-  @Provide() private api: SoloGameRequestAPI = new SoloGameRequestAPI();
+  @Provide() private api: LiteGameRequestAPI = new LiteGameRequestAPI();
   hasApi = false;
   started = false;
   studyApi = new StudyAPI(this.$store, this.$ajax, "solo");

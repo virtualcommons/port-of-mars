@@ -1,3 +1,5 @@
+import { Role } from "../types";
+
 export interface EventContinue {
   kind: "event-continue";
   data?: any;
@@ -8,5 +10,11 @@ export interface Invest {
   systemHealthInvestment: number;
 }
 
-export type MultiplayerGameRequest = Invest;
-export type SoloGameRequest = EventContinue | Invest;
+export interface Vote {
+  kind: "vote";
+  deckCardId: number;
+  roleVote: Role;
+  binaryVote: boolean;
+}
+
+export type LiteGameRequest = EventContinue | Invest;

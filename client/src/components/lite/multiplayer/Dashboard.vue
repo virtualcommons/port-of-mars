@@ -131,7 +131,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject, Prop } from "vue-property-decorator";
-import { MultiplayerGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
+import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
 import { MultiplayerLiteGameClientState } from "@port-of-mars/shared/lite";
 import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
 import EventModal from "@port-of-mars/client/components/lite/EventModal.vue";
@@ -157,7 +157,7 @@ import HealthGained from "@port-of-mars/client/components/lite/HealthGained.vue"
   },
 })
 export default class Dashboard extends Vue {
-  @Inject() readonly api!: MultiplayerGameRequestAPI;
+  @Inject() readonly api!: LiteGameRequestAPI;
   @Prop() state!: MultiplayerLiteGameClientState;
 
   pendingSystemHealthInvestment = 0;

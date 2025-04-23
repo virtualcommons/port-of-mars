@@ -1,7 +1,7 @@
 import { Room } from "colyseus.js";
-import { Invest, MultiplayerGameRequest } from "@port-of-mars/shared/lite";
+import { Invest, LiteGameRequest } from "@port-of-mars/shared/lite";
 
-export class MultiplayerGameRequestAPI {
+export class LiteGameRequestAPI {
   room: Room | null = null;
 
   connect(room: Room) {
@@ -18,7 +18,7 @@ export class MultiplayerGameRequestAPI {
     }
   }
 
-  public send(req: MultiplayerGameRequest) {
+  public send(req: LiteGameRequest) {
     if (!this.room) {
       throw new Error("room not connected");
     }

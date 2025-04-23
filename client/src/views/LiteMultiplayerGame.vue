@@ -17,7 +17,7 @@
 import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { cloneDeep } from "lodash";
-import { MultiplayerGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
+import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
 import {
   DEFAULT_STATE,
   applyMultiplayerGameServerResponses,
@@ -37,7 +37,7 @@ import Splash from "@port-of-mars/client/components/lite/solo/Splash.vue";
 })
 export default class LiteMultiplayerGame extends Vue {
   @Inject() readonly $client!: Client;
-  @Provide() private api: MultiplayerGameRequestAPI = new MultiplayerGameRequestAPI();
+  @Provide() private api: LiteGameRequestAPI = new LiteGameRequestAPI();
   hasApi = false;
   started = false;
 

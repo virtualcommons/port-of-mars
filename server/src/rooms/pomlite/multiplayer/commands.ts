@@ -4,7 +4,7 @@ import { User } from "@port-of-mars/server/entity";
 import { MultiplayerGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
-import { EventCard, Player } from "./state";
+import { EventCard, Player, TreatmentParams } from "./state";
 import { LiteGameStatus } from "@port-of-mars/shared/lite";
 import { Role } from "@port-of-mars/shared/types";
 
@@ -19,19 +19,18 @@ export class InitGameCmd extends CmdWithoutPayload {
   execute() {
     return [
       new CreateDeckCmd(),
+      new SetTreatmentParamsCmd(),
       new SetGameParamsCmd(),
       new PersistGameCmd(),
-      new SetFirstRoundCmd(),
-      new BroadcastReadyCmd(),
+      new WaitForPlayersCmd(),
     ];
   }
 }
 
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
-    const { sologame: service } = getServices();
-    // FIXME: temporary, replace with the multiplayer draw
-    const cards = (await service.drawEventCardDeck("prolificBaseline")).map(
+    const { litegame } = getServices();
+    const cards = (await litegame.drawEventCardDeck(this.state.type)).map(
       data => new EventCard(data)
     );
     if (this.state.type === "prolificVariable") {
@@ -46,11 +45,11 @@ export class CreateDeckCmd extends CmdWithoutPayload {
 
 export class SetTreatmentParamsCmd extends CmdWithoutPayload {
   async execute() {
-    if (this.state.type === "freeplay") {
-      // get the treatment for the game and set it for each participant!!
-    } else {
-      // get the treatment for the game and set it for each participant!!
-    }
+    if (["prolificVariable", "prolificBaseline"].includes(this.state.type)) {
+      this.state.treatmentParams = new TreatmentParams(
+        await getServices().litegame.getRandomTreatmentFor(this.state.type)
+      );
+    } // freeplay currently isn't supported, add here if needed
   }
 }
 
@@ -76,18 +75,17 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
 }
 
 export class PersistGameCmd extends CmdWithoutPayload {
-  // TODO: db is not finalized
   async execute() {
-    // const { triogame, study } = getServices();
-    // const game = await triogame.createGame(this.state);
-    // if (this.state.type === "prolificVariable" || this.state.type === "prolificBaseline") {
-    //   await study.setProlificParticipantPlayer(this.state.type, game.player);
-    // }
-    // this.state.gameId = game.id;
-    // // keep track of deck card db ids after persisting the deck
-    // this.state.eventCardDeck.forEach((card, index) => {
-    //   card.deckCardId = game.deck.cards[index].id;
-    // });
+    const { litegame, multiplayerStudy } = getServices();
+    const game = await litegame.createGame(this.state);
+    if (["prolificVariable", "prolificBaseline"].includes(this.state.type)) {
+      await multiplayerStudy.setProlificParticipantPlayer(this.state.type, game.players);
+    }
+    this.state.gameId = game.id;
+    // keep track of deck card db ids after persisting the deck
+    this.state.eventCardDeck.forEach((card, index) => {
+      card.deckCardId = game.deck.cards[index].id;
+    });
   }
 }
 
@@ -108,9 +106,11 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
   }
 }
 
-export class BroadcastReadyCmd extends CmdWithoutPayload {
+export class WaitForPlayersCmd extends CmdWithoutPayload {
   execute() {
-    this.room.broadcast("ready", { kind: "ready" });
+    this.state.isWaitingToStart = true;
+    this.state.timeRemaining = this.defaultParams.timeRemaining;
+    this.state.players.forEach(p => (p.isReadyToStart = false));
   }
 }
 
@@ -151,7 +151,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     );
   }
 
-  // FIXME: there needs to be a lot more special-case handling here
+  // TODO: there needs to be a lot more special-case handling here
   // for the cards that affect only certain players, require voting, etc.
   async execute({ playerSkipped } = this.payload) {
     if (!this.state.activeCard) return;
@@ -262,6 +262,7 @@ export class PlayerInvestCmd extends Cmd<{
     return this.state.canInvest && systemHealthInvestment <= player.resources;
   }
   async execute({ systemHealthInvestment, clockRanOut, player } = this.payload) {
+    player.hasInvested = !clockRanOut;
     player.pendingInvestment = systemHealthInvestment;
     // check if all players have a pending investment, if so, process the round
     if (Array.from(this.state.players.values()).every(p => p.pendingInvestment >= 0)) {
@@ -276,12 +277,15 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
     let totalSystemHealthInvestment = 0;
     this.state.players.forEach(player => {
       if (player.pendingInvestment >= 0) {
+        // if the investment was caused by a timeout, the player invests nothing
+        // and gets no points
+        let surplus = 0;
+        if (player.hasInvested) {
+          surplus = player.resources - player.pendingInvestment;
+        }
         totalSystemHealthInvestment += player.pendingInvestment;
-        const surplus = player.resources - player.pendingInvestment;
         player.points += surplus;
         player.pointsEarned = surplus;
-        // reset pending investment
-        player.pendingInvestment = -1;
       }
     });
     this.state.systemHealth = Math.min(
@@ -309,16 +313,21 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
 }
 
 export class PersistRoundCmd extends CmdWithoutPayload {
-  // TODO: db is not finalized
   async execute() {
-    // const { triogame: service } = getServices();
-    // await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
+    // !!!!!!!!!!!!!!!!! should use pendingInvestments and pointsEarned !!!!!!!!!!!!!!!!!!!!
+    // instead of the passed in systemHealthInvestment and pointsInvestment that solo does
+    await getServices().litegame.persistRound(this.state);
   }
 }
 
 export class SetNextRoundCmd extends CmdWithoutPayload {
   async execute() {
     this.state.canInvest = false; // disable investment until all cards are applied
+    this.state.players.forEach(player => {
+      // reset pending investment
+      player.pendingInvestment = -1;
+      player.hasInvested = false;
+    });
     this.state.isRoundTransitioning = false;
 
     const defaults = this.defaultParams;
@@ -350,27 +359,54 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
 }
 
 export class EndGameCmd extends Cmd<{ status: LiteGameStatus }> {
-  //FIXME: change the game type status
   async execute({ status } = this.payload) {
     this.clock.clear();
     // wait for a few seconds so the client can see the final state
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     this.state.status = status;
-    // TODO: db is not finalized
-    // const { triogame: service } = getServices();
-    // await service.updateGameStatus(this.state.gameId, status);
-    this.state.players.forEach(async player => {
-      // await service.updatePlayerPoints(
-      //   this.state.gameId,
-      //   player.points,
-      //   this.state.maxRound,
-      //   status
-      // );
-    });
+    const players = Array.from(this.state.players.values());
+    const { litegame } = getServices();
+    await litegame.updateGameStatus(this.state.gameId, status);
+    await litegame.updatePlayerPoints(this.state.gameId, players, this.state.maxRound, status);
 
     // wait for the update to be sent to the client
     await new Promise(resolve => setTimeout(resolve, 5000));
-    this.room.disconnect();
+
+    const nextGameType = this.defaultParams.nextGameType;
+    if (nextGameType) {
+      return new ResetGameStateCmd();
+    } else {
+      this.room.disconnect();
+    }
+  }
+}
+
+export class ResetGameStateCmd extends CmdWithoutPayload {
+  execute() {
+    const nextType = this.state.defaultParams.nextGameType;
+    if (!nextType) return; // for safety
+
+    this.state.gameId = 0;
+    this.state.type = nextType;
+    this.state.isWaitingToStart = true;
+
+    this.state.eventCardDeck.length = 0;
+    this.state.visibleEventCards.length = 0;
+    this.state.activeCardId = -1;
+    this.state.round = 1;
+    this.state.status = "incomplete";
+    this.state.systemHealth = 0;
+
+    this.state.players.forEach(p => {
+      p.resources = 0;
+      p.points = 0;
+      p.pendingInvestment = -1;
+      p.pointsEarned = 0;
+      p.hasInvested = false;
+      p.isReadyToStart = false;
+    });
+
+    return new InitGameCmd();
   }
 }

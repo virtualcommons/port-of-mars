@@ -395,3 +395,7 @@ export class SoloGameService extends BaseService {
     }
   }
 }
+
+export class LiteGameService extends BaseService {
+  // TODO:
+}

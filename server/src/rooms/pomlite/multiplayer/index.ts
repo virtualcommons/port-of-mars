@@ -4,9 +4,9 @@ import * as http from "http";
 import { MultiplayerGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import { InitGameCmd, ProcessRoundCmd, PlayerInvestCmd } from "./commands";
+import { InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
-import { Invest, LiteGameType } from "@port-of-mars/shared/lite";
+import { Invest, LiteGameType, Vote } from "@port-of-mars/shared/lite";
 import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
 
@@ -45,22 +45,35 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
     this.registerAllHandlers();
     this.dispatcher.dispatch(new InitGameCmd());
     this.clock.setInterval(() => {
+      if (this.state.isWaitingToStart) {
+        if (this.state.timeRemaining > 0) {
+          this.state.timeRemaining -= 1;
+        }
+        // start if every player clicked ready or time is up
+        if (
+          [...this.state.players.values()].every(p => p.isReadyToStart) ||
+          this.state.timeRemaining <= 0
+        ) {
+          this.state.isWaitingToStart = false;
+          this.dispatcher.dispatch(new SetFirstRoundCmd());
+        }
+        return;
+      }
       if (this.state.timeRemaining > 0) {
         this.state.timeRemaining -= 1;
       } else if (!this.state.isRoundTransitioning) {
         this.state.players.forEach(player => {
-          // FIXME: what should this be?????
-          player.pendingInvestment = 0;
-          player.pointsEarned = 0;
-          this.dispatcher.dispatch(
-            new PlayerInvestCmd().setPayload({
-              systemHealthInvestment: 0,
-              clockRanOut: true,
-              player: player,
-            })
-          );
+          // for all players that have timed out, invest 0
+          if (player.pendingInvestment < 0) {
+            this.dispatcher.dispatch(
+              new PlayerInvestCmd().setPayload({
+                systemHealthInvestment: 0,
+                clockRanOut: true,
+                player: player,
+              })
+            );
+          }
         });
-        this.dispatcher.dispatch(new ProcessRoundCmd());
       }
     }, 1000);
   }
@@ -91,6 +104,13 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
   }
 
   registerAllHandlers() {
+    this.onMessage("vote", (client: Client, message: Vote) => {
+      // TODO: record the player's vote/apply to event handling
+    });
+    this.onMessage("player-ready", (client: Client) => {
+      const player = this.state.getPlayer(client);
+      player.isReadyToStart = true;
+    });
     this.onMessage("invest", (client: Client, message: Invest) => {
       const player = this.state.getPlayer(client);
       this.dispatcher.dispatch(

@@ -29,6 +29,9 @@ export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
 export interface LiteGameParams {
+  // determines which game type to reset and transition to in the same game room
+  // if not defined, then end normally
+  nextGameType?: LiteGameType;
   maxRound: { min: number; max: number };
   roundTransitionDuration: number;
   twoEventsThreshold: { min: number; max: number };
@@ -79,10 +82,11 @@ export interface MultiplayerLiteGamePlayer {
   points: number;
   pendingInvestment: number | null;
   pointsEarned: number | null;
-  isReady: boolean;
+  isReadyToStart: boolean;
 }
 
 export interface MultiplayerLiteGameClientState extends SoloGameClientState {
   players: Map<string, MultiplayerLiteGamePlayer>;
   numPlayers: number;
+  isWaitingToStart: boolean;
 }

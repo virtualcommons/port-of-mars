@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddLiteGame1745360602369 implements MigrationInterface {
-    name = 'AddLiteGame1745360602369'
+export class AddLiteGame1745442643206 implements MigrationInterface {
+    name = 'AddLiteGame1745442643206'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "public"."lite_game_treatment_thresholdinformation_enum" AS ENUM('unknown', 'range', 'known')`);
@@ -19,7 +19,10 @@ export class AddLiteGame1745360602369 implements MigrationInterface {
         await queryRunner.query(`CREATE TYPE "public"."lite_player_role_enum" AS ENUM('Curator', 'Entrepreneur', 'Pioneer', 'Politician', 'Researcher')`);
         await queryRunner.query(`CREATE TABLE "lite_player" ("id" SERIAL NOT NULL, "userId" integer NOT NULL, "playerIp" character varying NOT NULL DEFAULT '', "points" integer, "dateCreated" TIMESTAMP NOT NULL DEFAULT now(), "gameId" integer, "role" "public"."lite_player_role_enum" NOT NULL, CONSTRAINT "PK_dfd7f586dd89783d30aa09b3ea6" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "lite_high_score" ("id" SERIAL NOT NULL, "userId" integer NOT NULL, "pointsPerRound" double precision NOT NULL, "points" integer NOT NULL, "maxRound" integer NOT NULL, "dateCreated" TIMESTAMP NOT NULL DEFAULT now(), "lastModified" TIMESTAMP NOT NULL DEFAULT now(), "playerId" integer, CONSTRAINT "PK_8500c3979b95b7c31a11c328487" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`ALTER TABLE "game" DROP COLUMN "classroomId"`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" ADD "prolificBaselinePlayerId" integer`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" ADD CONSTRAINT "UQ_bcf8a6eca870502cbed275d1a61" UNIQUE ("prolificBaselinePlayerId")`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" ADD "prolificVariablePlayerId" integer`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" ADD CONSTRAINT "UQ_7a337f47658feba6f1b637917cd" UNIQUE ("prolificVariablePlayerId")`);
         await queryRunner.query(`ALTER TABLE "lite_player_decision" ADD CONSTRAINT "FK_a5f93f46102504ff53e69b0f4e5" FOREIGN KEY ("roundId") REFERENCES "lite_game_round"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "lite_player_decision" ADD CONSTRAINT "FK_ab70496d7d98e92dbcc05d556bd" FOREIGN KEY ("playerId") REFERENCES "lite_player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "lite_player_vote" ADD CONSTRAINT "FK_af22ab4e19c1be827203724ff2d" FOREIGN KEY ("playerId") REFERENCES "lite_player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
@@ -35,9 +38,13 @@ export class AddLiteGame1745360602369 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "lite_player" ADD CONSTRAINT "FK_222a7d59919f4608494268fe8d2" FOREIGN KEY ("gameId") REFERENCES "lite_game"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "lite_high_score" ADD CONSTRAINT "FK_45a3ba107d2873600043e4583af" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "lite_high_score" ADD CONSTRAINT "FK_0868da8f0696e58d8c0cf2d422a" FOREIGN KEY ("playerId") REFERENCES "lite_player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" ADD CONSTRAINT "FK_bcf8a6eca870502cbed275d1a61" FOREIGN KEY ("prolificBaselinePlayerId") REFERENCES "lite_player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" ADD CONSTRAINT "FK_7a337f47658feba6f1b637917cd" FOREIGN KEY ("prolificVariablePlayerId") REFERENCES "lite_player"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" DROP CONSTRAINT "FK_7a337f47658feba6f1b637917cd"`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" DROP CONSTRAINT "FK_bcf8a6eca870502cbed275d1a61"`);
         await queryRunner.query(`ALTER TABLE "lite_high_score" DROP CONSTRAINT "FK_0868da8f0696e58d8c0cf2d422a"`);
         await queryRunner.query(`ALTER TABLE "lite_high_score" DROP CONSTRAINT "FK_45a3ba107d2873600043e4583af"`);
         await queryRunner.query(`ALTER TABLE "lite_player" DROP CONSTRAINT "FK_222a7d59919f4608494268fe8d2"`);
@@ -53,7 +60,10 @@ export class AddLiteGame1745360602369 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "lite_player_vote" DROP CONSTRAINT "FK_af22ab4e19c1be827203724ff2d"`);
         await queryRunner.query(`ALTER TABLE "lite_player_decision" DROP CONSTRAINT "FK_ab70496d7d98e92dbcc05d556bd"`);
         await queryRunner.query(`ALTER TABLE "lite_player_decision" DROP CONSTRAINT "FK_a5f93f46102504ff53e69b0f4e5"`);
-        await queryRunner.query(`ALTER TABLE "game" ADD "classroomId" integer`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" DROP CONSTRAINT "UQ_7a337f47658feba6f1b637917cd"`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" DROP COLUMN "prolificVariablePlayerId"`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" DROP CONSTRAINT "UQ_bcf8a6eca870502cbed275d1a61"`);
+        await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study_participant" DROP COLUMN "prolificBaselinePlayerId"`);
         await queryRunner.query(`DROP TABLE "lite_high_score"`);
         await queryRunner.query(`DROP TABLE "lite_player"`);
         await queryRunner.query(`DROP TYPE "public"."lite_player_role_enum"`);

@@ -8,8 +8,7 @@ import { SurveyService } from "@port-of-mars/server/services/survey";
 import { StatsService } from "@port-of-mars/server/services/stats";
 import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
-import { SoloGameService } from "@port-of-mars/server/services/sologame";
-import { TrioGameService } from "@port-of-mars/server/services/triogame";
+import { SoloGameService, LiteGameService } from "@port-of-mars/server/services/litegame";
 import { SoloStudyService, MultiplayerStudyService } from "@port-of-mars/server/services/study";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
 import dataSource from "@port-of-mars/server/datasource";
@@ -50,12 +49,12 @@ export class ServiceProvider {
     return this._sologame;
   }
 
-  private _triogame?: TrioGameService;
-  get triogame(): TrioGameService {
-    if (!this._triogame) {
-      this._triogame = new TrioGameService(this);
+  private _litegame?: LiteGameService;
+  get litegame(): LiteGameService {
+    if (!this._litegame) {
+      this._litegame = new LiteGameService(this);
     }
-    return this._triogame;
+    return this._litegame;
   }
 
   private _quiz?: QuizService;

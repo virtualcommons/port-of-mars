@@ -21,7 +21,7 @@ import {
 } from "@port-of-mars/server/rooms/pomlite/solo/commands";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { Dispatcher } from "@colyseus/command";
-import { SoloGameService } from "@port-of-mars/server/services/sologame";
+import { SoloGameService } from "@port-of-mars/server/services/litegame";
 import { getLogger } from "@port-of-mars/server/settings";
 
 const logger = getLogger(__filename);
