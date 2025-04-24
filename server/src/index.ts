@@ -38,7 +38,7 @@ import {
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
-import { MultiplayerGameRoom } from "./rooms/pomlite/multiplayer";
+import { LiteGameRoom } from "./rooms/pomlite/multiplayer";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -265,7 +265,7 @@ async function createApp() {
   gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
   gameServer.define(TournamentLobbyRoom.NAME, TournamentLobbyRoom);
   gameServer.define(SoloGameRoom.NAME, SoloGameRoom);
-  gameServer.define(MultiplayerGameRoom.NAME, MultiplayerGameRoom);
+  gameServer.define(LiteGameRoom.NAME, LiteGameRoom);
   gameServer.define(LiteLobbyRoom.NAME, LiteLobbyRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));

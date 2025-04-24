@@ -29,4 +29,7 @@ export class LitePlayerDecision extends BaseLitePlayerDecision {
 
   @Column()
   playerId!: number;
+
+  @Column()
+  initialPoints!: number;
 }

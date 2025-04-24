@@ -6,6 +6,14 @@ import {
   TreatmentData,
 } from "@port-of-mars/shared/lite";
 import {
+  LiteGame,
+  LiteGameRound,
+  LiteGameTreatment,
+  LiteMarsEventCard,
+  LiteMarsEventDeck,
+  LiteMarsEventDeckCard,
+  LitePlayer,
+  LitePlayerDecision,
   SoloGame,
   SoloGameRound,
   SoloGameTreatment,
@@ -18,8 +26,10 @@ import {
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
+import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
+import { LitePlayerVote } from "../entity/LitePlayerVote";
 
 const logger = getLogger(__filename);
 
@@ -397,5 +407,172 @@ export class SoloGameService extends BaseService {
 }
 
 export class LiteGameService extends BaseService {
-  // TODO:
+  async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
+    const cards = await this.em.getRepository(LiteMarsEventCard).find({
+      where: { gameType },
+      order: { id: "ASC" },
+    });
+
+    const deck: EventCardData[] = [];
+
+    for (const card of cards) {
+      const drawAmt = getRandomIntInclusive(card.drawMin, card.drawMax);
+      for (let i = 0; i < drawAmt; i++) {
+        const roll = getRandomIntInclusive(card.rollMin, card.rollMax);
+        const effectText = card.effect
+          .replace("{roll}", roll.toString())
+          .replace("{s}", roll === 1 ? "" : "s");
+
+        deck.push({
+          id: card.id,
+          codeName: card.codeName,
+          displayName: card.displayName,
+          flavorText: card.flavorText,
+          effectText,
+          pointsEffect: card.pointsMultiplier * roll,
+          resourcesEffect: card.resourcesMultiplier * roll,
+          systemHealthEffect: card.systemHealthMultiplier * roll,
+        });
+      }
+    }
+    return deck;
+  }
+
+  async getRandomTreatmentFor(gameType: LiteGameType): Promise<LiteGameTreatment> {
+    const repo = this.em.getRepository(LiteGameTreatment);
+    const list = await repo.find({ where: { gameType } });
+    if (list.length === 0) {
+      throw new Error(`No LiteGame treatments configured for ${gameType}`);
+    }
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  async findTreatment(treatmentData: TreatmentData): Promise<LiteGameTreatment> {
+    return this.em.getRepository(LiteGameTreatment).findOneOrFail({
+      where: {
+        gameType: treatmentData.gameType,
+        isNumberOfRoundsKnown: treatmentData.isNumberOfRoundsKnown,
+        isEventDeckKnown: treatmentData.isEventDeckKnown,
+        thresholdInformation: treatmentData.thresholdInformation,
+        isLowResSystemHealth: treatmentData.isLowResSystemHealth,
+      },
+    });
+  }
+
+  async createDeck(state: LiteGameState): Promise<LiteMarsEventDeck> {
+    const deckRepo = this.em.getRepository(LiteMarsEventDeck);
+    const deckCardRepo = this.em.getRepository(LiteMarsEventDeckCard);
+    const deck = deckRepo.create({});
+    await deckRepo.save(deck);
+    for (const card of state.eventCardDeck) {
+      const deckCard = deckCardRepo.create({
+        deckId: deck.id,
+        cardId: card.id,
+        effectText: card.effectText,
+        systemHealthEffect: card.systemHealthEffect,
+        pointsEffect: card.pointsEffect,
+        resourcesEffect: card.resourcesEffect,
+      });
+      await deckCardRepo.save(deckCard);
+      // store the deck card id back in the state
+      card.deckCardId = deckCard.id;
+    }
+    return deck;
+  }
+
+  async createPlayers(gameId: number, state: LiteGameState): Promise<void> {
+    const playerRepo = this.em.getRepository(LitePlayer);
+
+    for (const runtimePlayer of state.players.values()) {
+      const player = playerRepo.create({
+        userId: runtimePlayer.userId,
+        gameId,
+        role: runtimePlayer.role,
+      });
+      await playerRepo.save(player);
+    }
+  }
+
+  async createGame(state: LiteGameState): Promise<LiteGame> {
+    const gameRepo = this.em.getRepository(LiteGame);
+    const treatment = await this.findTreatment(state.treatmentParams);
+    const deck = await this.createDeck(state);
+    const game = gameRepo.create({
+      type: state.type,
+      treatment,
+      deck,
+      status: state.status,
+      maxRound: state.maxRound,
+      twoEventsThreshold: state.twoEventsThreshold,
+      threeEventsThreshold: state.threeEventsThreshold,
+    });
+    await gameRepo.save(game);
+    await this.createPlayers(game.id, state);
+    state.gameId = game.id;
+    return game;
+  }
+
+  async createRound(state: LiteGameState): Promise<LiteGameRound> {
+    const roundRepo = this.em.getRepository(LiteGameRound);
+    const decisionRepo = this.em.getRepository(LitePlayerDecision);
+    // const voteRepo = this.em.getRepository(LitePlayerVote);
+    const deckCardRepo = this.em.getRepository(LiteMarsEventDeckCard);
+
+    const round = roundRepo.create({
+      gameId: state.gameId,
+      roundNumber: state.round,
+      initialSystemHealth: state.roundInitialSystemHealth,
+    });
+    await roundRepo.save(round);
+
+    for (const p of state.players.values()) {
+      const decision = decisionRepo.create({
+        roundId: round.id,
+        playerId: (p as any).dbId,
+        initialPoints: p.points - p.pointsEarned,
+        systemHealthInvestment: p.hasInvested ? p.pendingInvestment : 0,
+        pointsInvestment: p.pointsEarned,
+      });
+      await decisionRepo.save(decision);
+    }
+
+    for (const c of state.roundEventCards) {
+      await deckCardRepo.update({ id: c.deckCardId }, { roundId: round.id });
+    }
+
+    // voting not yet implemented
+    // state.pendingVotes.forEach(v => voteRepo.save(...))
+
+    return round;
+  }
+
+  async updateGameStatus(gameId: number, status: LiteGameStatus) {
+    await this.em.getRepository(LiteGame).update({ id: gameId }, { status });
+  }
+
+  async updatePlayerPoints(
+    gameId: number,
+    players: Array<{ userId: number; points: number }>,
+    maxRound: number,
+    status: LiteGameStatus
+  ) {
+    const playerRepo = this.em.getRepository(LitePlayer);
+
+    for (const { userId, points } of players) {
+      const player = await playerRepo.findOneBy({ userId, gameId });
+      if (!player) {
+        logger.warn(`LitePlayer not found for userId: ${userId}, gameId: ${gameId}`);
+        continue;
+      }
+
+      if (player.points !== points) {
+        player.points = points;
+        await playerRepo.save(player);
+      }
+
+      if (status === "victory") {
+        await this.sp.leaderboard.updateLiteHighScore(player.id, points, maxRound);
+      }
+    }
+  }
 }

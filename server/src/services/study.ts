@@ -1,6 +1,7 @@
 import {
   BaseProlificStudy,
   BaseProlificStudyParticipant,
+  LitePlayer,
   ProlificMultiplayerStudy,
   ProlificMultiplayerStudyParticipant,
   ProlificSoloStudy,
@@ -474,6 +475,28 @@ export class MultiplayerStudyService extends BaseStudyService {
 
   async getProlificParticipantStatus(user: User): Promise<any> {
     // TODO:
+  }
+
+  async setProlificParticipantPlayers(gameType: LiteGameType, players: LitePlayer[]) {
+    for (const player of players) {
+      await this.setProlificParticipantPlayer(gameType, player);
+    }
+  }
+
+  async setProlificParticipantPlayer(
+    gameType: LiteGameType,
+    player: LitePlayer
+  ): Promise<ProlificMultiplayerStudyParticipant> {
+    const participant = await this.getParticipantRepository().findOneOrFail({
+      where: { userId: player.userId },
+      relations: [`${gameType}Player`],
+    });
+    if (gameType === "prolificBaseline") {
+      participant.prolificBaselinePlayer = player;
+    } else {
+      participant.prolificVariablePlayer = player;
+    }
+    return this.getParticipantRepository().save(participant);
   }
 
   async getOrCreateProlificParticipant(

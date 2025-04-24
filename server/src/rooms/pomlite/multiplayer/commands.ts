@@ -1,14 +1,12 @@
 import _ from "lodash";
 import { Command } from "@colyseus/command";
-import { User } from "@port-of-mars/server/entity";
-import { MultiplayerGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
+import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { EventCard, Player, TreatmentParams } from "./state";
 import { LiteGameStatus } from "@port-of-mars/shared/lite";
-import { Role } from "@port-of-mars/shared/types";
 
-abstract class Cmd<Payload> extends Command<MultiplayerGameRoom, Payload> {
+abstract class Cmd<Payload> extends Command<LiteGameRoom, Payload> {
   get defaultParams() {
     return this.state.defaultParams;
   }
@@ -79,13 +77,9 @@ export class PersistGameCmd extends CmdWithoutPayload {
     const { litegame, multiplayerStudy } = getServices();
     const game = await litegame.createGame(this.state);
     if (["prolificVariable", "prolificBaseline"].includes(this.state.type)) {
-      await multiplayerStudy.setProlificParticipantPlayer(this.state.type, game.players);
+      await multiplayerStudy.setProlificParticipantPlayers(this.state.type, game.players);
     }
     this.state.gameId = game.id;
-    // keep track of deck card db ids after persisting the deck
-    this.state.eventCardDeck.forEach((card, index) => {
-      card.deckCardId = game.deck.cards[index].id;
-    });
   }
 }
 
@@ -151,8 +145,6 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     );
   }
 
-  // TODO: there needs to be a lot more special-case handling here
-  // for the cards that affect only certain players, require voting, etc.
   async execute({ playerSkipped } = this.payload) {
     if (!this.state.activeCard) return;
 
@@ -176,12 +168,16 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
       }
     });
 
+    // scale system health effect by the number of players since it
+    // is the shared resource
+    const scaledSystemHealthEffect =
+      this.state.numPlayers * this.state.activeCard.systemHealthEffect;
     // system health shouldn't go above the max or below 0
     this.state.systemHealth = Math.max(
       0,
       Math.min(
         this.defaultParams.systemHealthMax,
-        this.state.systemHealth + this.state.activeCard.systemHealthEffect
+        this.state.systemHealth + scaledSystemHealthEffect
       )
     );
 
@@ -314,9 +310,7 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
 
 export class PersistRoundCmd extends CmdWithoutPayload {
   async execute() {
-    // !!!!!!!!!!!!!!!!! should use pendingInvestments and pointsEarned !!!!!!!!!!!!!!!!!!!!
-    // instead of the passed in systemHealthInvestment and pointsInvestment that solo does
-    await getServices().litegame.persistRound(this.state);
+    await getServices().litegame.createRound(this.state);
   }
 }
 
@@ -365,7 +359,10 @@ export class EndGameCmd extends Cmd<{ status: LiteGameStatus }> {
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     this.state.status = status;
-    const players = Array.from(this.state.players.values());
+    const players = Array.from(this.state.players.values()).map(player => ({
+      userId: player.userId,
+      points: player.points,
+    }));
     const { litegame } = getServices();
     await litegame.updateGameStatus(this.state.gameId, status);
     await litegame.updatePlayerPoints(this.state.gameId, players, this.state.maxRound, status);

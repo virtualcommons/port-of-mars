@@ -8,9 +8,8 @@ import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
 import { User } from "@port-of-mars/server/entity";
 import { Group, GroupManager } from "@port-of-mars/server/rooms/lobby/common/group";
-import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { settings as sharedSettings } from "@port-of-mars/shared/settings";
-import { MultiplayerGameRoom } from "../../pomlite/multiplayer";
+import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { LitePlayerUser } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -85,7 +84,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
       };
     });
     const type = "prolificBaseline"; // FIXME: this shouldn't be hardcoded
-    const room = await matchMaker.createRoom(MultiplayerGameRoom.NAME, {
+    const room = await matchMaker.createRoom(LiteGameRoom.NAME, {
       type,
       users: playerUsers,
     });

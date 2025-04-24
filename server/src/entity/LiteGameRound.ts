@@ -25,9 +25,6 @@ export abstract class BaseLiteGameRound {
 
   @Column()
   initialSystemHealth!: number;
-
-  @Column()
-  initialPoints!: number;
 }
 
 @Entity()
@@ -45,6 +42,9 @@ export class SoloGameRound extends BaseLiteGameRound {
   @OneToOne(() => SoloPlayerDecision, { nullable: false })
   @JoinColumn()
   decision!: SoloPlayerDecision;
+
+  @Column()
+  initialPoints!: number;
 }
 
 @Entity()

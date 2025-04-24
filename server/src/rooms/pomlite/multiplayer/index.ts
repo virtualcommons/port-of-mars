@@ -1,7 +1,7 @@
 import { Client, Delayed, Room } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import * as http from "http";
-import { MultiplayerGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
@@ -12,7 +12,7 @@ import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/t
 
 const logger = settings.logging.getLogger(__filename);
 
-export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
+export class LiteGameRoom extends Room<LiteGameState> {
   public static get NAME() {
     return "multiplayer_game_room";
   }
@@ -27,7 +27,7 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
   eventTimeout: Delayed | null = null;
 
   private assignRoles(users: Array<LitePlayerUser>): LiteRoleAssignment {
-    const roles = MultiplayerGameState.DEFAULTS.prolificBaseline.availableRoles!;
+    const roles = LiteGameState.DEFAULTS.prolificBaseline.availableRoles!;
     const roleMap = new Map<Role, LitePlayerUser>();
     users.forEach((user, index) => {
       const role = roles[index % roles.length];
@@ -37,10 +37,10 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
   }
 
   async onCreate(options: { type?: LiteGameType; users: Array<LitePlayerUser> }) {
-    logger.trace("MultiplayerGameRoom '%s' created", this.roomId);
+    logger.trace("LiteGameRoom '%s' created", this.roomId);
     const type = options.type || "prolificBaseline";
     const userRoles = this.assignRoles(options.users);
-    this.setState(new MultiplayerGameState({ type, userRoles }));
+    this.setState(new LiteGameState({ type, userRoles }));
     this.setPrivate(true);
     this.registerAllHandlers();
     this.dispatcher.dispatch(new InitGameCmd());
@@ -95,11 +95,11 @@ export class MultiplayerGameRoom extends Room<MultiplayerGameState> {
   }
 
   onJoin(client: Client, options: any, auth: User) {
-    logger.trace("Client %s joined MultiplayerGameRoom %s", auth.username, this.roomId);
+    logger.trace("Client %s joined LiteGameRoom %s", auth.username, this.roomId);
   }
 
   async onDispose(): Promise<void> {
-    logger.trace("Disposing of MultiplayerGameRoom '%s'", this.roomId);
+    logger.trace("Disposing of LiteGameRoom '%s'", this.roomId);
     this.dispatcher.stop();
   }
 

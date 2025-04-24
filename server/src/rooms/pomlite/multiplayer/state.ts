@@ -46,8 +46,8 @@ export class Player extends Schema {
   userId = 0;
   @type("string") username = "";
   @type("string") role: Role = "Politician";
-  @type("uint8") resources = MultiplayerGameState.DEFAULTS.freeplay.resources;
-  @type("uint8") points = MultiplayerGameState.DEFAULTS.freeplay.points;
+  @type("uint8") resources = LiteGameState.DEFAULTS.freeplay.resources;
+  @type("uint8") points = LiteGameState.DEFAULTS.freeplay.points;
   @type("int8") pendingInvestment = -1;
   @type("boolean") hasInvested = false;
   @type("uint8") pointsEarned = 0;
@@ -72,14 +72,14 @@ export class TreatmentParams extends Schema {
   }
 }
 
-export class MultiplayerGameState extends Schema {
+export class LiteGameState extends Schema {
   @type("boolean") isWaitingToStart = true;
   @type("string") type: LiteGameType = "prolificBaseline";
   @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
-    MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax -
-    MultiplayerGameState.DEFAULTS.freeplay.systemHealthWear;
-  @type("uint8") timeRemaining = MultiplayerGameState.DEFAULTS.freeplay.timeRemaining;
+    LiteGameState.DEFAULTS.freeplay.systemHealthMax -
+    LiteGameState.DEFAULTS.freeplay.systemHealthWear;
+  @type("uint8") timeRemaining = LiteGameState.DEFAULTS.freeplay.timeRemaining;
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
 
@@ -95,11 +95,11 @@ export class MultiplayerGameState extends Schema {
 
   gameId = 0;
   userRoles: LiteRoleAssignment;
-  roundInitialSystemHealth = MultiplayerGameState.DEFAULTS.freeplay.systemHealthMax;
+  roundInitialSystemHealth = LiteGameState.DEFAULTS.freeplay.systemHealthMax;
 
-  maxRound = MultiplayerGameState.DEFAULTS.freeplay.maxRound.max;
-  twoEventsThreshold = MultiplayerGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
-  threeEventsThreshold = MultiplayerGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
+  maxRound = LiteGameState.DEFAULTS.freeplay.maxRound.max;
+  twoEventsThreshold = LiteGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
+  threeEventsThreshold = LiteGameState.DEFAULTS.freeplay.threeEventsThreshold.max;
   // this one doesn't have to be a schema property since visibleEventCards already mirrors it
   eventCardDeck: Array<EventCard> = [];
 
@@ -171,10 +171,7 @@ export class MultiplayerGameState extends Schema {
     if (player) {
       return player;
     }
-    logger.fatal(
-      "MultiplayerGameState.getPlayer: Unable to find player with id %s",
-      client.auth.id
-    );
+    logger.fatal("LiteGameState.getPlayer: Unable to find player with id %s", client.auth.id);
     throw new Error(`No player found with id ${client.auth.id}`);
   }
 
@@ -188,7 +185,7 @@ export class MultiplayerGameState extends Schema {
   }
 
   get defaultParams() {
-    return MultiplayerGameState.DEFAULTS[this.type];
+    return LiteGameState.DEFAULTS[this.type];
   }
 
   static DEFAULTS: Record<LiteGameType, LiteGameParams> = {

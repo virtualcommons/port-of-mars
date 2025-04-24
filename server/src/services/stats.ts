@@ -5,7 +5,14 @@ import {
   SoloHighScoreData,
   SoloPlayerStatItem,
 } from "@port-of-mars/shared/types";
-import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
+import {
+  Game,
+  LiteHighScore,
+  LitePlayer,
+  Player,
+  SoloGame,
+  SoloPlayer,
+} from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { SoloHighScore } from "@port-of-mars/server/entity";
 import { LiteGameType } from "@port-of-mars/shared/lite";
@@ -185,5 +192,41 @@ export class StatsService extends BaseService {
       victory: stat.game.status === "victory",
       maxRound: stat.game.maxRound,
     }));
+  }
+
+  async updateLiteHighScore(playerId: number, points: number, maxRound: number): Promise<void> {
+    const playerRepo = this.em.getRepository(LitePlayer);
+    const highscoreRepo = this.em.getRepository(LiteHighScore);
+
+    const player = await playerRepo.findOneOrFail({
+      where: { id: playerId },
+      relations: { user: true },
+    });
+    const user = player.user;
+    const pointsPerRound = points / maxRound;
+
+    let highscore = await highscoreRepo.findOne({ where: { userId: user.id } });
+
+    if (highscore) {
+      if (pointsPerRound > highscore.pointsPerRound) {
+        highscore.pointsPerRound = pointsPerRound;
+        highscore.points = points;
+        highscore.maxRound = maxRound;
+        highscore.player = player;
+        highscore.playerId = player.id;
+        await highscoreRepo.save(highscore);
+      }
+    } else {
+      highscore = highscoreRepo.create({
+        user,
+        userId: user.id,
+        pointsPerRound,
+        points,
+        maxRound,
+        player,
+        playerId: player.id,
+      });
+      await highscoreRepo.save(highscore);
+    }
   }
 }
