@@ -5,14 +5,14 @@
       :max="state.player.resources"
       v-model="pendingSystemHealthInvestment"
       :asInput="true"
-      :disabled="!state.canInvest"
+      :disabled="shouldDisableInvest"
       :segment-class="{ 'animate-flashing vfd-green': shouldFlashInvestInput }"
       class="mb-3"
     />
     <div class="text-center">
       <b-button
         @click="handleInvest"
-        :disabled="!state.canInvest"
+        :disabled="shouldDisableInvest"
         variant="primary"
         size="lg"
         :class="{ 'animate-flashing vfd-red': shouldFlashInvestButton }"
@@ -26,7 +26,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";
-import { BaseLiteGameClientState } from "@port-of-mars/shared/lite";
+import { LiteGameClientState } from "@port-of-mars/shared/lite";
 
 @Component({
   components: {
@@ -34,7 +34,7 @@ import { BaseLiteGameClientState } from "@port-of-mars/shared/lite";
   },
 })
 export default class Investment extends Vue {
-  @Prop() state!: BaseLiteGameClientState;
+  @Prop() state!: LiteGameClientState;
   @Prop({ default: 0 }) readonly value!: number;
 
   get pendingSystemHealthInvestment(): number {
@@ -59,6 +59,16 @@ export default class Investment extends Vue {
       this.state.round === 1 &&
       !this.state.isRoundTransitioning
     );
+  }
+
+  get shouldDisableInvest() {
+    if (this.state.players) {
+      // if this is a multiplayer game:
+      return this.state.player.hasInvested;
+    } else {
+      // if this is a solo game:
+      return !this.state.canInvest;
+    }
   }
 
   get pendingPointsValue() {

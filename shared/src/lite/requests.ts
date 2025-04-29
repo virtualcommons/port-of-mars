@@ -10,6 +10,11 @@ export interface Invest {
   systemHealthInvestment: number;
 }
 
+export interface PlayerReady {
+  kind: "player-ready";
+  data?: any;
+}
+
 export interface Vote {
   kind: "vote";
   deckCardId: number;
@@ -17,4 +22,4 @@ export interface Vote {
   binaryVote: boolean;
 }
 
-export type LiteGameRequest = EventContinue | Invest;
+export type LiteGameRequest = EventContinue | Invest | PlayerReady;

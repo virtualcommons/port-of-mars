@@ -8,6 +8,7 @@ import {
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
 import { Client } from "colyseus";
+import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
@@ -44,6 +45,7 @@ export class EventCard extends Schema {
 
 export class Player extends Schema {
   userId = 0;
+  @type("int32") playerId = 0;
   @type("string") username = "";
   @type("string") role: Role = "Politician";
   @type("uint8") resources = LiteGameState.DEFAULTS.freeplay.resources;
@@ -83,7 +85,7 @@ export class LiteGameState extends Schema {
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
 
-  @type("int8") numPlayers = 3;
+  @type("int8") numPlayers = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
   @type({ map: Player }) players = new MapSchema<Player>(); // track by client.auth.id.toString() (db id)
 
   // mirrors deck when deck is visible, otherwise show round cards
@@ -213,7 +215,7 @@ export class LiteGameState extends Schema {
       timeRemaining: 20,
       eventTimeout: 5,
       startingSystemHealth: 45,
-      systemHealthMax: 60,
+      systemHealthMax: 75,
       systemHealthWear: 15,
       points: 0,
       resources: 10,
@@ -229,7 +231,7 @@ export class LiteGameState extends Schema {
       timeRemaining: 20,
       eventTimeout: 5,
       startingSystemHealth: 45,
-      systemHealthMax: 60,
+      systemHealthMax: 75,
       systemHealthWear: 15,
       points: 0,
       resources: 10,

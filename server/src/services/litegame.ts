@@ -473,9 +473,9 @@ export class LiteGameService extends BaseService {
         pointsEffect: card.pointsEffect,
         resourcesEffect: card.resourcesEffect,
       });
-      await deckCardRepo.save(deckCard);
+      const saved = await deckCardRepo.save(deckCard);
       // store the deck card id back in the state
-      card.deckCardId = deckCard.id;
+      card.deckCardId = saved.id;
     }
     return deck;
   }
@@ -489,7 +489,9 @@ export class LiteGameService extends BaseService {
         gameId,
         role: runtimePlayer.role,
       });
-      await playerRepo.save(player);
+      const saved = await playerRepo.save(player);
+      // store the player id back in the state
+      runtimePlayer.playerId = saved.id;
     }
   }
 
@@ -508,8 +510,18 @@ export class LiteGameService extends BaseService {
     });
     await gameRepo.save(game);
     await this.createPlayers(game.id, state);
-    state.gameId = game.id;
-    return game;
+    const fullGame = await gameRepo.findOneOrFail({
+      where: { id: game.id },
+      relations: {
+        players: true,
+        deck: {
+          cards: true,
+        },
+        treatment: true,
+      },
+    });
+    state.gameId = fullGame.id;
+    return fullGame;
   }
 
   async createRound(state: LiteGameState): Promise<LiteGameRound> {
@@ -528,7 +540,7 @@ export class LiteGameService extends BaseService {
     for (const p of state.players.values()) {
       const decision = decisionRepo.create({
         roundId: round.id,
-        playerId: (p as any).dbId,
+        playerId: p.playerId,
         initialPoints: p.points - p.pointsEarned,
         systemHealthInvestment: p.hasInvested ? p.pendingInvestment : 0,
         pointsInvestment: p.pointsEarned,

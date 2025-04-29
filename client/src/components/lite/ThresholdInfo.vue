@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts">
-import { BaseLiteGameClientState } from "@port-of-mars/shared/lite";
+import { LiteGameClientState } from "@port-of-mars/shared/lite";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class ThresholdInfo extends Vue {
-  @Prop() state!: BaseLiteGameClientState;
+  @Prop() state!: LiteGameClientState;
   @Prop() thresholdInformation!: "known" | "range";
 
   get twoEventsThresholdInfo(): string {

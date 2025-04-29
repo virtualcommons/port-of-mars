@@ -27,7 +27,7 @@
             :min="0"
             :max="25"
             :delta="pendingSystemHealthInvestment"
-            v-model="state.systemHealth"
+            v-model="normalizedSystemHealth"
             label="System Health"
             class="flex-grow-1"
             variant="green"
@@ -132,7 +132,7 @@
 <script lang="ts">
 import { Vue, Component, Inject, Prop } from "vue-property-decorator";
 import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
-import { MultiplayerLiteGameClientState } from "@port-of-mars/shared/lite";
+import { LiteGameClientState } from "@port-of-mars/shared/lite";
 import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
 import EventModal from "@port-of-mars/client/components/lite/EventModal.vue";
 import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";
@@ -158,7 +158,7 @@ import HealthGained from "@port-of-mars/client/components/lite/HealthGained.vue"
 })
 export default class Dashboard extends Vue {
   @Inject() readonly api!: LiteGameRequestAPI;
-  @Prop() state!: MultiplayerLiteGameClientState;
+  @Prop() state!: LiteGameClientState;
 
   pendingSystemHealthInvestment = 0;
   // used for animating a snackbar-style animation for SH increase during round transition
@@ -173,11 +173,21 @@ export default class Dashboard extends Vue {
     return this.state.type === "prolificBaseline";
   }
 
-  get lowResSystemHealth() {
+  get normalizedSystemHealth() {
+    // system health is an integer pool on the server but we want to
+    // display it the same as if the user was playing the solo game
     if (this.state.systemHealth === 0) {
       return 0;
     }
-    return Math.floor((this.state.systemHealth - 1) / 5) + 1;
+    return Math.floor((this.state.systemHealth - 1) / this.state.numPlayers) + 1;
+  }
+
+  get lowResSystemHealth() {
+    // further reduces the system health (factor of 5) in order to display a 'low resolution'
+    if (this.normalizedSystemHealth === 0) {
+      return 0;
+    }
+    return Math.floor((this.normalizedSystemHealth - 1) / 5) + 1;
   }
 
   get lowResSystemHealthText() {

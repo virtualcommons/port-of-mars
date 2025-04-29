@@ -75,18 +75,20 @@ export interface SoloGameClientState {
   isRoundTransitioning: boolean;
 }
 
-export interface MultiplayerLiteGamePlayer {
+export interface LiteGamePlayerClientState {
   username: string;
   role: Role;
   resources: number;
   points: number;
   pendingInvestment: number | null;
+  hasInvested: boolean;
   pointsEarned: number | null;
   isReadyToStart: boolean;
 }
 
-export interface MultiplayerLiteGameClientState extends SoloGameClientState {
-  players: Map<string, MultiplayerLiteGamePlayer>;
+export interface LiteGameClientState extends SoloGameClientState {
+  players: Map<string, LiteGamePlayerClientState>;
+  player: LiteGamePlayerClientState;
   numPlayers: number;
   isWaitingToStart: boolean;
 }

@@ -32,4 +32,11 @@ export class LiteGameRequestAPI {
     };
     this.send(msg);
   }
+
+  public playerReady() {
+    const msg: LiteGameRequest = {
+      kind: "player-ready",
+    };
+    this.send(msg);
+  }
 }

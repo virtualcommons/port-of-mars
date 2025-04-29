@@ -48,8 +48,6 @@ import {
   PROFILE_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
-  LITE_LOBBY_PAGE,
-  LITE_MULTIPLAYER_GAME_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -103,8 +101,6 @@ const router = new VueRouter({
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
     { ...PAGE_META[PROLIFIC_SOLO_STUDY_PAGE], component: ProlificSoloStudy },
     { ...PAGE_META[PROLIFIC_MULTIPLAYER_STUDY_PAGE], component: ProlificMultiplayerStudy },
-    { ...PAGE_META[LITE_LOBBY_PAGE], component: LiteLobby },
-    { ...PAGE_META[LITE_MULTIPLAYER_GAME_PAGE], component: LiteMultiplayerGame },
   ],
 });
 

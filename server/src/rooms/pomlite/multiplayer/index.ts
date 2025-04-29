@@ -36,14 +36,7 @@ export class LiteGameRoom extends Room<LiteGameState> {
     return roleMap;
   }
 
-  async onCreate(options: { type?: LiteGameType; users: Array<LitePlayerUser> }) {
-    logger.trace("LiteGameRoom '%s' created", this.roomId);
-    const type = options.type || "prolificBaseline";
-    const userRoles = this.assignRoles(options.users);
-    this.setState(new LiteGameState({ type, userRoles }));
-    this.setPrivate(true);
-    this.registerAllHandlers();
-    this.dispatcher.dispatch(new InitGameCmd());
+  startGameLoop() {
     this.clock.setInterval(() => {
       if (this.state.isWaitingToStart) {
         if (this.state.timeRemaining > 0) {
@@ -76,6 +69,16 @@ export class LiteGameRoom extends Room<LiteGameState> {
         });
       }
     }, 1000);
+  }
+
+  async onCreate(options: { type?: LiteGameType; users: Array<LitePlayerUser> }) {
+    logger.trace("LiteGameRoom '%s' created", this.roomId);
+    const type = options.type || "prolificBaseline";
+    const userRoles = this.assignRoles(options.users);
+    this.setState(new LiteGameState({ type, userRoles }));
+    this.setPrivate(true);
+    this.registerAllHandlers();
+    this.dispatcher.dispatch(new InitGameCmd());
   }
 
   // maybe add a safeguard to ensure client belongs to this room

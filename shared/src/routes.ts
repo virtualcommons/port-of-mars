@@ -16,8 +16,6 @@ export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
 export const PROLIFIC_SOLO_STUDY_PAGE = "ProlificSoloStudy" as const;
 export const PROLIFIC_MULTIPLAYER_STUDY_PAGE = "ProlificMultiplayerStudy" as const;
-export const LITE_LOBBY_PAGE = "LiteLobby" as const;
-export const LITE_MULTIPLAYER_GAME_PAGE = "LiteMultiplayerGame" as const;
 
 export type Page =
   | "Admin"
@@ -37,8 +35,6 @@ export type Page =
   | "Manual"
   | "ProlificSoloStudy"
   | "ProlificMultiplayerStudy"
-  | "LiteLobby"
-  | "LiteMultiplayerGame"
   | "Privacy";
 
 export const PAGES: Array<Page> = [
@@ -60,8 +56,6 @@ export const PAGES: Array<Page> = [
   PRIVACY_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
-  LITE_LOBBY_PAGE,
-  LITE_MULTIPLAYER_GAME_PAGE,
 ];
 
 export function getPagePath(page: Page): string {
@@ -219,22 +213,6 @@ export const PAGE_META: {
   [PROLIFIC_MULTIPLAYER_STUDY_PAGE]: {
     path: "/prolific-multiplayer",
     name: PROLIFIC_MULTIPLAYER_STUDY_PAGE,
-    meta: {
-      requiresAuth: true,
-      requiresConsent: true,
-    },
-  },
-  [LITE_LOBBY_PAGE]: {
-    path: "/lite-lobby",
-    name: LITE_LOBBY_PAGE,
-    meta: {
-      requiresAuth: true,
-      requiresConsent: true,
-    },
-  },
-  [LITE_MULTIPLAYER_GAME_PAGE]: {
-    path: "/lite-multiplayer",
-    name: LITE_MULTIPLAYER_GAME_PAGE,
     meta: {
       requiresAuth: true,
       requiresConsent: true,

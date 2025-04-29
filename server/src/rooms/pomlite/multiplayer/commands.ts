@@ -21,7 +21,14 @@ export class InitGameCmd extends CmdWithoutPayload {
       new SetGameParamsCmd(),
       new PersistGameCmd(),
       new WaitForPlayersCmd(),
+      new StartGameLoopCmd(),
     ];
+  }
+}
+
+export class StartGameLoopCmd extends CmdWithoutPayload {
+  execute() {
+    this.room.startGameLoop();
   }
 }
 

@@ -1,6 +1,6 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { MultiplayerLiteGameClientState, SetHiddenParams } from "@port-of-mars/shared/lite";
+import { LiteGameClientState, SetHiddenParams } from "@port-of-mars/shared/lite";
 import { ClientSafeUser } from "@port-of-mars/shared/types";
 
 type Schemify<T> = T & Schema;
@@ -53,6 +53,7 @@ export function applyMultiplayerGameServerResponses(
       "isRoundTransitioning",
       "status",
       "numPlayers",
+      "isWaitingToStart",
     ]);
   };
 
@@ -75,8 +76,18 @@ export function applyMultiplayerGameServerResponses(
       component.state.player = p;
     }
     component.state.players.set(userId, p);
+
+    // subscribe to changes in the player
+    player.onChange = (changes: DataChange[]) => {
+      const local = component.state.players.get(userId);
+      for (const change of changes) {
+        local[change.field] = change.value;
+        if (userId === user.id.toString()) {
+          component.state.player[change.field] = change.value;
+        }
+      }
+    };
   };
-  room.state.players.onChange = room.state.players.onAdd; // same as onAdd
 
   room.state.players.onRemove = (player: any, userId: string) => {
     // if p is the 'self' player, reset the state.player
@@ -90,7 +101,7 @@ export function applyMultiplayerGameServerResponses(
   };
 }
 
-export const DEFAULT_STATE: MultiplayerLiteGameClientState = {
+export const DEFAULT_STATE: LiteGameClientState = {
   type: "prolificBaseline",
   status: "incomplete",
   timeRemaining: 0,
@@ -105,11 +116,18 @@ export const DEFAULT_STATE: MultiplayerLiteGameClientState = {
   players: new Map(),
   numPlayers: 1,
   player: {
+    username: "",
+    role: "Curator",
     resources: 0,
     points: 0,
+    pendingInvestment: null,
+    hasInvested: false,
+    pointsEarned: null,
+    isReadyToStart: false,
   },
   visibleEventCards: [],
   activeCardId: -1,
   canInvest: false,
   isRoundTransitioning: false,
+  isWaitingToStart: true,
 };

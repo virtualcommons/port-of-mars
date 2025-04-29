@@ -5,8 +5,6 @@ import { LobbyChatMessageData, LobbyClientData, LobbyType } from "@port-of-mars/
 import {
   FREE_PLAY_LOBBY_PAGE,
   GAME_PAGE,
-  LITE_LOBBY_PAGE,
-  LITE_MULTIPLAYER_GAME_PAGE,
   TOURNAMENT_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
@@ -84,7 +82,6 @@ export function applyLobbyResponses(room: Room, component: any, lobbyType: Lobby
 
 export function applyLiteLobbyResponses(room: Room, component: any) {
   const store = component.$tstore;
-  const router = component.$router;
 
   room.onError((code: number, message?: string) => {
     console.log(`Error ${code} occurred in room: ${message} `);
@@ -97,22 +94,11 @@ export function applyLiteLobbyResponses(room: Room, component: any) {
 
   room.onMessage("join-failure", (msg: JoinFailure) => {
     store.commit("SET_DASHBOARD_MESSAGE", { kind: "warning", message: msg.reason });
-    router.push({
-      name: LITE_LOBBY_PAGE,
-    });
   });
 
   room.onMessage("sent-invitation", (msg: SentInvitation) => {
     component.$ajax.roomId = msg.roomId;
     room.send("accept-invitation", { kind: "accept-invitation" });
-  });
-
-  room.onMessage("removed-client-from-lobby", () => {
-    router.push({ name: LITE_MULTIPLAYER_GAME_PAGE });
-  });
-
-  room.onMessage("join-existing-game", () => {
-    router.push({ name: LITE_MULTIPLAYER_GAME_PAGE });
   });
 
   room.state.clients.onAdd = (e: Schemify<LobbyClientData>) => {
