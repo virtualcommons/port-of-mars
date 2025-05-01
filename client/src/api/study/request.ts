@@ -3,6 +3,7 @@ import {
   ProlificStudyData,
   ProlificSoloParticipantStatus,
   StudyMode,
+  ProlificMultiplayerParticipantStatus,
 } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
@@ -18,7 +19,9 @@ export class StudyAPI {
     }
   }
 
-  async getProlificParticipantStatus(): Promise<ProlificSoloParticipantStatus> {
+  async getProlificParticipantStatus(): Promise<
+    ProlificSoloParticipantStatus | ProlificMultiplayerParticipantStatus
+  > {
     return this.ajax.get(url(`/study/prolific/${this.mode}/status`), ({ data, status }) => {
       if (status !== 200) {
         return null;

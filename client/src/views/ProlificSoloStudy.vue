@@ -133,7 +133,7 @@ export default class ProlificSoloStudy extends Vue {
     this.statusLoading = true;
     const status = await this.studyApi.getProlificParticipantStatus();
     if (status) {
-      this.participantStatus = status;
+      this.participantStatus = status as ProlificSoloParticipantStatus;
     }
     this.statusLoading = false;
   }

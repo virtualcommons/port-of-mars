@@ -1,7 +1,7 @@
 <template>
   <div class="backdrop d-flex flex-column justify-content-center align-items-center">
     <b-container class="h-100 dashboard-container content-container p-0" no-gutters>
-      <div v-if="!started" class="text-center p-5">
+      <div v-if="!started && lobbyRoom" class="text-center p-5">
         <p>Waiting for players to join…</p>
         <h4>{{ clients.length }} / {{ requiredPlayers }} Players</h4>
         <b-progress
@@ -30,22 +30,28 @@
 
       <GameOver
         v-else-if="isGameOver || isStudyComplete"
-        :status="state.status"
-        :points="state.player.points"
-        :round="state.round"
-        :showContinue="!isStudyComplete"
+        :status="completedGameState.status"
+        :points="completedGameState.points"
+        :round="completedGameState.round"
+        :showContinue="isStudyComplete"
         :continueText="isStudyComplete ? 'Return to Prolific' : 'Continue'"
         :showHighScores="false"
         @continue="handleContinue"
         :victoryText="gameOverText"
         :defeatText="gameOverText"
       />
+
+      <!-- TODO: what do we do here? -->
+      <div v-else>
+        Unfortunately, you were not able to complete the game portion of the study and your group
+        cannot be re-joined.
+      </div>
     </b-container>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide } from "vue-property-decorator";
+import { Vue, Component, Inject, Provide, Watch } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { cloneDeep } from "lodash";
 import { LITE_LOBBY_NAME } from "@port-of-mars/shared/lobby";
@@ -62,6 +68,7 @@ import { StudyAPI } from "@port-of-mars/client/api/study/request";
 import Splash from "@port-of-mars/client/components/lite/multiplayer/Splash.vue";
 import Dashboard from "@port-of-mars/client/components/lite/multiplayer/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/lite/multiplayer/GameOver.vue";
+import { ProlificMultiplayerParticipantStatus } from "@port-of-mars/shared/types";
 
 @Component({ name: "ProlificMultiplayerStudy", components: { Splash, Dashboard, GameOver } })
 export default class ProlificMultiplayerStudy extends Vue {
@@ -71,11 +78,9 @@ export default class ProlificMultiplayerStudy extends Vue {
   studyApi = new StudyAPI(this.$store, this.$ajax, "multiplayer");
 
   // participant
-  // participantStatus: ProlificMultiplayerParticipantStatus = {
-  //   activeGameType: null,
-  //   nextGameType: null,
-  //   progress: { current: 0, max: 0, label: "" },
-  // };
+  participantStatus: ProlificMultiplayerParticipantStatus = {
+    status: "not-started",
+  };
   statusLoading = true;
 
   // lobby
@@ -92,11 +97,16 @@ export default class ProlificMultiplayerStudy extends Vue {
   gameRoom: Room | null = null;
   started = false;
   state: LiteGameClientState = cloneDeep(DEFAULT_STATE);
+  // reflects the game last completed game state which is stored
+  // since we reset the state when moving to the next game
+  completedGameState = {
+    status: "incomplete",
+    points: 0,
+    round: 0,
+  };
 
   get isStudyComplete() {
-    return false;
-    // FIXME: relies on participant status. this tells us if the user should be given a link
-    // return !this.participantStatus.nextGameType && !this.statusLoading;
+    return this.participantStatus.status === "completed";
   }
 
   get isGameOver() {
@@ -109,22 +119,36 @@ export default class ProlificMultiplayerStudy extends Vue {
       : "You will be advanced to the next game in a few seconds..";
   }
 
-  // @Watch("isGameOver", { immediate: true })
-  // async onGameOver() {
-  //   if (this.isGameOver) {
-  //     await this.fetchParticipantStatus();
-  //   }
-  // }
+  @Watch("isGameOver", { immediate: true })
+  async onGameOver() {
+    if (this.isGameOver) {
+      this.completedGameState.status = this.state.status;
+      this.completedGameState.points = this.state.player.points;
+      this.completedGameState.round = this.state.round;
+      await this.fetchParticipantStatus();
+    }
+  }
 
-  // async fetchParticipantStatus() {
-  //   this.statusLoading = true;
-  //   const s = await this.studyApi.getProlificParticipantStatus();
-  //   if (s) this.participantStatus = s;
-  //   this.statusLoading = false;
-  // }
+  async fetchParticipantStatus() {
+    this.statusLoading = true;
+    const s = await this.studyApi.getProlificParticipantStatus();
+    if (s) this.participantStatus = s as ProlificMultiplayerParticipantStatus;
+    this.statusLoading = false;
+  }
 
   async created() {
-    // as soon as the page loads, join the lobby:
+    await this.fetchParticipantStatus();
+    if (this.participantStatus.status === "not-started") {
+      await this.joinLobby();
+    } else if (this.participantStatus.status === "in-progress") {
+      if (this.participantStatus.activeRoomId) {
+        // try to re-join active game
+        await this.joinGame(this.participantStatus.activeRoomId);
+      }
+    }
+  }
+
+  private async joinLobby() {
     this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME, { type: "prolificBaseline" });
     applyLiteLobbyResponses(this.lobbyRoom, this);
     this.lobbyApi.connect(this.lobbyRoom);
@@ -134,25 +158,31 @@ export default class ProlificMultiplayerStudy extends Vue {
     this.lobbyRoom.onMessage("join-existing-game", () => this.transitionToGame());
   }
 
+  private async joinGame(roomId: string) {
+    this.gameRoom = await this.$client.joinById(roomId);
+    applyMultiplayerGameServerResponses(this.gameRoom, this, this.$tstore.state.user);
+    this.api.connect(this.gameRoom);
+    this.started = true;
+  }
+
   private async transitionToGame() {
     // leave lobby and join the real game room
     await this.lobbyRoom!.leave();
     this.lobbyApi.leave();
-
     const roomId = this.$ajax.roomId;
     if (!roomId) {
       return console.error("Missing roomId");
     }
-
-    this.gameRoom = await this.$client.joinById(roomId);
-    applyMultiplayerGameServerResponses(this.gameRoom, this, this.$tstore.state.user);
-    this.api.connect(this.gameRoom);
-
-    this.started = true;
+    await this.joinGame(roomId);
   }
 
   async handleContinue() {
-    // TODO: if isStudyComplete, redirect to prolific with CC
+    try {
+      const completionUrl = await this.studyApi.completeProlificStudy();
+      window.location.href = completionUrl;
+    } catch (err) {
+      console.log("prolific study not actually completed");
+    }
   }
 
   async setPlayerReady() {

@@ -536,6 +536,13 @@ export interface ProlificSoloParticipantStatus {
   };
 }
 
+export interface ProlificMultiplayerParticipantStatus {
+  status: "not-started" | "in-progress" | "completed";
+  completionUrl?: string;
+  inProgressGameType?: LiteGameType | null;
+  activeRoomId?: string;
+}
+
 export type StudyMode = "solo" | "multiplayer";
 
 export interface ProlificStudyData {

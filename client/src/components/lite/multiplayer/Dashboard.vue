@@ -4,6 +4,7 @@
       v-if="state.activeCardId >= 0"
       :event="activeCard"
       :visible="state.activeCardId >= 0"
+      :showContinue="false"
     />
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">

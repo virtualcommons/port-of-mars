@@ -107,19 +107,17 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
   }
 
   async canUserJoin(user: User) {
-    // FIXME: check if user is a study participant that has not played a game yet
-    return true;
+    // check if user is a study participant that has not played a game yet
     const services = getServices();
-    const activeGame = await services.game.getActiveGameRoomId(user.id, "tournament");
-    if (activeGame) {
-      logger.warn(
-        `client ${user.username} attempted to join ${this.roomName} while in another game`
-      );
+    try {
+      const participant = await services.multiplayerStudy.getProlificParticipantStatus(user);
+      if (participant.status === "not-started") {
+        return true;
+      }
+      return false;
+    } catch (e) {
       return false;
     }
-    const numberOfActiveParticipants = await services.game.getNumberOfActiveParticipants();
-    const maxConnections = await this.getMaxConnections();
-    return numberOfActiveParticipants < maxConnections && services.tournament.canPlayInRound(user);
   }
 
   onAcceptInvitation(client: Client, message: AcceptInvitation) {

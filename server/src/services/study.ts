@@ -16,11 +16,13 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
 import { LiteGameType } from "@port-of-mars/shared/lite";
 import {
+  ProlificMultiplayerParticipantStatus,
   ProlificParticipantPointData,
   ProlificSoloParticipantStatus,
   ProlificStudyData,
 } from "@port-of-mars/shared/types";
 import { createObjectCsvWriter } from "csv-writer";
+import { matchMaker } from "colyseus";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -464,7 +466,6 @@ export class SoloStudyService extends BaseStudyService {
 }
 
 export class MultiplayerStudyService extends BaseStudyService {
-  // TODO: implement for MultiplayerStudy and MultiplayerStudyParticipant
   getRepository(): Repository<ProlificMultiplayerStudy> {
     return this.em.getRepository(ProlificMultiplayerStudy);
   }
@@ -473,19 +474,95 @@ export class MultiplayerStudyService extends BaseStudyService {
     return this.em.getRepository(ProlificMultiplayerStudyParticipant);
   }
 
-  async getProlificParticipantStatus(user: User): Promise<any> {
-    // TODO:
+  async getProlificParticipantStatus(user: User): Promise<ProlificMultiplayerParticipantStatus> {
+    const repo = this.getParticipantRepository();
+    let participant;
+    try {
+      participant = await repo.findOneOrFail({
+        where: { userId: user.id },
+        relations: [
+          "prolificBaselinePlayer",
+          "prolificVariablePlayer",
+          "prolificBaselinePlayer.game",
+          "prolificVariablePlayer.game",
+        ],
+      });
+    } catch (e) {
+      logger.fatal(e);
+      throw new ServerError({
+        code: 404,
+        message: "Participant not found",
+        displayMessage: "Participant not found",
+      });
+    }
+
+    if (!participant.prolificBaselinePlayer) {
+      return { status: "not-started" };
+    }
+
+    const basePlayer = participant.prolificBaselinePlayer;
+    const varPlayer = participant.prolificVariablePlayer;
+    const baseDone = ["victory", "defeat"].includes(basePlayer.game.status);
+    const varDone = varPlayer ? ["victory", "defeat"].includes(varPlayer.game.status) : false;
+
+    let status: ProlificMultiplayerParticipantStatus["status"] = "in-progress";
+    let inProgressGameType: LiteGameType | null = null;
+    let completionUrl: string | undefined;
+
+    if (!baseDone) {
+      // still in game 1
+      inProgressGameType = basePlayer.game.type;
+    } else if (!varPlayer) {
+      // finished game 1, game 2 not created yet
+      inProgressGameType = "prolificVariable";
+    } else if (!varDone) {
+      // in the middle of game 2
+      inProgressGameType = varPlayer.game.type;
+    } else {
+      // both games finished
+      status = "completed";
+      completionUrl = await this.getProlificCompletionUrl(user);
+    }
+
+    // only include activeRoomId if the room is actually live
+    let activeRoomId: string | undefined;
+    if (participant.roomId) {
+      const live =
+        (
+          await matchMaker.query({
+            roomId: participant.roomId,
+          })
+        ).length > 0;
+      if (live) {
+        activeRoomId = participant.roomId;
+      }
+    }
+
+    return {
+      status,
+      // in-progress users get their game type
+      ...(status === "in-progress" && { inProgressGameType }),
+      // completed users get a completion URL
+      ...(status === "completed" && { completionUrl }),
+      // only if the Colyseus room is still live
+      ...(activeRoomId && { activeRoomId }),
+    };
   }
 
-  async setProlificParticipantPlayers(gameType: LiteGameType, players: LitePlayer[]) {
+  async setProlificParticipantPlayers(
+    gameType: LiteGameType,
+    players: LitePlayer[],
+    roomId: string
+  ) {
     for (const player of players) {
-      await this.setProlificParticipantPlayer(gameType, player);
+      await this.setProlificParticipantPlayer(gameType, player, roomId);
     }
   }
 
   async setProlificParticipantPlayer(
     gameType: LiteGameType,
-    player: LitePlayer
+    player: LitePlayer,
+    roomId: string
   ): Promise<ProlificMultiplayerStudyParticipant> {
     const participant = await this.getParticipantRepository().findOneOrFail({
       where: { userId: player.userId },
@@ -496,6 +573,7 @@ export class MultiplayerStudyService extends BaseStudyService {
     } else {
       participant.prolificVariablePlayer = player;
     }
+    participant.roomId = roomId;
     return this.getParticipantRepository().save(participant);
   }
 
@@ -528,7 +606,6 @@ export class MultiplayerStudyService extends BaseStudyService {
       participant.user = user;
       participant.study = study;
       participant.prolificId = prolificId;
-      // TODO: add in treatments -- actually this should happen when a game starts
       logger.info(`Created new prolific participant ${prolificId} for study ${studyId}`);
       await this.getParticipantRepository().save(participant);
     } else {
@@ -538,18 +615,18 @@ export class MultiplayerStudyService extends BaseStudyService {
   }
 
   async checkHasCompletedStudy(user: User): Promise<void> {
-    // TODO: sanity check: make sure the user has played the game
-    // const numPlays = await this.em.getRepository(PlayerEntity).count({
-    //   where: { userId: user.id },
-    //   relations: ["game"],
-    // });
-    // if (numPlays < 1) {
-    //   throw new ServerError({
-    //     code: 403,
-    //     message: "Study not complete",
-    //     displayMessage: "Study not complete",
-    //   });
-    // }
+    // sanity check: make sure the user has played the game twice
+    const numPlays = await this.em.getRepository(LitePlayer).count({
+      where: { userId: user.id },
+      relations: ["game"],
+    });
+    if (numPlays < 1) {
+      throw new ServerError({
+        code: 403,
+        message: "Study not complete",
+        displayMessage: "Study not complete",
+      });
+    }
   }
 
   async getAllParticipantPoints(studyId: string): Promise<ProlificParticipantPointData[]> {

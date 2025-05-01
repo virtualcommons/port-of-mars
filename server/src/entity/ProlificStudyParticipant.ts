@@ -61,6 +61,12 @@ export class ProlificMultiplayerStudyParticipant extends BaseProlificStudyPartic
   @ManyToOne(type => ProlificMultiplayerStudy, study => study.participants, { nullable: false })
   study!: ProlificMultiplayerStudy;
 
+  @Column({ default: "" })
+  roomId!: string; // store the colyseus game room id for quick rejoining
+
+  @Column({ default: false })
+  abandonedGame!: boolean;
+
   @OneToOne(() => LitePlayer, { nullable: true })
   @JoinColumn()
   prolificBaselinePlayer!: LitePlayer;

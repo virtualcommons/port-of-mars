@@ -9,7 +9,9 @@
     body-bg-variant="dark"
   >
     <EventCard :event="event"></EventCard>
-    <b-button class="mt-2 w-100" variant="primary" @click="$emit('continue')">Continue</b-button>
+    <b-button v-if="showContinue" class="mt-2 w-100" variant="primary" @click="$emit('continue')"
+      >Continue</b-button
+    >
   </b-modal>
 </template>
 
@@ -26,6 +28,7 @@ import { EventCardData } from "@port-of-mars/shared/lite";
 export default class EventModal extends Vue {
   @Prop() event!: EventCardData;
   @Prop({ default: false }) visible!: boolean;
+  @Prop({ default: true }) showContinue!: boolean;
 
   localVisible = false;
 

@@ -84,7 +84,11 @@ export class PersistGameCmd extends CmdWithoutPayload {
     const { litegame, multiplayerStudy } = getServices();
     const game = await litegame.createGame(this.state);
     if (["prolificVariable", "prolificBaseline"].includes(this.state.type)) {
-      await multiplayerStudy.setProlificParticipantPlayers(this.state.type, game.players);
+      await multiplayerStudy.setProlificParticipantPlayers(
+        this.state.type,
+        game.players,
+        this.room.roomId
+      );
     }
     this.state.gameId = game.id;
   }
