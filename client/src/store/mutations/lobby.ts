@@ -2,6 +2,10 @@ import { State, defaultLobbyState } from "@port-of-mars/shared/game/client/state
 import { LobbyChatMessageData, LobbyClientData, LobbyType } from "@port-of-mars/shared/types";
 
 export default {
+  SET_LOBBY_GROUP_SIZE(state: State, payload: number) {
+    state.lobby.groupSize = payload;
+  },
+
   ADD_TO_LOBBY_CLIENTS(state: State, payload: LobbyClientData) {
     state.lobby.clients.push(payload);
   },

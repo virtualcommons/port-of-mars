@@ -22,6 +22,7 @@ export interface TreatmentData {
   isEventDeckKnown: boolean;
   thresholdInformation: ThresholdInformation;
   isLowResSystemHealth: boolean;
+  instructions?: string;
 }
 
 export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
@@ -29,6 +30,7 @@ export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
 export interface LiteGameParams {
+  numPlayers?: number;
   // determines which game type to reset and transition to in the same game room
   // if not defined, then end normally
   nextGameType?: LiteGameType;
@@ -60,6 +62,7 @@ export interface SoloGameClientState {
     isEventDeckKnown: boolean;
     thresholdInformation: "unknown" | "range" | "known";
     isLowResSystemHealth: boolean;
+    instructions?: string;
   };
   timeRemaining: number;
   systemHealth: number;

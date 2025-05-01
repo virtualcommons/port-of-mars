@@ -8,9 +8,10 @@ import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
 import { User } from "@port-of-mars/server/entity";
 import { Group, GroupManager } from "@port-of-mars/server/rooms/lobby/common/group";
-import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { LitePlayerUser } from "@port-of-mars/shared/types";
+import { LiteGameType } from "@port-of-mars/shared/lite";
+import { LiteGameState } from "../../pomlite/multiplayer/state";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -21,11 +22,9 @@ const logger = settings.logging.getLogger(__filename);
  */
 export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
   roomName = LITE_LOBBY_NAME;
-  // FIXME: this should be based on the game type, we can do this by
-  // throwing it in the data structure that holds events, etc for each type
-  // FIXME: also include the multiplayer game type here somehow so we know
-  // which to use and then pass it into the game room options
-  groupSize = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
+  groupSize = 3; // default, should be set to DEFAULTS.<gameType>.numPlayers
+  type: LiteGameType = "prolificBaseline";
+
   static get NAME() {
     return LITE_LOBBY_NAME;
   }
@@ -44,8 +43,18 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     return new LiteLobbyRoomState();
   }
 
+  async onCreate(options: { type: LiteGameType }) {
+    await super.onCreate(options);
+    this.type = options.type;
+    this.groupSize = LiteGameState.DEFAULTS[this.type].numPlayers || 3;
+  }
+
   afterJoin(client: Client) {
     this.groupManager.addClientToQueue(client);
+    this.sendSafe(client, {
+      kind: "set-group-size",
+      groupSize: this.groupSize,
+    });
   }
 
   afterLeave(client: Client) {
@@ -83,9 +92,8 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
         id: client.id,
       };
     });
-    const type = "prolificBaseline"; // FIXME: this shouldn't be hardcoded
     const room = await matchMaker.createRoom(LiteGameRoom.NAME, {
-      type,
+      type: this.type,
       users: playerUsers,
     });
     logger.info(`${this.roomName} created game room ${room.roomId}`);

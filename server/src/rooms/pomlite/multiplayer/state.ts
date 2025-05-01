@@ -8,7 +8,6 @@ import {
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
 import { Client } from "colyseus";
-import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
@@ -62,6 +61,7 @@ export class TreatmentParams extends Schema {
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
   @type("boolean") isLowResSystemHealth = false;
+  @type("string") instructions = "";
 
   constructor(data?: TreatmentData) {
     super();
@@ -71,6 +71,7 @@ export class TreatmentParams extends Schema {
     this.isEventDeckKnown = data.isEventDeckKnown;
     this.thresholdInformation = data.thresholdInformation;
     this.isLowResSystemHealth = data.isLowResSystemHealth;
+    this.instructions = data.instructions || "";
   }
 }
 
@@ -85,7 +86,7 @@ export class LiteGameState extends Schema {
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
 
-  @type("int8") numPlayers = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
+  @type("int8") numPlayers = 3; // default, should be set to DEFAULTS.<gameType>.numPlayers
   @type({ map: Player }) players = new MapSchema<Player>(); // track by client.auth.id.toString() (db id)
 
   // mirrors deck when deck is visible, otherwise show round cards
@@ -108,6 +109,7 @@ export class LiteGameState extends Schema {
   constructor(data: { userRoles: LiteRoleAssignment; type: LiteGameType }) {
     super();
     this.type = data.type;
+    this.numPlayers = this.defaultParams.numPlayers || 3;
     this.userRoles = data.userRoles;
     // set players
     for (const [role, user] of this.userRoles) {
@@ -193,6 +195,7 @@ export class LiteGameState extends Schema {
   static DEFAULTS: Record<LiteGameType, LiteGameParams> = {
     // unused for now
     freeplay: {
+      numPlayers: 3,
       maxRound: { min: 6, max: 14 },
       roundTransitionDuration: 3,
       twoEventsThreshold: { min: 12, max: 20 },
@@ -207,6 +210,7 @@ export class LiteGameState extends Schema {
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
     },
     prolificBaseline: {
+      numPlayers: 2,
       nextGameType: "prolificVariable",
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 2,
@@ -222,6 +226,7 @@ export class LiteGameState extends Schema {
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
     },
     prolificVariable: {
+      numPlayers: 2,
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 2,
       twoEventsThreshold: { min: 48, max: 48 },

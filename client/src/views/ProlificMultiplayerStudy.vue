@@ -14,7 +14,7 @@
       </div>
 
       <div v-else-if="started && state.isWaitingToStart" class="text-center p-5">
-        <p class="mb-4">{{ "temp: add state.treatmentParams.instructions" }}</p>
+        <span class="mb-4" v-html="state.treatmentParams.instructions"> </span>
         <h5>Game starts in {{ state.timeRemaining }}s</h5>
         <b-button
           variant="primary"
@@ -45,12 +45,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide, Watch } from "vue-property-decorator";
+import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { cloneDeep } from "lodash";
 import { LITE_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { LiteGameClientState } from "@port-of-mars/shared/lite";
-import { settings } from "@port-of-mars/shared/settings";
 import { LiteLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { applyLiteLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
@@ -86,7 +85,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   }
 
   get requiredPlayers() {
-    return settings.LITE_MULTIPLAYER_PLAYERS_COUNT;
+    return this.$tstore.state.lobby?.groupSize;
   }
 
   // game
@@ -126,7 +125,7 @@ export default class ProlificMultiplayerStudy extends Vue {
 
   async created() {
     // as soon as the page loads, join the lobby:
-    this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME);
+    this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME, { type: "prolificBaseline" });
     applyLiteLobbyResponses(this.lobbyRoom, this);
     this.lobbyApi.connect(this.lobbyRoom);
 

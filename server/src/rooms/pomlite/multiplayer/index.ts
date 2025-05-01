@@ -7,7 +7,6 @@ import { getServices } from "@port-of-mars/server/services";
 import { InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
 import { Invest, LiteGameType, Vote } from "@port-of-mars/shared/lite";
-import { settings as sharedSettings } from "@port-of-mars/shared/settings";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -18,9 +17,7 @@ export class LiteGameRoom extends Room<LiteGameState> {
   }
 
   autoDispose = true;
-  // FIXME: this should be based on the game type, we can do this by
-  // throwing it in the data structure that holds events, etc for each type
-  maxClients = sharedSettings.LITE_MULTIPLAYER_PLAYERS_COUNT;
+  maxClients = 5; // default, should be set to state.numPlayers
   patchRate = 1000 / 5;
 
   dispatcher = new Dispatcher(this);
@@ -76,6 +73,7 @@ export class LiteGameRoom extends Room<LiteGameState> {
     const type = options.type || "prolificBaseline";
     const userRoles = this.assignRoles(options.users);
     this.setState(new LiteGameState({ type, userRoles }));
+    this.maxClients = this.state.numPlayers;
     this.setPrivate(true);
     this.registerAllHandlers();
     this.dispatcher.dispatch(new InitGameCmd());

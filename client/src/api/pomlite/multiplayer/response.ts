@@ -39,6 +39,7 @@ export function applyMultiplayerGameServerResponses(
       "isEventDeckKnown",
       "thresholdInformation",
       "isLowResSystemHealth",
+      "instructions",
     ]);
   };
 
@@ -112,6 +113,7 @@ export const DEFAULT_STATE: LiteGameClientState = {
     isEventDeckKnown: false,
     thresholdInformation: "unknown",
     isLowResSystemHealth: false,
+    instructions: "",
   },
   players: new Map(),
   numPlayers: 1,

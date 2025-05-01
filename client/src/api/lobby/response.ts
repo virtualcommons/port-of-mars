@@ -92,6 +92,11 @@ export function applyLiteLobbyResponses(room: Room, component: any) {
     console.log(`client left the room: ${code}`);
   });
 
+  room.onMessage("set-group-size", (msg: { groupSize: number }) => {
+    console.log(msg);
+    store.commit("SET_LOBBY_GROUP_SIZE", msg.groupSize);
+  });
+
   room.onMessage("join-failure", (msg: JoinFailure) => {
     store.commit("SET_DASHBOARD_MESSAGE", { kind: "warning", message: msg.reason });
   });

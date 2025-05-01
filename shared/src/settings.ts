@@ -22,7 +22,6 @@ export const settings = {
   GIFT_CARD_AMOUNT: 10,
   SYSTEM_HEALTH_MAINTENANCE_COST: 25,
   MAXIMUM_COST: 1000,
-  LITE_MULTIPLAYER_PLAYERS_COUNT: 2,
 };
 
 const baseUrlMap = {

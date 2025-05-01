@@ -22,9 +22,15 @@ export interface JoinFailure {
   reason: string;
 }
 
+export interface SetGroupSize {
+  kind: "set-group-size";
+  groupSize: number;
+}
+
 export type LobbyResponse =
   | JoinedClientQueue
   | JoinExistingGame
   | SentInvitation
   | RemovedClientFromLobby
-  | JoinFailure;
+  | JoinFailure
+  | SetGroupSize;
