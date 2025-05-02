@@ -25,8 +25,6 @@ import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificSoloStudy from "@port-of-mars/client/views/ProlificSoloStudy.vue";
 import ProlificMultiplayerStudy from "@port-of-mars/client/views/ProlificMultiplayerStudy.vue";
-import LiteLobby from "@port-of-mars/client/views/LiteLobby.vue";
-import LiteMultiplayerGame from "@port-of-mars/client/views/LiteMultiplayerGame.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,

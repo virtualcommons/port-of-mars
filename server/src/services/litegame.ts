@@ -29,7 +29,6 @@ import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
 import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
-import { LitePlayerVote } from "../entity/LitePlayerVote";
 
 const logger = getLogger(__filename);
 
