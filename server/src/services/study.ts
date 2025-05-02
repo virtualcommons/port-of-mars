@@ -635,8 +635,54 @@ export class MultiplayerStudyService extends BaseStudyService {
     await this.getParticipantRepository().update({ userId }, { abandonedGame });
   }
 
-  async getAllParticipantPoints(studyId: string): Promise<ProlificParticipantPointData[]> {
-    // TODO:
-    return [];
+  async getAllParticipantPoints(studyId: string): Promise<Array<ProlificParticipantPointData>> {
+    const study = await this.getProlificStudy(studyId);
+    if (!study) {
+      throw new ServerError({
+        code: 404,
+        message: `Invalid study ID: ${studyId}`,
+        displayMessage: `Invalid study ID: ${studyId}`,
+      });
+    }
+    const participants = await this.getParticipantRepository().find({
+      where: { studyId: study.id },
+      relations: {
+        prolificBaselinePlayer: {
+          game: true,
+        },
+        prolificVariablePlayer: {
+          game: true,
+        },
+      },
+    });
+    return (
+      participants
+        // filter out participants who haven't fully completed both games
+        .filter(
+          p =>
+            p.prolificBaselinePlayer?.game &&
+            p.prolificVariablePlayer?.game &&
+            p.prolificBaselinePlayer.points !== null &&
+            p.prolificBaselinePlayer.points !== undefined &&
+            p.prolificVariablePlayer.points !== null &&
+            p.prolificVariablePlayer.points !== undefined
+        )
+        // return an array of prolificId and total points earned, if they lost they get 0 points
+        .map(p => {
+          const prolificBaselinePoints =
+            p.prolificBaselinePlayer.game.status === "victory"
+              ? p.prolificBaselinePlayer.points!
+              : 0;
+          const prolificVariablePoints =
+            p.prolificVariablePlayer.game.status === "victory"
+              ? p.prolificVariablePlayer.points!
+              : 0;
+          return {
+            prolificId: p.prolificId,
+            points: prolificBaselinePoints + prolificVariablePoints,
+            abandonedGame: p.abandonedGame,
+          };
+        })
+    );
   }
 }

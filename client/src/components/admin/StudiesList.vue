@@ -119,7 +119,14 @@
     >
       <b-form v-if="selectedStudy.participantPoints">
         <b-form-checkbox id="show-zero-bonus-payments" v-model="showZeroBonusPayments" class="mb-3">
-          Show participants with $0.00 bonus payments
+          Include participants with $0.00 bonus payments
+        </b-form-checkbox>
+        <b-form-checkbox
+          id="show-abandoned-game-players"
+          v-model="showAbandonedGamePlayers"
+          class="mb-3"
+        >
+          Include participants who abandoned the game (left early)
         </b-form-checkbox>
         <b-form-textarea
           id="bonus-payment-description-input"
@@ -157,6 +164,7 @@ export default class StudiesList extends Vue {
   selectedStudy: ProlificStudyData = this.resetStudy();
 
   showZeroBonusPayments = false;
+  showAbandonedGamePlayers = false;
 
   studyFields = [
     { key: "studyId", label: "Study ID" },
@@ -246,6 +254,7 @@ export default class StudiesList extends Vue {
   pointsToPaymentsCsv(data: ProlificParticipantPointData[]): string {
     return data
       .filter(item => this.showZeroBonusPayments || item.points > 0)
+      .filter(item => this.showAbandonedGamePlayers || !item.abandonedGame)
       .map(item => {
         const dollars = (item.points / 100).toFixed(2);
         return `${item.prolificId},${dollars}`;

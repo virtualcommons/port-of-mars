@@ -556,4 +556,5 @@ export interface ProlificStudyData {
 export interface ProlificParticipantPointData {
   prolificId: string;
   points: number;
+  abandonedGame?: boolean;
 }
