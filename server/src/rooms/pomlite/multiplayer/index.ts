@@ -4,10 +4,10 @@ import * as http from "http";
 import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import { InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
 import { Invest, LiteGameType, Vote } from "@port-of-mars/shared/lite";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
+import { EndGameCmd, InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -16,7 +16,7 @@ export class LiteGameRoom extends Room<LiteGameState> {
     return "multiplayer_game_room";
   }
 
-  autoDispose = true;
+  autoDispose = false;
   maxClients = 5; // default, should be set to state.numPlayers
   patchRate = 1000 / 5;
 
@@ -95,8 +95,22 @@ export class LiteGameRoom extends Room<LiteGameState> {
     return false;
   }
 
-  onJoin(client: Client, options: any, auth: User) {
+  async onJoin(client: Client, options: any, auth: User) {
     logger.trace("Client %s joined LiteGameRoom %s", auth.username, this.roomId);
+    const player = this.state.getPlayer(client);
+    const { multiplayerStudy } = getServices();
+    await multiplayerStudy.setParticipantAbandonedGame(player.userId, false);
+  }
+
+  async onLeave(client: Client, consented: boolean) {
+    const player = this.state.getPlayer(client);
+    const { multiplayerStudy } = getServices();
+    await multiplayerStudy.setParticipantAbandonedGame(player.userId, true);
+
+    // if no one is left, finish the game
+    if (this.clients.length === 0 && this.state.status === "incomplete") {
+      this.dispatcher.dispatch(new EndGameCmd().setPayload({ status: "defeat", abandoned: true }));
+    }
   }
 
   async onDispose(): Promise<void> {

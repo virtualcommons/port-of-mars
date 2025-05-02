@@ -629,6 +629,10 @@ export class MultiplayerStudyService extends BaseStudyService {
     }
   }
 
+  async setParticipantAbandonedGame(userId: number, abandonedGame: boolean) {
+    await this.getParticipantRepository().update({ userId }, { abandonedGame });
+  }
+
   async getAllParticipantPoints(studyId: string): Promise<ProlificParticipantPointData[]> {
     // TODO:
     return [];

@@ -363,11 +363,14 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
   }
 }
 
-export class EndGameCmd extends Cmd<{ status: LiteGameStatus }> {
-  async execute({ status } = this.payload) {
+export class EndGameCmd extends Cmd<{ status: LiteGameStatus; abandoned?: boolean }> {
+  async execute({ status, abandoned } = this.payload) {
     this.clock.clear();
-    // wait for a few seconds so the client can see the final state
-    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    if (!abandoned) {
+      // wait for a few seconds so the client can see the final state
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    }
 
     this.state.status = status;
     const players = Array.from(this.state.players.values()).map(player => ({
@@ -377,6 +380,10 @@ export class EndGameCmd extends Cmd<{ status: LiteGameStatus }> {
     const { litegame } = getServices();
     await litegame.updateGameStatus(this.state.gameId, status);
     await litegame.updatePlayerPoints(this.state.gameId, players, this.state.maxRound, status);
+
+    if (abandoned) {
+      this.room.disconnect();
+    }
 
     // wait for the update to be sent to the client
     await new Promise(resolve => setTimeout(resolve, 5000));
