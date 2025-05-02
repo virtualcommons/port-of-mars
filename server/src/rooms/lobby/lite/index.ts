@@ -11,7 +11,7 @@ import { Group, GroupManager } from "@port-of-mars/server/rooms/lobby/common/gro
 import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { LitePlayerUser } from "@port-of-mars/shared/types";
 import { LiteGameType } from "@port-of-mars/shared/lite";
-import { LiteGameState } from "../../pomlite/multiplayer/state";
+import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 
 const logger = settings.logging.getLogger(__filename);
 

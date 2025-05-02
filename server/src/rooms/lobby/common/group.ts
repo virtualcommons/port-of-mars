@@ -76,7 +76,7 @@ export class GroupManager {
   }
 
   formGroupFromQueue(): Group {
-    const group = new Group(this.queue.splice(0, MAX_GROUP_SIZE), this.groupSize);
+    const group = new Group(this.queue.splice(0, this.groupSize), this.groupSize);
     group.clients.forEach(client => {
       client.accepted = false;
       this.clientToGroup.set(client.username, group);

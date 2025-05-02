@@ -105,8 +105,10 @@ export class LiteGameRoom extends Room<LiteGameState> {
   async onLeave(client: Client, consented: boolean) {
     const player = this.state.getPlayer(client);
     const { multiplayerStudy } = getServices();
-    await multiplayerStudy.setParticipantAbandonedGame(player.userId, true);
-
+    if (!consented) {
+      // if the player left by closing the tab, etc. set them as having abandoned the game
+      await multiplayerStudy.setParticipantAbandonedGame(player.userId, true);
+    }
     // if no one is left, finish the game
     if (this.clients.length === 0 && this.state.status === "incomplete") {
       this.dispatcher.dispatch(new EndGameCmd().setPayload({ status: "defeat", abandoned: true }));
