@@ -100,7 +100,7 @@ studyRouter.get(
         return res.status(500).json({ message: "Study service not set" });
       }
       const user = req.user as User;
-      const url = await req.studyService.getProlificCompletionUrl(user);
+      const url = await req.studyService.getProlificCompletionUrl(user, false);
       res.json(url);
     } catch (e) {
       next(e);

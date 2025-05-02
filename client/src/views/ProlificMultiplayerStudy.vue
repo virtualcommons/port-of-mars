@@ -1,16 +1,35 @@
 <template>
   <div class="backdrop d-flex flex-column justify-content-center align-items-center">
+    <b-alert v-if="started" variant="warning" show dismissible>
+      <small>
+        <p>
+          This is a multiplayer game. In order to complete the study you must play through both
+          games with your group
+        </p>
+        <p class="mb-0">
+          If you are disconnected for any reason during the game, you will be able to rejoin by
+          returning to this page
+        </p>
+      </small>
+    </b-alert>
     <b-container class="h-100 dashboard-container content-container p-0" no-gutters>
-      <div v-if="!started && lobbyRoom" class="text-center p-5">
-        <p>Waiting for players to join…</p>
+      <div
+        v-if="!started && lobbyRoom"
+        class="mt-5 text-center p-5"
+        style="max-width: 30rem; margin: auto"
+      >
+        <p>Waiting for players to join..</p>
         <h4>{{ clients.length }} / {{ requiredPlayers }} Players</h4>
-        <b-progress
-          :value="clients.length"
-          :max="requiredPlayers"
-          animated
-          class="mt-3"
-          style="max-width: 400px; margin: auto"
-        />
+        <b-progress :value="clients.length" :max="requiredPlayers" animated class="my-3" />
+        <small class="text-muted">
+          <p>
+            Since the game portion of this study is multiplayer, please allow for some time for
+            other participants to join. If a group doesn't form in
+            {{ LOBBY_WAIT_LIMIT_MINUTES }} minutes, you'll be redirected back to Prolific and
+            compensated for your time.
+          </p>
+          <p>Please <b>do not</b> refresh this page</p>
+        </small>
       </div>
 
       <div v-else-if="started && state.isWaitingToStart" class="text-center p-5">
@@ -40,9 +59,13 @@
         :victoryText="gameOverText"
         :defeatText="gameOverText"
       />
-
-      <!-- TODO: what do we do here? -->
-      <div v-else>
+      <div
+        v-else-if="
+          !statusLoading &&
+          this.participantStatus.status === 'in-progress' &&
+          !participantStatus.activeRoomId
+        "
+      >
         Unfortunately, you were not able to complete the game portion of the study and your group
         cannot be re-joined.
       </div>
@@ -64,7 +87,6 @@ import {
   applyMultiplayerGameServerResponses,
 } from "@port-of-mars/client/api/pomlite/multiplayer/response";
 import { StudyAPI } from "@port-of-mars/client/api/study/request";
-// import { ProlificMultiplayerParticipantStatus } from "@port-of-mars/shared/types";
 import Splash from "@port-of-mars/client/components/lite/multiplayer/Splash.vue";
 import Dashboard from "@port-of-mars/client/components/lite/multiplayer/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/lite/multiplayer/GameOver.vue";
@@ -84,7 +106,9 @@ export default class ProlificMultiplayerStudy extends Vue {
   statusLoading = true;
 
   // lobby
+  LOBBY_WAIT_LIMIT_MINUTES = 5;
   lobbyRoom: Room | null = null;
+  lobbyTImeoutId: number | null = null;
   get clients() {
     return this.$tstore.state.lobby?.clients || [];
   }
@@ -153,6 +177,8 @@ export default class ProlificMultiplayerStudy extends Vue {
     applyLiteLobbyResponses(this.lobbyRoom, this);
     this.lobbyApi.connect(this.lobbyRoom);
 
+    this.startLobbyTimeout();
+
     // intercept lobby -> game messages
     this.lobbyRoom.onMessage("removed-client-from-lobby", () => this.transitionToGame());
     this.lobbyRoom.onMessage("join-existing-game", () => this.transitionToGame());
@@ -165,10 +191,30 @@ export default class ProlificMultiplayerStudy extends Vue {
     this.started = true;
   }
 
+  private startLobbyTimeout() {
+    if (this.lobbyTImeoutId !== null) return;
+    this.lobbyTImeoutId = window.setTimeout(async () => {
+      // be extra safe, make sure the game isn't running
+      if (this.gameRoom || this.started) {
+        return;
+      }
+      const completionUrl = await this.studyApi.completeProlificStudy();
+      window.location.href = completionUrl;
+    }, this.LOBBY_WAIT_LIMIT_MINUTES * 60 * 1000);
+  }
+
+  private clearLobbyTimeout() {
+    if (this.lobbyTImeoutId !== null) {
+      clearTimeout(this.lobbyTImeoutId);
+      this.lobbyTImeoutId = null;
+    }
+  }
+
   private async transitionToGame() {
     // leave lobby and join the real game room
     await this.lobbyRoom!.leave();
     this.lobbyApi.leave();
+    this.clearLobbyTimeout();
     const roomId = this.$ajax.roomId;
     if (!roomId) {
       return console.error("Missing roomId");
@@ -193,6 +239,7 @@ export default class ProlificMultiplayerStudy extends Vue {
     if (this.lobbyRoom) {
       await this.lobbyRoom.leave();
       this.lobbyApi.leave();
+      this.clearLobbyTimeout();
     }
     if (this.gameRoom) {
       await this.gameRoom.leave();

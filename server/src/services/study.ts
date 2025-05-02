@@ -65,7 +65,7 @@ export abstract class BaseStudyService extends BaseService {
     }
   }
 
-  async getProlificCompletionUrl(user: User): Promise<string> {
+  async getProlificCompletionUrl(user: User, checkCompleted = true): Promise<string> {
     const participant = await this.getParticipantRepository().findOne({
       where: { userId: user.id },
       relations: ["study"],
@@ -77,7 +77,9 @@ export abstract class BaseStudyService extends BaseService {
         displayMessage: "Participant not found",
       });
     }
-    await this.checkHasCompletedStudy(user);
+    if (checkCompleted) {
+      await this.checkHasCompletedStudy(user);
+    }
     return `https://app.prolific.co/submissions/complete?cc=${participant.study.completionCode}`;
   }
 
