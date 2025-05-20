@@ -649,7 +649,8 @@ export class LiteGameService extends BaseService {
       .getRepository(LitePlayerDecision)
       .createQueryBuilder("decision")
       .leftJoinAndSelect("decision.round", "round")
-      .leftJoin("round.game", "game")
+      .leftJoinAndSelect("round.game", "game")
+      .leftJoinAndSelect("game.players", "gamePlayers") // need to count players
       .leftJoinAndSelect("decision.player", "player")
       .leftJoinAndSelect("player.user", "user")
       .where("round.gameId IS NOT NULL");
@@ -660,18 +661,25 @@ export class LiteGameService extends BaseService {
 
     try {
       const decisions = await query.getMany();
-      const formattedDecisions = decisions.map(decision => ({
-        gameId: decision.round.gameId,
-        roundId: decision.round.id,
-        roundNumber: decision.round.roundNumber,
-        playerId: decision.player.id,
-        userId: decision.player.user.id,
-        username: decision.player.user.username,
-        initialPoints: decision.initialPoints,
-        systemHealthInvestment: decision.systemHealthInvestment,
-        pointsInvestment: decision.pointsInvestment,
-        dateCreated: decision.round.dateCreated.toISOString(),
-      }));
+      const formattedDecisions = decisions.map(decision => {
+        const numPlayers = decision.round.game.players.length;
+
+        return {
+          gameId: decision.round.gameId,
+          roundId: decision.round.id,
+          roundNumber: decision.round.roundNumber,
+          playerId: decision.player.id,
+          userId: decision.player.user.id,
+          username: decision.player.user.username,
+          initialPoints: decision.initialPoints,
+          initialSystemHealth: decision.round.initialSystemHealth,
+          scaledInitialSystemHealth: decision.round.initialSystemHealth / numPlayers,
+          systemHealthInvestment: decision.systemHealthInvestment,
+          scaledSystemHealthInvestment: decision.systemHealthInvestment / numPlayers,
+          pointsInvestment: decision.pointsInvestment,
+          dateCreated: decision.round.dateCreated.toISOString(),
+        };
+      });
 
       let header: any[] = [];
       if (formattedDecisions.length > 0) {

@@ -691,7 +691,7 @@ export class MultiplayerStudyService extends BaseStudyService {
     /**
      * export a flat CSV of unique games associated with the specified study
      *
-     * gameId, gameType, status, dateCreated, treatment details
+     * gameId, gameType, status, dateCreated, treatment details, numPlayers
      */
     const gameIds = await this.getGameIdsForStudyId(studyId);
     if (gameIds.length === 0) {
@@ -703,6 +703,7 @@ export class MultiplayerStudyService extends BaseStudyService {
       .getRepository(LiteGame)
       .createQueryBuilder("game")
       .leftJoinAndSelect("game.treatment", "treatment")
+      .leftJoinAndSelect("game.players", "players")
       .where("game.id IN (:...gameIds)", { gameIds });
 
     const games = await query.getMany();
@@ -716,6 +717,7 @@ export class MultiplayerStudyService extends BaseStudyService {
         studyId,
         status: game.status,
         maxRound: game.maxRound,
+        numPlayers: game.players.length,
         treatmentId: treatment.id,
         twoEventsThreshold: game.twoEventsThreshold,
         threeEventsThreshold: game.threeEventsThreshold,
