@@ -1,5 +1,16 @@
 <template>
   <div class="d-flex flex-column p-2 h-100 overflow-hidden solo-game">
+    <div class="d-flex flex-row justify-content-between mx-3">
+      <div v-for="[playerKey, player] of state.players" :key="playerKey">
+        <OtherPlayers
+          :role="player.role"
+          :ready="player.hasInvested"
+          :victoryPoints="player.points"
+          :username="player.username"
+          :isSelf="player.role === state.player.role"
+        />
+      </div>
+    </div>
     <EventModal
       v-if="state.activeCardId >= 0"
       :event="activeCard"
@@ -135,6 +146,7 @@ import { Vue, Component, Inject, Prop } from "vue-property-decorator";
 import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
 import { LiteGameClientState } from "@port-of-mars/shared/lite";
 import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
+import OtherPlayers from "@port-of-mars/client/components/lite/multiplayer/OtherPlayers.vue";
 import EventModal from "@port-of-mars/client/components/lite/EventModal.vue";
 import SegmentedBar from "@port-of-mars/client/components/lite/SegmentedBar.vue";
 import Deck from "@port-of-mars/client/components/lite/Deck.vue";
@@ -155,6 +167,7 @@ import HealthGained from "@port-of-mars/client/components/lite/HealthGained.vue"
     ThresholdInfo,
     VFDNumberDisplay,
     HealthGained,
+    OtherPlayers,
   },
 })
 export default class Dashboard extends Vue {
