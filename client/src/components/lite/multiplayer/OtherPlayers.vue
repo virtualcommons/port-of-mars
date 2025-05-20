@@ -23,12 +23,10 @@
     </div>
     <div class="h-100 w-100 mx-2 mt-2">
       <div class="d-flex flex-row">
-        <p class="font-weight-bold m-0 p-0" style="font-size: 1.2rem">
-          {{ username }}
-        </p>
+        <p class="font-weight-bold m-0 p-0" style="font-size: 1.2rem">Player&nbsp;{{ index }}</p>
         <b-badge v-if="isSelf" class="ml-2 p-2" variant="primary">You</b-badge>
       </div>
-      <p class="font-weight-bold m-0 p-0" style="font-size: 1rem">Points: {{ victoryPoints }}</p>
+      <b-badge v-if="hasInvested" class="ml-2 p-1" variant="success">Invested</b-badge>
     </div>
   </div>
 </template>
@@ -45,10 +43,9 @@ import PlayerModal from "@port-of-mars/client/components/game/modals/PlayerModal
 })
 export default class OtherPlayers extends Vue {
   @Prop() role!: Role;
-  @Prop() username!: string;
+  @Prop() index!: number;
   @Prop() isSelf!: boolean;
-  @Prop() ready!: boolean;
-  @Prop() victoryPoints!: number;
+  @Prop() hasInvested!: boolean;
 
   get frameColor(): object {
     return this.role

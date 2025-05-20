@@ -1,12 +1,11 @@
 <template>
   <div class="d-flex flex-column p-2 h-100 overflow-hidden solo-game">
     <div class="d-flex flex-row justify-content-between mx-3">
-      <div v-for="[playerKey, player] of state.players" :key="playerKey">
+      <div v-for="([playerKey, player], index) of state.players" :key="playerKey">
         <OtherPlayers
           :role="player.role"
-          :ready="player.hasInvested"
-          :victoryPoints="player.points"
-          :username="player.username"
+          :hasInvested="player.hasInvested"
+          :index="index + 1"
           :isSelf="player.role === state.player.role"
         />
       </div>
