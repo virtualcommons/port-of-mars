@@ -586,4 +586,105 @@ export class LiteGameService extends BaseService {
       }
     }
   }
+
+  async exportEventCardsCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all event cards drawn in past multiplayer games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, cardId (deckCardId), roundId, roundNumber, name, effectText, systemHealthEffect,
+     * resourcesEffect, pointsEffect
+     */
+    let query = this.em
+      .getRepository(LiteMarsEventDeckCard)
+      .createQueryBuilder("deckCard")
+      .leftJoinAndSelect("deckCard.round", "round")
+      .leftJoin("round.game", "game")
+      .leftJoinAndSelect("deckCard.card", "eventCard")
+      .where("deckCard.roundId IS NOT NULL"); // ensure card was actually drawn in a round
+
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("game.id IN (:...gameIds)", { gameIds });
+    }
+
+    try {
+      const deckCards = await query.getMany();
+      const formattedDeckCards = deckCards.map(deckCard => ({
+        gameId: deckCard.round!.gameId,
+        deckCardId: deckCard.id,
+        roundId: deckCard.round!.id,
+        roundNumber: deckCard.round!.roundNumber,
+        name: deckCard.card.displayName,
+        codeName: deckCard.card.codeName,
+        effectText: deckCard.effectText,
+        systemHealthEffect: deckCard.systemHealthEffect,
+        resourcesEffect: deckCard.resourcesEffect,
+        pointsEffect: deckCard.pointsEffect,
+      }));
+
+      let header: any[] = [];
+      if (formattedDeckCards.length > 0) {
+        header = Object.keys(formattedDeckCards[0]).map(name => ({
+          id: name,
+          title: name,
+        }));
+      }
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedDeckCards);
+      logger.info(`Lite game event cards data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting lite game event cards data: ${error}`);
+    }
+  }
+
+  async exportInvestmentsCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all player-made investments in past multiplayer games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, playerId, roundId, roundNumber, initialPoints (player's points before investment this round),
+     * systemHealthInvestment, pointsInvestment (points earned/lost from personal projects)
+     */
+    let query = this.em
+      .getRepository(LitePlayerDecision)
+      .createQueryBuilder("decision")
+      .leftJoinAndSelect("decision.round", "round")
+      .leftJoin("round.game", "game")
+      .leftJoinAndSelect("decision.player", "player")
+      .leftJoinAndSelect("player.user", "user")
+      .where("round.gameId IS NOT NULL");
+
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("game.id IN (:...gameIds)", { gameIds });
+    }
+
+    try {
+      const decisions = await query.getMany();
+      const formattedDecisions = decisions.map(decision => ({
+        gameId: decision.round.gameId,
+        roundId: decision.round.id,
+        roundNumber: decision.round.roundNumber,
+        playerId: decision.player.id,
+        userId: decision.player.user.id,
+        username: decision.player.user.username,
+        initialPoints: decision.initialPoints,
+        systemHealthInvestment: decision.systemHealthInvestment,
+        pointsInvestment: decision.pointsInvestment,
+        dateCreated: decision.round.dateCreated.toISOString(),
+      }));
+
+      let header: any[] = [];
+      if (formattedDecisions.length > 0) {
+        header = Object.keys(formattedDecisions[0]).map(name => ({
+          id: name,
+          title: name,
+        }));
+      }
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedDecisions);
+      logger.info(`Lite game investment data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting lite game investment data: ${error}`);
+    }
+  }
 }

@@ -9,6 +9,7 @@ import {
   SoloGameTreatment,
   SoloPlayer,
   User,
+  LiteGame,
 } from "@port-of-mars/server/entity";
 import { Repository } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
@@ -684,5 +685,143 @@ export class MultiplayerStudyService extends BaseStudyService {
           };
         })
     );
+  }
+
+  async exportProlificStudyGamesCsv(path: string, studyId: string) {
+    /**
+     * export a flat CSV of unique games associated with the specified study
+     *
+     * gameId, gameType, status, dateCreated, treatment details
+     */
+    const gameIds = await this.getGameIdsForStudyId(studyId);
+    if (gameIds.length === 0) {
+      logger.warn(`No games found for study ${studyId} to export to games.csv.`);
+      return;
+    }
+
+    const query = this.em
+      .getRepository(LiteGame)
+      .createQueryBuilder("game")
+      .leftJoinAndSelect("game.treatment", "treatment")
+      .where("game.id IN (:...gameIds)", { gameIds });
+
+    const games = await query.getMany();
+    const formattedGames = [];
+
+    for (const game of games) {
+      const treatment = game.treatment;
+      formattedGames.push({
+        gameId: game.id,
+        gameType: game.type,
+        studyId,
+        status: game.status,
+        maxRound: game.maxRound,
+        treatmentId: treatment.id,
+        twoEventsThreshold: game.twoEventsThreshold,
+        threeEventsThreshold: game.threeEventsThreshold,
+        knownEventDeck: treatment.isEventDeckKnown,
+        knownEndRound: treatment.isNumberOfRoundsKnown,
+        thresholdInformation: treatment.thresholdInformation,
+        lowResSystemHealth: treatment.isLowResSystemHealth,
+        dateCreated: game.dateCreated.toISOString(),
+      });
+    }
+
+    if (formattedGames.length === 0) {
+      logger.warn(`No game data to format for study ${studyId} in games.csv.`);
+      return;
+    }
+    const header = Object.keys(formattedGames[0]).map(name => ({ id: name, title: name }));
+    const writer = createObjectCsvWriter({ path, header });
+    await writer.writeRecords(formattedGames);
+    logger.info(
+      `Multiplayer study game data for study ${studyId} exported successfully to ${path}`
+    );
+  }
+
+  async exportProlificStudyPlayersCsv(path: string, studyId: string) {
+    /**
+     * export a flat CSV of player participations in games for the specified study
+     *
+     * playerId, userId, username, prolificId, gameId, role, points, abandonedGame, roomId
+     */
+    const query = this.em
+      .getRepository(ProlificMultiplayerStudyParticipant)
+      .createQueryBuilder("participant")
+      .leftJoinAndSelect("participant.user", "user")
+      .leftJoinAndSelect("participant.study", "study")
+      .leftJoinAndSelect("participant.prolificBaselinePlayer", "baselinePlayer")
+      .leftJoinAndSelect("baselinePlayer.game", "baselineGame") // Only need gameId
+      .leftJoinAndSelect("participant.prolificVariablePlayer", "variablePlayer")
+      .leftJoinAndSelect("variablePlayer.game", "variableGame") // Only need gameId
+      .where("study.studyId = :studyId", { studyId });
+
+    const participants = await query.getMany();
+    const formattedPlayers = [];
+
+    for (const participant of participants) {
+      const user = participant.user;
+      const currentStudyId = participant.study.studyId;
+      const prolificId = participant.prolificId;
+
+      const playerInstances = [
+        participant.prolificBaselinePlayer,
+        participant.prolificVariablePlayer,
+      ];
+
+      for (const player of playerInstances) {
+        if (player && player.game) {
+          formattedPlayers.push({
+            prolificId: prolificId,
+            userId: user.id,
+            username: user.username,
+            playerId: player.id,
+            gameId: player.game.id,
+            gameType: player.game.type,
+            studyId: currentStudyId,
+            role: player.role,
+            points: player.points,
+            abandonedGame: participant.abandonedGame,
+            roomId: participant.roomId,
+            dateCreated: player.dateCreated.toISOString(),
+          });
+        }
+      }
+    }
+
+    if (formattedPlayers.length === 0) {
+      logger.warn(`No player data to format for study ${studyId} in players.csv.`);
+      return;
+    }
+    const header = Object.keys(formattedPlayers[0]).map(name => ({ id: name, title: name }));
+    const writer = createObjectCsvWriter({ path, header });
+    await writer.writeRecords(formattedPlayers);
+    logger.info(
+      `Multiplayer study player data for study ${studyId} exported successfully to ${path}`
+    );
+  }
+
+  async getGameIdsForStudyId(studyId: string): Promise<number[]> {
+    const participants = await this.em
+      .getRepository(ProlificMultiplayerStudyParticipant)
+      .createQueryBuilder("participant")
+      .leftJoinAndSelect("participant.prolificBaselinePlayer", "baselinePlayer")
+      .leftJoinAndSelect("baselinePlayer.game", "baselineGame")
+      .leftJoinAndSelect("participant.prolificVariablePlayer", "variablePlayer")
+      .leftJoinAndSelect("variablePlayer.game", "variableGame")
+      .leftJoinAndSelect("participant.study", "study")
+      .where("study.studyId = :studyId", { studyId })
+      .getMany();
+
+    const gameIds = [];
+    for (const participant of participants) {
+      if (participant.prolificBaselinePlayer?.game) {
+        gameIds.push(participant.prolificBaselinePlayer.game.id);
+      }
+      if (participant.prolificVariablePlayer?.game) {
+        gameIds.push(participant.prolificVariablePlayer.game.id);
+      }
+    }
+    return gameIds;
   }
 }

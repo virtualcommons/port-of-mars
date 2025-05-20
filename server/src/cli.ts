@@ -81,22 +81,51 @@ async function exportSoloData(em: EntityManager, type: LiteGameType, start?: str
   await getServices().sologame.exportInvestmentsCsv("/dump/solo/investments.csv", gameIds);
 }
 
-async function exportStudyData(em: EntityManager, studyIds: Array<string>) {
+async function exportSoloStudyData(em: EntityManager, studyIds: Array<string>) {
   for (const studyId of studyIds) {
     const gameIds = await getServices().soloStudy.getGameIdsForStudyId(studyId);
     if (gameIds.length > 0) {
-      await mkdir(`/dump/study/${studyId}`, { recursive: true });
+      await mkdir(`/dump/study/solo/${studyId}`, { recursive: true });
       logger.info("Exporting %d games for study %s", gameIds.length, studyId);
       await getServices().soloStudy.exportProlificGamesCsv(
-        `/dump/study/${studyId}/games.csv`,
+        `/dump/study/solo/${studyId}/games.csv`,
         studyId
       );
       await getServices().sologame.exportEventCardsCsv(
-        `/dump/study/${studyId}/eventcards.csv`,
+        `/dump/study/solo/${studyId}/eventcards.csv`,
         gameIds
       );
       await getServices().sologame.exportInvestmentsCsv(
-        `/dump/study/${studyId}/investments.csv`,
+        `/dump/study/solo/${studyId}/investments.csv`,
+        gameIds
+      );
+    } else {
+      logger.info("No games found for study %s", studyId);
+    }
+  }
+}
+
+async function exportLiteStudyData(em: EntityManager, studyIds: Array<string>) {
+  for (const studyId of studyIds) {
+    const gameIds = await getServices().multiplayerStudy.getGameIdsForStudyId(studyId);
+    if (gameIds.length > 0) {
+      const studyExportPath = `/dump/study/lite/${studyId}`;
+      await mkdir(studyExportPath, { recursive: true });
+      logger.info("Exporting data for %d games in study %s", gameIds.length, studyId);
+      await getServices().multiplayerStudy.exportProlificStudyGamesCsv(
+        `${studyExportPath}/games.csv`,
+        studyId
+      );
+      await getServices().multiplayerStudy.exportProlificStudyPlayersCsv(
+        `${studyExportPath}/players.csv`,
+        studyId
+      );
+      await getServices().litegame.exportEventCardsCsv(
+        `${studyExportPath}/eventcards.csv`,
+        gameIds
+      );
+      await getServices().litegame.exportInvestmentsCsv(
+        `${studyExportPath}/investments.csv`,
         gameIds
       );
     } else {
@@ -771,11 +800,20 @@ program
       )
       .addCommand(
         program
-          .createCommand("study")
+          .createCommand("solostudy")
           .description("export solo game data to flat CSV files for a given study or studies")
           .option("-s, --studyIds <studyIds...>", "Specify one or more study IDs")
           .action(async cmd => {
-            await withDataSource(async em => exportStudyData(em, cmd.studyIds));
+            await withDataSource(async em => exportSoloStudyData(em, cmd.studyIds));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("litestudy")
+          .description("export solo game data to flat CSV files for a given study or studies")
+          .option("-s, --studyIds <studyIds...>", "Specify one or more study IDs")
+          .action(async cmd => {
+            await withDataSource(async em => exportLiteStudyData(em, cmd.studyIds));
           })
       )
   )
