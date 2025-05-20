@@ -54,7 +54,7 @@ export default class OtherPlayers extends Vue {
   }
 
   get indicatorStyle() {
-    return !this.ready
+    return !this.hasInvested
       ? { border: `0.125rem solid var(--color-${this.role})` }
       : { border: `0.125rem solid var(--green)` };
   }
