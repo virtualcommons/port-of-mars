@@ -32,16 +32,16 @@
       </div>
 
       <div v-else-if="started && state.isWaitingToStart" class="text-center p-5">
-        <span class="mb-4" v-html="state.treatmentParams.instructions"> </span>
-        <h5>Game starts in {{ state.timeRemaining }}s</h5>
+        <span class="mb-4 text-left" v-html="state.treatmentParams.instructions"> </span>
         <b-button
           variant="primary"
           class="mt-3"
           :disabled="state.player.isReadyToStart"
           @click="setPlayerReady"
         >
-          {{ state.player.isReadyToStart ? "Waiting on others…" : "I'm Ready" }}
+          {{ state.player.isReadyToStart ? "Waiting on others…" : "Start now" }}
         </b-button>
+        <h5 class="mb-0 mt-3">The game will automatically start in {{ state.timeRemaining }}s</h5>
       </div>
 
       <Dashboard v-else-if="started && !state.isWaitingToStart && !isGameOver" :state="state" />
