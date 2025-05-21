@@ -71,10 +71,16 @@ const router = new VueRouter({
     },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     {
-      ...PAGE_META[FREE_PLAY_LOBBY_PAGE],
+      path: PAGE_META[FREE_PLAY_LOBBY_PAGE].path,
+      meta: PAGE_META[FREE_PLAY_LOBBY_PAGE].meta,
       component: FreePlayLobby,
       children: [
-        { path: "", name: "FreePlayLobby", component: LobbyRoomList, meta: FREE_PLAY_LOBBY_META },
+        {
+          path: "",
+          name: FREE_PLAY_LOBBY_PAGE,
+          component: LobbyRoomList,
+          meta: FREE_PLAY_LOBBY_META,
+        },
         {
           path: "room/:id",
           name: "FreePlayLobbyRoom",
