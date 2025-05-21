@@ -24,21 +24,48 @@ export default class ThresholdInfo extends Vue {
   @Prop() state!: LiteGameClientState;
   @Prop() thresholdInformation!: "known" | "range";
 
+  normalize(value: number): number {
+    if (value === 0) {
+      return 0;
+    }
+    // extra safety
+    if (this.state.numPlayers > 0) {
+      return Math.floor((value - 1) / this.state.numPlayers) + 1;
+    }
+    return value;
+  }
+
   get twoEventsThresholdInfo(): string {
     if (this.thresholdInformation === "known") {
-      return `below ${this.state.twoEventsThreshold}`;
+      if (typeof this.state.twoEventsThreshold === "number") {
+        return `below ${this.normalize(this.state.twoEventsThreshold)}`;
+      }
+      return "threshold not available";
     } else {
-      const range = this.state.twoEventsThresholdRange!;
-      return `between ${range.min}-${range.max}`;
+      const range = this.state.twoEventsThresholdRange;
+      if (range && typeof range.min === "number" && typeof range.max === "number") {
+        const normalizedMin = this.normalize(range.min);
+        const normalizedMax = this.normalize(range.max);
+        return `between ${normalizedMin}-${normalizedMax}`;
+      }
+      return "range not available";
     }
   }
 
   get threeEventsThresholdInfo(): string {
     if (this.thresholdInformation === "known") {
-      return `below ${this.state.threeEventsThreshold}`;
+      if (typeof this.state.threeEventsThreshold === "number") {
+        return `below ${this.normalize(this.state.threeEventsThreshold)}`;
+      }
+      return "threshold not available";
     } else {
-      const range = this.state.threeEventsThresholdRange!;
-      return `between ${range.min}-${range.max}`;
+      const range = this.state.threeEventsThresholdRange;
+      if (range && typeof range.min === "number" && typeof range.max === "number") {
+        const normalizedMin = this.normalize(range.min);
+        const normalizedMax = this.normalize(range.max);
+        return `between ${normalizedMin}-${normalizedMax}`;
+      }
+      return "range not available";
     }
   }
 

@@ -27,10 +27,16 @@ export interface SetGroupSize {
   groupSize: number;
 }
 
+export interface LobbyTimeoutRedirect {
+  kind: "lobby-timeout-redirect";
+  completionUrl: string;
+}
+
 export type LobbyResponse =
   | JoinedClientQueue
   | JoinExistingGame
   | SentInvitation
   | RemovedClientFromLobby
   | JoinFailure
-  | SetGroupSize;
+  | SetGroupSize
+  | LobbyTimeoutRedirect;

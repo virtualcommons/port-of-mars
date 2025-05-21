@@ -1,6 +1,10 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { SentInvitation, JoinFailure } from "@port-of-mars/shared/lobby/responses";
+import {
+  SentInvitation,
+  JoinFailure,
+  LobbyTimeoutRedirect,
+} from "@port-of-mars/shared/lobby/responses";
 import { LobbyChatMessageData, LobbyClientData, LobbyType } from "@port-of-mars/shared/types";
 import {
   FREE_PLAY_LOBBY_PAGE,
@@ -104,6 +108,10 @@ export function applyLiteLobbyResponses(room: Room, component: any) {
   room.onMessage("sent-invitation", (msg: SentInvitation) => {
     component.$ajax.roomId = msg.roomId;
     room.send("accept-invitation", { kind: "accept-invitation" });
+  });
+
+  room.onMessage("lobby-timeout-redirect", (msg: LobbyTimeoutRedirect) => {
+    window.location.href = msg.completionUrl;
   });
 
   room.state.clients.onAdd = (e: Schemify<LobbyClientData>) => {

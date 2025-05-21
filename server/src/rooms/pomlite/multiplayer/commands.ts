@@ -114,7 +114,7 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
 export class WaitForPlayersCmd extends CmdWithoutPayload {
   execute() {
     this.state.isWaitingToStart = true;
-    this.state.timeRemaining = this.defaultParams.timeRemaining;
+    this.state.timeRemaining = 45;
     this.state.players.forEach(p => (p.isReadyToStart = false));
   }
 }
@@ -405,6 +405,7 @@ export class ResetGameStateCmd extends CmdWithoutPayload {
     this.state.gameId = 0;
     this.state.type = nextType;
     this.state.isWaitingToStart = true;
+    this.state.timeRemaining = 45;
 
     this.state.eventCardDeck.length = 0;
     this.state.visibleEventCards.length = 0;

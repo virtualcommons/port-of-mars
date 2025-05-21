@@ -30,6 +30,8 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
   }
 
   clockInterval = 1000 * 5; // try to form groups every 5 seconds
+  LOBBY_WAIT_LIMIT_MS = 5 * 60 * 1000; // 5 minutes in milliseconds
+  lastPlayerJoinTimestamp: number = Date.now(); // timestamp of the last player join to the lobby room
 
   private mutex = new Mutex();
 
@@ -47,6 +49,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     await super.onCreate(options);
     this.type = options.type;
     this.groupSize = LiteGameState.DEFAULTS[this.type].numPlayers || 3;
+    this.lastPlayerJoinTimestamp = Date.now();
   }
 
   afterJoin(client: Client) {
@@ -55,6 +58,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
       kind: "set-group-size",
       groupSize: this.groupSize,
     });
+    this.lastPlayerJoinTimestamp = Date.now(); // reset stale lobby timer on any new join
   }
 
   afterLeave(client: Client) {
@@ -67,13 +71,44 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     const release = await this.mutex.acquire();
     try {
       await this.formAndInviteGroups();
+      await this.checkLobbyTimeout(); // call the timeout check
     } finally {
       release();
     }
   }
 
+  async checkLobbyTimeout() {
+    if (Date.now() - this.lastPlayerJoinTimestamp > this.LOBBY_WAIT_LIMIT_MS) {
+      const queueSnapshot = [...this.queue];
+
+      if (queueSnapshot.length > 0) {
+        const { multiplayerStudy, account } = getServices();
+
+        for (const lobbyClient of queueSnapshot) {
+          try {
+            const user = await account.findUserById(lobbyClient.client.auth.id);
+            if (user) {
+              // redirect to prolific completion url
+              const completionUrl = await multiplayerStudy.getProlificCompletionUrl(user, false);
+              this.sendSafe(lobbyClient.client, {
+                kind: "lobby-timeout-redirect",
+                completionUrl: completionUrl,
+              });
+              lobbyClient.client.leave(); // this will trigger afterLeave, removing them from queue
+            } else {
+              logger.warn(`Timeout: User with id ${lobbyClient.client.auth.id} not found`);
+            }
+          } catch (error: any) {
+            logger.warn(`Timeout: Error processing client ${lobbyClient.username}`);
+          }
+        }
+      }
+      // reset the timestamp regardless of whether anyone was timed out or if queue was empty
+      this.lastPlayerJoinTimestamp = Date.now();
+    }
+  }
+
   async formAndInviteGroups() {
-    this.groupManager.shuffleQueue();
     while (this.queue.length >= this.groupSize) {
       const group = this.groupManager.formGroupFromQueue();
       if (group) {

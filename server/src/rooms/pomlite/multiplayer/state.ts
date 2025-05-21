@@ -227,7 +227,7 @@ export class LiteGameState extends Schema {
     },
     prolificVariable: {
       numPlayers: 3,
-      maxRound: { min: 8, max: 8 },
+      maxRound: { min: 11, max: 11 },
       roundTransitionDuration: 2,
       twoEventsThreshold: { min: 48, max: 48 },
       threeEventsThreshold: { min: 27, max: 27 },

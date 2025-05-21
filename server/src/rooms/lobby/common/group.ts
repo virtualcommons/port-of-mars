@@ -75,11 +75,16 @@ export class GroupManager {
     return this.pendingGroups.get(id);
   }
 
-  formGroupFromQueue(): Group {
-    const group = new Group(this.queue.splice(0, this.groupSize), this.groupSize);
-    group.clients.forEach(client => {
-      client.accepted = false;
-      this.clientToGroup.set(client.username, group);
+  formGroupFromQueue(): Group | null {
+    if (this.queue.length < this.groupSize) {
+      return null;
+    }
+    this.queue.sort((a, b) => a.dateJoined - b.dateJoined);
+    const groupClients = this.queue.splice(0, this.groupSize);
+    const group = new Group(groupClients, this.groupSize);
+    group.clients.forEach(lc => {
+      lc.accepted = false;
+      this.clientToGroup.set(lc.username, group);
     });
     this.pendingGroups.set(group.id, group);
     return group;

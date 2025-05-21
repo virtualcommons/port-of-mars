@@ -24,9 +24,8 @@
         <small class="text-muted">
           <p>
             Since the game portion of this study is multiplayer, please allow for some time for
-            other participants to join. If a group doesn't form in
-            {{ LOBBY_WAIT_LIMIT_MINUTES }} minutes, you'll be redirected back to Prolific and
-            compensated for your time.
+            other participants to join. If 5 minutes passes since the last player joined the lobby,
+            you will be redirected back to Prolific and compensated for your time.
           </p>
           <p>Please <b>do not</b> refresh this page</p>
         </small>
@@ -106,9 +105,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   statusLoading = true;
 
   // lobby
-  LOBBY_WAIT_LIMIT_MINUTES = 5;
   lobbyRoom: Room | null = null;
-  lobbyTImeoutId: number | null = null;
   get clients() {
     return this.$tstore.state.lobby?.clients || [];
   }
@@ -177,8 +174,6 @@ export default class ProlificMultiplayerStudy extends Vue {
     applyLiteLobbyResponses(this.lobbyRoom, this);
     this.lobbyApi.connect(this.lobbyRoom);
 
-    this.startLobbyTimeout();
-
     // intercept lobby -> game messages
     this.lobbyRoom.onMessage("removed-client-from-lobby", () => this.transitionToGame());
     this.lobbyRoom.onMessage("join-existing-game", () => this.transitionToGame());
@@ -191,30 +186,10 @@ export default class ProlificMultiplayerStudy extends Vue {
     this.started = true;
   }
 
-  private startLobbyTimeout() {
-    if (this.lobbyTImeoutId !== null) return;
-    this.lobbyTImeoutId = window.setTimeout(async () => {
-      // be extra safe, make sure the game isn't running
-      if (this.gameRoom || this.started) {
-        return;
-      }
-      const completionUrl = await this.studyApi.completeProlificStudy();
-      window.location.href = completionUrl;
-    }, this.LOBBY_WAIT_LIMIT_MINUTES * 60 * 1000);
-  }
-
-  private clearLobbyTimeout() {
-    if (this.lobbyTImeoutId !== null) {
-      clearTimeout(this.lobbyTImeoutId);
-      this.lobbyTImeoutId = null;
-    }
-  }
-
   private async transitionToGame() {
     // leave lobby and join the real game room
     await this.lobbyRoom!.leave();
     this.lobbyApi.leave();
-    this.clearLobbyTimeout();
     const roomId = this.$ajax.roomId;
     if (!roomId) {
       return console.error("Missing roomId");
@@ -239,7 +214,6 @@ export default class ProlificMultiplayerStudy extends Vue {
     if (this.lobbyRoom) {
       await this.lobbyRoom.leave();
       this.lobbyApi.leave();
-      this.clearLobbyTimeout();
     }
     if (this.gameRoom) {
       await this.gameRoom.leave();
