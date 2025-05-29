@@ -51,8 +51,8 @@
         :status="completedGameState.status"
         :points="completedGameState.points"
         :round="completedGameState.round"
-        :showContinue="isStudyComplete"
-        :continueText="isStudyComplete ? 'Return to Prolific' : 'Continue'"
+        :showContinue="isStudyComplete || isSecondGame"
+        continueText="Return to Prolific"
         :showHighScores="false"
         @continue="handleContinue"
         :victoryText="gameOverText"
@@ -130,12 +130,16 @@ export default class ProlificMultiplayerStudy extends Vue {
     return this.participantStatus.status === "completed";
   }
 
+  get isSecondGame() {
+    return this.state.type === "prolificVariable";
+  }
+
   get isGameOver() {
     return ["victory", "defeat"].includes(this.state.status);
   }
 
   get gameOverText() {
-    return this.isStudyComplete
+    return this.isSecondGame
       ? "You have completed the study. Thank you for your participation!"
       : "You will be advanced to the next game in a few seconds..";
   }
