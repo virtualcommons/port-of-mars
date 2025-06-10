@@ -163,6 +163,7 @@ export interface ProfileMenuView {
 
 export interface Lobby {
   clients: Array<LobbyClientData>;
+  groupSize: number;
   chat: Array<LobbyChatMessageData>;
   ready: boolean;
   dateCreated: number;
@@ -225,6 +226,7 @@ export const initialUserState: User = {
 
 export function defaultLobbyState(): Lobby {
   return {
+    groupSize: 5,
     clients: [],
     chat: [],
     ready: false,

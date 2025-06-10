@@ -4,7 +4,7 @@ import {
   Player,
   Trade,
   Accomplishment,
-} from "@port-of-mars/server/rooms/game/state";
+} from "@port-of-mars/server/rooms/pom/game/state";
 import {
   CURATOR,
   PIONEER,
@@ -27,8 +27,8 @@ import {
   OutOfCommissionEntrepreneur,
   BreakdownOfTrust,
   PersonalGain,
-} from "@port-of-mars/server/rooms/game/state/marsevents/state";
-import { MarsEvent } from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
+} from "@port-of-mars/server/rooms/pom/game/state/marsevents/state";
+import { MarsEvent } from "@port-of-mars/server/rooms/pom/game/state/marsevents/MarsEvent";
 
 /**
  * Returns true iff the given playerData has enough resources to send a trade request

@@ -1,13 +1,28 @@
 import { url } from "@port-of-mars/client/util";
-import { ProlificStudyData, ProlificParticipantStatus } from "@port-of-mars/shared/types";
+import {
+  ProlificStudyData,
+  ProlificSoloParticipantStatus,
+  StudyMode,
+  ProlificMultiplayerParticipantStatus,
+} from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
 export class StudyAPI {
-  constructor(public store: TStore, public ajax: AjaxRequest) {}
+  mode: StudyMode;
 
-  async getProlificParticipantStatus(): Promise<ProlificParticipantStatus> {
-    return this.ajax.get(url("/study/prolific/status"), ({ data, status }) => {
+  constructor(public store: TStore, public ajax: AjaxRequest, mode: StudyMode) {
+    if (mode !== "solo" && mode !== "multiplayer") {
+      throw new Error("Study mode must be 'solo' or 'multiplayer'");
+    } else {
+      this.mode = mode;
+    }
+  }
+
+  async getProlificParticipantStatus(): Promise<
+    ProlificSoloParticipantStatus | ProlificMultiplayerParticipantStatus
+  > {
+    return this.ajax.get(url(`/study/prolific/${this.mode}/status`), ({ data, status }) => {
       if (status !== 200) {
         return null;
       }
@@ -16,20 +31,20 @@ export class StudyAPI {
   }
 
   async completeProlificStudy(): Promise<string> {
-    return this.ajax.get(url("/study/prolific/complete"), ({ data }) => {
+    return this.ajax.get(url(`/study/prolific/${this.mode}/complete`), ({ data }) => {
       return data;
     });
   }
 
   async getAllProlificStudies(): Promise<ProlificStudyData[]> {
-    return this.ajax.get(url("/study/prolific/studies"), ({ data }) => {
+    return this.ajax.get(url(`/study/prolific/${this.mode}/studies`), ({ data }) => {
       return data;
     });
   }
 
   async addProlificStudy(study: ProlificStudyData): Promise<ProlificStudyData> {
     return this.ajax.post(
-      url("/study/prolific/add"),
+      url(`/study/prolific/${this.mode}/add`),
       ({ data }) => {
         return data;
       },
@@ -39,7 +54,7 @@ export class StudyAPI {
 
   async updateProlificStudy(study: ProlificStudyData): Promise<ProlificStudyData> {
     return this.ajax.post(
-      url(`/study/prolific/update/?studyId=${study.studyId}`),
+      url(`/study/prolific/${this.mode}/update/?studyId=${study.studyId}`),
       ({ data }) => {
         return data;
       },

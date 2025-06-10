@@ -2,18 +2,45 @@ import { Router, Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
-import { PROLIFIC_STUDY_PAGE } from "@port-of-mars/shared/routes";
+import {
+  PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_SOLO_STUDY_PAGE,
+} from "@port-of-mars/shared/routes";
 import { User } from "@port-of-mars/server/entity";
-import { ProlificStudyData } from "@port-of-mars/shared/types";
+import { ProlificStudyData, StudyMode } from "@port-of-mars/shared/types";
 import { isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
+import { BaseStudyService } from "@port-of-mars/server/services/study";
+
+interface StudyModeRequest extends Request {
+  studyService?: BaseStudyService;
+  mode?: StudyMode;
+}
 
 export const studyRouter = Router();
 
-// http://localhost:2567/study/prolific?prolificId=<PROLIFIC_PID>&studyId=<STUDY_ID>
-// https://portofmars.asu.edu/study/prolific?prolificId=<PROLIFIC_PID>&studyId=<STUDY_ID>
+// middleware to extract :mode parameter and attach corresponding study service
+studyRouter.use("/prolific/:mode", (req: StudyModeRequest, res: Response, next: NextFunction) => {
+  const mode = req.params.mode;
+  if (mode === "solo") {
+    req.studyService = getServices().soloStudy;
+    req.mode = "solo";
+  } else if (mode === "multiplayer") {
+    req.studyService = getServices().multiplayerStudy;
+    req.mode = "multiplayer";
+  } else {
+    return res.status(400).json({ message: "Invalid mode. Use 'solo' or 'multiplayer'" });
+  }
+  next();
+});
+
+// http://localhost:2567/study/prolific/solo?prolificId=<PROLIFIC_PID>&studyId=<STUDY_ID>
+// https://portofmars.asu.edu/study/prolific/solo?prolificId=<PROLIFIC_PID>&studyId=<STUDY_ID>
+// or
+// http://localhost:2567/study/prolific/multiplayer?prolificId=<PROLIFIC_PID>&studyId=<STUDY_ID>
+// https://portofmars.asu.edu/study/prolific/multiplayer?prolificId=<PROLIFIC_PID>&studyId=<STUDY_ID>
 studyRouter.get(
-  "/prolific",
-  async (req: Request, res: Response, next: NextFunction) => {
+  "/prolific/:mode",
+  async (req: StudyModeRequest, res: Response, next: NextFunction) => {
     const prolificId = String(req.query.prolificId || "");
     if (!prolificId) {
       return res.status(403).json({
@@ -22,7 +49,10 @@ studyRouter.get(
       });
     }
     const studyId = String(req.query.studyId || "");
-    const study = await getServices().study.getProlificStudy(studyId);
+    if (!req.studyService) {
+      return res.status(500).json({ message: "Study service not set" });
+    }
+    const study = await req.studyService.getProlificStudy(studyId);
     if (!study || !study.isActive) {
       return res.status(403).json({
         kind: "danger",
@@ -33,42 +63,62 @@ studyRouter.get(
     req.body.studyId = studyId;
     next();
   },
-  passport.authenticate("local-prolific"),
-  (req: Request, res: Response) => {
-    res.redirect(toUrl(PROLIFIC_STUDY_PAGE));
+  (req: StudyModeRequest, res: Response, next: NextFunction) => {
+    // use the correct passport strategy based on mode
+    passport.authenticate(`local-prolific-${req.params.mode}`)(req, res, next);
+  },
+  (req: StudyModeRequest, res: Response) => {
+    if (req.mode == "solo") {
+      res.redirect(toUrl(PROLIFIC_SOLO_STUDY_PAGE));
+    } else if (req.mode == "multiplayer") {
+      res.redirect(toUrl(PROLIFIC_MULTIPLAYER_STUDY_PAGE));
+    }
   }
 );
 
-studyRouter.get("/prolific/status", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const services = getServices();
-    const user = req.user as User;
-    const status = await services.study.getProlificParticipantStatus(user);
-    res.json(status);
-  } catch (e) {
-    next(e);
+studyRouter.get(
+  "/prolific/:mode/status",
+  async (req: StudyModeRequest, res: Response, next: NextFunction) => {
+    try {
+      if (!req.studyService) {
+        return res.status(500).json({ message: "Study service not set" });
+      }
+      const user = req.user as User;
+      const status = await req.studyService.getProlificParticipantStatus(user);
+      res.json(status);
+    } catch (e) {
+      next(e);
+    }
   }
-});
-
-studyRouter.get("/prolific/complete", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const services = getServices();
-    const user = req.user as User;
-    const url = await services.study.getProlificCompletionUrl(user);
-    res.json(url);
-  } catch (e) {
-    next(e);
-  }
-});
+);
 
 studyRouter.get(
-  "/prolific/studies",
-  isAdminAuthenticated,
-  async (req: Request, res: Response, next: NextFunction) => {
+  "/prolific/:mode/complete",
+  async (req: StudyModeRequest, res: Response, next: NextFunction) => {
     try {
-      const studies = await getServices().study.getAllProlificStudies();
+      if (!req.studyService) {
+        return res.status(500).json({ message: "Study service not set" });
+      }
+      const user = req.user as User;
+      const url = await req.studyService.getProlificCompletionUrl(user, false);
+      res.json(url);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+studyRouter.get(
+  "/prolific/:mode/studies",
+  isAdminAuthenticated,
+  async (req: StudyModeRequest, res: Response, next: NextFunction) => {
+    try {
+      if (!req.studyService) {
+        return res.status(500).json({ message: "Study service not set" });
+      }
+      const studies = await req.studyService.getAllProlificStudies();
       for (const study of studies) {
-        study.participantPoints = await getServices().study.getAllParticipantPoints(study.studyId);
+        study.participantPoints = await req.studyService.getAllParticipantPoints(study.studyId);
       }
       res.json(studies);
     } catch (error) {
@@ -78,17 +128,20 @@ studyRouter.get(
 );
 
 studyRouter.post(
-  "/prolific/add",
+  "/prolific/:mode/add",
   isAdminAuthenticated,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: StudyModeRequest, res: Response, next: NextFunction) => {
     try {
+      if (!req.studyService) {
+        return res.status(500).json({ message: "Study service not set" });
+      }
       const { description, studyId, completionCode, isActive } = req.body as ProlificStudyData;
       if (!description || !studyId || !completionCode) {
         return res.status(400).json({
           message: "Missing required fields: description, studyId, or completionCode.",
         });
       }
-      const savedStudy = await getServices().study.createProlificStudy(
+      const savedStudy = await req.studyService.createProlificStudy(
         studyId,
         completionCode,
         description,
@@ -103,12 +156,15 @@ studyRouter.post(
 );
 
 studyRouter.post(
-  "/prolific/update",
+  "/prolific/:mode/update",
   isAdminAuthenticated,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: StudyModeRequest, res: Response, next: NextFunction) => {
     try {
+      if (!req.studyService) {
+        return res.status(500).json({ message: "Study service not set" });
+      }
       const { studyId, description, completionCode, isActive } = req.body as ProlificStudyData;
-      const updatedStudy = await getServices().study.updateProlificStudy(
+      const updatedStudy = await req.studyService.updateProlificStudy(
         studyId,
         completionCode,
         description,

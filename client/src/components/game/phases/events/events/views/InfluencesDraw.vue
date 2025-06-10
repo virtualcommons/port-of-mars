@@ -41,7 +41,7 @@
 <script lang="ts">
 import { Vue, Component, Inject } from "vue-property-decorator";
 import { Role, Resource } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({})
 export default class InfluencesDraw extends Vue {

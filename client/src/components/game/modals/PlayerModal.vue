@@ -85,7 +85,7 @@ import { Component, Vue, Prop, Inject } from "vue-property-decorator";
 import { Role, Phase } from "@port-of-mars/shared/types";
 import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({
   components: {

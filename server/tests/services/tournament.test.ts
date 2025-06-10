@@ -9,7 +9,7 @@ import {
   initTransaction,
   rollbackTransaction,
 } from "../common";
-import { getRandomizedMarsEventDeck } from "@port-of-mars/server/rooms/game/state/marsevents/common";
+import { getRandomizedMarsEventDeck } from "@port-of-mars/server/rooms/pom/game/state/marsevents/common";
 import { Game, TournamentRoundInvite, Treatment, User } from "@port-of-mars/server/entity";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import { ServerError } from "@port-of-mars/server/util";

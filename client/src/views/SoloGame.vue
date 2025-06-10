@@ -18,15 +18,15 @@
 import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { cloneDeep } from "lodash";
-import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
+import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/solo/request";
 import {
   DEFAULT_STATE,
   applySoloGameServerResponses,
-} from "@port-of-mars/client/api/sologame/response";
-import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/sologame";
-import Dashboard from "@port-of-mars/client/components/sologame/Dashboard.vue";
-import GameOver from "@port-of-mars/client/components/sologame/GameOver.vue";
-import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
+} from "@port-of-mars/client/api/pomlite/solo/response";
+import { SOLO_ROOM_NAME, SoloGameClientState } from "@port-of-mars/shared/lite";
+import Dashboard from "@port-of-mars/client/components/lite/solo/Dashboard.vue";
+import GameOver from "@port-of-mars/client/components/lite/solo/GameOver.vue";
+import Splash from "@port-of-mars/client/components/lite/solo/Splash.vue";
 
 @Component({
   name: "sologame",
@@ -38,7 +38,7 @@ import Splash from "@port-of-mars/client/components/sologame/Splash.vue";
 })
 export default class SoloGame extends Vue {
   @Inject() readonly $client!: Client;
-  @Provide() private api: SoloGameRequestAPI = new SoloGameRequestAPI();
+  @Provide() private api: LiteGameRequestAPI = new LiteGameRequestAPI();
   hasApi = false;
   started = false;
 

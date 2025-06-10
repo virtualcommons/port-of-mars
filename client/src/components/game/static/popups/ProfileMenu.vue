@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from "vue-property-decorator";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import { isDev, isStaging } from "@port-of-mars/shared/settings";
 import { FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 

@@ -35,7 +35,7 @@
 <script lang="ts">
 import { Vue, Component, Inject } from "vue-property-decorator";
 import { Role, ROLES } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import _ from "lodash";
 
 @Component({})

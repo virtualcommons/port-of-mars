@@ -32,7 +32,7 @@
 <script lang="ts">
 import { Vue, Component, Inject } from "vue-property-decorator";
 import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
-import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
+import { AbstractGameAPI } from "@port-of-mars/client/api/pom/game/types";
 
 @Component({
   components: {},

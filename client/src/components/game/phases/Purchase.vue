@@ -45,7 +45,7 @@ import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
 import { AccomplishmentCardType } from "@port-of-mars/client/types/cards";
 import { AccomplishmentData } from "@port-of-mars/shared/types";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 
 @Component({
   components: {

@@ -41,7 +41,7 @@
 <script lang="ts">
 import { Inject, Component, Vue } from "vue-property-decorator";
 
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
 import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
 import { AccomplishmentCardType } from "@port-of-mars/client/types/cards";

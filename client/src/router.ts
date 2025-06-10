@@ -23,7 +23,8 @@ import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
-import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
+import ProlificSoloStudy from "@port-of-mars/client/views/ProlificSoloStudy.vue";
+import ProlificMultiplayerStudy from "@port-of-mars/client/views/ProlificMultiplayerStudy.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -43,7 +44,8 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
   PROFILE_PAGE,
-  PROLIFIC_STUDY_PAGE,
+  PROLIFIC_SOLO_STUDY_PAGE,
+  PROLIFIC_MULTIPLAYER_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -69,10 +71,16 @@ const router = new VueRouter({
     },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     {
-      ...PAGE_META[FREE_PLAY_LOBBY_PAGE],
+      path: PAGE_META[FREE_PLAY_LOBBY_PAGE].path,
+      meta: PAGE_META[FREE_PLAY_LOBBY_PAGE].meta,
       component: FreePlayLobby,
       children: [
-        { path: "", name: "FreePlayLobby", component: LobbyRoomList, meta: FREE_PLAY_LOBBY_META },
+        {
+          path: "",
+          name: FREE_PLAY_LOBBY_PAGE,
+          component: LobbyRoomList,
+          meta: FREE_PLAY_LOBBY_META,
+        },
         {
           path: "room/:id",
           name: "FreePlayLobbyRoom",
@@ -95,7 +103,8 @@ const router = new VueRouter({
     { ...PAGE_META[ABOUT_PAGE], component: Home },
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
-    { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
+    { ...PAGE_META[PROLIFIC_SOLO_STUDY_PAGE], component: ProlificSoloStudy },
+    { ...PAGE_META[PROLIFIC_MULTIPLAYER_STUDY_PAGE], component: ProlificMultiplayerStudy },
   ],
 });
 

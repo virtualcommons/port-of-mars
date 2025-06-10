@@ -1,5 +1,5 @@
 import { Page } from "@port-of-mars/shared/routes";
-import { SoloGameType } from "@port-of-mars/shared/sologame/types";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 export type Dictionary<T> = { [key: string]: T };
 
@@ -19,6 +19,8 @@ export const BAN = "ban" as const;
 export const NONE = "none" as const;
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
+export type LitePlayerUser = { username: string; id: number };
+export type LiteRoleAssignment = Map<Role, LitePlayerUser>;
 export interface ClientSafeUser {
   id: number;
   email?: string;
@@ -523,9 +525,9 @@ export interface DynamicSettingsData {
   announcementBannerText: string;
 }
 
-export interface ProlificParticipantStatus {
-  activeGameType: SoloGameType | null;
-  nextGameType: SoloGameType | null;
+export interface ProlificSoloParticipantStatus {
+  activeGameType: LiteGameType | null;
+  nextGameType: LiteGameType | null;
   nextGameInstructions?: string;
   progress: {
     max: number;
@@ -533,6 +535,15 @@ export interface ProlificParticipantStatus {
     label: string;
   };
 }
+
+export interface ProlificMultiplayerParticipantStatus {
+  status: "not-started" | "in-progress" | "completed";
+  completionUrl?: string;
+  inProgressGameType?: LiteGameType | null;
+  activeRoomId?: string;
+}
+
+export type StudyMode = "solo" | "multiplayer";
 
 export interface ProlificStudyData {
   description: string;
@@ -545,4 +556,5 @@ export interface ProlificStudyData {
 export interface ProlificParticipantPointData {
   prolificId: string;
   points: number;
+  abandonedGame?: boolean;
 }

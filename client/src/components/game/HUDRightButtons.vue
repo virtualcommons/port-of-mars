@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from "vue-property-decorator";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import { HUDRightView } from "@port-of-mars/shared/game/client/panes";
 import { MANUAL_PAGE } from "@port-of-mars/shared/routes";
 

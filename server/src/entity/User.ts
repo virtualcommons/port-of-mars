@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Player } from "./Player";
-import { SoloPlayer } from "./SoloPlayer";
+import { SoloPlayer } from "./LitePlayer";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
 @Entity()

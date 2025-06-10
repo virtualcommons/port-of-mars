@@ -94,7 +94,7 @@
 
 <script lang="ts">
 import { Vue, Prop, Component, Inject } from "vue-property-decorator";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/pom/game/request";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 import ReportButton from "@port-of-mars/client/components/game/static/chat/ReportButton.vue";
 

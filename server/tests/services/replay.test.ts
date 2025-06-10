@@ -1,4 +1,4 @@
-import { GameState } from "@port-of-mars/server/rooms/game/state";
+import { GameState } from "@port-of-mars/server/rooms/pom/game/state";
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import {
   AcceptedTradeRequest,
@@ -23,7 +23,7 @@ import {
   SubtractedSystemHealthWearAndTear,
   TakenStateSnapshot,
   TimeInvested,
-} from "@port-of-mars/server/rooms/game/events";
+} from "@port-of-mars/server/rooms/pom/game/events";
 import {
   CURATOR,
   ENTREPRENEUR,
@@ -34,9 +34,9 @@ import {
 } from "@port-of-mars/shared/types";
 import { DBPersister, toDBGameEvent } from "@port-of-mars/server/services/persistence";
 import { GameReplayer, MarsEventSummarizer } from "@port-of-mars/server/services/replay";
-import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
+import { GameEvent } from "@port-of-mars/server/rooms/pom/game/events/types";
 import { EntityManager, QueryRunner } from "typeorm";
-import { Persister } from "@port-of-mars/server/rooms/game/types";
+import { Persister } from "@port-of-mars/server/rooms/pom/game/types";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { Player, Tournament, TournamentRound, User } from "@port-of-mars/server/entity";
 import { getAccomplishmentByID } from "@port-of-mars/server/data/Accomplishment";
@@ -47,7 +47,7 @@ import {
   initTransaction,
   rollbackTransaction,
 } from "../common";
-import { getFixedMarsEventDeck } from "@port-of-mars/server/rooms/game/state/marsevents/common";
+import { getFixedMarsEventDeck } from "@port-of-mars/server/rooms/pom/game/state/marsevents/common";
 
 describe("a game", () => {
   const opts = mockGameStateInitOpts();

@@ -1,6 +1,6 @@
 import { Client, matchMaker } from "colyseus";
 import { buildGameOpts } from "@port-of-mars/server/util";
-import { GameRoom } from "@port-of-mars/server/rooms/game";
+import { GameRoom } from "@port-of-mars/server/rooms/pom/game";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import {

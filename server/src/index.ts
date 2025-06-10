@@ -17,11 +17,12 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { settings as sharedSettings, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
-import { GameRoom } from "@port-of-mars/server/rooms/game";
-import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
+import { GameRoom } from "@port-of-mars/server/rooms/pom/game";
+import { SoloGameRoom } from "@port-of-mars/server/rooms/pomlite/solo";
 import { User } from "@port-of-mars/server/entity";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { TournamentLobbyRoom } from "@port-of-mars/server/rooms/lobby/tournament";
+import { LiteLobbyRoom } from "@port-of-mars/server/rooms/lobby/lite";
 import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
@@ -37,6 +38,7 @@ import {
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
+import { LiteGameRoom } from "./rooms/pomlite/multiplayer";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -111,7 +113,7 @@ if (isDevOrStaging()) {
 }
 
 passport.use(
-  "local-prolific",
+  "local-prolific-solo",
   new LocalStrategy(
     {
       usernameField: "studyId",
@@ -120,7 +122,29 @@ passport.use(
     },
     async function (req: any, studyId: string, prolificId: string, done: any) {
       try {
-        const participant = await getServices().study.getOrCreateProlificParticipant(
+        const participant = await getServices().soloStudy.getOrCreateProlificParticipant(
+          prolificId,
+          studyId
+        );
+        return done(null, participant.user);
+      } catch (e) {
+        return done(e);
+      }
+    }
+  )
+);
+
+passport.use(
+  "local-prolific-multiplayer",
+  new LocalStrategy(
+    {
+      usernameField: "studyId",
+      passwordField: "prolificId",
+      passReqToCallback: true,
+    },
+    async function (req: any, studyId: string, prolificId: string, done: any) {
+      try {
+        const participant = await getServices().multiplayerStudy.getOrCreateProlificParticipant(
           prolificId,
           studyId
         );
@@ -241,6 +265,8 @@ async function createApp() {
   gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
   gameServer.define(TournamentLobbyRoom.NAME, TournamentLobbyRoom);
   gameServer.define(SoloGameRoom.NAME, SoloGameRoom);
+  gameServer.define(LiteGameRoom.NAME, LiteGameRoom);
+  gameServer.define(LiteLobbyRoom.NAME, LiteLobbyRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
   // Final error handling middleware

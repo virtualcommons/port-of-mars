@@ -8,11 +8,11 @@ import { SurveyService } from "@port-of-mars/server/services/survey";
 import { StatsService } from "@port-of-mars/server/services/stats";
 import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
-import { SoloGameService } from "@port-of-mars/server/services/sologame";
+import { SoloGameService, LiteGameService } from "@port-of-mars/server/services/litegame";
+import { SoloStudyService, MultiplayerStudyService } from "@port-of-mars/server/services/study";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
 import dataSource from "@port-of-mars/server/datasource";
 import { createClient, RedisClient } from "redis";
-import { StudyService } from "./study";
 
 export class ServiceProvider {
   constructor(public em: EntityManager) {}
@@ -47,6 +47,14 @@ export class ServiceProvider {
       this._sologame = new SoloGameService(this);
     }
     return this._sologame;
+  }
+
+  private _litegame?: LiteGameService;
+  get litegame(): LiteGameService {
+    if (!this._litegame) {
+      this._litegame = new LiteGameService(this);
+    }
+    return this._litegame;
   }
 
   private _quiz?: QuizService;
@@ -97,12 +105,20 @@ export class ServiceProvider {
     return this._admin;
   }
 
-  private _study?: StudyService;
-  get study() {
-    if (!this._study) {
-      this._study = new StudyService(this);
+  private _soloStudy?: SoloStudyService;
+  get soloStudy() {
+    if (!this._soloStudy) {
+      this._soloStudy = new SoloStudyService(this);
     }
-    return this._study;
+    return this._soloStudy;
+  }
+
+  private _multiplayerStudy?: MultiplayerStudyService;
+  get multiplayerStudy() {
+    if (!this._multiplayerStudy) {
+      this._multiplayerStudy = new MultiplayerStudyService(this);
+    }
+    return this._multiplayerStudy;
   }
 
   private _settings?: RedisSettings;

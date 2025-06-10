@@ -21,7 +21,7 @@ export class LobbyClient extends Schema {
     this.id = this.client.auth.id;
     this.ready = false;
     this.accepted = false;
-    this.dateJoined = new Date().getTime();
+    this.dateJoined = Date.now();
   }
 }
 
