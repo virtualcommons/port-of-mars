@@ -13,6 +13,9 @@
       </small>
     </b-alert>
     <b-container class="h-100 dashboard-container content-container p-0" no-gutters>
+      <div v-if="joinFailureReason" class="text-center p-5">
+        <p>{{ joinFailureReason }}</p>
+      </div>
       <div
         v-if="!started && lobbyRoom"
         class="mt-5 text-center p-5"
@@ -106,6 +109,7 @@ export default class ProlificMultiplayerStudy extends Vue {
 
   // lobby
   lobbyRoom: Room | null = null;
+  joinFailureReason = "";
   get clients() {
     return this.$tstore.state.lobby?.clients || [];
   }
@@ -164,7 +168,16 @@ export default class ProlificMultiplayerStudy extends Vue {
   async created() {
     await this.fetchParticipantStatus();
     if (this.participantStatus.status === "not-started") {
-      await this.joinLobby();
+      try {
+        await this.joinLobby();
+      } catch (error) {
+        console.error("Failed to join lobby:", error);
+        if (error instanceof Error) {
+          this.joinFailureReason = error.message;
+        } else {
+          this.joinFailureReason = "Failed to join lobby. Please try refreshing the page.";
+        }
+      }
     } else if (this.participantStatus.status === "in-progress") {
       if (this.participantStatus.activeRoomId) {
         // try to re-join active game

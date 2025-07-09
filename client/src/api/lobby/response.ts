@@ -102,7 +102,7 @@ export function applyLiteLobbyResponses(room: Room, component: any) {
   });
 
   room.onMessage("join-failure", (msg: JoinFailure) => {
-    store.commit("SET_DASHBOARD_MESSAGE", { kind: "warning", message: msg.reason });
+    console.log("join failure", msg);
   });
 
   room.onMessage("sent-invitation", (msg: SentInvitation) => {

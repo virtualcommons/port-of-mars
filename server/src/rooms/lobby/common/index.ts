@@ -1,4 +1,4 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, ServerError } from "colyseus";
 import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/common/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
@@ -76,23 +76,37 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   }
 
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
-    try {
-      if (!(await this.isLobbyOpen())) {
-        return false;
-      }
-      const user = await getServices().account.findUserById((request as any).session.passport.user);
-      if (!(await this.canUserJoin(user))) {
-        return false;
-      }
-      if (user.isBanned) {
-        logger.info(`Banned user ${user.username} attempted to join ${this.roomName}`);
-        return false;
-      }
-      return user;
-    } catch (e) {
-      logger.fatal(`Unable to authenticate client: ${e}`);
+    const sp = getServices();
+    if (!(await this.isLobbyOpen())) {
+      throw new ServerError(
+        503,
+        "Sorry, Port of Mars is currently closed! Please try again later."
+      );
     }
-    return false;
+    const numberOfActiveParticipants = await sp.game.getNumberOfActiveParticipants();
+    const maxConnections = await sp.settings.maxConnections();
+    if (numberOfActiveParticipants + this.state.clients.length > maxConnections) {
+      throw new ServerError(503, "Sorry, Port of Mars is currently full! Please try again later.");
+    }
+
+    const user = await sp.account.findUserById((request as any).session.passport.user);
+    if (!(await this.canUserJoin(user))) {
+      return false;
+    }
+    if (user.isBanned) {
+      logger.info(`Banned user ${user.username} attempted to join ${this.roomName}`);
+      return false;
+    }
+
+    // if user is already in lobby, reject and offer troubleshooting
+    if (this.state.clients.find((c: LobbyClient) => c.id === user.id)) {
+      throw new ServerError(
+        409,
+        "You are already in a lobby. Please check your other browser windows."
+      );
+    }
+
+    return user;
   }
 
   /**
@@ -101,26 +115,6 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   afterJoin(client: Client): void {}
 
   async onJoin(client: Client, options: any, auth: any) {
-    const sp = getServices();
-    // if existing room found, give option to join that room
-    // reject join if max connections reached
-    const numberOfActiveParticipants = await sp.game.getNumberOfActiveParticipants();
-    const maxConnections = await sp.settings.maxConnections();
-    if (numberOfActiveParticipants + this.state.clients.length > maxConnections) {
-      this.sendSafe(client, {
-        kind: "join-failure",
-        reason: "Sorry, Port of Mars is currently full! Please try again later.",
-      });
-      return;
-    }
-    // if user is already in lobby, reject and offer troubleshooting
-    if (this.state.clients.find((c: LobbyClient) => c.id === client.auth.id)) {
-      this.sendSafe(client, {
-        kind: "join-failure",
-        reason: "You are already in a lobby. Please check your other browser windows.",
-      });
-      return;
-    }
     // add client to lobby
     logger.debug(
       `attempting to add client ${client.auth.username} to ${this.roomName} ${this.roomId}`
