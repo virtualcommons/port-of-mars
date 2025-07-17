@@ -56,6 +56,7 @@ export abstract class BaseStudyService extends BaseService {
       const studies = await this.getRepository().find();
 
       return studies.map((study: BaseProlificStudy) => ({
+        gameType: study.gameType,
         description: study.description || "",
         studyId: study.studyId,
         completionCode: study.completionCode,
@@ -93,7 +94,8 @@ export abstract class BaseStudyService extends BaseService {
     studyId: string,
     completionCode: string,
     description?: string,
-    isActive = true
+    isActive = true,
+    gameType: LiteGameType = "prolificBaseline"
   ): Promise<BaseProlificStudy> {
     const repo = this.getRepository();
     const study = repo.create({
@@ -101,6 +103,7 @@ export abstract class BaseStudyService extends BaseService {
       completionCode,
       description,
       isActive,
+      gameType,
     });
     return repo.save(study);
   }

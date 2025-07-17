@@ -135,7 +135,8 @@ studyRouter.post(
       if (!req.studyService) {
         return res.status(500).json({ message: "Study service not set" });
       }
-      const { description, studyId, completionCode, isActive } = req.body as ProlificStudyData;
+      const { gameType, description, studyId, completionCode, isActive } =
+        req.body as ProlificStudyData;
       if (!description || !studyId || !completionCode) {
         return res.status(400).json({
           message: "Missing required fields: description, studyId, or completionCode.",
@@ -145,7 +146,8 @@ studyRouter.post(
         studyId,
         completionCode,
         description,
-        isActive ?? true
+        isActive ?? true,
+        gameType
       );
       res.status(201).json(savedStudy);
     } catch (error) {

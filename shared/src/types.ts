@@ -547,6 +547,7 @@ export interface ProlificMultiplayerParticipantStatus {
 export type StudyMode = "solo" | "multiplayer";
 
 export interface ProlificStudyData {
+  gameType: LiteGameType;
   description: string;
   studyId: string;
   completionCode: string;
