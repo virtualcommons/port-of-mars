@@ -537,6 +537,7 @@ export interface ProlificSoloParticipantStatus {
 }
 
 export interface ProlificMultiplayerParticipantStatus {
+  startingGameType: LiteGameType;
   status: "not-started" | "in-progress" | "completed";
   completionUrl?: string;
   inProgressGameType?: LiteGameType | null;
@@ -546,6 +547,7 @@ export interface ProlificMultiplayerParticipantStatus {
 export type StudyMode = "solo" | "multiplayer";
 
 export interface ProlificStudyData {
+  gameType: LiteGameType;
   description: string;
   studyId: string;
   completionCode: string;

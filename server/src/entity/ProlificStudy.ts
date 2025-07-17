@@ -4,6 +4,7 @@ import {
   ProlificMultiplayerStudyParticipant,
   ProlificSoloStudyParticipant,
 } from "./ProlificStudyParticipant";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 export abstract class BaseProlificStudy {
   @PrimaryGeneratedColumn()
@@ -23,6 +24,9 @@ export abstract class BaseProlificStudy {
 
   @Column()
   completionCode!: string;
+
+  @Column({ default: "prolificBaseline" })
+  gameType!: LiteGameType;
 
   abstract participants: Array<BaseProlificStudyParticipant>;
 }

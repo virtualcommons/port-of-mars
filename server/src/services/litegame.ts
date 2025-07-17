@@ -14,6 +14,7 @@ import {
   LiteMarsEventDeckCard,
   LitePlayer,
   LitePlayerDecision,
+  LiteChatMessage,
   SoloGame,
   SoloGameRound,
   SoloGameTreatment,
@@ -585,6 +586,23 @@ export class LiteGameService extends BaseService {
         await this.sp.leaderboard.updateLiteHighScore(player.id, points, maxRound);
       }
     }
+  }
+
+  async createChatMessage(
+    gameId: number,
+    playerId: number,
+    message: string,
+    round: number
+  ): Promise<LiteChatMessage> {
+    const chatMessageRepo = this.em.getRepository(LiteChatMessage);
+    const chatMessage = chatMessageRepo.create({
+      gameId,
+      playerId,
+      message,
+      round,
+      dateCreated: new Date(),
+    });
+    return await chatMessageRepo.save(chatMessage);
   }
 
   async exportEventCardsCsv(path: string, gameIds?: Array<number>) {
