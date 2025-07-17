@@ -493,6 +493,7 @@ export class MultiplayerStudyService extends BaseStudyService {
           "prolificVariablePlayer",
           "prolificBaselinePlayer.game",
           "prolificVariablePlayer.game",
+          "study",
         ],
       });
     } catch (e) {
@@ -505,7 +506,10 @@ export class MultiplayerStudyService extends BaseStudyService {
     }
 
     if (!participant.prolificBaselinePlayer) {
-      return { status: "not-started" };
+      return {
+        status: "not-started",
+        startingGameType: participant.study.gameType,
+      };
     }
 
     const basePlayer = participant.prolificBaselinePlayer;
@@ -547,6 +551,7 @@ export class MultiplayerStudyService extends BaseStudyService {
     }
 
     return {
+      startingGameType: participant.study.gameType,
       status,
       // in-progress users get their game type
       ...(status === "in-progress" && { inProgressGameType }),

@@ -537,6 +537,7 @@ export interface ProlificSoloParticipantStatus {
 }
 
 export interface ProlificMultiplayerParticipantStatus {
+  startingGameType: LiteGameType;
   status: "not-started" | "in-progress" | "completed";
   completionUrl?: string;
   inProgressGameType?: LiteGameType | null;

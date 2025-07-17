@@ -75,6 +75,7 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
       defaults.threeEventsThreshold.min,
       threeEventsThresholdMax
     );
+    this.state.chatEnabled = defaults.chatEnabled || false;
     this.state.updateVisibleCards();
   }
 }

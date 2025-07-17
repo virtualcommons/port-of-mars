@@ -22,4 +22,9 @@ export interface Vote {
   binaryVote: boolean;
 }
 
-export type LiteGameRequest = EventContinue | Invest | PlayerReady;
+export interface SendChatMessage {
+  kind: "send-chat-message";
+  message: string;
+}
+
+export type LiteGameRequest = EventContinue | Invest | PlayerReady | SendChatMessage;

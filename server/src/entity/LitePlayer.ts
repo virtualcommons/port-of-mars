@@ -13,6 +13,7 @@ import { SoloGame, LiteGame } from "./LiteGame";
 import { Role, ROLES } from "@port-of-mars/shared/types";
 import { LitePlayerDecision } from "./LitePlayerDecision";
 import { LitePlayerVote } from "./LitePlayerVote";
+import { LiteChatMessage } from "./LiteChatMessage";
 
 export abstract class BaseLitePlayer {
   @PrimaryGeneratedColumn()
@@ -64,4 +65,7 @@ export class LitePlayer extends BaseLitePlayer {
 
   @OneToMany(() => LitePlayerVote, vote => vote.player)
   votes!: LitePlayerVote[];
+
+  @OneToMany(() => LiteChatMessage, message => message.player)
+  chatMessages!: LiteChatMessage[];
 }

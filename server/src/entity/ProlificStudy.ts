@@ -4,6 +4,7 @@ import {
   ProlificMultiplayerStudyParticipant,
   ProlificSoloStudyParticipant,
 } from "./ProlificStudyParticipant";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 export abstract class BaseProlificStudy {
   @PrimaryGeneratedColumn()
@@ -37,4 +38,7 @@ export class ProlificSoloStudy extends BaseProlificStudy {
 export class ProlificMultiplayerStudy extends BaseProlificStudy {
   @OneToMany(type => ProlificMultiplayerStudyParticipant, participant => participant.study)
   participants!: Array<ProlificMultiplayerStudyParticipant>;
+
+  @Column({ default: "prolificBaseline" })
+  gameType!: LiteGameType;
 }

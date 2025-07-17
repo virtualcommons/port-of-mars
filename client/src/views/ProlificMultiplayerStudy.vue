@@ -217,7 +217,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   private async joinLobby() {
     try {
       this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME, {
-        type: "prolificBaseline",
+        type: this.participantStatus.startingGameType,
       });
       applyLiteLobbyResponses(this.lobbyRoom, this);
       this.lobbyApi.connect(this.lobbyRoom);

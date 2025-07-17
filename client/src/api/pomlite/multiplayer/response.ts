@@ -132,4 +132,6 @@ export const DEFAULT_STATE: LiteGameClientState = {
   canInvest: false,
   isRoundTransitioning: false,
   isWaitingToStart: true,
+  chatMessages: [],
+  chatEnabled: false,
 };

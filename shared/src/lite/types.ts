@@ -34,7 +34,15 @@ export interface TreatmentData {
   instructions?: string;
 }
 
-export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
+export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
+
+export type MultiplayerGameType =
+  | "freeplay"
+  | "prolificBaseline"
+  | "prolificVariable"
+  | "prolificInteractive";
+
+export type LiteGameType = SoloGameType | MultiplayerGameType;
 
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
@@ -57,6 +65,7 @@ export interface LiteGameParams {
   points: number;
   resources: number;
   availableRoles?: Array<Role>;
+  chatEnabled?: boolean;
 }
 
 export interface SoloGameClientState {
@@ -98,9 +107,20 @@ export interface LiteGamePlayerClientState {
   isReadyToStart: boolean;
 }
 
+export interface ChatMessageData {
+  id?: number;
+  username: string;
+  role: Role;
+  message: string;
+  dateCreated: number;
+  round: number;
+}
+
 export interface LiteGameClientState extends SoloGameClientState {
   players: Map<string, LiteGamePlayerClientState>;
   player: LiteGamePlayerClientState;
   numPlayers: number;
   isWaitingToStart: boolean;
+  chatMessages: ChatMessageData[];
+  chatEnabled: boolean;
 }

@@ -1,11 +1,11 @@
 import { Client, Delayed, Room } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import * as http from "http";
-import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import { LiteGameState, ChatMessage } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
-import { Invest, LiteGameType, Vote } from "@port-of-mars/shared/lite";
+import { Invest, MultiplayerGameType, Vote } from "@port-of-mars/shared/lite";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
 import { EndGameCmd, InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
 
@@ -68,7 +68,7 @@ export class LiteGameRoom extends Room<LiteGameState> {
     }, 1000);
   }
 
-  async onCreate(options: { type?: LiteGameType; users: Array<LitePlayerUser> }) {
+  async onCreate(options: { type?: MultiplayerGameType; users: Array<LitePlayerUser> }) {
     logger.trace("LiteGameRoom '%s' created", this.roomId);
     const type = options.type || "prolificBaseline";
     const userRoles = this.assignRoles(options.users);
@@ -143,5 +143,36 @@ export class LiteGameRoom extends Room<LiteGameState> {
         })
       );
     });
+    this.onMessage("send-chat-message", (client: Client, message: { message: string }) => {
+      this.handleChatMessage(client, message.message);
+    });
+  }
+
+  async handleChatMessage(client: Client, messageText: string) {
+    if (!this.state.chatEnabled) {
+      return;
+    }
+    const user = client.auth as User;
+    const player = this.state.getPlayer(client);
+    const chatMessage = new ChatMessage({
+      username: user.username,
+      role: player.role,
+      message: messageText,
+      dateCreated: Date.now(),
+      round: this.state.round,
+    });
+    this.state.chatMessages.push(chatMessage);
+    // persist to database
+    const { litegame } = getServices();
+    try {
+      await litegame.createChatMessage(
+        this.state.gameId,
+        player.playerId,
+        messageText,
+        this.state.round
+      );
+    } catch (error) {
+      logger.fatal(`Failed to persist chat message: ${error}`);
+    }
   }
 }
