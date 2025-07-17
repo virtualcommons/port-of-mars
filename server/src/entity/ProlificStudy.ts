@@ -25,6 +25,9 @@ export abstract class BaseProlificStudy {
   @Column()
   completionCode!: string;
 
+  @Column({ default: "prolificBaseline" })
+  gameType!: LiteGameType;
+
   abstract participants: Array<BaseProlificStudyParticipant>;
 }
 
@@ -38,7 +41,4 @@ export class ProlificSoloStudy extends BaseProlificStudy {
 export class ProlificMultiplayerStudy extends BaseProlificStudy {
   @OneToMany(type => ProlificMultiplayerStudyParticipant, participant => participant.study)
   participants!: Array<ProlificMultiplayerStudyParticipant>;
-
-  @Column({ default: "prolificBaseline" })
-  gameType!: LiteGameType;
 }

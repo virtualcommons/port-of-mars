@@ -1,11 +1,14 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddLiteProlificInteractive1752790734574 implements MigrationInterface {
-  name = "AddLiteProlificInteractive1752790734574";
+export class AddLiteProlificInteractive1752794083755 implements MigrationInterface {
+  name = "AddLiteProlificInteractive1752794083755";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE "lite_chat_message" ("id" SERIAL NOT NULL, "dateCreated" TIMESTAMP NOT NULL, "playerId" integer NOT NULL, "message" character varying NOT NULL, "gameId" integer NOT NULL, "round" integer NOT NULL, CONSTRAINT "PK_f31675cb7a773d75f5100660ff5" PRIMARY KEY ("id"))`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "prolific_solo_study" ADD "gameType" character varying NOT NULL DEFAULT 'prolificBaseline'`
     );
     await queryRunner.query(
       `ALTER TABLE "prolific_multiplayer_study" ADD "gameType" character varying NOT NULL DEFAULT 'prolificBaseline'`
@@ -26,6 +29,7 @@ export class AddLiteProlificInteractive1752790734574 implements MigrationInterfa
       `ALTER TABLE "lite_chat_message" DROP CONSTRAINT "FK_3e57003d074eb2cf18f58011601"`
     );
     await queryRunner.query(`ALTER TABLE "prolific_multiplayer_study" DROP COLUMN "gameType"`);
+    await queryRunner.query(`ALTER TABLE "prolific_solo_study" DROP COLUMN "gameType"`);
     await queryRunner.query(`DROP TABLE "lite_chat_message"`);
   }
 }
