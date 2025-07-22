@@ -46,6 +46,10 @@ export type LiteGameType = SoloGameType | MultiplayerGameType;
 
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
+export type LiteGameBinaryVoteInterpretation =
+  // succinctly describe the context of a yes/no vote
+  "accept_greedy_offer" | "reject_greedy_offer" | "chose_hero" | "chose_pariah";
+
 export interface LiteGameParams {
   numPlayers?: number;
   // determines which game type to reset and transition to in the same game room
