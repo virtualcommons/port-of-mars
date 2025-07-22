@@ -1,31 +1,34 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm";
 import { LitePlayer } from "./LitePlayer";
-import { LiteGameRound } from "./LiteGameRound";
 import { LiteMarsEventDeckCard } from "./LiteMarsEventDeckCard";
-import { Role, ROLES } from "@port-of-mars/shared/types";
+import { Role } from "@port-of-mars/shared/types";
+import { LiteGameBinaryVoteInterpretation } from "@port-of-mars/shared/lite/types";
 
 @Entity()
 export class LitePlayerVote {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  binaryVote!: boolean;
+  @CreateDateColumn()
+  dateCreated!: Date;
 
-  @Column({ type: "enum", enum: ROLES })
-  roleVote!: Role;
+  @Column({ nullable: true })
+  binaryVote?: boolean;
 
-  @ManyToOne(() => LitePlayer, p => p.votes, { nullable: false })
+  @Column({ nullable: true })
+  roleVote?: Role;
+
+  @Column({ nullable: true })
+  binaryVoteInterpretation?: LiteGameBinaryVoteInterpretation;
+
+  @Column({ default: 1 })
+  voteStep!: number;
+
+  @ManyToOne(() => LitePlayer, { nullable: false })
   player!: LitePlayer;
 
   @Column()
   playerId!: number;
-
-  @ManyToOne(() => LiteGameRound, r => r.votes, { nullable: false })
-  round!: LiteGameRound;
-
-  @Column()
-  roundId!: number;
 
   @ManyToOne(() => LiteMarsEventDeckCard, c => c.votes, { nullable: false })
   deckCard!: LiteMarsEventDeckCard;
