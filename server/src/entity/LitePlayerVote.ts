@@ -18,6 +18,9 @@ export class LitePlayerVote {
   @Column({ nullable: true })
   roleVote?: Role;
 
+  @Column({ default: false })
+  isDefaultTimeoutVote!: boolean;
+
   @Column({ nullable: true })
   binaryVoteInterpretation?: LiteGameBinaryVoteInterpretation;
 

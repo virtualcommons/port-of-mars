@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class LiteGameVoting1753138417161 implements MigrationInterface {
-  name = "LiteGameVoting1753138417161";
+export class AddLiteGameVoting1753297901376 implements MigrationInterface {
+  name = "AddLiteGameVoting1753297901376";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -13,6 +13,9 @@ export class LiteGameVoting1753138417161 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "lite_player_vote" DROP COLUMN "roundId"`);
     await queryRunner.query(
       `ALTER TABLE "lite_player_vote" ADD "dateCreated" TIMESTAMP NOT NULL DEFAULT now()`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "lite_player_vote" ADD "isDefaultTimeoutVote" boolean NOT NULL DEFAULT false`
     );
     await queryRunner.query(
       `ALTER TABLE "lite_player_vote" ADD "binaryVoteInterpretation" character varying`
@@ -55,6 +58,7 @@ export class LiteGameVoting1753138417161 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "lite_player_vote" DROP COLUMN "binaryVoteInterpretation"`
     );
+    await queryRunner.query(`ALTER TABLE "lite_player_vote" DROP COLUMN "isDefaultTimeoutVote"`);
     await queryRunner.query(`ALTER TABLE "lite_player_vote" DROP COLUMN "dateCreated"`);
     await queryRunner.query(`ALTER TABLE "lite_player_vote" ADD "roundId" integer NOT NULL`);
     await queryRunner.query(`DROP TABLE "lite_player_vote_effect"`);

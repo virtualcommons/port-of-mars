@@ -12,6 +12,7 @@ export interface EventCardData {
   pointsEffect: number;
   resourcesEffect: number;
   systemHealthEffect: number;
+  requiresVote?: boolean;
 }
 
 export type ThresholdInformation = "unknown" | "range" | "known";
@@ -100,6 +101,7 @@ export interface LiteGamePlayerClientState {
   hasInvested: boolean;
   pointsEarned: number | null;
   isReadyToStart: boolean;
+  vote?: VoteData;
 }
 
 export interface ChatMessageData {
@@ -111,6 +113,12 @@ export interface ChatMessageData {
   round: number;
 }
 
+export interface VoteData {
+  binaryVote?: boolean;
+  roleVote?: Role;
+  isDefaultTimeoutVote?: boolean;
+}
+
 export interface LiteGameClientState extends SoloGameClientState {
   players: Map<string, LiteGamePlayerClientState>;
   player: LiteGamePlayerClientState;
@@ -118,4 +126,7 @@ export interface LiteGameClientState extends SoloGameClientState {
   isWaitingToStart: boolean;
   chatMessages: ChatMessageData[];
   chatEnabled: boolean;
+  votingInProgress: boolean;
+  currentVoteStep: number;
+  heroOrPariah: "hero" | "pariah" | "";
 }

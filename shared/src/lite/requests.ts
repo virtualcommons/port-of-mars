@@ -22,9 +22,15 @@ export interface Vote {
   binaryVote: boolean;
 }
 
+export interface SubmitVote {
+  kind: "submit-vote";
+  binaryVote?: boolean;
+  roleVote?: Role;
+}
+
 export interface SendChatMessage {
   kind: "send-chat-message";
   message: string;
 }
 
-export type LiteGameRequest = EventContinue | Invest | PlayerReady | SendChatMessage;
+export type LiteGameRequest = EventContinue | Invest | PlayerReady | SubmitVote | SendChatMessage;
