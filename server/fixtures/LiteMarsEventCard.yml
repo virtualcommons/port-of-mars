@@ -421,3 +421,107 @@ items:
     systemHealthMultiplier: 0
     pointsMultiplier: 0
     resourcesMultiplier: 0
+  # prolific interactive event cards
+  liteProlificInteractiveEvent1:
+    id: 31
+    gameType: prolificInteractive
+    codeName: "lifeAsUsual"
+    displayName: "Life as Usual"
+    flavorText: "LAU flavor text"
+    effect: "Life as usual, nothing happens."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  liteProlificInteractiveEvent2:
+    id: 32
+    gameType: prolificInteractive
+    codeName: "personalGain"
+    displayName: "Personal Gain"
+    flavorText: "personal gain flavor text"
+    effect: "Each player chooses yes or no. Whoever chose yes gains 6 resources and destroys 6 system health."
+    requiresVote: true
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0 # 6 per player so not sure whether this should be encoded here..
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  liteProlificInteractiveEvent3:
+    id: 33
+    gameType: prolificInteractive
+    codeName: "compulsivePhilanthropy"
+    displayName: "Compulsive Philanthropy"
+    flavorText: "compulsive philanthropy flavor text"
+    effect: "Players vote to force one player to put all resources into system health."
+    requiresVote: true
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  liteProlificInteractiveEvent4:
+    id: 34
+    codeName: "heroOrPariah"
+    displayName: "Hero or Pariah"
+    flavorText: "hero or pariah flavor text"
+    effect: "players first choose whether someone should lose all resources or gain 4 resources, then vote for the player"
+    requiresVote: true
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  liteProlificInteractiveEvent5:
+    id: 35
+    codeName: "grantFunk"
+    displayName: "Grant Funk"
+    flavorText: "grant funk flavor text"
+    effect: "researcher gets an offer: gain 3 points at the cost of 4 system health, choose yes or no"
+    affectedRole: "Researcher"
+    requiresVote: true
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: -4
+    pointsMultiplier: 3
+    resourcesMultiplier: 0
+  liteProlificInteractiveEvent6:
+    id: 36
+    codeName: "cuttingCorners"
+    displayName: "Cutting Corners"
+    flavorText: "cutting corners flavor text"
+    effect: "entrepreneur gets an offer: gain 3 points at the cost of 4 system health, choose yes or no"
+    affectedRole: "Entrepreneur"
+    requiresVote: true
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: -4
+    pointsMultiplier: 3
+    resourcesMultiplier: 0
+  liteProlificInteractiveEvent7:
+    id: 37
+    codeName: "shortTermGains"
+    displayName: "Short Term Gains"
+    flavorText: "short term gains flavor text"
+    effect: "politician gets an offer: gain 3 points at the cost of 4 system health, choose yes or no"
+    affectedRole: "Politician"
+    requiresVote: true
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: -4
+    pointsMultiplier: 3
+    resourcesMultiplier: 0

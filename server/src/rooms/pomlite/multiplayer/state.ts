@@ -7,6 +7,7 @@ import {
   TreatmentData,
   HiddenParams,
   ChatMessageData,
+  VoteData,
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
 import { Client } from "colyseus";
@@ -31,6 +32,19 @@ export class ChatMessage extends Schema {
   }
 }
 
+export class Vote extends Schema {
+  @type("boolean") binaryVote?: boolean;
+  @type("string") roleVote?: Role;
+  @type("boolean") isDefaultTimeoutVote = false;
+
+  constructor(data: VoteData) {
+    super();
+    this.binaryVote = data.binaryVote;
+    this.roleVote = data.roleVote;
+    this.isDefaultTimeoutVote = data.isDefaultTimeoutVote ?? false;
+  }
+}
+
 export class EventCard extends Schema {
   id = 0;
   @type("boolean") expired = false;
@@ -43,6 +57,7 @@ export class EventCard extends Schema {
   @type("int8") pointsEffect = 0;
   @type("int8") resourcesEffect = 0;
   @type("int8") systemHealthEffect = 0;
+  @type("boolean") requiresVote = false;
 
   constructor(data: EventCardData) {
     super();
@@ -54,6 +69,7 @@ export class EventCard extends Schema {
     this.pointsEffect = data.pointsEffect;
     this.resourcesEffect = data.resourcesEffect;
     this.systemHealthEffect = data.systemHealthEffect;
+    this.requiresVote = data.requiresVote || false;
   }
 
   get isMurphysLaw() {
@@ -72,6 +88,7 @@ export class Player extends Schema {
   @type("boolean") hasInvested = false;
   @type("uint8") pointsEarned = 0;
   @type("boolean") isReadyToStart = false;
+  @type(Vote) vote?: Vote;
 }
 
 export class TreatmentParams extends Schema {
@@ -114,6 +131,11 @@ export class LiteGameState extends Schema {
 
   @type([ChatMessage]) chatMessages = new ArraySchema<ChatMessage>();
   @type("boolean") chatEnabled = false;
+
+  // voting state
+  @type("boolean") votingInProgress = false;
+  @type("uint8") currentVoteStep = 1;
+  @type("string") heroOrPariah: "hero" | "pariah" | "" = "";
 
   @type("boolean") canInvest = false;
   @type("boolean") isRoundTransitioning = false;
@@ -292,7 +314,7 @@ export class LiteGameState extends Schema {
       chatEnabled: false,
     },
     prolificInteractive: {
-      numPlayers: 3,
+      numPlayers: 1, // FIXME: change back to 3
       maxRound: { min: 8, max: 12 },
       roundTransitionDuration: 3,
       twoEventsThreshold: { min: 39, max: 39 }, // full game is 13 * numplayers

@@ -35,7 +35,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   private mutex = new Mutex();
 
-  groupManager = new GroupManager(this.groupSize);
+  groupManager!: GroupManager;
 
   get queue() {
     return this.groupManager.queue;
@@ -49,6 +49,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     await super.onCreate(options);
     this.type = options.type;
     this.groupSize = LiteGameState.DEFAULTS[this.type].numPlayers || 3;
+    this.groupManager = new GroupManager(this.groupSize);
     this.lastPlayerJoinTimestamp = Date.now();
   }
 
@@ -110,6 +111,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   async formAndInviteGroups() {
     while (this.queue.length >= this.groupSize) {
+      logger.debug(`forming group from queue of length ${this.queue.length}`);
       const group = this.groupManager.formGroupFromQueue();
       if (group) {
         await this.sendGroupInvitations(group);
@@ -127,6 +129,9 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
         id: client.id,
       };
     });
+    logger.debug(
+      `sending group invitations to ${playerUsers.length} players for game type ${this.type}`
+    );
     const room = await matchMaker.createRoom(LiteGameRoom.NAME, {
       type: this.type,
       users: playerUsers,

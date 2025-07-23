@@ -21,6 +21,8 @@ export * from "./LiteMarsEventDeck";
 export * from "./LiteMarsEventDeckCard";
 export * from "./LitePlayer";
 export * from "./LitePlayerDecision";
+export * from "./LitePlayerVote";
+export * from "./LitePlayerVoteEffect";
 export * from "./LiteChatMessage";
 export * from "./ProlificStudy";
 export * from "./ProlificStudyParticipant";

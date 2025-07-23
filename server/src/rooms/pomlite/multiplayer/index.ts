@@ -7,7 +7,13 @@ import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
 import { Invest, MultiplayerGameType, Vote } from "@port-of-mars/shared/lite";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
-import { EndGameCmd, InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
+import {
+  EndGameCmd,
+  InitGameCmd,
+  PlayerInvestCmd,
+  SetFirstRoundCmd,
+  ProcessVoteCmd,
+} from "./commands";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -146,6 +152,12 @@ export class LiteGameRoom extends Room<LiteGameState> {
     this.onMessage("send-chat-message", (client: Client, message: { message: string }) => {
       this.handleChatMessage(client, message.message);
     });
+    this.onMessage(
+      "submit-vote",
+      (client: Client, message: { binaryVote?: boolean; roleVote?: Role }) => {
+        this.handleVote(client, message);
+      }
+    );
   }
 
   async handleChatMessage(client: Client, messageText: string) {
@@ -174,5 +186,21 @@ export class LiteGameRoom extends Room<LiteGameState> {
     } catch (error) {
       logger.fatal(`Failed to persist chat message: ${error}`);
     }
+  }
+
+  async handleVote(client: Client, message: { binaryVote?: boolean; roleVote?: Role }) {
+    if (!this.state.votingInProgress) {
+      return;
+    }
+
+    const player = this.state.getPlayer(client);
+
+    this.dispatcher.dispatch(
+      new ProcessVoteCmd().setPayload({
+        playerId: player.playerId,
+        binaryVote: message.binaryVote,
+        roleVote: message.roleVote,
+      })
+    );
   }
 }
