@@ -599,8 +599,9 @@ export class LiteGameService extends BaseService {
       .getRepository(LiteMarsEventDeckCard)
       .createQueryBuilder("deckCard")
       .leftJoinAndSelect("deckCard.round", "round")
-      .leftJoin("round.game", "game")
+      .leftJoinAndSelect("round.game", "game")
       .leftJoinAndSelect("deckCard.card", "eventCard")
+      .leftJoinAndSelect("round.game.players", "gamePlayers") // need to count players
       .where("deckCard.roundId IS NOT NULL"); // ensure card was actually drawn in a round
 
     if (gameIds && gameIds.length > 0) {
@@ -609,18 +610,23 @@ export class LiteGameService extends BaseService {
 
     try {
       const deckCards = await query.getMany();
-      const formattedDeckCards = deckCards.map(deckCard => ({
-        gameId: deckCard.round!.gameId,
-        deckCardId: deckCard.id,
-        roundId: deckCard.round!.id,
-        roundNumber: deckCard.round!.roundNumber,
-        name: deckCard.card.displayName,
-        codeName: deckCard.card.codeName,
-        effectText: deckCard.effectText,
-        systemHealthEffect: deckCard.systemHealthEffect,
-        resourcesEffect: deckCard.resourcesEffect,
-        pointsEffect: deckCard.pointsEffect,
-      }));
+      const formattedDeckCards = deckCards.map(deckCard => {
+        const numPlayers = deckCard.round!.game.players.length;
+
+        return {
+          gameId: deckCard.round!.gameId,
+          deckCardId: deckCard.id,
+          roundId: deckCard.round!.id,
+          roundNumber: deckCard.round!.roundNumber,
+          name: deckCard.card.displayName,
+          codeName: deckCard.card.codeName,
+          effectText: deckCard.effectText,
+          scaledSystemHealthEffect: deckCard.systemHealthEffect,
+          systemHealthEffect: deckCard.systemHealthEffect * numPlayers,
+          resourcesEffect: deckCard.resourcesEffect,
+          pointsEffect: deckCard.pointsEffect,
+        };
+      });
 
       let header: any[] = [];
       if (formattedDeckCards.length > 0) {
