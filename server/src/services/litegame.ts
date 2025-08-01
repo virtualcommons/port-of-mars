@@ -5,6 +5,8 @@ import {
   LiteGameType,
   TreatmentData,
 } from "@port-of-mars/shared/lite";
+import { Role } from "@port-of-mars/shared/types";
+import { LiteGameBinaryVoteInterpretation } from "@port-of-mars/shared/lite";
 import {
   LiteGame,
   LiteGameRound,
@@ -14,6 +16,9 @@ import {
   LiteMarsEventDeckCard,
   LitePlayer,
   LitePlayerDecision,
+  LitePlayerVote,
+  LitePlayerVoteEffect,
+  LiteChatMessage,
   SoloGame,
   SoloGameRound,
   SoloGameTreatment,
@@ -26,7 +31,10 @@ import {
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
-import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import {
+  LiteGameState,
+  Player as PlayerState,
+} from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
 
@@ -408,7 +416,8 @@ export class SoloGameService extends BaseService {
 export class LiteGameService extends BaseService {
   async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
     const cards = await this.em.getRepository(LiteMarsEventCard).find({
-      where: { gameType },
+      // FIXME: filtering for debugging
+      where: { gameType, codeName: "compulsivePhilanthropy" },
       order: { id: "ASC" },
     });
 
@@ -431,6 +440,8 @@ export class LiteGameService extends BaseService {
           pointsEffect: card.pointsMultiplier * roll,
           resourcesEffect: card.resourcesMultiplier * roll,
           systemHealthEffect: card.systemHealthMultiplier * roll,
+          requiresVote: card.requiresVote,
+          affectedRole: card.affectedRole,
         });
       }
     }
@@ -587,6 +598,24 @@ export class LiteGameService extends BaseService {
     }
   }
 
+  async createChatMessage(
+    gameId: number,
+    playerId: number,
+    message: string,
+    round: number,
+    dateCreated: Date
+  ): Promise<LiteChatMessage> {
+    const chatMessageRepo = this.em.getRepository(LiteChatMessage);
+    const chatMessage = chatMessageRepo.create({
+      gameId,
+      playerId,
+      message,
+      round,
+      dateCreated,
+    });
+    return await chatMessageRepo.save(chatMessage);
+  }
+
   async exportEventCardsCsv(path: string, gameIds?: Array<number>) {
     /**
      * export a flat csv of all event cards drawn in past multiplayer games specified by gameIds
@@ -700,5 +729,45 @@ export class LiteGameService extends BaseService {
     } catch (error) {
       logger.fatal(`Error exporting lite game investment data: ${error}`);
     }
+  }
+
+  async createPlayerVote(
+    player: PlayerState,
+    deckCardId: number,
+    voteStep: number,
+    binaryVoteInterpretation?: LiteGameBinaryVoteInterpretation
+  ): Promise<LitePlayerVote> {
+    if (!player.vote) {
+      throw new Error("Player state has no recorded vote");
+    }
+    const voteRepo = this.em.getRepository(LitePlayerVote);
+    const vote = voteRepo.create({
+      playerId: player.playerId,
+      deckCardId,
+      voteStep,
+      binaryVote: player.vote.binaryVote,
+      roleVote: player.vote.roleVote,
+      binaryVoteInterpretation,
+      isDefaultTimeoutVote: player.vote.isDefaultTimeoutVote,
+    });
+    return await voteRepo.save(vote);
+  }
+
+  async createPlayerVoteEffect(
+    playerId: number,
+    deckCardId: number,
+    pointsChange: number,
+    resourcesChange: number,
+    systemHealthChange: number
+  ): Promise<LitePlayerVoteEffect> {
+    const effectRepo = this.em.getRepository(LitePlayerVoteEffect);
+    const effect = effectRepo.create({
+      playerId,
+      deckCardId,
+      pointsChange,
+      resourcesChange,
+      systemHealthChange,
+    });
+    return await effectRepo.save(effect);
   }
 }

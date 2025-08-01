@@ -12,6 +12,8 @@ export interface EventCardData {
   pointsEffect: number;
   resourcesEffect: number;
   systemHealthEffect: number;
+  requiresVote?: boolean;
+  affectedRole?: Role;
 }
 
 export type ThresholdInformation = "unknown" | "range" | "known";
@@ -25,12 +27,25 @@ export interface TreatmentData {
   instructions?: string;
 }
 
-export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
+export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
+
+export type MultiplayerGameType =
+  | "freeplay"
+  | "prolificBaseline"
+  | "prolificVariable"
+  | "prolificInteractive";
+
+export type LiteGameType = SoloGameType | MultiplayerGameType;
 
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
+export type LiteGameBinaryVoteInterpretation =
+  // succinctly describe the context of a yes/no vote
+  "accept_greedy_offer" | "reject_greedy_offer" | "chose_hero" | "chose_pariah";
+
 export interface LiteGameParams {
   numPlayers?: number;
+  systemHealthScalingFactor?: number;
   // determines which game type to reset and transition to in the same game room
   // if not defined, then end normally
   nextGameType?: LiteGameType;
@@ -48,6 +63,7 @@ export interface LiteGameParams {
   points: number;
   resources: number;
   availableRoles?: Array<Role>;
+  chatEnabled?: boolean;
 }
 
 export interface SoloGameClientState {
@@ -87,6 +103,22 @@ export interface LiteGamePlayerClientState {
   hasInvested: boolean;
   pointsEarned: number | null;
   isReadyToStart: boolean;
+  vote?: VoteData;
+}
+
+export interface ChatMessageData {
+  id?: number;
+  username: string;
+  role: Role;
+  message: string;
+  dateCreated: number;
+  round: number;
+}
+
+export interface VoteData {
+  binaryVote?: boolean;
+  roleVote?: Role;
+  isDefaultTimeoutVote?: boolean;
 }
 
 export interface LiteGameClientState extends SoloGameClientState {
@@ -94,4 +126,9 @@ export interface LiteGameClientState extends SoloGameClientState {
   player: LiteGamePlayerClientState;
   numPlayers: number;
   isWaitingToStart: boolean;
+  chatMessages: ChatMessageData[];
+  chatEnabled: boolean;
+  votingInProgress: boolean;
+  currentVoteStep: number;
+  heroOrPariah: "hero" | "pariah" | "";
 }

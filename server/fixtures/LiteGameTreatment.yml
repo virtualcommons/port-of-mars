@@ -193,3 +193,11 @@ items:
       <p>The possible event cards will be listed on the screen at the right.</p>
       <p>You get 20 seconds each round to make a decision using the controls at the right of the screen.</p>
       <p>If you are ready, click the start button.</p>
+  # prolific interactive treatments (default, treatments here are varied cards)
+  liteProlificInteractiveTreatment1:
+    id: 20
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: false
+    thresholdInformation: known
+    isLowResSystemHealth: false
