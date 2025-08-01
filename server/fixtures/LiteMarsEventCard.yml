@@ -446,11 +446,11 @@ items:
     requiresVote: true
     drawMin: 1
     drawMax: 1
-    rollMin: 0
-    rollMax: 0
-    systemHealthMultiplier: 0 # 6 per player so not sure whether this should be encoded here..
+    rollMin: 1
+    rollMax: 1
+    systemHealthMultiplier: -6
     pointsMultiplier: 0
-    resourcesMultiplier: 0
+    resourcesMultiplier: 6
   liteProlificInteractiveEvent3:
     id: 33
     gameType: prolificInteractive
@@ -468,6 +468,7 @@ items:
     resourcesMultiplier: 0
   liteProlificInteractiveEvent4:
     id: 34
+    gameType: prolificInteractive
     codeName: "heroOrPariah"
     displayName: "Hero or Pariah"
     flavorText: "hero or pariah flavor text"
@@ -482,6 +483,7 @@ items:
     resourcesMultiplier: 0
   liteProlificInteractiveEvent5:
     id: 35
+    gameType: prolificInteractive
     codeName: "grantFunk"
     displayName: "Grant Funk"
     flavorText: "grant funk flavor text"
@@ -490,13 +492,14 @@ items:
     requiresVote: true
     drawMin: 1
     drawMax: 1
-    rollMin: 0
-    rollMax: 0
+    rollMin: 1
+    rollMax: 1
     systemHealthMultiplier: -4
     pointsMultiplier: 3
     resourcesMultiplier: 0
   liteProlificInteractiveEvent6:
     id: 36
+    gameType: prolificInteractive
     codeName: "cuttingCorners"
     displayName: "Cutting Corners"
     flavorText: "cutting corners flavor text"
@@ -505,13 +508,14 @@ items:
     requiresVote: true
     drawMin: 1
     drawMax: 1
-    rollMin: 0
-    rollMax: 0
+    rollMin: 1
+    rollMax: 1
     systemHealthMultiplier: -4
     pointsMultiplier: 3
     resourcesMultiplier: 0
   liteProlificInteractiveEvent7:
     id: 37
+    gameType: prolificInteractive
     codeName: "shortTermGains"
     displayName: "Short Term Gains"
     flavorText: "short term gains flavor text"
@@ -520,8 +524,8 @@ items:
     requiresVote: true
     drawMin: 1
     drawMax: 1
-    rollMin: 0
-    rollMax: 0
+    rollMin: 1
+    rollMax: 1
     systemHealthMultiplier: -4
     pointsMultiplier: 3
     resourcesMultiplier: 0

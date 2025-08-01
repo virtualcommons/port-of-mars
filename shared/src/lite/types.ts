@@ -13,6 +13,7 @@ export interface EventCardData {
   resourcesEffect: number;
   systemHealthEffect: number;
   requiresVote?: boolean;
+  affectedRole?: Role;
 }
 
 export type ThresholdInformation = "unknown" | "range" | "known";
@@ -44,6 +45,7 @@ export type LiteGameBinaryVoteInterpretation =
 
 export interface LiteGameParams {
   numPlayers?: number;
+  systemHealthScalingFactor?: number;
   // determines which game type to reset and transition to in the same game room
   // if not defined, then end normally
   nextGameType?: LiteGameType;
