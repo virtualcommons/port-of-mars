@@ -416,7 +416,8 @@ export class SoloGameService extends BaseService {
 export class LiteGameService extends BaseService {
   async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
     const cards = await this.em.getRepository(LiteMarsEventCard).find({
-      where: { gameType },
+      // FIXME: filtering for debugging
+      where: { gameType, codeName: "compulsivePhilanthropy" },
       order: { id: "ASC" },
     });
 
@@ -439,6 +440,8 @@ export class LiteGameService extends BaseService {
           pointsEffect: card.pointsMultiplier * roll,
           resourcesEffect: card.resourcesMultiplier * roll,
           systemHealthEffect: card.systemHealthMultiplier * roll,
+          requiresVote: card.requiresVote,
+          affectedRole: card.affectedRole,
         });
       }
     }
@@ -599,7 +602,8 @@ export class LiteGameService extends BaseService {
     gameId: number,
     playerId: number,
     message: string,
-    round: number
+    round: number,
+    dateCreated: Date
   ): Promise<LiteChatMessage> {
     const chatMessageRepo = this.em.getRepository(LiteChatMessage);
     const chatMessage = chatMessageRepo.create({
@@ -607,7 +611,7 @@ export class LiteGameService extends BaseService {
       playerId,
       message,
       round,
-      dateCreated: new Date(),
+      dateCreated,
     });
     return await chatMessageRepo.save(chatMessage);
   }

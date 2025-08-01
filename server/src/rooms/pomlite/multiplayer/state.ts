@@ -49,6 +49,7 @@ export class EventCard extends Schema {
   id = 0;
   @type("boolean") expired = false;
   @type("boolean") inPlay = false; // indicates that the card has been drawn for current round
+  @type("string") affectedRole?: Role;
   @type("int32") deckCardId = 0;
   @type("string") codeName = "";
   @type("string") displayName = "";
@@ -70,6 +71,7 @@ export class EventCard extends Schema {
     this.resourcesEffect = data.resourcesEffect;
     this.systemHealthEffect = data.systemHealthEffect;
     this.requiresVote = data.requiresVote || false;
+    this.affectedRole = data.affectedRole;
   }
 
   get isMurphysLaw() {
@@ -224,6 +226,10 @@ export class LiteGameState extends Schema {
     throw new Error(`No player found with id ${client.auth.id}`);
   }
 
+  getPlayerByRole(role: Role): Player | undefined {
+    return Array.from(this.players.values()).find(player => player.role === role);
+  }
+
   playersInvested(): boolean {
     this.players.forEach(player => {
       if (player.pendingInvestment == null) {
@@ -280,6 +286,7 @@ export class LiteGameState extends Schema {
     },
     prolificBaseline: {
       numPlayers: 3,
+      systemHealthScalingFactor: 3,
       nextGameType: "prolificVariable",
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 2,
@@ -297,6 +304,7 @@ export class LiteGameState extends Schema {
     },
     prolificVariable: {
       numPlayers: 3,
+      systemHealthScalingFactor: 3,
       maxRound: { min: 11, max: 11 },
       roundTransitionDuration: 2,
       twoEventsThreshold: { min: 48, max: 48 },
@@ -315,6 +323,7 @@ export class LiteGameState extends Schema {
     },
     prolificInteractive: {
       numPlayers: 1, // FIXME: change back to 3
+      systemHealthScalingFactor: 1, // FIXME: export will do scaling based on numPlayers
       maxRound: { min: 8, max: 12 },
       roundTransitionDuration: 3,
       twoEventsThreshold: { min: 39, max: 39 }, // full game is 13 * numplayers

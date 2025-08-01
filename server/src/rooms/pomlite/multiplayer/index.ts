@@ -133,9 +133,6 @@ export class LiteGameRoom extends Room<LiteGameState> {
   }
 
   registerAllHandlers() {
-    this.onMessage("vote", (client: Client, message: Vote) => {
-      // TODO: record the player's vote/apply to event handling
-    });
     this.onMessage("player-ready", (client: Client) => {
       const player = this.state.getPlayer(client);
       player.isReadyToStart = true;
@@ -166,11 +163,12 @@ export class LiteGameRoom extends Room<LiteGameState> {
     }
     const user = client.auth as User;
     const player = this.state.getPlayer(client);
+    const dateCreated = new Date();
     const chatMessage = new ChatMessage({
       username: user.username,
       role: player.role,
       message: messageText,
-      dateCreated: Date.now(),
+      dateCreated: dateCreated.getTime(),
       round: this.state.round,
     });
     this.state.chatMessages.push(chatMessage);
@@ -181,7 +179,8 @@ export class LiteGameRoom extends Room<LiteGameState> {
         this.state.gameId,
         player.playerId,
         messageText,
-        this.state.round
+        this.state.round,
+        dateCreated
       );
     } catch (error) {
       logger.fatal(`Failed to persist chat message: ${error}`);
@@ -192,12 +191,10 @@ export class LiteGameRoom extends Room<LiteGameState> {
     if (!this.state.votingInProgress) {
       return;
     }
-
     const player = this.state.getPlayer(client);
-
     this.dispatcher.dispatch(
       new ProcessVoteCmd().setPayload({
-        playerId: player.playerId,
+        player: player,
         binaryVote: message.binaryVote,
         roleVote: message.roleVote,
       })

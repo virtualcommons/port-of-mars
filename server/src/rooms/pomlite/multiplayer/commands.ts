@@ -6,6 +6,9 @@ import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { EventCard, Player, TreatmentParams, Vote } from "./state";
 import { LiteGameStatus, LiteGameBinaryVoteInterpretation } from "@port-of-mars/shared/lite";
 import { Role } from "@port-of-mars/shared/types";
+import { settings } from "@port-of-mars/server/settings";
+
+const logger = settings.logging.getLogger(__filename);
 
 abstract class Cmd<Payload> extends Command<LiteGameRoom, Payload> {
   get defaultParams() {
@@ -17,8 +20,8 @@ abstract class CmdWithoutPayload extends Cmd<Record<string, never>> {}
 export class InitGameCmd extends CmdWithoutPayload {
   execute() {
     return [
-      new CreateDeckCmd(),
       new SetTreatmentParamsCmd(),
+      new CreateDeckCmd(),
       new SetGameParamsCmd(),
       new PersistGameCmd(),
       new WaitForPlayersCmd(),
@@ -36,11 +39,15 @@ export class StartGameLoopCmd extends CmdWithoutPayload {
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
     const { litegame } = getServices();
+    // FIXME: add LAU treatments for prolificInteractive
+    // something in treatment entity needs to override drawMin drawMax of LAU cards, probably just a
+    // lifeAsUsualCards: number (default: 0) gets set to 6, 12, 18 in treatments yml
+    // somehow passed into/referenced by drawEventCardDeck
     const cards = (await litegame.drawEventCardDeck(this.state.type)).map(
       data => new EventCard(data)
     );
     if (this.state.type === "prolificVariable") {
-      // prolific configuration uses a fixed deck
+      // prolific variable configuration uses a fixed deck
       this.state.eventCardDeck.push(...cards);
     } else {
       const shuffledCards = _.shuffle(cards);
@@ -142,100 +149,77 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   }
 
   async execute({ playerSkipped } = this.payload) {
-    if (!this.state.activeCard) return;
+    const card = this.state.activeCard;
+    if (!card) return;
 
     if (playerSkipped) {
       this.room.eventTimeout?.clear();
     }
 
-    // apply card effects based on whether it requires voting
-    if (this.state.activeCard.requiresVote) {
-      return this.applyVotingEffects();
-    } else {
-      return this.applyStandardEffects();
-    }
-  }
-
-  private applyStandardEffects() {
-    if (!this.state.activeCard) return;
-
-    this.state.players.forEach(player => {
-      if (this.state.activeCard) {
-        if (player.points < -this.state.activeCard.pointsEffect) {
-          player.points = 0;
-        } else {
-          player.points += this.state.activeCard.pointsEffect;
-        }
-
-        if (player.resources < -this.state.activeCard.resourcesEffect) {
-          player.resources = 0;
-        } else {
-          player.resources += this.state.activeCard.resourcesEffect;
-        }
+    // special cases
+    if (card.codeName === "compulsivePhilanthropy") {
+      return [new ApplyCompulsivePhilanthropyCmd().setPayload({ card, playerSkipped })];
+    } else if (card.codeName === "heroOrPariah") {
+      if (this.state.currentVoteStep === 1) {
+        return [new ApplyHeroOrPariahStep1Cmd().setPayload({ card, playerSkipped })];
+      } else {
+        return [new ApplyHeroOrPariahStep2Cmd().setPayload({ card, playerSkipped })];
       }
-    });
-
-    // scale system health effect by number of players
-    const scaledSystemHealthEffect =
-      this.state.numPlayers * this.state.activeCard.systemHealthEffect;
-
-    this.state.systemHealth = Math.max(
-      0,
-      Math.min(
-        this.defaultParams.systemHealthMax,
-        this.state.systemHealth + scaledSystemHealthEffect
-      )
-    );
-
-    return this.finishCard();
-  }
-
-  private finishCard() {
-    if (!this.state.activeCard) return;
-
-    this.state.activeCard.expired = true;
-    this.state.updateVisibleCards();
-
-    if (this.state.systemHealth <= 0) {
-      this.state.players.forEach(player => {
-        (player.pendingInvestment = 0), (player.pointsEarned = 0);
-      });
-      return [new PersistRoundCmd(), new EndGameCmd().setPayload({ status: "defeat" })];
-    }
-
-    // move to next card or investment phase
-    const nextRoundCard = this.state.nextRoundCard;
-    if (nextRoundCard) {
-      this.state.activeCardId = nextRoundCard.deckCardId;
-      return new StartEventTimerCmd();
+    } else if (card.requiresVote) {
+      // offer cards (requires a vote)
+      return [new ApplyOfferCardCmd().setPayload({ card, playerSkipped })];
     } else {
-      this.state.canInvest = true;
-      this.state.activeCardId = -1;
+      // standard cards (no vote required)
+      return [new ApplyStandardCardCmd().setPayload({ card, playerSkipped })];
     }
   }
+}
 
-  private async applyVotingEffects() {
-    if (!this.state.activeCard) return;
+abstract class BaseCardCmd extends Cmd<{ card: EventCard; playerSkipped: boolean }> {
+  protected card!: EventCard;
 
-    if (this.state.activeCard.codeName === "personalGain") {
-      await this.applyPersonalGainEffects();
-    } else if (this.state.activeCard.codeName === "heroOrPariah") {
-      const shouldContinue = await this.applyHeroOrPariahEffects();
-      if (!shouldContinue) {
-        return; // don't clear voting state yet, continue to next step
-      }
-    }
-
-    // clear voting state and continue to next card
+  protected finishVoting() {
     this.state.votingInProgress = false;
-    this.state.players.forEach(player => {
-      player.vote = undefined;
-    });
-
-    return this.finishCard();
+    this.state.currentVoteStep = 1;
+    this.state.heroOrPariah = "";
+    this.state.players.forEach(p => (p.vote = undefined));
   }
 
-  private createDefaultVoteIfNeeded(
+  protected ensureAllPlayersHaveVotes(defaultBinary?: boolean, defaultRole?: Role) {
+    this.state.players.forEach(player => {
+      if (!player.vote) {
+        player.vote = new Vote({
+          binaryVote: defaultBinary,
+          roleVote: defaultRole,
+          isDefaultTimeoutVote: true,
+        });
+      }
+    });
+  }
+
+  protected getOrCreateVote(
+    player: Player,
+    defaultVote: { binaryVote?: boolean; roleVote?: Role }
+  ): Vote {
+    if (player.vote) {
+      // fill in the missing vote value if there is an existing vote but it's missing the target value
+      if (defaultVote.binaryVote !== undefined && player.vote.binaryVote === undefined) {
+        player.vote.binaryVote = defaultVote.binaryVote;
+      }
+      if (defaultVote.roleVote !== undefined && player.vote.roleVote === undefined) {
+        player.vote.roleVote = defaultVote.roleVote;
+      }
+    } else {
+      player.vote = new Vote({
+        ...defaultVote,
+        isDefaultTimeoutVote: true,
+      });
+    }
+
+    return player.vote;
+  }
+
+  protected createDefaultVoteIfNeeded(
     player: Player,
     vote: { binaryVote?: boolean; roleVote?: Role }
   ) {
@@ -264,7 +248,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     }
   }
 
-  private async persistVoteForPlayer(
+  protected async persistVoteForPlayer(
     player: Player,
     binaryVoteInterpretation?: LiteGameBinaryVoteInterpretation
   ) {
@@ -272,71 +256,217 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     if (player.vote) {
       await litegame.createPlayerVote(
         player,
-        this.state.activeCardId,
+        this.card.deckCardId,
         this.state.currentVoteStep,
         binaryVoteInterpretation
       );
     }
   }
 
-  private async applyAndPersistVoteEffect(
+  protected async applyAndPersistVoteEffect(
     player: Player,
     pointsChange: number,
     resourcesChange: number,
     systemHealthChange: number
   ) {
     const { litegame } = getServices();
-    player.points += pointsChange;
-    player.resources += resourcesChange;
-    this.state.systemHealth = Math.max(0, this.state.systemHealth - systemHealthChange);
+    player.points = Math.max(0, player.points + pointsChange);
+    player.resources = Math.max(0, player.resources + resourcesChange);
+    this.state.systemHealth = Math.max(
+      0,
+      Math.min(this.defaultParams.systemHealthMax, this.state.systemHealth + systemHealthChange)
+    );
     await litegame.createPlayerVoteEffect(
       player.playerId,
-      this.state.activeCardId,
+      this.card.deckCardId,
       pointsChange,
       resourcesChange,
       systemHealthChange
     );
   }
 
-  private async applyPersonalGainEffects() {
-    for (const player of this.state.players.values()) {
-      // if they don't have a binary vote, create a default one
-      this.createDefaultVoteIfNeeded(player, { binaryVote: false });
-      const interpretation: LiteGameBinaryVoteInterpretation = player.vote!.binaryVote
-        ? "accept_greedy_offer"
-        : "reject_greedy_offer";
-      await this.persistVoteForPlayer(player, interpretation);
+  protected finishCard() {
+    this.card.expired = true;
+    this.state.updateVisibleCards();
 
-      const binaryVote = player.vote!.binaryVote;
+    if (this.state.systemHealth <= 0) {
+      this.state.players.forEach(player => {
+        (player.pendingInvestment = 0), (player.pointsEarned = 0);
+      });
+      return [new PersistRoundCmd(), new EndGameCmd().setPayload({ status: "defeat" })];
+    }
 
-      const pointsChange = 0;
-      let resourcesChange = 0;
-      let systemHealthChange = 0;
+    // move to next card or investment phase
+    const nextRoundCard = this.state.nextRoundCard;
+    if (nextRoundCard) {
+      this.state.activeCardId = nextRoundCard.deckCardId;
+      return new StartEventTimerCmd();
+    } else {
+      this.state.canInvest = true;
+      this.state.activeCardId = -1;
+    }
+  }
+}
 
-      if (binaryVote === true) {
-        // player chose "yes" - gains 6 resources, loses 6 system health
-        resourcesChange = 6;
-        systemHealthChange = -6;
-      }
-      await this.applyAndPersistVoteEffect(
+export class ApplyOfferCardCmd extends BaseCardCmd {
+  /**
+   * Apply card effects require a binary vote (accept/reject) from one or all players
+   * The system health effect of the card is applied for all players that accept the offer
+   */
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+
+    const affectedRole = this.card.affectedRole;
+    // all players or affected role player
+    const targetPlayers: Player[] = affectedRole
+      ? Array.from(this.state.players.values()).filter(p => p.role === affectedRole)
+      : Array.from(this.state.players.values());
+
+    if (targetPlayers.length === 0) {
+      return this.finishCard();
+    }
+
+    for (const player of targetPlayers) {
+      // default to rejecting the offer
+      const vote = this.getOrCreateVote(player, { binaryVote: false });
+      const binaryVote = vote.binaryVote;
+      await this.persistVoteForPlayer(
         player,
-        pointsChange,
-        resourcesChange,
-        systemHealthChange
+        binaryVote ? "accept_greedy_offer" : "reject_greedy_offer"
       );
-    }
-  }
 
-  private async applyHeroOrPariahEffects(): Promise<boolean> {
-    if (this.state.currentVoteStep === 1) {
-      return await this.applyHeroOrPariahStep1();
-    } else if (this.state.currentVoteStep === 2) {
-      return await this.applyHeroOrPariahStep2();
+      logger.fatal(`pointsEffect: ${this.card.pointsEffect}`);
+      logger.fatal(`resourcesEffect: ${this.card.resourcesEffect}`);
+      logger.fatal(`systemHealthEffect: ${this.card.systemHealthEffect}`);
+      if (binaryVote === true) {
+        await this.applyAndPersistVoteEffect(
+          player,
+          this.card.pointsEffect,
+          this.card.resourcesEffect,
+          this.card.systemHealthEffect
+        );
+      }
     }
-    return true; // unreachable
-  }
 
-  private async applyHeroOrPariahStep1(): Promise<boolean> {
+    this.finishVoting();
+    return this.finishCard();
+  }
+}
+
+export class ApplyStandardCardCmd extends BaseCardCmd {
+  /**
+   * Apply card effects that do not require a vote and affects one or all player
+   * System health effect is applied once globally
+   */
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+
+    const affectedRole = this.card.affectedRole;
+    // all players or affected role player
+    const targetPlayers: Player[] = affectedRole
+      ? Array.from(this.state.players.values()).filter(p => p.role === affectedRole)
+      : Array.from(this.state.players.values());
+
+    if (targetPlayers.length === 0) {
+      return this.finishCard();
+    }
+
+    for (const player of targetPlayers) {
+      player.points = Math.max(0, player.points + this.card.pointsEffect);
+      player.resources = Math.max(0, player.resources + this.card.resourcesEffect);
+    }
+    // when the scaling factor is not 1, we need to scale up the system health effect
+    // (this is used in prolificBaseline/Variable since we want the system health contributions/effects to
+    // appear 'averaged out' to keep the values the same as a solo game)
+    const scaledSystemHealthEffect =
+      this.card.systemHealthEffect * (this.defaultParams.systemHealthScalingFactor || 1);
+    // apply system health changes (always apply the card's effect once, globally)
+    this.state.systemHealth = Math.max(
+      0,
+      Math.min(
+        this.defaultParams.systemHealthMax,
+        this.state.systemHealth + scaledSystemHealthEffect
+      )
+    );
+
+    return this.finishCard();
+  }
+}
+
+export class ApplyCompulsivePhilanthropyCmd extends BaseCardCmd {
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+
+    // get the role votes and find the most voted role
+    const roleVotes: { [role: string]: number } = {};
+    this.state.players.forEach(player => {
+      if (player.vote?.roleVote) {
+        const role = player.vote.roleVote;
+        roleVotes[role] = (roleVotes[role] || 0) + 1;
+      }
+    });
+
+    // find the role with the most votes (simple majority, or first in case of tie)
+    let selectedRole: Role | null = null;
+    let maxVotes = 0;
+
+    for (const [role, votes] of Object.entries(roleVotes)) {
+      if (votes > maxVotes) {
+        maxVotes = votes;
+        selectedRole = role as Role;
+      }
+    }
+
+    if (selectedRole) {
+      // find the player with the selected role and make them invest all resources
+      const targetPlayer = Array.from(this.state.players.values()).find(
+        p => p.role === selectedRole
+      );
+
+      if (targetPlayer && targetPlayer.resources > 0) {
+        const resourcesInvested = targetPlayer.resources;
+
+        // move all resources to system health
+        this.state.systemHealth = Math.min(
+          this.defaultParams.systemHealthMax,
+          this.state.systemHealth + resourcesInvested
+        );
+        targetPlayer.resources = 0;
+
+        // persist the voting effects
+        const { litegame } = getServices();
+        for (const voter of this.state.players.values()) {
+          if (voter.vote) {
+            await litegame.createPlayerVote(
+              voter,
+              this.card.deckCardId,
+              this.state.currentVoteStep
+            );
+
+            // create vote effect for the target player only
+            if (voter.playerId === targetPlayer.playerId) {
+              await litegame.createPlayerVoteEffect(
+                voter.playerId,
+                this.card.deckCardId,
+                0, // points change
+                -resourcesInvested, // resources change (negative because resources were removed)
+                resourcesInvested // system health change
+              );
+            }
+          }
+        }
+      }
+    }
+
+    this.finishVoting();
+    return this.finishCard();
+  }
+}
+
+export class ApplyHeroOrPariahStep1Cmd extends BaseCardCmd {
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+
     // ensure all players have votes for step 1 (blank defaults for non-voters)
     for (const player of this.state.players.values()) {
       this.createDefaultVoteIfNeeded(player, {});
@@ -378,20 +508,27 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
       player.vote = undefined;
     });
     this.state.currentVoteStep = 2;
+
     // start new timer for step 2
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
     }, this.defaultParams.eventTimeout * 1000);
 
-    return false; // don't finish the card yet
+    return; // don't finish the card yet, wait for step 2
   }
+}
 
-  private async applyHeroOrPariahStep2(): Promise<boolean> {
+export class ApplyHeroOrPariahStep2Cmd extends BaseCardCmd {
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+
     const shouldGainResources = this.state.heroOrPariah === "hero";
+
     // ensure all players have votes for step 2
     for (const player of this.state.players.values()) {
       this.createDefaultVoteIfNeeded(player, {});
     }
+
     for (const player of this.state.players.values()) {
       await this.persistVoteForPlayer(player);
     }
@@ -402,6 +539,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     availableRoles.forEach(role => {
       roleVoteCounts[role] = 0;
     });
+
     for (const player of this.state.players.values()) {
       if (player.vote!.roleVote !== undefined) {
         roleVoteCounts[player.vote!.roleVote]++;
@@ -453,7 +591,8 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     this.state.currentVoteStep = 1;
     this.state.heroOrPariah = "";
 
-    return true; // now allow finishing the card
+    this.finishVoting();
+    return this.finishCard();
   }
 }
 
@@ -465,7 +604,6 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
       this.state.currentVoteStep = 1;
       this.state.heroOrPariah = "";
     }
-
     // start the event timer
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
@@ -531,7 +669,7 @@ export class PlayerInvestCmd extends Cmd<{
 }
 
 export class ProcessVoteCmd extends Cmd<{
-  playerId: number;
+  player: Player;
   binaryVote?: boolean;
   roleVote?: Role;
 }> {
@@ -540,16 +678,30 @@ export class ProcessVoteCmd extends Cmd<{
   }
 
   execute() {
-    const { playerId, binaryVote, roleVote } = this.payload;
-
-    const player = this.state.players.get(playerId.toString());
-    if (!player) return;
+    const { player, binaryVote, roleVote } = this.payload;
 
     player.vote = new Vote({
       binaryVote,
       roleVote,
       isDefaultTimeoutVote: false,
     });
+
+    const requiredVoters = this.getRequiredVoters();
+    const allVoted = requiredVoters.every(p => p.vote !== undefined);
+
+    if (allVoted) {
+      this.room.eventTimeout?.clear();
+      return [new ApplyCardCmd().setPayload({ playerSkipped: false })];
+    }
+  }
+
+  private getRequiredVoters(): Player[] {
+    const activeCard = this.state.activeCard;
+    if (activeCard?.affectedRole) {
+      const affectedPlayer = this.state.getPlayerByRole(activeCard.affectedRole);
+      return affectedPlayer ? [affectedPlayer] : [];
+    }
+    return Array.from(this.state.players.values());
   }
 }
 
