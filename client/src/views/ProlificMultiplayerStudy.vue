@@ -1,7 +1,8 @@
 <template>
   <div class="backdrop d-flex flex-column justify-content-center align-items-center">
-    <button @click="leaveAll">leave all</button>
-    <p v-if="reconnectTimeout && !isTransitioning">Connection lost. Attempting to reconnect...</p>
+    <p v-if="reconnectTimeout && !isTransitioning && !isGameOver">
+      Connection lost. Attempting to reconnect...
+    </p>
     <b-alert v-if="started" variant="warning" show dismissible>
       <small>
         <p>
