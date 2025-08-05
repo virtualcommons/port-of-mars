@@ -14,7 +14,12 @@ import {
 import { Repository } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { generateProbablyUniqueUsername, generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
+import {
+  generateProbablyUniqueUsername,
+  generateUsername,
+  getRandomIntInclusive,
+  ServerError,
+} from "@port-of-mars/server/util";
 import { LiteGameType } from "@port-of-mars/shared/lite";
 import {
   ProlificMultiplayerParticipantStatus,
