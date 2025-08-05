@@ -254,13 +254,16 @@ export default class ProlificMultiplayerStudy extends Vue {
 
   private async transitionToGame() {
     this.isTransitioning = true;
-    console.log(this.isTransitioning);
     // leave lobby and join the real game room
     await this.lobbyRoom!.leave();
     this.lobbyApi.leave();
     const roomId = this.$ajax.roomId;
     if (!roomId) {
-      return console.error("Missing roomId");
+      // schedule a reconnect attempt if roomId is undefined for some reason
+      // this will ask the server for an active roomId and join it
+      this.isTransitioning = false;
+      this.scheduleReconnect();
+      return;
     }
     await this.joinGame(roomId);
     // clear timeout
