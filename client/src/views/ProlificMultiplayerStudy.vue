@@ -1,5 +1,7 @@
 <template>
   <div class="backdrop d-flex flex-column justify-content-center align-items-center">
+    <button @click="leaveAll">leave all</button>
+    <p v-if="reconnectTimeout && !isTransitioning">Connection lost. Attempting to reconnect...</p>
     <b-alert v-if="started" variant="warning" show dismissible>
       <small>
         <p>
@@ -17,7 +19,7 @@
         <p>{{ joinFailureReason }}</p>
       </div>
       <div
-        v-if="!started && lobbyRoom"
+        v-else-if="!started && lobbyRoom"
         class="mt-5 text-center p-5"
         style="max-width: 30rem; margin: auto"
       >
@@ -30,7 +32,7 @@
             other participants to join. If 5 minutes passes since the last player joined the lobby,
             you will be redirected back to Prolific and compensated for your time.
           </p>
-          <p>Please <b>do not</b> refresh this page</p>
+          <p>Please <b>do not</b> refresh this page as this will reset the timer</p>
         </small>
       </div>
 
@@ -143,7 +145,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   }
 
   get gameOverText() {
-    return this.isSecondGame
+    return this.isStudyComplete || this.isSecondGame
       ? "You have completed the study. Thank you for your participation!"
       : "You will be advanced to the next game in a few seconds..";
   }
@@ -168,16 +170,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   async created() {
     await this.fetchParticipantStatus();
     if (this.participantStatus.status === "not-started") {
-      try {
-        await this.joinLobby();
-      } catch (error) {
-        console.error("Failed to join lobby:", error);
-        if (error instanceof Error) {
-          this.joinFailureReason = error.message;
-        } else {
-          this.joinFailureReason = "Failed to join lobby. Please try refreshing the page.";
-        }
-      }
+      await this.joinLobby();
     } else if (this.participantStatus.status === "in-progress") {
       if (this.participantStatus.activeRoomId) {
         // try to re-join active game
@@ -186,24 +179,81 @@ export default class ProlificMultiplayerStudy extends Vue {
     }
   }
 
-  private async joinLobby() {
-    this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME, { type: "prolificBaseline" });
-    applyLiteLobbyResponses(this.lobbyRoom, this);
-    this.lobbyApi.connect(this.lobbyRoom);
+  private async onLobbyLeave() {
+    this.lobbyRoom = null;
+    this.scheduleReconnect();
+  }
 
-    // intercept lobby -> game messages
-    this.lobbyRoom.onMessage("removed-client-from-lobby", () => this.transitionToGame());
-    this.lobbyRoom.onMessage("join-existing-game", () => this.transitionToGame());
+  private async onGameLeave() {
+    this.gameRoom = null;
+    this.scheduleReconnect();
+  }
+
+  private reconnectTimeout: number | null = null;
+  private isTransitioning = false;
+
+  private async scheduleReconnect() {
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+    }
+    this.reconnectTimeout = setTimeout(async () => {
+      this.reconnectTimeout = null;
+      this.attemptReconnect();
+    }, 10000);
+  }
+
+  private async attemptReconnect() {
+    // abort if we're already connected
+    if (this.lobbyRoom || this.gameRoom) return;
+    await this.fetchParticipantStatus();
+    if (this.participantStatus.status === "in-progress" && this.participantStatus.activeRoomId) {
+      await this.joinGame(this.participantStatus.activeRoomId);
+    } else if (this.participantStatus.status === "not-started") {
+      await this.joinLobby();
+    }
+  }
+
+  private async joinLobby() {
+    try {
+      this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME, {
+        type: "prolificBaseline",
+      });
+      applyLiteLobbyResponses(this.lobbyRoom, this);
+      this.lobbyApi.connect(this.lobbyRoom);
+      // intercept lobby -> game messages
+      this.lobbyRoom.onMessage("removed-client-from-lobby", () => this.transitionToGame());
+      this.lobbyRoom.onMessage("join-existing-game", () => this.transitionToGame());
+      this.lobbyRoom.onLeave(() => this.onLobbyLeave());
+    } catch (error) {
+      console.error("Failed to join lobby:", error);
+      this.joinFailureReason =
+        "Failed to join lobby. Please try refreshing the page. If the problem persists, please contact the researcher with error details and you will be compensated for your time.";
+      if (error instanceof Error) {
+        this.joinFailureReason += ` Error details: ${error.message}`;
+      }
+    }
   }
 
   private async joinGame(roomId: string) {
-    this.gameRoom = await this.$client.joinById(roomId);
-    applyMultiplayerGameServerResponses(this.gameRoom, this, this.$tstore.state.user);
-    this.api.connect(this.gameRoom);
-    this.started = true;
+    try {
+      this.gameRoom = await this.$client.joinById(roomId);
+      applyMultiplayerGameServerResponses(this.gameRoom, this, this.$tstore.state.user);
+      this.api.connect(this.gameRoom);
+      this.started = true;
+      this.gameRoom.onLeave(() => this.onGameLeave());
+    } catch (error) {
+      console.error("Failed to join game:", error);
+      this.joinFailureReason =
+        "Failed to join game. Please try refreshing the page. If the problem persists, please contact the researcher with error details and you will be compensated for your time.";
+      if (error instanceof Error) {
+        this.joinFailureReason += ` Error details: ${error.message}`;
+      }
+    }
   }
 
   private async transitionToGame() {
+    this.isTransitioning = true;
+    console.log(this.isTransitioning);
     // leave lobby and join the real game room
     await this.lobbyRoom!.leave();
     this.lobbyApi.leave();
@@ -212,6 +262,12 @@ export default class ProlificMultiplayerStudy extends Vue {
       return console.error("Missing roomId");
     }
     await this.joinGame(roomId);
+    // clear timeout
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+    this.isTransitioning = false;
   }
 
   async handleContinue() {

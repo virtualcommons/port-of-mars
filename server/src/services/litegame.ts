@@ -601,7 +601,7 @@ export class LiteGameService extends BaseService {
       .leftJoinAndSelect("deckCard.round", "round")
       .leftJoinAndSelect("round.game", "game")
       .leftJoinAndSelect("deckCard.card", "eventCard")
-      .leftJoinAndSelect("round.game.players", "gamePlayers") // need to count players
+      .leftJoinAndSelect("game.players", "gamePlayers") // need to count players
       .where("deckCard.roundId IS NOT NULL"); // ensure card was actually drawn in a round
 
     if (gameIds && gameIds.length > 0) {

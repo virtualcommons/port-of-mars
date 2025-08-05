@@ -14,7 +14,7 @@ import {
 import { Repository } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
+import { generateProbablyUniqueUsername, generateUsername, getRandomIntInclusive, ServerError } from "@port-of-mars/server/util";
 import { LiteGameType } from "@port-of-mars/shared/lite";
 import {
   ProlificMultiplayerParticipantStatus,
@@ -599,11 +599,17 @@ export class MultiplayerStudyService extends BaseStudyService {
     if (!participant) {
       // create a new user if not found
       const user = new User();
-      user.username = await generateUsername();
+      user.username = generateProbablyUniqueUsername();
       user.name = "";
       user.dateConsented = new Date(); // assuming this happens externally
       user.isSystemBot = false;
-      await this.getUserRepository().save(user);
+      try {
+        await this.getUserRepository().save(user);
+      } catch (e) {
+        // if the username is already taken, try again
+        user.username = generateProbablyUniqueUsername();
+        await this.getUserRepository().save(user);
+      }
       // create a new participant record and link to user
       participant = new ProlificMultiplayerStudyParticipant();
       participant.user = user;

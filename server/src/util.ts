@@ -1,5 +1,6 @@
 import _ from "lodash";
 import * as assert from "assert";
+import { v4 as uuidv4 } from "uuid";
 import { Builder, Loader, Parser, Resolver, fixturesIterator } from "typeorm-fixtures-cli/dist";
 import { ROLES, DashboardMessage, GameType } from "@port-of-mars/shared/types";
 import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/pom/game/types";
@@ -162,6 +163,17 @@ export class ValidationError extends ServerError {
   constructor(data: { displayMessage: string }) {
     super({ ...data, message: "Invalid request", code: 400 });
   }
+}
+
+export function generateProbablyUniqueUsername() {
+  /**
+   * synchronous username gen that uses partial uuid
+   * this is not guaranteed to be unique but is highly probable
+   */
+  const adj = Math.floor(Math.random() * ADJECTIVES.length);
+  const noun = Math.floor(Math.random() * NOUNS.length);
+  const uuid = uuidv4();
+  return ADJECTIVES[adj] + NOUNS[noun] + uuid.slice(-12);
 }
 
 export async function generateUsername() {

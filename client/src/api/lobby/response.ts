@@ -87,6 +87,9 @@ export function applyLobbyResponses(room: Room, component: any, lobbyType: Lobby
 export function applyLiteLobbyResponses(room: Room, component: any) {
   const store = component.$tstore;
 
+  // always clear the lobby clients on reconnect
+  store.commit("CLEAR_LOBBY_CLIENTS");
+
   room.onError((code: number, message?: string) => {
     console.log(`Error ${code} occurred in room: ${message} `);
     alert("sorry, we encountered an error, please try refreshing the page or contact us");
