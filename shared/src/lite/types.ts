@@ -14,6 +14,15 @@ export interface EventCardData {
   systemHealthEffect: number;
 }
 
+export interface HiddenParams {
+  twoEventsThreshold?: number;
+  threeEventsThreshold?: number;
+  twoEventsThresholdRange?: { min: number; max: number };
+  threeEventsThresholdRange?: { min: number; max: number };
+  maxRound?: number;
+  eventCardDeck: Array<EventCardData>;
+}
+
 export type ThresholdInformation = "unknown" | "range" | "known";
 
 export interface TreatmentData {

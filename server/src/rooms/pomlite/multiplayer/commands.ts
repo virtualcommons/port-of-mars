@@ -106,6 +106,7 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.updateRoundInitialValues();
     this.state.isRoundTransitioning = false;
     this.state.canInvest = true;
+    this.state.isRoundInitialized = true;
 
     return [new SendHiddenParamsCmd()];
   }
@@ -121,23 +122,7 @@ export class WaitForPlayersCmd extends CmdWithoutPayload {
 
 export class SendHiddenParamsCmd extends CmdWithoutPayload {
   execute() {
-    const data: any = {};
-    if (this.state.treatmentParams.isEventDeckKnown) {
-      data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
-    }
-    if (this.state.treatmentParams.isNumberOfRoundsKnown) {
-      data.maxRound = this.state.maxRound;
-    }
-    if (this.state.treatmentParams.thresholdInformation === "known") {
-      data.twoEventsThreshold = this.state.twoEventsThreshold;
-      data.threeEventsThreshold = this.state.threeEventsThreshold;
-    } else if (this.state.treatmentParams.thresholdInformation === "range") {
-      data.twoEventsThresholdRange =
-        this.defaultParams.twoEventsThresholdDisplayRange || this.defaultParams.twoEventsThreshold;
-      data.threeEventsThresholdRange =
-        this.defaultParams.threeEventsThresholdDisplayRange ||
-        this.defaultParams.threeEventsThreshold;
-    }
+    const data = this.state.buildHiddenParams();
     this.room.clients.forEach(client => {
       client.send("set-hidden-params", {
         kind: "set-hidden-params",

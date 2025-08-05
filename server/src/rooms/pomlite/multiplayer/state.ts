@@ -5,6 +5,7 @@ import {
   LiteGameType,
   LiteGameStatus,
   TreatmentData,
+  HiddenParams,
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
 import { Client } from "colyseus";
@@ -99,6 +100,7 @@ export class LiteGameState extends Schema {
   gameId = 0;
   userRoles: LiteRoleAssignment;
   roundInitialSystemHealth = LiteGameState.DEFAULTS.freeplay.systemHealthMax;
+  isRoundInitialized = false;
 
   maxRound = LiteGameState.DEFAULTS.freeplay.maxRound.max;
   twoEventsThreshold = LiteGameState.DEFAULTS.freeplay.twoEventsThreshold.max;
@@ -186,6 +188,29 @@ export class LiteGameState extends Schema {
       }
     });
     return true;
+  }
+
+  buildHiddenParams(): HiddenParams {
+    const data: HiddenParams = {
+      eventCardDeck: [],
+    };
+    if (this.treatmentParams.isEventDeckKnown) {
+      data.eventCardDeck = this.eventCardDeck.map(card => card.toJSON() as EventCardData);
+    }
+    if (this.treatmentParams.isNumberOfRoundsKnown) {
+      data.maxRound = this.maxRound;
+    }
+    if (this.treatmentParams.thresholdInformation === "known") {
+      data.twoEventsThreshold = this.twoEventsThreshold;
+      data.threeEventsThreshold = this.threeEventsThreshold;
+    } else if (this.treatmentParams.thresholdInformation === "range") {
+      data.twoEventsThresholdRange =
+        this.defaultParams.twoEventsThresholdDisplayRange || this.defaultParams.twoEventsThreshold;
+      data.threeEventsThresholdRange =
+        this.defaultParams.threeEventsThresholdDisplayRange ||
+        this.defaultParams.threeEventsThreshold;
+    }
+    return data;
   }
 
   get defaultParams() {

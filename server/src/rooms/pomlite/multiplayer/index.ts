@@ -100,6 +100,12 @@ export class LiteGameRoom extends Room<LiteGameState> {
     const player = this.state.getPlayer(client);
     const { multiplayerStudy } = getServices();
     await multiplayerStudy.setParticipantAbandonedGame(player.userId, false);
+    if (this.state.isRoundInitialized) {
+      client.send("set-hidden-params", {
+        kind: "set-hidden-params",
+        data: this.state.buildHiddenParams(),
+      });
+    }
   }
 
   async onLeave(client: Client, consented: boolean) {
