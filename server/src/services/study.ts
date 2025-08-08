@@ -6,6 +6,8 @@ import {
   ProlificMultiplayerStudyParticipant,
   ProlificSoloStudy,
   ProlificSoloStudyParticipant,
+  ProlificInteractiveStudy,
+  ProlificInteractiveStudyParticipant,
   SoloGameTreatment,
   SoloPlayer,
   User,
@@ -842,6 +844,189 @@ export class MultiplayerStudyService extends BaseStudyService {
       if (participant.prolificVariablePlayer?.game) {
         gameIds.push(participant.prolificVariablePlayer.game.id);
       }
+    }
+    return gameIds;
+  }
+}
+
+export class InteractiveStudyService extends BaseStudyService {
+  getRepository(): Repository<ProlificInteractiveStudy> {
+    return this.em.getRepository(ProlificInteractiveStudy);
+  }
+
+  getParticipantRepository(): Repository<ProlificInteractiveStudyParticipant> {
+    return this.em.getRepository(ProlificInteractiveStudyParticipant);
+  }
+
+  async getProlificParticipantStatus(user: User) {
+    const repo = this.getParticipantRepository();
+    let participant: ProlificInteractiveStudyParticipant;
+    try {
+      participant = await repo.findOneOrFail({
+        where: { userId: user.id },
+        relations: ["interactivePlayer", "interactivePlayer.game", "study"],
+      });
+    } catch (e) {
+      logger.fatal(e);
+      throw new ServerError({
+        code: 404,
+        message: "Participant not found",
+        displayMessage: "Participant not found",
+      });
+    }
+
+    if (!participant.interactivePlayer) {
+      return {
+        status: "not-started",
+        startingGameType: "prolificInteractive" as const,
+      };
+    }
+    const gameStatus = participant.interactivePlayer.game?.status;
+    const isDone = gameStatus && ["victory", "defeat"].includes(gameStatus);
+
+    const status: "in-progress" | "completed" = isDone ? "completed" : "in-progress";
+    let completionUrl: string | undefined;
+    if (status === "completed") {
+      completionUrl = await this.getProlificCompletionUrl(user);
+    }
+
+    let activeRoomId: string | undefined;
+    if (participant.roomId) {
+      const live =
+        (
+          await matchMaker.query({
+            roomId: participant.roomId,
+          })
+        ).length > 0;
+      if (live) activeRoomId = participant.roomId;
+    }
+
+    return {
+      startingGameType: "prolificInteractive" as const,
+      status,
+      ...(status === "in-progress" && { inProgressGameType: "prolificInteractive" as const }),
+      ...(status === "completed" && { completionUrl }),
+      ...(activeRoomId && { activeRoomId }),
+    };
+  }
+
+  async getOrCreateProlificParticipant(
+    prolificId: string,
+    studyId: string
+  ): Promise<ProlificInteractiveStudyParticipant> {
+    const study = (await this.getProlificStudy(studyId)) as ProlificInteractiveStudy;
+    if (!study) {
+      throw new ServerError({
+        code: 404,
+        message: `Invalid study ID: ${studyId}`,
+        displayMessage: `Invalid study ID: ${studyId}`,
+      });
+    }
+    let participant = await this.getParticipantRepository().findOne({
+      where: { prolificId, study: { studyId } },
+      relations: ["user", "study"],
+    });
+    if (!participant) {
+      const user = new User();
+      user.username = generateProbablyUniqueUsername();
+      user.name = "";
+      user.dateConsented = new Date();
+      user.isSystemBot = false;
+      try {
+        await this.getUserRepository().save(user);
+      } catch (e) {
+        user.username = generateProbablyUniqueUsername();
+        await this.getUserRepository().save(user);
+      }
+      participant = new ProlificInteractiveStudyParticipant();
+      participant.user = user;
+      participant.study = study;
+      participant.prolificId = prolificId;
+      logger.info(
+        `Created new prolific participant ${prolificId} for interactive study ${studyId}`
+      );
+      await this.getParticipantRepository().save(participant);
+    } else {
+      logger.info(
+        `Found existing prolific participant ${prolificId} for interactive study ${studyId}`
+      );
+    }
+    return participant;
+  }
+
+  async setProlificParticipantPlayers(
+    gameType: LiteGameType,
+    players: LitePlayer[],
+    roomId: string
+  ) {
+    if (gameType !== "prolificInteractive") return;
+    for (const player of players) {
+      await this.setProlificParticipantPlayer(player, roomId);
+    }
+  }
+
+  async setProlificParticipantPlayer(player: LitePlayer, roomId: string) {
+    const participant = await this.getParticipantRepository().findOneOrFail({
+      where: { userId: player.userId },
+      relations: ["interactivePlayer"],
+    });
+    participant.interactivePlayer = player;
+    participant.roomId = roomId;
+    return this.getParticipantRepository().save(participant);
+  }
+
+  async checkHasCompletedStudy(user: User): Promise<void> {
+    const count = await this.em.getRepository(LitePlayer).count({
+      where: { userId: user.id },
+      relations: ["game"],
+    });
+    if (count < 1) {
+      throw new ServerError({
+        code: 403,
+        message: "Study not complete",
+        displayMessage: "Study not complete",
+      });
+    }
+  }
+
+  async getAllParticipantPoints(studyId: string): Promise<Array<ProlificParticipantPointData>> {
+    const study = await this.getProlificStudy(studyId);
+    if (!study) {
+      throw new ServerError({
+        code: 404,
+        message: `Invalid study ID: ${studyId}`,
+        displayMessage: `Invalid study ID: ${studyId}`,
+      });
+    }
+    const participants = await this.getParticipantRepository().find({
+      where: { studyId: (study as any).id },
+      relations: { interactivePlayer: { game: true } },
+    });
+    return participants
+      .filter(
+        p =>
+          p.interactivePlayer?.game &&
+          p.interactivePlayer.points !== null &&
+          p.interactivePlayer.points !== undefined
+      )
+      .map(p => ({
+        prolificId: p.prolificId,
+        points: p.interactivePlayer.game.status === "victory" ? p.interactivePlayer.points! : 0,
+        abandonedGame: p.abandonedGame,
+      }));
+  }
+
+  async getGameIdsForStudyId(studyId: string): Promise<number[]> {
+    const participants = await this.getParticipantRepository()
+      .createQueryBuilder("participant")
+      .leftJoinAndSelect("participant.interactivePlayer", "player")
+      .leftJoinAndSelect("player.game", "game")
+      .leftJoinAndSelect("participant.study", "study")
+      .where("study.studyId = :studyId", { studyId })
+      .getMany();
+    const gameIds: number[] = [];
+    for (const p of participants) {
+      if (p.interactivePlayer?.game) gameIds.push(p.interactivePlayer.game.id);
     }
     return gameIds;
   }

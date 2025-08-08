@@ -96,6 +96,13 @@ export class PersistGameCmd extends CmdWithoutPayload {
         game.players,
         this.room.roomId
       );
+    } else if (this.state.type === "prolificInteractive") {
+      const { interactiveStudy } = getServices();
+      await interactiveStudy.setProlificParticipantPlayers(
+        this.state.type,
+        game.players,
+        this.room.roomId
+      );
     }
     this.state.gameId = game.id;
   }

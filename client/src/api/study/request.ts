@@ -12,8 +12,8 @@ export class StudyAPI {
   mode: StudyMode;
 
   constructor(public store: TStore, public ajax: AjaxRequest, mode: StudyMode) {
-    if (mode !== "solo" && mode !== "multiplayer") {
-      throw new Error("Study mode must be 'solo' or 'multiplayer'");
+    if (mode !== "solo" && mode !== "multiplayer" && mode !== "interactive") {
+      throw new Error("Study mode must be 'solo', 'multiplayer', or 'interactive'");
     } else {
       this.mode = mode;
     }

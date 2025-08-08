@@ -12,6 +12,7 @@ import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { LitePlayerUser } from "@port-of-mars/shared/types";
 import { LiteGameType } from "@port-of-mars/shared/lite";
 import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import { BaseStudyService } from "@port-of-mars/server/services/study";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -39,6 +40,13 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   get queue() {
     return this.groupManager.queue;
+  }
+
+  private get studyService(): BaseStudyService {
+    const services = getServices();
+    return this.type === "prolificInteractive"
+      ? services.interactiveStudy
+      : services.multiplayerStudy;
   }
 
   createState() {
@@ -83,14 +91,14 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
       const queueSnapshot = [...this.queue];
 
       if (queueSnapshot.length > 0) {
-        const { multiplayerStudy, account } = getServices();
+        const { account } = getServices();
 
         for (const lobbyClient of queueSnapshot) {
           try {
             const user = await account.findUserById(lobbyClient.client.auth.id);
             if (user) {
               // redirect to prolific completion url
-              const completionUrl = await multiplayerStudy.getProlificCompletionUrl(user, false);
+              const completionUrl = await this.studyService.getProlificCompletionUrl(user, false);
               this.sendSafe(lobbyClient.client, {
                 kind: "lobby-timeout-redirect",
                 completionUrl: completionUrl,
@@ -148,9 +156,8 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   async canUserJoin(user: User) {
     // check if user is a study participant that has not played a game yet
-    const services = getServices();
     try {
-      const participant = await services.multiplayerStudy.getProlificParticipantStatus(user);
+      const participant = await this.studyService.getProlificParticipantStatus(user);
       if (participant.status === "not-started") {
         return true;
       }

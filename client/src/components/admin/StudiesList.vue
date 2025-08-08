@@ -216,7 +216,7 @@ export default class StudiesList extends Vue {
 
   resetStudy(): ProlificStudyData {
     return {
-      gameType: "prolificBaseline",
+      gameType: this.mode === "interactive" ? "prolificInteractive" : "prolificBaseline",
       studyId: "",
       description: "",
       completionCode: "",

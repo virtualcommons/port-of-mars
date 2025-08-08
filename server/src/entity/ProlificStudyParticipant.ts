@@ -1,5 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { BaseProlificStudy, ProlificSoloStudy, ProlificMultiplayerStudy } from "./ProlificStudy";
+import {
+  BaseProlificStudy,
+  ProlificSoloStudy,
+  ProlificMultiplayerStudy,
+  ProlificInteractiveStudy,
+} from "./ProlificStudy";
 import { User } from "./User";
 import { SoloGameTreatment } from "./LiteGameTreatment";
 import { LitePlayer, SoloPlayer } from "./LitePlayer";
@@ -80,4 +85,23 @@ export class ProlificMultiplayerStudyParticipant extends BaseProlificStudyPartic
 
   @Column({ nullable: true })
   prolificVariablePlayerId!: number;
+}
+
+@Entity()
+export class ProlificInteractiveStudyParticipant extends BaseProlificStudyParticipant {
+  @ManyToOne(type => ProlificInteractiveStudy, study => study.participants, { nullable: false })
+  study!: ProlificInteractiveStudy;
+
+  @Column({ default: "" })
+  roomId!: string;
+
+  @Column({ default: false })
+  abandonedGame!: boolean;
+
+  @OneToOne(() => LitePlayer, { nullable: true })
+  @JoinColumn()
+  interactivePlayer!: LitePlayer;
+
+  @Column({ nullable: true })
+  interactivePlayerId!: number;
 }

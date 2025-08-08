@@ -328,8 +328,8 @@ export class LiteGameState extends Schema {
       roundTransitionDuration: 3,
       twoEventsThreshold: { min: 39, max: 39 }, // full game is 13 * numplayers
       threeEventsThreshold: { min: 21, max: 21 }, // full game is 7 * numplayers
-      timeRemaining: 45,
-      eventTimeout: 15,
+      timeRemaining: 4000, // FIXME: change back to 45
+      eventTimeout: 3000, // FIXME: change back to 15
       systemHealthMax: 60, // 3 * 20 matches the full game
       systemHealthWear: 15, // 3 * 5 matches the full game
       startingSystemHealth: 45, // (3 * 20) - (3 * 5)

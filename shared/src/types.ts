@@ -544,7 +544,7 @@ export interface ProlificMultiplayerParticipantStatus {
   activeRoomId?: string;
 }
 
-export type StudyMode = "solo" | "multiplayer";
+export type StudyMode = "solo" | "multiplayer" | "interactive";
 
 export interface ProlificStudyData {
   gameType: LiteGameType;

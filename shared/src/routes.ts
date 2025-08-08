@@ -16,6 +16,7 @@ export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
 export const PROLIFIC_SOLO_STUDY_PAGE = "ProlificSoloStudy" as const;
 export const PROLIFIC_MULTIPLAYER_STUDY_PAGE = "ProlificMultiplayerStudy" as const;
+export const PROLIFIC_INTERACTIVE_STUDY_PAGE = "ProlificInteractiveStudy" as const;
 
 export type Page =
   | "Admin"
@@ -35,6 +36,7 @@ export type Page =
   | "Manual"
   | "ProlificSoloStudy"
   | "ProlificMultiplayerStudy"
+  | "ProlificInteractiveStudy"
   | "Privacy";
 
 export const PAGES: Array<Page> = [
@@ -56,6 +58,7 @@ export const PAGES: Array<Page> = [
   PRIVACY_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_INTERACTIVE_STUDY_PAGE,
 ];
 
 export function getPagePath(page: Page): string {
@@ -213,6 +216,14 @@ export const PAGE_META: {
   [PROLIFIC_MULTIPLAYER_STUDY_PAGE]: {
     path: "/prolific-multiplayer",
     name: PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+    meta: {
+      requiresAuth: true,
+      requiresConsent: true,
+    },
+  },
+  [PROLIFIC_INTERACTIVE_STUDY_PAGE]: {
+    path: "/prolific-multiplayer-interactive",
+    name: PROLIFIC_INTERACTIVE_STUDY_PAGE,
     meta: {
       requiresAuth: true,
       requiresConsent: true,

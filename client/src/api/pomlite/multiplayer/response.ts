@@ -55,6 +55,10 @@ export function applyMultiplayerGameServerResponses(
       "status",
       "numPlayers",
       "isWaitingToStart",
+      "chatEnabled",
+      "votingInProgress",
+      "currentVoteStep",
+      "heroOrPariah",
     ]);
   };
 
@@ -69,6 +73,15 @@ export function applyMultiplayerGameServerResponses(
   room.onMessage("set-hidden-params", (msg: SetHiddenParams) => {
     component.state = { ...component.state, ...msg.data };
   });
+
+  // Handle chat messages
+  room.state.chatMessages.onAdd = (chatMessage: any) => {
+    component.state.chatMessages.push(deschemify(chatMessage));
+  };
+
+  room.state.chatMessages.onRemove = (chatMessage: any, index: number) => {
+    component.state.chatMessages.splice(index, 1);
+  };
 
   room.state.players.onAdd = (player: any, userId: string) => {
     const p = deschemify(player);
@@ -88,6 +101,19 @@ export function applyMultiplayerGameServerResponses(
         }
       }
     };
+
+    // subscribe to vote changes if vote exists
+    if (player.vote) {
+      player.vote.onChange = () => {
+        const local = component.state.players.get(userId);
+        if (local) {
+          local.vote = deschemify(player.vote);
+          if (userId === user.id.toString()) {
+            component.state.player.vote = deschemify(player.vote);
+          }
+        }
+      };
+    }
   };
 
   room.state.players.onRemove = (player: any, userId: string) => {
@@ -134,4 +160,7 @@ export const DEFAULT_STATE: LiteGameClientState = {
   isWaitingToStart: true,
   chatMessages: [],
   chatEnabled: false,
+  votingInProgress: false,
+  currentVoteStep: 0,
+  heroOrPariah: "",
 };

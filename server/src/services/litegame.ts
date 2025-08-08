@@ -416,8 +416,7 @@ export class SoloGameService extends BaseService {
 export class LiteGameService extends BaseService {
   async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
     const cards = await this.em.getRepository(LiteMarsEventCard).find({
-      // FIXME: filtering for debugging
-      where: { gameType, codeName: "compulsivePhilanthropy" },
+      where: { gameType },
       order: { id: "ASC" },
     });
 
