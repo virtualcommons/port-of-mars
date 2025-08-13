@@ -16,6 +16,7 @@
           :key="msg.dateCreated"
           :message="msg"
           :showUsername="false"
+          :showTimestamp="false"
         />
       </div>
 

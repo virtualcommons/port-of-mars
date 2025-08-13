@@ -3,7 +3,7 @@ import { Command } from "@colyseus/command";
 import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
-import { EventCard, Player, TreatmentParams, Vote } from "./state";
+import { ChatMessage, EventCard, Player, TreatmentParams, Vote } from "./state";
 import { LiteGameStatus, LiteGameBinaryVoteInterpretation } from "@port-of-mars/shared/lite";
 import { Role } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/server/settings";
@@ -121,6 +121,8 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.isRoundTransitioning = false;
     this.state.canInvest = true;
     this.state.isRoundInitialized = true;
+    this.state.auditing = false;
+    this.state.sandstormRoundsRemaining = 0;
 
     return [new SendHiddenParamsCmd()];
   }
@@ -172,6 +174,10 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
       } else {
         return [new ApplyHeroOrPariahStep2Cmd().setPayload({ card, playerSkipped })];
       }
+    } else if (card.codeName === "audit") {
+      return [new ApplyAuditCmd().setPayload({ card, playerSkipped })];
+    } else if (card.codeName === "sandstorm") {
+      return [new ApplySandstormCmd().setPayload({ card, playerSkipped })];
     } else if (card.requiresVote) {
       // offer cards (requires a vote)
       return [new ApplyOfferCardCmd().setPayload({ card, playerSkipped })];
@@ -314,6 +320,22 @@ abstract class BaseCardCmd extends Cmd<{ card: EventCard; playerSkipped: boolean
       this.state.canInvest = true;
       this.state.activeCardId = -1;
     }
+  }
+}
+
+export class ApplyAuditCmd extends BaseCardCmd {
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+    this.state.auditing = true;
+    return this.finishCard();
+  }
+}
+
+export class ApplySandstormCmd extends BaseCardCmd {
+  async execute({ card, playerSkipped } = this.payload) {
+    this.card = card;
+    this.state.sandstormRoundsRemaining = 3;
+    return this.finishCard();
   }
 }
 
@@ -677,6 +699,20 @@ export class PlayerInvestCmd extends Cmd<{
   async execute({ systemHealthInvestment, clockRanOut, player } = this.payload) {
     player.hasInvested = !clockRanOut;
     player.pendingInvestment = systemHealthInvestment;
+
+    // audit: reveal investments via system chat message
+    if (this.state.chatEnabled && this.state.auditing) {
+      const dateCreated = new Date();
+      const messageText = `${player.role} contributed ${systemHealthInvestment} system health.`;
+      const chatMessage = new ChatMessage({
+        username: player.username,
+        role: "Auditor" as Role,
+        message: messageText,
+        dateCreated: dateCreated.getTime(),
+        round: this.state.round,
+      });
+      this.state.chatMessages.push(chatMessage);
+    }
     // check if all players have a pending investment, if so, process the round
     if (Array.from(this.state.players.values()).every(p => p.pendingInvestment >= 0)) {
       this.state.canInvest = false;
@@ -750,11 +786,12 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
     await new Promise(resolve =>
       setTimeout(resolve, this.defaultParams.roundTransitionDuration * 1000)
     );
+    // apply standard wear plus sandstorm extra wear if active
+    const extraWear = this.state.sandstormRoundsRemaining > 0 ? 10 : 0;
     this.state.systemHealth = Math.max(
       0,
-      this.state.systemHealth - this.defaultParams.systemHealthWear
+      this.state.systemHealth - (this.defaultParams.systemHealthWear + extraWear)
     );
-
     if (this.state.systemHealth <= 0) {
       return [new PersistRoundCmd(), new EndGameCmd().setPayload({ status: "defeat" })];
     }
@@ -792,6 +829,11 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     });
 
     this.state.timeRemaining = defaults.timeRemaining;
+
+    this.state.auditing = false;
+    if (this.state.sandstormRoundsRemaining > 0) {
+      this.state.sandstormRoundsRemaining = Math.max(0, this.state.sandstormRoundsRemaining - 1);
+    }
 
     this.state.eventCardDeck.forEach(card => {
       card.inPlay = false;
@@ -856,6 +898,9 @@ export class ResetGameStateCmd extends CmdWithoutPayload {
     this.state.round = 1;
     this.state.status = "incomplete";
     this.state.systemHealth = 0;
+
+    this.state.auditing = false;
+    this.state.sandstormRoundsRemaining = 0;
 
     this.state.players.forEach(p => {
       p.resources = 0;

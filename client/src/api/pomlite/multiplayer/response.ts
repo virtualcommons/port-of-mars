@@ -44,6 +44,23 @@ export function applyMultiplayerGameServerResponses(
     ]);
   };
 
+  function setPlayer(userId: string, playerObj: any) {
+    // ensure reactivity when adding new keys to plain object
+    if (component.$set) {
+      component.$set(component.state.players, userId, playerObj);
+    } else {
+      component.state.players[userId] = playerObj;
+    }
+  }
+
+  function deletePlayer(userId: string) {
+    if (component.$delete) {
+      component.$delete(component.state.players, userId);
+    } else {
+      delete component.state.players[userId];
+    }
+  }
+
   room.state.onChange = (changes: DataChange[]) => {
     applyChanges(component.state, changes, [
       "type",
@@ -55,6 +72,8 @@ export function applyMultiplayerGameServerResponses(
       "activeCardId",
       "canInvest",
       "isRoundTransitioning",
+      "auditing",
+      "sandstormRoundsRemaining",
       "status",
       "numPlayers",
       "isWaitingToStart",
@@ -92,11 +111,11 @@ export function applyMultiplayerGameServerResponses(
     if (userId === user.id.toString()) {
       component.state.player = p;
     }
-    component.state.players.set(userId, p);
+    setPlayer(userId, p);
 
     // subscribe to changes in the player
     player.onChange = (changes: DataChange[]) => {
-      const local = component.state.players.get(userId);
+      const local = component.state.players[userId];
       for (const change of changes) {
         local[change.field] = change.value;
         if (userId === user.id.toString()) {
@@ -108,7 +127,7 @@ export function applyMultiplayerGameServerResponses(
     // subscribe to vote changes if vote exists
     if (player.vote) {
       player.vote.onChange = () => {
-        const local = component.state.players.get(userId);
+        const local = component.state.players[userId];
         if (local) {
           local.vote = deschemify(player.vote);
           if (userId === user.id.toString()) {
@@ -127,7 +146,7 @@ export function applyMultiplayerGameServerResponses(
         points: 0,
       };
     }
-    component.state.players.delete(userId);
+    deletePlayer(userId);
   };
 }
 
@@ -147,7 +166,7 @@ export const DEFAULT_STATE: LiteGameClientState = {
     instructions: "",
     numLifeAsUsualCardsOverride: -1,
   },
-  players: new Map(),
+  players: {},
   numPlayers: 1,
   player: {
     username: "",
@@ -169,4 +188,6 @@ export const DEFAULT_STATE: LiteGameClientState = {
   votingInProgress: false,
   currentVoteStep: 0,
   heroOrPariah: "",
+  auditing: false,
+  sandstormRoundsRemaining: 0,
 };

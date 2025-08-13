@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column p-2 h-100 overflow-hidden">
     <div class="d-flex flex-row justify-content-between mx-3">
-      <div v-for="([playerKey, player], index) of state.players" :key="playerKey">
+      <div v-for="(player, playerKey, index) in state.players" :key="playerKey">
         <OtherPlayers
           :index="index + 1"
           :isSelf="player.role === state.player.role"
@@ -15,13 +15,14 @@
         <div class="d-flex flex-shrink-1 m-2 mt-3">
           <SegmentedBar
             :min="0"
-            :max="75"
+            :max="60"
             :delta="pendingSystemHealthInvestment"
-            v-model="normalizedSystemHealth"
+            v-model="state.systemHealth"
             label="System Health"
             class="flex-grow-1"
             variant="green"
             size="md"
+            :helpText="systemHealthHelpText"
           />
         </div>
 
@@ -182,7 +183,7 @@
 <script lang="ts">
 import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
 import { LiteGameRequestAPI } from "@port-of-mars/client/api/pomlite/multiplayer/request";
-import { LiteGameClientState } from "@port-of-mars/shared/lite";
+import { LiteGameClientState, LiteGamePlayerClientState } from "@port-of-mars/shared/lite";
 import EventCard from "@port-of-mars/client/components/lite/EventCard.vue";
 import LiteChat from "@port-of-mars/client/components/lite/LiteChat.vue";
 import PlayerIndicators from "@port-of-mars/client/components/lite/PlayerIndicators.vue";
@@ -257,7 +258,9 @@ export default class Dashboard extends Vue {
   }
 
   get getAvailableRoles() {
-    return Array.from(this.state.players.values()).map(player => player.role);
+    return Object.values(this.state.players).map(
+      (player: LiteGamePlayerClientState) => player.role
+    );
   }
 
   get binaryAffirmativeLabel() {
@@ -278,30 +281,11 @@ export default class Dashboard extends Vue {
     }
   }
 
-  get actualVotesReceived() {
-    const playersWithVotes = Array.from(this.state.players.values()).filter(
-      player => player.vote !== undefined
-    );
-    console.log("InteractiveDashboard: Calculating actual votes received");
-    console.log(
-      "InteractiveDashboard: All players:",
-      Array.from(this.state.players.values()).map(p => ({
-        role: p.role,
-        hasVote: p.vote !== undefined,
-        vote: p.vote,
-      }))
-    );
-    console.log("InteractiveDashboard: Players with votes:", playersWithVotes.length);
-    console.log("InteractiveDashboard: Total players:", this.state.numPlayers);
-    console.log("InteractiveDashboard: Voting in progress:", this.state.votingInProgress);
-    return playersWithVotes.length;
-  }
-
-  get normalizedSystemHealth() {
-    if (this.state.systemHealth === 0) {
-      return 0;
+  get systemHealthHelpText() {
+    if (this.state.sandstormRoundsRemaining > 0) {
+      return "[SANDSTORM ACTIVE] Forecasted system health loss: 25";
     }
-    return Math.floor((this.state.systemHealth - 1) / this.state.numPlayers) + 1;
+    return "Forecasted system health loss: 15";
   }
 
   handleInvest(investment: number) {

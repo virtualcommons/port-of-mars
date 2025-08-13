@@ -27,7 +27,7 @@
           <span>{{ player.role }}</span>
         </p>
         <b-badge v-if="isSelf" class="ml-2 pt-2" variant="primary">You</b-badge>
-        <b-badge v-else class="ml-2 pt-2" variant="light">{{ player.points }}</b-badge>
+        <b-badge v-else class="ml-2 pt-2" variant="light">{{ player.points }} pts</b-badge>
       </div>
       <b-badge v-if="player.hasInvested" class="ml-2 p-1" variant="success">Invested</b-badge>
     </div>

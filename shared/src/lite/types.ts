@@ -135,7 +135,7 @@ export interface VoteData {
 export interface LiteGameClientState extends SoloGameClientState {
   eventTimeRemaining: number;
   eventTimeTotal: number;
-  players: Map<string, LiteGamePlayerClientState>;
+  players: Record<string, LiteGamePlayerClientState>;
   player: LiteGamePlayerClientState;
   numPlayers: number;
   isWaitingToStart: boolean;
@@ -144,4 +144,6 @@ export interface LiteGameClientState extends SoloGameClientState {
   votingInProgress: boolean;
   currentVoteStep: number;
   heroOrPariah: "hero" | "pariah" | "";
+  auditing: boolean;
+  sandstormRoundsRemaining: number;
 }
