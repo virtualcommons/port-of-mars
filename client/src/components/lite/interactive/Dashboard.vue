@@ -21,120 +21,143 @@
             label="System Health"
             class="flex-grow-1"
             variant="green"
+            size="md"
           />
         </div>
 
-        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden">
-          <div class="cell-shrink mw-50 d-flex flex-column">
-            <div class="p-1 mb-2 small">
-              <ThresholdInfo
-                :state="state"
-                :thresholdInformation="state.treatmentParams.thresholdInformation"
+        <div class="d-flex flex-row align-items-center justify-content-around p-2">
+          <div class="d-flex flex-column align-items-center mx-3">
+            <h6 class="text-center">
+              {{ state.isRoundTransitioning ? "New round in" : "Time left" }}
+            </h6>
+            <Clock :timeRemaining="state.timeRemaining" :size="2" />
+          </div>
+          <div class="d-flex flex-column align-items-center mx-3">
+            <h6 class="text-center">Round</h6>
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="vfd-container p-2">
+                <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
+              </div>
+              <h4 v-if="state.treatmentParams.isNumberOfRoundsKnown" class="mx-2">/</h4>
+              <div v-if="state.treatmentParams.isNumberOfRoundsKnown" class="vfd-container p-2">
+                <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column align-items-center mx-3">
+            <h6 class="text-center">Points</h6>
+            <div class="vfd-container p-2">
+              <VFDNumberDisplay
+                :digits="2"
+                :value="state.player.points"
+                variant="yellow"
+                size="2"
               />
             </div>
-            <div class="flex-grow-1 d-flex flex-column">
-              <div v-if="state.activeCardId >= 0" class="p-2">
-                <EventCard :event="activeCard">
-                  <div v-if="isVotingEvent && activeCard?.requiresVote" class="mt-2">
-                    <div v-if="getVotingType === 'binary'" class="text-center">
-                      <b-button-group size="md" class="w-100">
-                        <b-button
-                          variant="outline-success"
-                          @click="handleBinaryVote(true)"
-                          :disabled="hasVoted"
-                        >
-                          {{ binaryAffirmativeLabel }}
-                        </b-button>
-                        <b-button
-                          variant="outline-danger"
-                          @click="handleBinaryVote(false)"
-                          :disabled="hasVoted"
-                        >
-                          {{ binaryNegativeLabel }}
-                        </b-button>
-                      </b-button-group>
-                    </div>
-                    <div v-else-if="getVotingType === 'role'" class="text-center">
-                      <div class="d-flex flex-wrap justify-content-center">
-                        <b-button
-                          v-for="role in getAvailableRoles"
-                          :key="role"
-                          class="m-1"
-                          variant="outline-light"
-                          @click="handleRoleVote(role)"
-                          :disabled="hasVoted"
-                        >
-                          {{ role }}
-                        </b-button>
+          </div>
+          <div class="d-flex flex-column align-items-center mx-3">
+            <h6 class="text-center">Resources</h6>
+            <div class="vfd-container p-2">
+              <VFDNumberDisplay
+                :digits="2"
+                :value="state.player.resources"
+                variant="blue"
+                size="2"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden">
+          <div class="cell-shrink d-flex flex-column w-100 w-md-50">
+            <div
+              class="flex-grow-1 d-flex flex-column justify-content-center align-items-center"
+              style="min-width: 0"
+            >
+              <div class="p-2 overflow-hidden">
+                <transition
+                  name="event-draw"
+                  appear
+                  mode="out-in"
+                  @before-leave="onBeforeEventCardLeave"
+                  @after-leave="onAfterEventCardLeave"
+                >
+                  <EventCard
+                    v-if="state.activeCardId >= 0"
+                    :key="`card-${activeCard.deckCardId}`"
+                    class="w-100"
+                    :event="activeCard"
+                    style="max-width: 48rem; margin: 0 auto"
+                  >
+                    <div v-if="isVotingEvent && activeCard?.requiresVote" class="mt-2">
+                      <div v-if="getVotingType === 'binary'" class="text-center">
+                        <b-button-group size="md" class="w-100">
+                          <b-button
+                            variant="success"
+                            @click="handleBinaryVote(true)"
+                            :disabled="hasVoted"
+                            :class="{ 'animate-flashing vfd-green': !hasVoted }"
+                          >
+                            {{ binaryAffirmativeLabel }}
+                          </b-button>
+                          <b-button
+                            variant="danger"
+                            @click="handleBinaryVote(false)"
+                            :disabled="hasVoted"
+                            :class="{ 'animate-flashing vfd-red': !hasVoted }"
+                          >
+                            {{ binaryNegativeLabel }}
+                          </b-button>
+                        </b-button-group>
+                      </div>
+                      <div v-else-if="getVotingType === 'role'" class="text-center">
+                        <div class="d-flex flex-wrap justify-content-center">
+                          <b-button
+                            v-for="role in getAvailableRoles"
+                            :key="role"
+                            class="m-1"
+                            variant="warning"
+                            @click="handleRoleVote(role)"
+                            :disabled="hasVoted"
+                            :class="{ 'animate-flashing vfd-yellow': !hasVoted }"
+                          >
+                            {{ role }}
+                          </b-button>
+                        </div>
                       </div>
                     </div>
+                    <div v-if="state.eventTimeTotal > 0" class="event-timer mt-2">
+                      <b-progress
+                        :value="state.eventTimeRemaining"
+                        :max="state.eventTimeTotal"
+                        variant="success"
+                        height="0.75rem"
+                      />
+                    </div>
+                  </EventCard>
+                </transition>
+                <div
+                  v-if="state.activeCardId < 0 && !isCardLeaving"
+                  class="flex-grow-1 d-flex align-items-center justify-content-center"
+                >
+                  <div class="w-100">
+                    <p class="text-muted small mb-3 text-center">
+                      Events will happen at the start of the next round
+                    </p>
+                    <div class="p-1 mb-2 small" style="flex: 0 0 auto">
+                      <ThresholdInfo
+                        :state="state"
+                        :thresholdInformation="state.treatmentParams.thresholdInformation"
+                      />
+                    </div>
                   </div>
-                  <div v-if="state.eventTimeTotal > 0" class="event-timer mt-2">
-                    <b-progress
-                      :value="state.eventTimeRemaining"
-                      :max="state.eventTimeTotal"
-                      variant="success"
-                      height="0.75rem"
-                    />
-                  </div>
-                </EventCard>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="cell-grow d-flex flex-column mw-50">
-            <div class="d-flex flex-row justify-content-around">
-              <div class="cell-grow bg-transparent m-0 d-flex flex-column justify-content-center">
-                <h6 class="text-center">
-                  {{ state.isRoundTransitioning ? "New round in" : "Time left" }}
-                </h6>
-                <div class="d-flex justify-content-center">
-                  <Clock :timeRemaining="state.timeRemaining" :size="2" />
-                </div>
-              </div>
-              <div
-                class="cell-grow bg-transparent mw-50 m-0 d-flex flex-column justify-content-center"
-              >
-                <div>
-                  <h6 class="text-center">Round</h6>
-                </div>
-                <div class="d-flex justify-content-center align-items-center">
-                  <div class="vfd-container p-2">
-                    <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
-                  </div>
-                  <h4 v-if="state.treatmentParams.isNumberOfRoundsKnown" class="mx-2">/</h4>
-                  <div v-if="state.treatmentParams.isNumberOfRoundsKnown" class="vfd-container p-2">
-                    <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          <div class="cell-shrink d-flex flex-column w-100 w-md-50">
             <div class="d-flex flex-column flex-grow-1 p-2">
-              <div class="d-flex justify-content-around align-items-center">
-                <div class="d-flex flex-column align-items-center mx-3">
-                  <h6 class="text-center">Points</h6>
-                  <div class="vfd-container p-2">
-                    <VFDNumberDisplay
-                      :digits="2"
-                      :value="state.player.points"
-                      variant="yellow"
-                      size="2"
-                    />
-                  </div>
-                </div>
-                <div class="d-flex flex-column align-items-center mx-3">
-                  <h6 class="text-center">Resources</h6>
-                  <div class="vfd-container p-2">
-                    <VFDNumberDisplay
-                      :digits="2"
-                      :value="state.player.resources"
-                      variant="blue"
-                      size="2"
-                    />
-                  </div>
-                </div>
-              </div>
               <div class="flex-grow-1">
                 <Investment
                   :state="state"
@@ -200,6 +223,7 @@ export default class Dashboard extends Vue {
   selectedRole: Role | null = null;
   hasVoted = false;
   submittingVote = false;
+  isCardLeaving = false;
 
   get activeCard() {
     return this.state.visibleEventCards.find(card => card.deckCardId === this.state.activeCardId);
@@ -223,7 +247,8 @@ export default class Dashboard extends Vue {
 
   get getVotingType(): "binary" | "role" {
     if (this.activeCard?.codeName === "heroOrPariah") {
-      return this.state.currentVoteStep === 1 ? "role" : "binary";
+      // step 1: binary (hero/pariah), step 2: role selection
+      return this.state.currentVoteStep === 1 ? "binary" : "role";
     }
     if (this.activeCard?.codeName === "compulsivePhilanthropy") {
       return "role";
@@ -327,11 +352,44 @@ export default class Dashboard extends Vue {
   onActiveCardChanged() {
     this.resetVotingState();
   }
+
+  @Watch("state.currentVoteStep")
+  onVoteStepChanged() {
+    // reset local voting state between steps so buttons enable correctly
+    this.resetVotingState();
+  }
+
+  onBeforeEventCardLeave() {
+    // avoid showing placeholder during leave animation
+    this.isCardLeaving = true;
+  }
+
+  onAfterEventCardLeave() {
+    this.isCardLeaving = false;
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .event-timer .progress {
   background-color: transparent;
+}
+
+// card flip animation
+.event-draw-enter-active,
+.event-draw-leave-active {
+  transition: transform 600ms ease;
+  transform-style: preserve-3d;
+}
+.event-draw-enter {
+  transform-origin: 50% 100%;
+  transform: perspective(800px) rotateX(-90deg);
+}
+.event-draw-enter-to {
+  transform: perspective(800px) rotateX(0deg);
+}
+.event-draw-leave-to {
+  transform-origin: 50% 100%;
+  transform: perspective(800px) rotateX(90deg);
 }
 </style>
