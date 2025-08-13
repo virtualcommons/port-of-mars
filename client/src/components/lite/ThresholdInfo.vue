@@ -1,14 +1,14 @@
 <template>
-  <div v-if="loaded" class="d-flex flex-column justify-content-around p-3">
-    <b-alert show variant="warning" class="px-2 py-1 dim-unless-hover">
+  <div v-if="loaded" class="d-flex flex-column justify-content-around">
+    <b-alert show variant="warning" class="px-2 py-1 dim-unless-hover mb-2">
       <b-badge variant="warning">+1</b-badge>
-      additional event(s) will occur
+      extra event will occur
       <strong>{{ twoEventsThresholdInfo }}</strong>
       system health
     </b-alert>
     <b-alert show variant="danger" class="px-2 py-1 m-0 dim-unless-hover">
       <b-badge variant="danger">+2</b-badge>
-      additional events will occur
+      extra events will occur
       <strong>{{ threeEventsThresholdInfo }}</strong>
       system health
     </b-alert>

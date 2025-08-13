@@ -48,7 +48,7 @@
           class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50 justify-content-center"
         >
           <div v-if="!isProlificBaselineGame" class="cell-grow mw-35">
-            <div>
+            <div class="p-2">
               <ThresholdInfo
                 v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
                 :state="state"

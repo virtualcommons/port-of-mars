@@ -131,6 +131,8 @@ export interface VoteData {
 }
 
 export interface LiteGameClientState extends SoloGameClientState {
+  eventTimeRemaining: number;
+  eventTimeTotal: number;
   players: Map<string, LiteGamePlayerClientState>;
   player: LiteGamePlayerClientState;
   numPlayers: number;

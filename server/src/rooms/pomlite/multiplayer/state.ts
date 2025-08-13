@@ -139,6 +139,10 @@ export class LiteGameState extends Schema {
   @type("uint8") currentVoteStep = 1;
   @type("string") heroOrPariah: "hero" | "pariah" | "" = "";
 
+  // event timer state (counts down while an event is active)
+  @type("uint8") eventTimeRemaining = 0;
+  @type("uint8") eventTimeTotal = 0;
+
   @type("boolean") canInvest = false;
   @type("boolean") isRoundTransitioning = false;
 
@@ -329,7 +333,7 @@ export class LiteGameState extends Schema {
       twoEventsThreshold: { min: 39, max: 39 }, // full game is 13 * numplayers
       threeEventsThreshold: { min: 21, max: 21 }, // full game is 7 * numplayers
       timeRemaining: 4000, // FIXME: change back to 45
-      eventTimeout: 3000, // FIXME: change back to 15
+      eventTimeout: 15,
       systemHealthMax: 60, // 3 * 20 matches the full game
       systemHealthWear: 15, // 3 * 5 matches the full game
       startingSystemHealth: 45, // (3 * 20) - (3 * 5)

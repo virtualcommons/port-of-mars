@@ -48,6 +48,8 @@ export function applyMultiplayerGameServerResponses(
       "type",
       "round",
       "timeRemaining",
+      "eventTimeRemaining",
+      "eventTimeTotal",
       "systemHealth",
       "activeCardId",
       "canInvest",
@@ -132,6 +134,8 @@ export const DEFAULT_STATE: LiteGameClientState = {
   type: "prolificBaseline",
   status: "incomplete",
   timeRemaining: 0,
+  eventTimeRemaining: 0,
+  eventTimeTotal: 0,
   systemHealth: 0,
   round: 0,
   treatmentParams: {

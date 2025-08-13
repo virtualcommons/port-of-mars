@@ -189,6 +189,8 @@ abstract class BaseCardCmd extends Cmd<{ card: EventCard; playerSkipped: boolean
     this.state.votingInProgress = false;
     this.state.currentVoteStep = 1;
     this.state.heroOrPariah = "";
+    this.state.eventTimeRemaining = 0;
+    this.state.eventTimeTotal = 0;
     this.state.players.forEach(p => (p.vote = undefined));
   }
 
@@ -611,10 +613,14 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
       this.state.currentVoteStep = 1;
       this.state.heroOrPariah = "";
     }
-    // start the event timer
+    // initialize and start the event timer
+    let eventTimeout = this.defaultParams.eventTimeout;
+    if (this.state.activeCard?.requiresVote) eventTimeout *= 2;
+    this.state.eventTimeTotal = eventTimeout;
+    this.state.eventTimeRemaining = eventTimeout;
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
-    }, this.defaultParams.eventTimeout * 1000);
+    }, eventTimeout * 1000);
   }
 }
 

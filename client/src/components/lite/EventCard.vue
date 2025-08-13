@@ -10,6 +10,7 @@
       >
     </p>
     <p class="mb-0">{{ event.effectText }}</p>
+    <slot></slot>
   </div>
 </template>
 

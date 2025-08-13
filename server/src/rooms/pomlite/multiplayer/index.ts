@@ -71,6 +71,10 @@ export class LiteGameRoom extends Room<LiteGameState> {
           }
         });
       }
+      // decrement active event timer if an event is in progress
+      if (this.state.activeCardId >= 0 && this.state.eventTimeRemaining > 0) {
+        this.state.eventTimeRemaining = Math.max(0, this.state.eventTimeRemaining - 1);
+      }
     }, 1000);
   }
 
