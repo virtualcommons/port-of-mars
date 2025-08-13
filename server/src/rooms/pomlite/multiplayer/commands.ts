@@ -39,13 +39,13 @@ export class StartGameLoopCmd extends CmdWithoutPayload {
 export class CreateDeckCmd extends CmdWithoutPayload {
   async execute() {
     const { litegame } = getServices();
-    // FIXME: add LAU treatments for prolificInteractive
-    // something in treatment entity needs to override drawMin drawMax of LAU cards, probably just a
-    // lifeAsUsualCards: number (default: 0) gets set to 6, 12, 18 in treatments yml
-    // somehow passed into/referenced by drawEventCardDeck
-    const cards = (await litegame.drawEventCardDeck(this.state.type)).map(
-      data => new EventCard(data)
-    );
+    // pass in the number of LAU cards to draw
+    const cards = (
+      await litegame.drawEventCardDeck(
+        this.state.type,
+        this.state.treatmentParams.numLifeAsUsualCardsOverride
+      )
+    ).map(data => new EventCard(data));
     if (this.state.type === "prolificVariable") {
       // prolific variable configuration uses a fixed deck
       this.state.eventCardDeck.push(...cards);
@@ -518,7 +518,10 @@ export class ApplyHeroOrPariahStep1Cmd extends BaseCardCmd {
     });
     this.state.currentVoteStep = 2;
 
-    // start new timer for step 2
+    // reset and start new timer for step 2 so clients show a fresh progress bar
+    this.state.eventTimeTotal = this.defaultParams.eventTimeout;
+    this.state.eventTimeRemaining = this.defaultParams.eventTimeout;
+    this.room.eventTimeout?.clear();
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
     }, this.defaultParams.eventTimeout * 1000);
@@ -618,6 +621,7 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
     if (this.state.activeCard?.requiresVote) eventTimeout *= 2;
     this.state.eventTimeTotal = eventTimeout;
     this.state.eventTimeRemaining = eventTimeout;
+    this.room.eventTimeout?.clear();
     this.room.eventTimeout = this.clock.setTimeout(() => {
       this.room.dispatcher.dispatch(new ApplyCardCmd().setPayload({ playerSkipped: true }));
     }, eventTimeout * 1000);

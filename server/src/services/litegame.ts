@@ -414,7 +414,10 @@ export class SoloGameService extends BaseService {
 }
 
 export class LiteGameService extends BaseService {
-  async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
+  async drawEventCardDeck(
+    gameType: LiteGameType,
+    numLifeAsUsualCardsOverride = -1
+  ): Promise<EventCardData[]> {
     const cards = await this.em.getRepository(LiteMarsEventCard).find({
       where: { gameType },
       order: { id: "ASC" },
@@ -423,7 +426,11 @@ export class LiteGameService extends BaseService {
     const deck: EventCardData[] = [];
 
     for (const card of cards) {
-      const drawAmt = getRandomIntInclusive(card.drawMin, card.drawMax);
+      let drawAmt = getRandomIntInclusive(card.drawMin, card.drawMax);
+      // if the card is a life as usual card and an override is provided, use the override
+      if (card.codeName === "lifeAsUsual" && numLifeAsUsualCardsOverride >= 0) {
+        drawAmt = numLifeAsUsualCardsOverride;
+      }
       for (let i = 0; i < drawAmt; i++) {
         const roll = getRandomIntInclusive(card.rollMin, card.rollMax);
         const effectText = card.effect

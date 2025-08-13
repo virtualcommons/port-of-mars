@@ -33,6 +33,7 @@ export interface TreatmentData {
   isEventDeckKnown: boolean;
   thresholdInformation: ThresholdInformation;
   isLowResSystemHealth: boolean;
+  numLifeAsUsualCardsOverride?: number;
   instructions?: string;
 }
 
@@ -88,6 +89,7 @@ export interface SoloGameClientState {
     thresholdInformation: "unknown" | "range" | "known";
     isLowResSystemHealth: boolean;
     instructions?: string;
+    numLifeAsUsualCardsOverride?: number;
   };
   timeRemaining: number;
   systemHealth: number;

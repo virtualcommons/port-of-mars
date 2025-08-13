@@ -99,6 +99,7 @@ export class TreatmentParams extends Schema {
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
   @type("boolean") isLowResSystemHealth = false;
+  @type("uint8") numLifeAsUsualCardsOverride = -1; // -1 means no override
   @type("string") instructions = "";
 
   constructor(data?: TreatmentData) {
@@ -109,6 +110,7 @@ export class TreatmentParams extends Schema {
     this.isEventDeckKnown = data.isEventDeckKnown;
     this.thresholdInformation = data.thresholdInformation;
     this.isLowResSystemHealth = data.isLowResSystemHealth;
+    this.numLifeAsUsualCardsOverride = data.numLifeAsUsualCardsOverride || -1;
     this.instructions = data.instructions || "";
   }
 }

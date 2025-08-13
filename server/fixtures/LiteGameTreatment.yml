@@ -198,6 +198,33 @@ items:
     id: 20
     gameType: prolificInteractive
     isNumberOfRoundsKnown: false
-    isEventDeckKnown: false
+    isEventDeckKnown: true
     thresholdInformation: known
     isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 6
+    instructions: |
+      <h4>FIXME: PLACEHOLDER</h4>
+      <p>treatment 1, 6 LAU cards</p>
+  liteProlificInteractiveTreatment2:
+    id: 21
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 12
+    instructions: |
+      <h4>FIXME: PLACEHOLDER</h4>
+      <p>treatment 2, 12 LAU cards</p>
+  liteProlificInteractiveTreatment3:
+    id: 22
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 18
+    instructions: |
+      <h4>FIXME: PLACEHOLDER</h4>
+      <p>treatment 3, 18 LAU cards</p>
+
