@@ -203,8 +203,8 @@ items:
     isLowResSystemHealth: false
     numLifeAsUsualCardsOverride: 6
     instructions: |
-      <h4>FIXME: PLACEHOLDER</h4>
-      <p>treatment 1, 6 LAU cards</p>
+      <h4>FIXME: Instructions placeholder</h4>
+      <h6>Treatment 1, 6 Life as Usual cards</h6>
   liteProlificInteractiveTreatment2:
     id: 21
     gameType: prolificInteractive
@@ -214,8 +214,8 @@ items:
     isLowResSystemHealth: false
     numLifeAsUsualCardsOverride: 12
     instructions: |
-      <h4>FIXME: PLACEHOLDER</h4>
-      <p>treatment 2, 12 LAU cards</p>
+      <h4>FIXME: Instructions placeholder</h4>
+      <h6>Treatment 2, 12 Life as Usual cards</h6>
   liteProlificInteractiveTreatment3:
     id: 22
     gameType: prolificInteractive
@@ -225,6 +225,6 @@ items:
     isLowResSystemHealth: false
     numLifeAsUsualCardsOverride: 18
     instructions: |
-      <h4>FIXME: PLACEHOLDER</h4>
-      <p>treatment 3, 18 LAU cards</p>
+      <h4>FIXME: Instructions placeholder</h4>
+      <h6>Treatment 3, 18 Life as Usual cards</h6>
 

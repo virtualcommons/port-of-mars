@@ -333,7 +333,7 @@ export class LiteGameState extends Schema {
     },
     prolificInteractive: {
       numPlayers: 3,
-      systemHealthScalingFactor: 1, // FIXME: export will do scaling based on numPlayers
+      systemHealthScalingFactor: 1,
       maxRound: { min: 8, max: 12 },
       roundTransitionDuration: 3,
       twoEventsThreshold: { min: 39, max: 39 }, // full game is 13 * numplayers

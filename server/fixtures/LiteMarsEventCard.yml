@@ -518,7 +518,7 @@ items:
     gameType: prolificInteractive
     codeName: "shortTermGains"
     displayName: "Short Term Gains"
-    flavorText: "FIXME: flavor text"
+    flavorText: "Whatever it takes to get re-elected, you can deal with the consequences later."
     effect: "politician gets an offer: gain 3 points at the cost of 4 system health, choose yes or no"
     affectedRole: "Politician"
     requiresVote: true

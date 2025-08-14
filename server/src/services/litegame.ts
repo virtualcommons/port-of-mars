@@ -5,7 +5,6 @@ import {
   LiteGameType,
   TreatmentData,
 } from "@port-of-mars/shared/lite";
-import { Role } from "@port-of-mars/shared/types";
 import { LiteGameBinaryVoteInterpretation } from "@port-of-mars/shared/lite";
 import {
   LiteGame,
@@ -647,6 +646,9 @@ export class LiteGameService extends BaseService {
       const deckCards = await query.getMany();
       const formattedDeckCards = deckCards.map(deckCard => {
         const numPlayers = deckCard.round!.game.players.length;
+        const gameType = deckCard.round!.game.type;
+        const isSystemHealthScaled =
+          gameType === "prolificBaseline" || gameType === "prolificVariable";
 
         return {
           gameId: deckCard.round!.gameId,
@@ -657,7 +659,9 @@ export class LiteGameService extends BaseService {
           codeName: deckCard.card.codeName,
           effectText: deckCard.effectText,
           scaledSystemHealthEffect: deckCard.systemHealthEffect,
-          systemHealthEffect: deckCard.systemHealthEffect * numPlayers,
+          systemHealthEffect: isSystemHealthScaled
+            ? deckCard.systemHealthEffect * numPlayers
+            : deckCard.systemHealthEffect,
           resourcesEffect: deckCard.resourcesEffect,
           pointsEffect: deckCard.pointsEffect,
         };
@@ -704,6 +708,9 @@ export class LiteGameService extends BaseService {
       const decisions = await query.getMany();
       const formattedDecisions = decisions.map(decision => {
         const numPlayers = decision.round.game.players.length;
+        const gameType = decision.round.game.type;
+        const isSystemHealthScaled =
+          gameType === "prolificBaseline" || gameType === "prolificVariable";
 
         return {
           gameId: decision.round.gameId,
@@ -714,9 +721,13 @@ export class LiteGameService extends BaseService {
           username: decision.player.user.username,
           initialPoints: decision.initialPoints,
           initialSystemHealth: decision.round.initialSystemHealth,
-          scaledInitialSystemHealth: decision.round.initialSystemHealth / numPlayers,
+          scaledInitialSystemHealth: isSystemHealthScaled
+            ? decision.round.initialSystemHealth / numPlayers
+            : decision.round.initialSystemHealth,
           systemHealthInvestment: decision.systemHealthInvestment,
-          scaledSystemHealthInvestment: decision.systemHealthInvestment / numPlayers,
+          scaledSystemHealthInvestment: isSystemHealthScaled
+            ? decision.systemHealthInvestment / numPlayers
+            : decision.systemHealthInvestment,
           pointsInvestment: decision.pointsInvestment,
           dateCreated: decision.round.dateCreated.toISOString(),
         };
