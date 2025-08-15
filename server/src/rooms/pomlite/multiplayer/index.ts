@@ -1,13 +1,19 @@
 import { Client, Delayed, Room } from "colyseus";
 import { Dispatcher } from "@colyseus/command";
 import * as http from "http";
-import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import { LiteGameState, ChatMessage } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
-import { Invest, LiteGameType, Vote } from "@port-of-mars/shared/lite";
+import { Invest, MultiplayerGameType, Vote } from "@port-of-mars/shared/lite";
 import { LitePlayerUser, LiteRoleAssignment, Role } from "@port-of-mars/shared/types";
-import { EndGameCmd, InitGameCmd, PlayerInvestCmd, SetFirstRoundCmd } from "./commands";
+import {
+  EndGameCmd,
+  InitGameCmd,
+  PlayerInvestCmd,
+  SetFirstRoundCmd,
+  ProcessVoteCmd,
+} from "./commands";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -65,12 +71,20 @@ export class LiteGameRoom extends Room<LiteGameState> {
           }
         });
       }
+      // decrement active event timer if an event is in progress
+      if (this.state.activeCardId >= 0 && this.state.eventTimeRemaining > 0) {
+        this.state.eventTimeRemaining = Math.max(0, this.state.eventTimeRemaining - 1);
+      }
     }, 1000);
   }
 
-  async onCreate(options: { type?: LiteGameType; users: Array<LitePlayerUser> }) {
+  async onCreate(options: { type?: MultiplayerGameType; users: Array<LitePlayerUser> }) {
     logger.trace("LiteGameRoom '%s' created", this.roomId);
     const type = options.type || "prolificBaseline";
+    // FIXME: if prolific game, we should use the participant.study.gameType to confirm this
+    // is correct, also in onjoin, also in lobby?
+
+    // FIXME: should also prevent participant players from doing anything else like playing freeplay games
     const userRoles = this.assignRoles(options.users);
     this.setState(new LiteGameState({ type, userRoles }));
     this.maxClients = this.state.numPlayers;
@@ -127,9 +141,6 @@ export class LiteGameRoom extends Room<LiteGameState> {
   }
 
   registerAllHandlers() {
-    this.onMessage("vote", (client: Client, message: Vote) => {
-      // TODO: record the player's vote/apply to event handling
-    });
     this.onMessage("player-ready", (client: Client) => {
       const player = this.state.getPlayer(client);
       player.isReadyToStart = true;
@@ -143,5 +154,58 @@ export class LiteGameRoom extends Room<LiteGameState> {
         })
       );
     });
+    this.onMessage("send-chat-message", (client: Client, message: { message: string }) => {
+      this.handleChatMessage(client, message.message);
+    });
+    this.onMessage(
+      "submit-vote",
+      (client: Client, message: { binaryVote?: boolean; roleVote?: Role }) => {
+        this.handleVote(client, message);
+      }
+    );
+  }
+
+  async handleChatMessage(client: Client, messageText: string) {
+    if (!this.state.chatEnabled) {
+      return;
+    }
+    const user = client.auth as User;
+    const player = this.state.getPlayer(client);
+    const dateCreated = new Date();
+    const chatMessage = new ChatMessage({
+      username: user.username,
+      role: player.role,
+      message: messageText,
+      dateCreated: dateCreated.getTime(),
+      round: this.state.round,
+    });
+    this.state.chatMessages.push(chatMessage);
+    // persist to database
+    const { litegame } = getServices();
+    try {
+      await litegame.createChatMessage(
+        this.state.gameId,
+        player.playerId,
+        messageText,
+        this.state.round,
+        dateCreated
+      );
+    } catch (error) {
+      logger.fatal(`Failed to persist chat message: ${error}`);
+    }
+  }
+
+  async handleVote(client: Client, message: { binaryVote?: boolean; roleVote?: Role }) {
+    if (!this.state.votingInProgress) {
+      return;
+    }
+    const player = this.state.getPlayer(client);
+    this.dispatcher.dispatch(
+      new ProcessVoteCmd().setPayload({
+        player: player,
+        binaryVote: message.binaryVote,
+        roleVote: message.roleVote,
+      })
+    );
   }
 }

@@ -39,22 +39,48 @@ export function applyMultiplayerGameServerResponses(
       "isEventDeckKnown",
       "thresholdInformation",
       "isLowResSystemHealth",
+      "numLifeAsUsualCardsOverride",
       "instructions",
     ]);
   };
+
+  function setPlayer(userId: string, playerObj: any) {
+    // ensure reactivity when adding new keys to plain object
+    if (component.$set) {
+      component.$set(component.state.players, userId, playerObj);
+    } else {
+      component.state.players[userId] = playerObj;
+    }
+  }
+
+  function deletePlayer(userId: string) {
+    if (component.$delete) {
+      component.$delete(component.state.players, userId);
+    } else {
+      delete component.state.players[userId];
+    }
+  }
 
   room.state.onChange = (changes: DataChange[]) => {
     applyChanges(component.state, changes, [
       "type",
       "round",
       "timeRemaining",
+      "eventTimeRemaining",
+      "eventTimeTotal",
       "systemHealth",
       "activeCardId",
       "canInvest",
       "isRoundTransitioning",
+      "auditing",
+      "sandstormRoundsRemaining",
       "status",
       "numPlayers",
       "isWaitingToStart",
+      "chatEnabled",
+      "votingInProgress",
+      "currentVoteStep",
+      "heroOrPariah",
     ]);
   };
 
@@ -70,17 +96,26 @@ export function applyMultiplayerGameServerResponses(
     component.state = { ...component.state, ...msg.data };
   });
 
+  // Handle chat messages
+  room.state.chatMessages.onAdd = (chatMessage: any) => {
+    component.state.chatMessages.push(deschemify(chatMessage));
+  };
+
+  room.state.chatMessages.onRemove = (chatMessage: any, index: number) => {
+    component.state.chatMessages.splice(index, 1);
+  };
+
   room.state.players.onAdd = (player: any, userId: string) => {
     const p = deschemify(player);
     // if p is the 'self' player, set the state.player (match by username)
     if (userId === user.id.toString()) {
       component.state.player = p;
     }
-    component.state.players.set(userId, p);
+    setPlayer(userId, p);
 
     // subscribe to changes in the player
     player.onChange = (changes: DataChange[]) => {
-      const local = component.state.players.get(userId);
+      const local = component.state.players[userId];
       for (const change of changes) {
         local[change.field] = change.value;
         if (userId === user.id.toString()) {
@@ -88,6 +123,19 @@ export function applyMultiplayerGameServerResponses(
         }
       }
     };
+
+    // subscribe to vote changes if vote exists
+    if (player.vote) {
+      player.vote.onChange = () => {
+        const local = component.state.players[userId];
+        if (local) {
+          local.vote = deschemify(player.vote);
+          if (userId === user.id.toString()) {
+            component.state.player.vote = deschemify(player.vote);
+          }
+        }
+      };
+    }
   };
 
   room.state.players.onRemove = (player: any, userId: string) => {
@@ -98,7 +146,7 @@ export function applyMultiplayerGameServerResponses(
         points: 0,
       };
     }
-    component.state.players.delete(userId);
+    deletePlayer(userId);
   };
 }
 
@@ -106,6 +154,8 @@ export const DEFAULT_STATE: LiteGameClientState = {
   type: "prolificBaseline",
   status: "incomplete",
   timeRemaining: 0,
+  eventTimeRemaining: 0,
+  eventTimeTotal: 0,
   systemHealth: 0,
   round: 0,
   treatmentParams: {
@@ -114,8 +164,9 @@ export const DEFAULT_STATE: LiteGameClientState = {
     thresholdInformation: "unknown",
     isLowResSystemHealth: false,
     instructions: "",
+    numLifeAsUsualCardsOverride: -1,
   },
-  players: new Map(),
+  players: {},
   numPlayers: 1,
   player: {
     username: "",
@@ -132,4 +183,11 @@ export const DEFAULT_STATE: LiteGameClientState = {
   canInvest: false,
   isRoundTransitioning: false,
   isWaitingToStart: true,
+  chatMessages: [],
+  chatEnabled: false,
+  votingInProgress: false,
+  currentVoteStep: 0,
+  heroOrPariah: "",
+  auditing: false,
+  sandstormRoundsRemaining: 0,
 };

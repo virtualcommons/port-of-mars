@@ -76,6 +76,14 @@
             placeholder="The completion code from Prolific"
           ></b-form-input>
         </b-form-group>
+        <b-form-group v-if="mode === 'multiplayer'" label="Game Type" label-for="game-type-input">
+          <b-form-select
+            id="game-type-input"
+            v-model="newStudy.gameType"
+            required
+            :options="gameTypeOptions"
+          ></b-form-select>
+        </b-form-group>
       </b-form>
     </b-modal>
     <b-modal
@@ -152,6 +160,7 @@ import {
   ProlificStudyData,
   StudyMode,
 } from "@port-of-mars/shared/types";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 @Component({})
 export default class StudiesList extends Vue {
@@ -173,6 +182,11 @@ export default class StudiesList extends Vue {
     { key: "actions", label: "" },
   ];
 
+  gameTypeOptions: { value: LiteGameType; text: string }[] = [
+    { value: "prolificBaseline", text: "Baseline -> Variable (uncertainty treatments)" },
+    { value: "prolificInteractive", text: "Interactive (chat, interactive events, etc.)" },
+  ];
+
   get addStudyModalId() {
     return `add-study-modal-${this.mode}`;
   }
@@ -191,11 +205,18 @@ export default class StudiesList extends Vue {
 
   async created() {
     this.studyApi = new StudyAPI(this.$tstore, this.$ajax, this.mode);
+    if (this.mode === "multiplayer") {
+      this.studyFields.splice(this.studyFields.length - 1, 0, {
+        key: "gameType",
+        label: "Game Type",
+      });
+    }
     await this.loadProlificStudies();
   }
 
   resetStudy(): ProlificStudyData {
     return {
+      gameType: this.mode === "interactive" ? "prolificInteractive" : "prolificBaseline",
       studyId: "",
       description: "",
       completionCode: "",

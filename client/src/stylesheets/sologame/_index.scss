@@ -115,11 +115,12 @@
 @each $name, $colors in $vfd-colors {
   @keyframes flashing-#{$name} {
     0%, 100% {
-      box-shadow: none;
+      filter: none;
+      box-shadow: 0 0 4px rgba(nth($colors, 2), 0.15), 0 0 8px rgba(nth($colors, 2), 0.10);
     }
     50% {
-      background-color: rgba(nth($colors, 1), 0.5);
-      box-shadow: 0 0 5px rgba(nth($colors, 2), 0.25), 0 0 10px rgba(nth($colors, 2), 0.25);
+      filter: brightness(1.06);
+      box-shadow: 0 0 12px rgba(nth($colors, 2), 0.6), 0 0 24px rgba(nth($colors, 2), 0.4);
     }
   }
 }

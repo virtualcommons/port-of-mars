@@ -14,7 +14,7 @@
         {{ message.message }}
       </p>
       <!-- timestamp -->
-      <p class="mb-2 mx-2">[ {{ toDate(message.dateCreated) }} ]</p>
+      <p v-if="showTimestamp" class="mb-2 mx-2">[ {{ toDate(message.dateCreated) }} ]</p>
       <slot></slot>
     </b-col>
   </b-row>
@@ -31,6 +31,8 @@ export default class ChatMessage extends Vue {
   message!: ChatMessageData;
   @Prop({ default: false })
   showUsername!: boolean;
+  @Prop({ default: true })
+  showTimestamp!: boolean;
 
   get username() {
     return this.$tstore.state.players[this.message.role as Role].username;
@@ -42,6 +44,9 @@ export default class ChatMessage extends Vue {
 
   getMessageColor(message: ChatMessageData): object {
     if (message.role) {
+      if (message.role === "Auditor") {
+        return { backgroundColor: "var(--marslog-green)" };
+      }
       return { backgroundColor: `var(--color-${message.role})` };
     }
     return { backgroundColor: "var(--light-shade-05)" };

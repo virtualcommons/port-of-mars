@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column p-2 h-100 overflow-hidden solo-game">
     <div class="d-flex flex-row justify-content-between mx-3">
-      <div v-for="([playerKey, player], index) of state.players" :key="playerKey">
+      <div v-for="(player, playerKey, index) in state.players" :key="playerKey">
         <OtherPlayers
           :role="player.role"
           :hasInvested="player.hasInvested"
@@ -48,7 +48,7 @@
           class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50 justify-content-center"
         >
           <div v-if="!isProlificBaselineGame" class="cell-grow mw-35">
-            <div>
+            <div class="p-2">
               <ThresholdInfo
                 v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
                 :state="state"

@@ -2,10 +2,12 @@ import { Schema, ArraySchema, type, MapSchema } from "@colyseus/schema";
 import {
   EventCardData,
   LiteGameParams,
-  LiteGameType,
+  MultiplayerGameType,
   LiteGameStatus,
   TreatmentData,
   HiddenParams,
+  ChatMessageData,
+  VoteData,
 } from "@port-of-mars/shared/lite";
 import { Role, LiteRoleAssignment } from "@port-of-mars/shared/types";
 import { Client } from "colyseus";
@@ -13,10 +15,41 @@ import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
+export class ChatMessage extends Schema {
+  @type("string") username = "";
+  @type("string") role: Role = "Politician";
+  @type("string") message = "";
+  @type("number") dateCreated = 0;
+  @type("number") round = 0;
+
+  constructor(data: ChatMessageData) {
+    super();
+    this.username = data.username;
+    this.role = data.role;
+    this.message = data.message;
+    this.dateCreated = data.dateCreated;
+    this.round = data.round;
+  }
+}
+
+export class Vote extends Schema {
+  @type("boolean") binaryVote?: boolean;
+  @type("string") roleVote?: Role;
+  @type("boolean") isDefaultTimeoutVote = false;
+
+  constructor(data: VoteData) {
+    super();
+    this.binaryVote = data.binaryVote;
+    this.roleVote = data.roleVote;
+    this.isDefaultTimeoutVote = data.isDefaultTimeoutVote ?? false;
+  }
+}
+
 export class EventCard extends Schema {
   id = 0;
   @type("boolean") expired = false;
   @type("boolean") inPlay = false; // indicates that the card has been drawn for current round
+  @type("string") affectedRole?: Role;
   @type("int32") deckCardId = 0;
   @type("string") codeName = "";
   @type("string") displayName = "";
@@ -25,6 +58,7 @@ export class EventCard extends Schema {
   @type("int8") pointsEffect = 0;
   @type("int8") resourcesEffect = 0;
   @type("int8") systemHealthEffect = 0;
+  @type("boolean") requiresVote = false;
 
   constructor(data: EventCardData) {
     super();
@@ -36,6 +70,8 @@ export class EventCard extends Schema {
     this.pointsEffect = data.pointsEffect;
     this.resourcesEffect = data.resourcesEffect;
     this.systemHealthEffect = data.systemHealthEffect;
+    this.requiresVote = data.requiresVote || false;
+    this.affectedRole = data.affectedRole;
   }
 
   get isMurphysLaw() {
@@ -54,31 +90,34 @@ export class Player extends Schema {
   @type("boolean") hasInvested = false;
   @type("uint8") pointsEarned = 0;
   @type("boolean") isReadyToStart = false;
+  @type(Vote) vote?: Vote;
 }
 
 export class TreatmentParams extends Schema {
-  @type("string") gameType: LiteGameType = "prolificBaseline";
+  @type("string") gameType: MultiplayerGameType = "prolificBaseline";
   @type("boolean") isNumberOfRoundsKnown = false;
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
   @type("boolean") isLowResSystemHealth = false;
+  @type("uint8") numLifeAsUsualCardsOverride = -1; // -1 means no override
   @type("string") instructions = "";
 
   constructor(data?: TreatmentData) {
     super();
     if (!data) return;
-    this.gameType = data.gameType as LiteGameType;
+    this.gameType = data.gameType as MultiplayerGameType;
     this.isNumberOfRoundsKnown = data.isNumberOfRoundsKnown;
     this.isEventDeckKnown = data.isEventDeckKnown;
     this.thresholdInformation = data.thresholdInformation;
     this.isLowResSystemHealth = data.isLowResSystemHealth;
+    this.numLifeAsUsualCardsOverride = data.numLifeAsUsualCardsOverride || -1;
     this.instructions = data.instructions || "";
   }
 }
 
 export class LiteGameState extends Schema {
   @type("boolean") isWaitingToStart = true;
-  @type("string") type: LiteGameType = "prolificBaseline";
+  @type("string") type: MultiplayerGameType = "prolificBaseline";
   @type("string") status: LiteGameStatus = "incomplete";
   @type("int8") systemHealth =
     LiteGameState.DEFAULTS.freeplay.systemHealthMax -
@@ -94,8 +133,24 @@ export class LiteGameState extends Schema {
   @type([EventCard]) visibleEventCards = new ArraySchema<EventCard>();
   @type("int32") activeCardId = -1; // refers to the deckCardId of the active (shown in modal) card
 
+  @type([ChatMessage]) chatMessages = new ArraySchema<ChatMessage>();
+  @type("boolean") chatEnabled = false;
+
+  // voting state
+  @type("boolean") votingInProgress = false;
+  @type("uint8") currentVoteStep = 1;
+  @type("string") heroOrPariah: "hero" | "pariah" | "" = "";
+
+  // event timer state (counts down while an event is active)
+  @type("uint8") eventTimeRemaining = 0;
+  @type("uint8") eventTimeTotal = 0;
+
   @type("boolean") canInvest = false;
   @type("boolean") isRoundTransitioning = false;
+
+  // special event flags
+  @type("boolean") auditing = false;
+  @type("uint8") sandstormRoundsRemaining = 0;
 
   gameId = 0;
   userRoles: LiteRoleAssignment;
@@ -108,7 +163,7 @@ export class LiteGameState extends Schema {
   // this one doesn't have to be a schema property since visibleEventCards already mirrors it
   eventCardDeck: Array<EventCard> = [];
 
-  constructor(data: { userRoles: LiteRoleAssignment; type: LiteGameType }) {
+  constructor(data: { userRoles: LiteRoleAssignment; type: MultiplayerGameType }) {
     super();
     this.type = data.type;
     this.numPlayers = this.defaultParams.numPlayers || 3;
@@ -181,6 +236,10 @@ export class LiteGameState extends Schema {
     throw new Error(`No player found with id ${client.auth.id}`);
   }
 
+  getPlayerByRole(role: Role): Player | undefined {
+    return Array.from(this.players.values()).find(player => player.role === role);
+  }
+
   playersInvested(): boolean {
     this.players.forEach(player => {
       if (player.pendingInvestment == null) {
@@ -217,7 +276,7 @@ export class LiteGameState extends Schema {
     return LiteGameState.DEFAULTS[this.type];
   }
 
-  static DEFAULTS: Record<LiteGameType, LiteGameParams> = {
+  static DEFAULTS: Record<MultiplayerGameType, LiteGameParams> = {
     // unused for now
     freeplay: {
       numPlayers: 3,
@@ -233,9 +292,11 @@ export class LiteGameState extends Schema {
       points: 0,
       resources: 10,
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
+      chatEnabled: false,
     },
     prolificBaseline: {
       numPlayers: 3,
+      systemHealthScalingFactor: 3,
       nextGameType: "prolificVariable",
       maxRound: { min: 8, max: 8 },
       roundTransitionDuration: 2,
@@ -249,9 +310,11 @@ export class LiteGameState extends Schema {
       points: 0,
       resources: 10,
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
+      chatEnabled: false,
     },
     prolificVariable: {
       numPlayers: 3,
+      systemHealthScalingFactor: 3,
       maxRound: { min: 11, max: 11 },
       roundTransitionDuration: 2,
       twoEventsThreshold: { min: 48, max: 48 },
@@ -266,6 +329,24 @@ export class LiteGameState extends Schema {
       points: 0,
       resources: 10,
       availableRoles: ["Politician", "Entrepreneur", "Researcher"],
+      chatEnabled: false,
+    },
+    prolificInteractive: {
+      numPlayers: 3,
+      systemHealthScalingFactor: 1,
+      maxRound: { min: 8, max: 12 },
+      roundTransitionDuration: 3,
+      twoEventsThreshold: { min: 39, max: 39 }, // full game is 13 * numplayers
+      threeEventsThreshold: { min: 21, max: 21 }, // full game is 7 * numplayers
+      timeRemaining: 45,
+      eventTimeout: 8,
+      systemHealthMax: 60, // 3 * 20 matches the full game
+      systemHealthWear: 15, // 3 * 5 matches the full game
+      startingSystemHealth: 45, // (3 * 20) - (3 * 5)
+      points: 0,
+      resources: 10,
+      availableRoles: ["Politician", "Entrepreneur", "Researcher"],
+      chatEnabled: true,
     },
   };
 }

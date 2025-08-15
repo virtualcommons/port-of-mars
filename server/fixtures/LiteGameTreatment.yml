@@ -193,3 +193,38 @@ items:
       <p>The possible event cards will be listed on the screen at the right.</p>
       <p>You get 20 seconds each round to make a decision using the controls at the right of the screen.</p>
       <p>If you are ready, click the start button.</p>
+  # prolific interactive treatments (default, treatments here are varied cards)
+  liteProlificInteractiveTreatment1:
+    id: 20
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 6
+    instructions: |
+      <h4>FIXME: Instructions placeholder</h4>
+      <h6>Treatment 1, 6 Life as Usual cards</h6>
+  liteProlificInteractiveTreatment2:
+    id: 21
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 12
+    instructions: |
+      <h4>FIXME: Instructions placeholder</h4>
+      <h6>Treatment 2, 12 Life as Usual cards</h6>
+  liteProlificInteractiveTreatment3:
+    id: 22
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: false
+    isEventDeckKnown: true
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 18
+    instructions: |
+      <h4>FIXME: Instructions placeholder</h4>
+      <h6>Treatment 3, 18 Life as Usual cards</h6>
+
