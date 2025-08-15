@@ -41,6 +41,7 @@ export default class Investment extends Vue {
   @Prop({ default: 0 }) readonly value!: number;
   @Prop({ default: "" }) helpText!: string;
   @Prop({ default: "Invest in System Health" }) buttonText!: string;
+  @Prop({ default: true }) enableKeyboard!: boolean; // enable or disable [enter] to invest
 
   get pendingSystemHealthInvestment(): number {
     return this.value;
@@ -86,7 +87,9 @@ export default class Investment extends Vue {
   }
 
   created() {
-    window.addEventListener("keydown", this.handleKeyDown);
+    if (this.enableKeyboard) {
+      window.addEventListener("keydown", this.handleKeyDown);
+    }
   }
 
   handleKeyDown(event: KeyboardEvent) {

@@ -166,6 +166,7 @@
                   @invest="handleInvest"
                   helpText="Contribute resources to system health. Left over resources are earned as points."
                   buttonText="Invest"
+                  :enableKeyboard="false"
                 />
               </div>
             </div>
