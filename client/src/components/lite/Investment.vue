@@ -42,6 +42,7 @@ export default class Investment extends Vue {
   @Prop({ default: "" }) helpText!: string;
   @Prop({ default: "Invest in System Health" }) buttonText!: string;
   @Prop({ default: true }) enableKeyboard!: boolean; // enable or disable [enter] to invest
+  @Prop({ default: false }) shouldFlashEachRound!: boolean;
 
   get pendingSystemHealthInvestment(): number {
     return this.value;
@@ -54,16 +55,18 @@ export default class Investment extends Vue {
   get shouldFlashInvestButton() {
     return (
       this.pendingSystemHealthInvestment > 0 &&
-      this.state.round === 1 &&
-      !this.state.isRoundTransitioning
+      (this.state.round === 1 || this.shouldFlashEachRound) &&
+      !this.state.isRoundTransitioning &&
+      !this.shouldDisableInvest
     );
   }
 
   get shouldFlashInvestInput() {
     return (
       this.pendingSystemHealthInvestment === 0 &&
-      this.state.round === 1 &&
-      !this.state.isRoundTransitioning
+      (this.state.round === 1 || this.shouldFlashEachRound) &&
+      !this.state.isRoundTransitioning &&
+      !this.shouldDisableInvest
     );
   }
 

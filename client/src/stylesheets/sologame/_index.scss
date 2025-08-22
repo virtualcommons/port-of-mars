@@ -90,6 +90,16 @@
   }
 }
 
+.vfd-badge-glow {
+  @each $name, $colors in $vfd-colors {
+    &.#{$name} {
+      background-color: nth($colors, 1) !important;
+      color: $dark !important;
+      box-shadow: 0 0 5px nth($colors, 2), 0 0 10px nth($colors, 2);
+    }
+  }
+}
+
 .vfd-bg-underlay {
   background-color: rgba(255, 255, 255, 0.025);
 }

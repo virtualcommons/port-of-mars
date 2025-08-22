@@ -25,14 +25,7 @@
             :helpText="systemHealthHelpText"
           />
         </div>
-
-        <div class="d-flex flex-row align-items-center justify-content-around p-2">
-          <div class="d-flex flex-column align-items-center mx-3">
-            <h6 class="text-center">
-              {{ state.isRoundTransitioning ? "New round in" : "Time left" }}
-            </h6>
-            <Clock :timeRemaining="state.timeRemaining" :size="2" />
-          </div>
+        <div class="d-flex flex-row align-items-center justify-content-between py-2">
           <div class="d-flex flex-column align-items-center mx-3">
             <h6 class="text-center">Round</h6>
             <div class="d-flex justify-content-center align-items-center">
@@ -46,25 +39,41 @@
             </div>
           </div>
           <div class="d-flex flex-column align-items-center mx-3">
-            <h6 class="text-center">Points</h6>
-            <div class="vfd-container p-2">
-              <VFDNumberDisplay
-                :digits="2"
-                :value="state.player.points"
-                variant="yellow"
-                size="2"
-              />
-            </div>
+            <span class="badge bg-primary" :style="phaseLabel.style">
+              <h6 class="text-center mb-0">{{ phaseLabel.label }}</h6>
+            </span>
+            <p v-if="state.activeCardId >= 0" class="text-center small text-muted">
+              Deal with them before investing
+            </p>
+            <Clock
+              v-if="state.activeCardId < 0"
+              :timeRemaining="state.timeRemaining"
+              :size="2"
+              :showBlank="state.activeCardId >= 0"
+            />
           </div>
-          <div class="d-flex flex-column align-items-center mx-3">
-            <h6 class="text-center">Resources</h6>
-            <div class="vfd-container p-2">
-              <VFDNumberDisplay
-                :digits="2"
-                :value="state.player.resources"
-                variant="blue"
-                size="2"
-              />
+          <div class="d-flex align-items-center">
+            <div class="d-flex flex-column align-items-center">
+              <h6 class="text-center">Points</h6>
+              <div class="vfd-container p-2">
+                <VFDNumberDisplay
+                  :digits="2"
+                  :value="state.player.points"
+                  variant="yellow"
+                  size="2"
+                />
+              </div>
+            </div>
+            <div class="d-flex flex-column align-items-center ml-3">
+              <h6 class="text-center">Resources</h6>
+              <div class="vfd-container p-2">
+                <VFDNumberDisplay
+                  :digits="2"
+                  :value="state.player.resources"
+                  variant="blue"
+                  size="2"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -167,6 +176,7 @@
                   helpText="Contribute resources to system health. Left over resources are earned as points."
                   buttonText="Invest"
                   :enableKeyboard="false"
+                  :shouldFlashEachRound="true"
                 />
               </div>
             </div>
@@ -280,6 +290,25 @@ export default class Dashboard extends Vue {
       default:
         return "No";
     }
+  }
+
+  get phaseLabel() {
+    let label = "";
+    let color = "";
+    if (this.state.isRoundTransitioning) {
+      label = "New round in";
+      color = "var(--secondary)";
+    } else if (this.state.activeCardId >= 0) {
+      label = "Events active";
+      color = "var(--warning)";
+    } else {
+      label = "Make an investment";
+      color = "var(--primary)";
+    }
+    return {
+      label,
+      style: `background-color: ${color} !important; color: var(--dark) !important; margin-top: -5px; margin-bottom: 5px`,
+    };
   }
 
   get systemHealthHelpText() {
