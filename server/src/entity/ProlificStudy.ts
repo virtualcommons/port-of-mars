@@ -2,8 +2,10 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import {
   BaseProlificStudyParticipant,
   ProlificMultiplayerStudyParticipant,
+  ProlificInteractiveStudyParticipant,
   ProlificSoloStudyParticipant,
 } from "./ProlificStudyParticipant";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 export abstract class BaseProlificStudy {
   @PrimaryGeneratedColumn()
@@ -24,6 +26,9 @@ export abstract class BaseProlificStudy {
   @Column()
   completionCode!: string;
 
+  @Column({ default: "prolificBaseline" })
+  gameType!: LiteGameType;
+
   abstract participants: Array<BaseProlificStudyParticipant>;
 }
 
@@ -37,4 +42,13 @@ export class ProlificSoloStudy extends BaseProlificStudy {
 export class ProlificMultiplayerStudy extends BaseProlificStudy {
   @OneToMany(type => ProlificMultiplayerStudyParticipant, participant => participant.study)
   participants!: Array<ProlificMultiplayerStudyParticipant>;
+}
+
+@Entity()
+export class ProlificInteractiveStudy extends BaseProlificStudy {
+  @OneToMany(type => ProlificInteractiveStudyParticipant, participant => participant.study)
+  participants!: Array<ProlificInteractiveStudyParticipant>;
+
+  @Column({ default: "prolificInteractive" })
+  gameType!: LiteGameType;
 }

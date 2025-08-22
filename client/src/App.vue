@@ -21,6 +21,7 @@ import {
   PRIVACY_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_INTERACTIVE_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
 Vue.use(BootstrapVue);
 
@@ -39,6 +40,7 @@ export default class App extends Vue {
   privacy = { name: PRIVACY_PAGE };
   soloStudy = { name: PROLIFIC_SOLO_STUDY_PAGE };
   multiplayerStudy = { name: PROLIFIC_MULTIPLAYER_STUDY_PAGE };
+  interactiveStudy = { name: PROLIFIC_INTERACTIVE_STUDY_PAGE };
 
   get topLevelPath() {
     return this.$route.path.split("/")[1];
@@ -48,6 +50,7 @@ export default class App extends Vue {
     switch (this.$route.name) {
       case this.game.name:
       case this.multiplayerStudy.name:
+      case this.interactiveStudy.name:
       case this.soloStudy.name:
         return false;
       default:

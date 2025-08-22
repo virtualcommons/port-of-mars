@@ -12,6 +12,7 @@ import { LiteGameTreatment, SoloGameTreatment } from "./LiteGameTreatment";
 import { LiteMarsEventDeck, SoloMarsEventDeck } from "./LiteMarsEventDeck";
 import { LitePlayer, SoloPlayer } from "./LitePlayer";
 import { LiteGameRound, SoloGameRound } from "./LiteGameRound";
+import { LiteChatMessage } from "./LiteChatMessage";
 import { LiteGameStatus, LiteGameType } from "@port-of-mars/shared/lite";
 
 export abstract class BaseLiteGame {
@@ -81,6 +82,9 @@ export class LiteGame extends BaseLiteGame {
 
   @OneToMany(() => LiteGameRound, round => round.game)
   rounds!: LiteGameRound[];
+
+  @OneToMany(() => LiteChatMessage, message => message.game)
+  chatMessages!: LiteChatMessage[];
 
   @OneToOne(() => LiteMarsEventDeck, { nullable: false })
   @JoinColumn()

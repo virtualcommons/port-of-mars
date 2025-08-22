@@ -1,5 +1,6 @@
 import { Room } from "colyseus.js";
-import { Invest, LiteGameRequest } from "@port-of-mars/shared/lite";
+import { Invest, LiteGameRequest, SendChatMessage, SubmitVote } from "@port-of-mars/shared/lite";
+import { Role } from "@port-of-mars/shared/types";
 
 export class LiteGameRequestAPI {
   room: Room | null = null;
@@ -37,6 +38,25 @@ export class LiteGameRequestAPI {
     const msg: LiteGameRequest = {
       kind: "player-ready",
     };
+    this.send(msg);
+  }
+
+  public sendChatMessage(message: string) {
+    const msg: SendChatMessage = {
+      kind: "send-chat-message",
+      message,
+    };
+    this.send(msg);
+  }
+
+  public submitVote(vote: { binaryVote?: boolean; roleVote?: Role }) {
+    console.log("Submitting vote:", vote);
+    const msg: SubmitVote = {
+      kind: "submit-vote",
+      binaryVote: vote.binaryVote,
+      roleVote: vote.roleVote,
+    };
+    console.log("Sending vote message:", msg);
     this.send(msg);
   }
 }

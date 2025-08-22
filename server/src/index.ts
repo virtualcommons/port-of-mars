@@ -156,6 +156,28 @@ passport.use(
   )
 );
 
+passport.use(
+  "local-prolific-interactive",
+  new LocalStrategy(
+    {
+      usernameField: "studyId",
+      passwordField: "prolificId",
+      passReqToCallback: true,
+    },
+    async function (req: any, studyId: string, prolificId: string, done: any) {
+      try {
+        const participant = await getServices().interactiveStudy.getOrCreateProlificParticipant(
+          prolificId,
+          studyId
+        );
+        return done(null, participant.user);
+      } catch (e) {
+        return done(e);
+      }
+    }
+  )
+);
+
 passport.serializeUser(function (user: Pick<User, "id">, done: any) {
   done(null, user.id);
 } as any);

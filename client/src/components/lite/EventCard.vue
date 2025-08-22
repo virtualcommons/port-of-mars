@@ -4,12 +4,13 @@
     :class="{ dim: event.expired, 'border-primary': event.inPlay, 'dim-slight': upcoming }"
   >
     <h4 :class="{ 'text-primary': event.inPlay }">{{ event.displayName }}</h4>
-    <p>
+    <p class="text-muted">
       <small
         ><i>{{ event.flavorText }}</i></small
       >
     </p>
     <p class="mb-0">{{ event.effectText }}</p>
+    <slot></slot>
   </div>
 </template>
 

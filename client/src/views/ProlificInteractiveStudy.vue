@@ -1,16 +1,13 @@
 <template>
   <div class="backdrop d-flex flex-column justify-content-center align-items-center">
-    <p v-if="reconnectTimeout && !isTransitioning && !isGameOver">
-      Connection lost. Attempting to reconnect...
-    </p>
-    <b-alert v-if="started" variant="warning" show dismissible>
+    <b-alert v-if="started" variant="info" show dismissible>
       <small>
         <p>
-          This is a multiplayer game. In order to complete the study you must play through both
-          games with your group
+          This is an interactive multiplayer study. You will be working collaboratively with other
+          participants to make decisions that affect the group outcome.
         </p>
         <p class="mb-0">
-          If you are disconnected for any reason during the game, you will be able to rejoin by
+          If you are disconnected for any reason during the study, you will be able to rejoin by
           returning to this page
         </p>
       </small>
@@ -20,20 +17,20 @@
         <p>{{ joinFailureReason }}</p>
       </div>
       <div
-        v-else-if="!started && lobbyRoom"
+        v-if="!started && lobbyRoom"
         class="mt-5 text-center p-5"
         style="max-width: 30rem; margin: auto"
       >
-        <p>Waiting for players to join..</p>
-        <h4>{{ clients.length }} / {{ requiredPlayers }} Players</h4>
+        <p>Waiting for participants to join the interactive study...</p>
+        <h4>{{ clients.length }} / {{ requiredPlayers }} Participants</h4>
         <b-progress :value="clients.length" :max="requiredPlayers" animated class="my-3" />
         <small class="text-muted">
           <p>
-            Since the game portion of this study is multiplayer, please allow for some time for
-            other participants to join. If 5 minutes passes since the last player joined the lobby,
-            you will be redirected back to Prolific and compensated for your time.
+            This interactive study requires all participants to be present. Please allow time for
+            other participants to join. If 5 minutes passes since the last participant joined, you
+            will be redirected back to Prolific and compensated for your time.
           </p>
-          <p>Please <b>do not</b> refresh this page as this will reset the timer</p>
+          <p>Please <b>do not</b> refresh this page</p>
         </small>
       </div>
 
@@ -45,9 +42,9 @@
           :disabled="state.player.isReadyToStart"
           @click="setPlayerReady"
         >
-          {{ state.player.isReadyToStart ? "Waiting on others…" : "Start now" }}
+          {{ state.player.isReadyToStart ? "Waiting on others…" : "Start Interactive Study" }}
         </b-button>
-        <h5 class="mb-0 mt-3">The game will automatically start in {{ state.timeRemaining }}s</h5>
+        <h5 class="mb-0 mt-3">The study will automatically start in {{ state.timeRemaining }}s</h5>
       </div>
 
       <Dashboard v-else-if="started && !state.isWaitingToStart && !isGameOver" :state="state" />
@@ -57,7 +54,7 @@
         :status="completedGameState.status"
         :points="completedGameState.points"
         :round="completedGameState.round"
-        :showContinue="isStudyComplete || isSecondGame"
+        :showContinue="isStudyComplete"
         continueText="Return to Prolific"
         :showHighScores="false"
         @continue="handleContinue"
@@ -71,15 +68,15 @@
           !participantStatus.activeRoomId
         "
       >
-        Unfortunately, you were not able to complete the game portion of the study and your group
-        cannot be re-joined.
+        Unfortunately, you were not able to complete the interactive study and your group cannot be
+        re-joined.
       </div>
     </b-container>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide, Watch } from "vue-property-decorator";
+import { Component, Inject, Provide, Vue, Watch } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { cloneDeep } from "lodash";
 import { LITE_LOBBY_NAME } from "@port-of-mars/shared/lobby";
@@ -93,24 +90,24 @@ import {
 } from "@port-of-mars/client/api/pomlite/multiplayer/response";
 import { StudyAPI } from "@port-of-mars/client/api/study/request";
 import Splash from "@port-of-mars/client/components/lite/multiplayer/Splash.vue";
-import Dashboard from "@port-of-mars/client/components/lite/multiplayer/Dashboard.vue";
+import Dashboard from "@port-of-mars/client/components/lite/interactive/Dashboard.vue";
 import GameOver from "@port-of-mars/client/components/lite/multiplayer/GameOver.vue";
 import { ProlificMultiplayerParticipantStatus } from "@port-of-mars/shared/types";
 
 @Component({
-  name: "ProlificMultiplayerStudy",
+  name: "ProlificInteractiveStudy",
   components: { Splash, Dashboard, GameOver },
 })
-export default class ProlificMultiplayerStudy extends Vue {
+export default class ProlificInteractiveStudy extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api = new LiteGameRequestAPI();
   lobbyApi = new LiteLobbyRequestAPI(this.$ajax);
-  studyApi = new StudyAPI(this.$store, this.$ajax, "multiplayer");
+  studyApi = new StudyAPI(this.$store, this.$ajax, "interactive");
 
   // participant
   participantStatus: ProlificMultiplayerParticipantStatus = {
     status: "not-started",
-    startingGameType: "prolificBaseline",
+    startingGameType: "prolificInteractive",
   };
   statusLoading = true;
 
@@ -141,18 +138,12 @@ export default class ProlificMultiplayerStudy extends Vue {
     return this.participantStatus.status === "completed";
   }
 
-  get isSecondGame() {
-    return this.state.type === "prolificVariable";
-  }
-
   get isGameOver() {
-    return ["victory", "defeat"].includes(this.state.status);
+    return this.state.status === "victory" || this.state.status === "defeat";
   }
 
   get gameOverText() {
-    return this.isStudyComplete || this.isSecondGame
-      ? "You have completed the study. Thank you for your participation!"
-      : "You will be advanced to the next game in a few seconds..";
+    return "You have completed the interactive study. Thank you for your participation!";
   }
 
   @Watch("isGameOver", { immediate: true })

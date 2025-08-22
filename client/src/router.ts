@@ -25,6 +25,7 @@ import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificSoloStudy from "@port-of-mars/client/views/ProlificSoloStudy.vue";
 import ProlificMultiplayerStudy from "@port-of-mars/client/views/ProlificMultiplayerStudy.vue";
+import ProlificInteractiveStudy from "@port-of-mars/client/views/ProlificInteractiveStudy.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -46,6 +47,7 @@ import {
   PROFILE_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_INTERACTIVE_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -105,6 +107,10 @@ const router = new VueRouter({
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
     { ...PAGE_META[PROLIFIC_SOLO_STUDY_PAGE], component: ProlificSoloStudy },
     { ...PAGE_META[PROLIFIC_MULTIPLAYER_STUDY_PAGE], component: ProlificMultiplayerStudy },
+    {
+      ...PAGE_META[PROLIFIC_INTERACTIVE_STUDY_PAGE],
+      component: ProlificInteractiveStudy,
+    },
   ],
 });
 

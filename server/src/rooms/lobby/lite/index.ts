@@ -12,6 +12,7 @@ import { LiteGameRoom } from "@port-of-mars/server/rooms/pomlite/multiplayer";
 import { LitePlayerUser } from "@port-of-mars/shared/types";
 import { LiteGameType } from "@port-of-mars/shared/lite";
 import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import { BaseStudyService } from "@port-of-mars/server/services/study";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -35,10 +36,17 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   private mutex = new Mutex();
 
-  groupManager = new GroupManager(this.groupSize);
+  groupManager!: GroupManager;
 
   get queue() {
     return this.groupManager.queue;
+  }
+
+  private get studyService(): BaseStudyService {
+    const services = getServices();
+    return this.type === "prolificInteractive"
+      ? services.interactiveStudy
+      : services.multiplayerStudy;
   }
 
   createState() {
@@ -49,6 +57,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
     await super.onCreate(options);
     this.type = options.type;
     this.groupSize = LiteGameState.DEFAULTS[this.type].numPlayers || 3;
+    this.groupManager = new GroupManager(this.groupSize);
     this.lastPlayerJoinTimestamp = Date.now();
   }
 
@@ -82,14 +91,14 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
       const queueSnapshot = [...this.queue];
 
       if (queueSnapshot.length > 0) {
-        const { multiplayerStudy, account } = getServices();
+        const { account } = getServices();
 
         for (const lobbyClient of queueSnapshot) {
           try {
             const user = await account.findUserById(lobbyClient.client.auth.id);
             if (user) {
               // redirect to prolific completion url
-              const completionUrl = await multiplayerStudy.getProlificCompletionUrl(user, false);
+              const completionUrl = await this.studyService.getProlificCompletionUrl(user, false);
               this.sendSafe(lobbyClient.client, {
                 kind: "lobby-timeout-redirect",
                 completionUrl: completionUrl,
@@ -110,6 +119,7 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   async formAndInviteGroups() {
     while (this.queue.length >= this.groupSize) {
+      logger.debug(`forming group from queue of length ${this.queue.length}`);
       const group = this.groupManager.formGroupFromQueue();
       if (group) {
         await this.sendGroupInvitations(group);
@@ -127,6 +137,9 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
         id: client.id,
       };
     });
+    logger.debug(
+      `sending group invitations to ${playerUsers.length} players for game type ${this.type}`
+    );
     const room = await matchMaker.createRoom(LiteGameRoom.NAME, {
       type: this.type,
       users: playerUsers,
@@ -143,9 +156,8 @@ export class LiteLobbyRoom extends LobbyRoom<LiteLobbyRoomState> {
 
   async canUserJoin(user: User) {
     // check if user is a study participant that has not played a game yet
-    const services = getServices();
     try {
-      const participant = await services.multiplayerStudy.getProlificParticipantStatus(user);
+      const participant = await this.studyService.getProlificParticipantStatus(user);
       if (participant.status === "not-started") {
         return true;
       }

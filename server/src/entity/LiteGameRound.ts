@@ -61,7 +61,4 @@ export class LiteGameRound extends BaseLiteGameRound {
 
   @OneToMany(() => LitePlayerDecision, decision => decision.round)
   decisions!: LitePlayerDecision[];
-
-  @OneToMany(() => LitePlayerVote, vote => vote.round)
-  votes!: LitePlayerVote[];
 }

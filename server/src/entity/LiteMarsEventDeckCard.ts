@@ -10,6 +10,7 @@ import { LiteMarsEventDeck, SoloMarsEventDeck } from "./LiteMarsEventDeck";
 import { LiteGameRound, SoloGameRound } from "./LiteGameRound";
 import { LiteMarsEventCard, SoloMarsEventCard } from "./LiteMarsEventCard";
 import { LitePlayerVote } from "./LitePlayerVote";
+import { LitePlayerVoteEffect } from "./LitePlayerVoteEffect";
 
 export abstract class BaseLiteMarsEventDeckCard {
   @PrimaryGeneratedColumn()
@@ -68,4 +69,7 @@ export class LiteMarsEventDeckCard extends BaseLiteMarsEventDeckCard {
 
   @OneToMany(() => LitePlayerVote, vote => vote.deckCard)
   votes!: LitePlayerVote[];
+
+  @OneToMany(() => LitePlayerVoteEffect, effect => effect.deckCard)
+  voteEffects!: LitePlayerVoteEffect[];
 }
