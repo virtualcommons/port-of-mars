@@ -5,6 +5,7 @@ import {
   LiteGameType,
   TreatmentData,
 } from "@port-of-mars/shared/lite";
+import { LiteGameBinaryVoteInterpretation } from "@port-of-mars/shared/lite";
 import {
   LiteGame,
   LiteGameRound,
@@ -14,6 +15,9 @@ import {
   LiteMarsEventDeckCard,
   LitePlayer,
   LitePlayerDecision,
+  LitePlayerVote,
+  LitePlayerVoteEffect,
+  LiteChatMessage,
   SoloGame,
   SoloGameRound,
   SoloGameTreatment,
@@ -26,7 +30,10 @@ import {
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { SoloGameState } from "@port-of-mars/server/rooms/pomlite/solo/state";
-import { LiteGameState } from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
+import {
+  LiteGameState,
+  Player as PlayerState,
+} from "@port-of-mars/server/rooms/pomlite/multiplayer/state";
 import { createObjectCsvWriter } from "csv-writer";
 import { getLogger } from "@port-of-mars/server/settings";
 
@@ -305,6 +312,8 @@ export class SoloGameService extends BaseService {
         id: name,
         title: name,
       }));
+      // sort by primary key: gameId
+      formattedGames.sort((a: any, b: any) => (a.gameId ?? 0) - (b.gameId ?? 0));
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedGames);
       logger.info(`Solo game data exported successfully to ${path}`);
@@ -352,6 +361,10 @@ export class SoloGameService extends BaseService {
           title: name,
         }));
       }
+      // sort by primary key: deckCardId
+      formattedDeckCards.sort((a: any, b: any) => (a.deckCardId ?? 0) - (b.deckCardId ?? 0));
+      // sort by primary key: cardId
+      formattedDeckCards.sort((a: any, b: any) => (a.cardId ?? 0) - (b.cardId ?? 0));
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedDeckCards);
       logger.info(`Event cards data exported successfully to ${path}`);
@@ -396,6 +409,8 @@ export class SoloGameService extends BaseService {
         id: name,
         title: name,
       }));
+      // sort by primary key: roundId
+      formattedRounds.sort((a: any, b: any) => (a.roundId ?? 0) - (b.roundId ?? 0));
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedRounds);
       logger.info(`Investment data exported successfully to ${path}`);
@@ -406,7 +421,10 @@ export class SoloGameService extends BaseService {
 }
 
 export class LiteGameService extends BaseService {
-  async drawEventCardDeck(gameType: LiteGameType): Promise<EventCardData[]> {
+  async drawEventCardDeck(
+    gameType: LiteGameType,
+    numLifeAsUsualCardsOverride = -1
+  ): Promise<EventCardData[]> {
     const cards = await this.em.getRepository(LiteMarsEventCard).find({
       where: { gameType },
       order: { id: "ASC" },
@@ -415,7 +433,11 @@ export class LiteGameService extends BaseService {
     const deck: EventCardData[] = [];
 
     for (const card of cards) {
-      const drawAmt = getRandomIntInclusive(card.drawMin, card.drawMax);
+      let drawAmt = getRandomIntInclusive(card.drawMin, card.drawMax);
+      // if the card is a life as usual card and an override is provided, use the override
+      if (card.codeName === "lifeAsUsual" && numLifeAsUsualCardsOverride >= 0) {
+        drawAmt = numLifeAsUsualCardsOverride;
+      }
       for (let i = 0; i < drawAmt; i++) {
         const roll = getRandomIntInclusive(card.rollMin, card.rollMax);
         const effectText = card.effect
@@ -431,6 +453,9 @@ export class LiteGameService extends BaseService {
           pointsEffect: card.pointsMultiplier * roll,
           resourcesEffect: card.resourcesMultiplier * roll,
           systemHealthEffect: card.systemHealthMultiplier * roll,
+          requiresVote: card.requiresVote,
+          affectedRole: card.affectedRole,
+          eventTimeoutOverride: card.eventTimeoutOverride,
         });
       }
     }
@@ -454,6 +479,7 @@ export class LiteGameService extends BaseService {
         isEventDeckKnown: treatmentData.isEventDeckKnown,
         thresholdInformation: treatmentData.thresholdInformation,
         isLowResSystemHealth: treatmentData.isLowResSystemHealth,
+        instructions: treatmentData.instructions,
       },
     });
   }
@@ -587,6 +613,24 @@ export class LiteGameService extends BaseService {
     }
   }
 
+  async createChatMessage(
+    gameId: number,
+    playerId: number,
+    message: string,
+    round: number,
+    dateCreated: Date
+  ): Promise<LiteChatMessage> {
+    const chatMessageRepo = this.em.getRepository(LiteChatMessage);
+    const chatMessage = chatMessageRepo.create({
+      gameId,
+      playerId,
+      message,
+      round,
+      dateCreated,
+    });
+    return await chatMessageRepo.save(chatMessage);
+  }
+
   async exportEventCardsCsv(path: string, gameIds?: Array<number>) {
     /**
      * export a flat csv of all event cards drawn in past multiplayer games specified by gameIds
@@ -602,6 +646,11 @@ export class LiteGameService extends BaseService {
       .leftJoinAndSelect("round.game", "game")
       .leftJoinAndSelect("deckCard.card", "eventCard")
       .leftJoinAndSelect("game.players", "gamePlayers") // need to count players
+      .leftJoinAndSelect("deckCard.votes", "votes")
+      .leftJoinAndSelect("votes.player", "votePlayer")
+      .leftJoinAndSelect("votePlayer.user", "voteUser")
+      .leftJoinAndSelect("deckCard.voteEffects", "voteEffects")
+      .leftJoinAndSelect("voteEffects.player", "effectPlayer")
       .where("deckCard.roundId IS NOT NULL"); // ensure card was actually drawn in a round
 
     if (gameIds && gameIds.length > 0) {
@@ -612,8 +661,50 @@ export class LiteGameService extends BaseService {
       const deckCards = await query.getMany();
       const formattedDeckCards = deckCards.map(deckCard => {
         const numPlayers = deckCard.round!.game.players.length;
+        const gameType = deckCard.round!.game.type;
+        const isSystemHealthScaled =
+          gameType === "prolificBaseline" || gameType === "prolificVariable";
 
-        return {
+        // aggregate vote effects by playerId
+        const effectByPlayer: Record<
+          number,
+          { points: number; resources: number; systemHealth: number }
+        > = {};
+        for (const eff of deckCard.voteEffects || []) {
+          const pid = eff.playerId;
+          if (!effectByPlayer[pid])
+            effectByPlayer[pid] = { points: 0, resources: 0, systemHealth: 0 };
+          effectByPlayer[pid].points += eff.pointsChange;
+          effectByPlayer[pid].resources += eff.resourcesChange;
+          effectByPlayer[pid].systemHealth += eff.systemHealthChange;
+        }
+
+        // prepare per-role fields
+        const perRole: Record<string, any> = {};
+        const players = deckCard.round!.game.players;
+        for (const p of players) {
+          const roleKey = p.role.toLowerCase();
+          const rolePrefix = roleKey; // e.g., researcher
+          const votesForPlayer = (deckCard.votes || []).filter(v => v.playerId === p.id);
+          const roleVote = votesForPlayer.find(
+            v => v.roleVote !== null && v.roleVote !== undefined
+          )?.roleVote;
+          const binaryVoteInterpretation = votesForPlayer.find(
+            v => v.binaryVoteInterpretation !== null && v.binaryVoteInterpretation !== undefined
+          )?.binaryVoteInterpretation;
+          const isDefaultTimeoutVote = votesForPlayer.some(v => v.isDefaultTimeoutVote);
+          const eff = effectByPlayer[p.id] || { points: 0, resources: 0, systemHealth: 0 };
+
+          perRole[`${rolePrefix}PlayerId`] = p.id;
+          perRole[`${rolePrefix}RoleVote`] = roleVote || "";
+          perRole[`${rolePrefix}BinaryVoteInterpretation`] = binaryVoteInterpretation || "";
+          perRole[`${rolePrefix}IsDefaultTimeoutVote`] = isDefaultTimeoutVote;
+          perRole[`${rolePrefix}VoteEffectPointsChange`] = eff.points;
+          perRole[`${rolePrefix}VoteEffectResourcesChange`] = eff.resources;
+          perRole[`${rolePrefix}VoteEffectSystemHealthChange`] = eff.systemHealth;
+        }
+
+        const row: Record<string, any> = {
           gameId: deckCard.round!.gameId,
           deckCardId: deckCard.id,
           roundId: deckCard.round!.id,
@@ -621,20 +712,72 @@ export class LiteGameService extends BaseService {
           name: deckCard.card.displayName,
           codeName: deckCard.card.codeName,
           effectText: deckCard.effectText,
-          scaledSystemHealthEffect: deckCard.systemHealthEffect,
-          systemHealthEffect: deckCard.systemHealthEffect * numPlayers,
-          resourcesEffect: deckCard.resourcesEffect,
-          pointsEffect: deckCard.pointsEffect,
+          requiresVote: deckCard.card.requiresVote,
+          affectedRole: deckCard.card.affectedRole,
+          // show zero effect if a vote was required, actual effect will be shown in vote effects cols
+          resourcesEffect: deckCard.card.requiresVote ? 0 : deckCard.resourcesEffect,
+          pointsEffect: deckCard.card.requiresVote ? 0 : deckCard.pointsEffect,
+          ...perRole,
         };
+        if (isSystemHealthScaled) {
+          row.scaledSystemHealthEffect = deckCard.systemHealthEffect;
+          row.systemHealthEffect = deckCard.systemHealthEffect * numPlayers;
+        } else {
+          // show zero effect if a vote was required, actual effect will be shown in vote effects cols
+          row.systemHealthEffect = deckCard.card.requiresVote ? 0 : deckCard.systemHealthEffect;
+        }
+        return row;
       });
 
+      // build header from union of keys, grouping related role columns together
       let header: any[] = [];
       if (formattedDeckCards.length > 0) {
-        header = Object.keys(formattedDeckCards[0]).map(name => ({
-          id: name,
-          title: name,
-        }));
+        const allKeys = new Set<string>();
+        for (const row of formattedDeckCards) {
+          Object.keys(row).forEach(k => allKeys.add(k));
+        }
+        const baseOrder = [
+          "gameId",
+          "deckCardId",
+          "roundId",
+          "roundNumber",
+          "name",
+          "codeName",
+          "effectText",
+          "requiresVote",
+          "affectedRole",
+          "scaledSystemHealthEffect",
+          "systemHealthEffect",
+          "resourcesEffect",
+          "pointsEffect",
+        ];
+        const roleSuffixes = [
+          "PlayerId",
+          "RoleVote",
+          "BinaryVoteInterpretation",
+          "IsDefaultTimeoutVote",
+          "VoteEffectPointsChange",
+          "VoteEffectResourcesChange",
+          "VoteEffectSystemHealthChange",
+        ];
+        const preferredRoles = ["politician", "researcher", "entrepreneur", "curator", "pioneer"];
+        const baseCols = baseOrder.filter(k => allKeys.has(k));
+        const perRoleCols: string[] = [];
+        for (const suffix of roleSuffixes) {
+          for (const role of preferredRoles) {
+            const key = `${role}${suffix}`;
+            if (allKeys.has(key)) perRoleCols.push(key);
+          }
+        }
+        const consumed = new Set<string>([...baseCols, ...perRoleCols]);
+        const remaining = Array.from(allKeys)
+          .filter(k => !consumed.has(k))
+          .sort();
+        const ordered = [...baseCols, ...perRoleCols, ...remaining];
+        header = ordered.map(name => ({ id: name, title: name }));
       }
+      // sort by primary key: deckCardId
+      formattedDeckCards.sort((a: any, b: any) => (a.deckCardId ?? 0) - (b.deckCardId ?? 0));
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedDeckCards);
       logger.info(`Lite game event cards data exported successfully to ${path}`);
@@ -669,8 +812,12 @@ export class LiteGameService extends BaseService {
       const decisions = await query.getMany();
       const formattedDecisions = decisions.map(decision => {
         const numPlayers = decision.round.game.players.length;
+        const gameType = decision.round.game.type;
+        const isSystemHealthScaled =
+          gameType === "prolificBaseline" || gameType === "prolificVariable";
 
         return {
+          decisionId: decision.id,
           gameId: decision.round.gameId,
           roundId: decision.round.id,
           roundNumber: decision.round.roundNumber,
@@ -679,9 +826,13 @@ export class LiteGameService extends BaseService {
           username: decision.player.user.username,
           initialPoints: decision.initialPoints,
           initialSystemHealth: decision.round.initialSystemHealth,
-          scaledInitialSystemHealth: decision.round.initialSystemHealth / numPlayers,
+          scaledInitialSystemHealth: isSystemHealthScaled
+            ? decision.round.initialSystemHealth / numPlayers
+            : decision.round.initialSystemHealth,
           systemHealthInvestment: decision.systemHealthInvestment,
-          scaledSystemHealthInvestment: decision.systemHealthInvestment / numPlayers,
+          scaledSystemHealthInvestment: isSystemHealthScaled
+            ? decision.systemHealthInvestment / numPlayers
+            : decision.systemHealthInvestment,
           pointsInvestment: decision.pointsInvestment,
           dateCreated: decision.round.dateCreated.toISOString(),
         };
@@ -694,11 +845,212 @@ export class LiteGameService extends BaseService {
           title: name,
         }));
       }
+      // sort by primary key: decisionId
+      formattedDecisions.sort((a: any, b: any) => (a.decisionId ?? 0) - (b.decisionId ?? 0));
       const writer = createObjectCsvWriter({ path, header });
       await writer.writeRecords(formattedDecisions);
       logger.info(`Lite game investment data exported successfully to ${path}`);
     } catch (error) {
       logger.fatal(`Error exporting lite game investment data: ${error}`);
+    }
+  }
+
+  async createPlayerVote(
+    player: PlayerState,
+    deckCardId: number,
+    voteStep: number,
+    binaryVoteInterpretation?: LiteGameBinaryVoteInterpretation
+  ): Promise<LitePlayerVote> {
+    if (!player.vote) {
+      throw new Error("Player state has no recorded vote");
+    }
+    const voteRepo = this.em.getRepository(LitePlayerVote);
+    const vote = voteRepo.create({
+      playerId: player.playerId,
+      deckCardId,
+      voteStep,
+      binaryVote: player.vote.binaryVote,
+      roleVote: player.vote.roleVote,
+      binaryVoteInterpretation,
+      isDefaultTimeoutVote: player.vote.isDefaultTimeoutVote,
+    });
+    return await voteRepo.save(vote);
+  }
+
+  async createPlayerVoteEffect(
+    playerId: number,
+    deckCardId: number,
+    pointsChange: number,
+    resourcesChange: number,
+    systemHealthChange: number
+  ): Promise<LitePlayerVoteEffect> {
+    const effectRepo = this.em.getRepository(LitePlayerVoteEffect);
+    const effect = effectRepo.create({
+      playerId,
+      deckCardId,
+      pointsChange,
+      resourcesChange,
+      systemHealthChange,
+    });
+    return await effectRepo.save(effect);
+  }
+
+  async exportVotesCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all recorded votes for past multiplayer games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, deckCardId, voteId, voteStep, roundId, roundNumber, playerId, userId,
+     * username, binaryVote, roleVote, isDefaultTimeoutVote, binaryVoteInterpretation, dateCreated
+     */
+    let query = this.em
+      .getRepository(LitePlayerVote)
+      .createQueryBuilder("vote")
+      .leftJoinAndSelect("vote.player", "player")
+      .leftJoinAndSelect("player.user", "user")
+      .leftJoinAndSelect("vote.deckCard", "deckCard")
+      .leftJoinAndSelect("deckCard.round", "round")
+      .leftJoinAndSelect("round.game", "game")
+      .where("round.gameId IS NOT NULL");
+
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("game.id IN (:...gameIds)", { gameIds });
+    }
+
+    try {
+      const votes = await query.getMany();
+      const formattedVotes = votes.map(v => ({
+        gameId: v.deckCard.round!.gameId,
+        deckCardId: v.deckCardId,
+        voteId: v.id,
+        voteStep: v.voteStep,
+        roundId: v.deckCard.round!.id,
+        roundNumber: v.deckCard.round!.roundNumber,
+        playerId: v.playerId,
+        userId: (v as any).player.user.id,
+        username: (v as any).player.user.username,
+        binaryVote: v.binaryVote,
+        roleVote: v.roleVote,
+        isDefaultTimeoutVote: v.isDefaultTimeoutVote,
+        binaryVoteInterpretation: v.binaryVoteInterpretation,
+        dateCreated: v.dateCreated.toISOString(),
+      }));
+
+      let header: any[] = [];
+      if (formattedVotes.length > 0) {
+        header = Object.keys(formattedVotes[0]).map(name => ({
+          id: name,
+          title: name,
+        }));
+      }
+      // sort by primary key: voteId
+      formattedVotes.sort((a: any, b: any) => (a.voteId ?? 0) - (b.voteId ?? 0));
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedVotes);
+      logger.info(`Lite game votes data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting lite game votes data: ${error}`);
+    }
+  }
+
+  async exportChatCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all chat messages for past multiplayer games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, round, playerId, userId, username, message, dateCreated
+     */
+    let query = this.em
+      .getRepository(LiteChatMessage)
+      .createQueryBuilder("chat")
+      .leftJoinAndSelect("chat.player", "player")
+      .leftJoinAndSelect("player.user", "user")
+      .where("chat.gameId IS NOT NULL");
+
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("chat.gameId IN (:...gameIds)", { gameIds });
+    }
+
+    try {
+      const chats = await query.getMany();
+      const formattedChats = chats.map(c => ({
+        chatId: c.id,
+        gameId: c.gameId,
+        round: c.round,
+        playerId: c.playerId,
+        userId: (c as any).player.user.id,
+        username: (c as any).player.user.username,
+        message: c.message,
+        dateCreated: c.dateCreated.toISOString(),
+      }));
+
+      let header: any[] = [];
+      if (formattedChats.length > 0) {
+        header = Object.keys(formattedChats[0]).map(name => ({
+          id: name,
+          title: name,
+        }));
+      }
+      // sort by primary key: chatId
+      formattedChats.sort((a: any, b: any) => (a.chatId ?? 0) - (b.chatId ?? 0));
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedChats);
+      logger.info(`Lite game chat data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting lite game chat data: ${error}`);
+    }
+  }
+
+  async exportVoteEffectsCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all vote effects applied in past multiplayer games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, deckCardId, roundId, roundNumber, playerId, userId, username,
+     * pointsChange, resourcesChange, systemHealthChange, dateCreated
+     */
+    let query = this.em
+      .getRepository(LitePlayerVoteEffect)
+      .createQueryBuilder("effect")
+      .leftJoinAndSelect("effect.player", "player")
+      .leftJoinAndSelect("player.user", "user")
+      .leftJoinAndSelect("effect.deckCard", "deckCard")
+      .leftJoinAndSelect("deckCard.round", "round")
+      .leftJoinAndSelect("round.game", "game")
+      .where("deckCard.roundId IS NOT NULL");
+
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("game.id IN (:...gameIds)", { gameIds });
+    }
+
+    try {
+      const effects = await query.getMany();
+      const formatted = effects.map(e => ({
+        voteEffectId: e.id,
+        gameId: e.deckCard.round!.gameId,
+        deckCardId: e.deckCardId,
+        roundId: e.deckCard.round!.id,
+        roundNumber: e.deckCard.round!.roundNumber,
+        playerId: e.playerId,
+        userId: (e as any).player.user.id,
+        username: (e as any).player.user.username,
+        pointsChange: e.pointsChange,
+        resourcesChange: e.resourcesChange,
+        systemHealthChange: e.systemHealthChange,
+        dateCreated: e.dateCreated.toISOString(),
+      }));
+
+      let header: any[] = [];
+      if (formatted.length > 0) {
+        header = Object.keys(formatted[0]).map(name => ({ id: name, title: name }));
+      }
+      // sort by primary key: voteEffectId
+      formatted.sort((a: any, b: any) => (a.voteEffectId ?? 0) - (b.voteEffectId ?? 0));
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formatted);
+      logger.info(`Lite game vote effects data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting lite game vote effects data: ${error}`);
     }
   }
 }

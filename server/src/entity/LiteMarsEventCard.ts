@@ -57,4 +57,7 @@ export class LiteMarsEventCard extends BaseLiteMarsEventCard {
 
   @Column({ default: false })
   requiresVote!: boolean;
+
+  @Column({ nullable: true })
+  eventTimeoutOverride?: number;
 }

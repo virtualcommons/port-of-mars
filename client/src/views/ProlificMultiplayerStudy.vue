@@ -97,7 +97,10 @@ import Dashboard from "@port-of-mars/client/components/lite/multiplayer/Dashboar
 import GameOver from "@port-of-mars/client/components/lite/multiplayer/GameOver.vue";
 import { ProlificMultiplayerParticipantStatus } from "@port-of-mars/shared/types";
 
-@Component({ name: "ProlificMultiplayerStudy", components: { Splash, Dashboard, GameOver } })
+@Component({
+  name: "ProlificMultiplayerStudy",
+  components: { Splash, Dashboard, GameOver },
+})
 export default class ProlificMultiplayerStudy extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api = new LiteGameRequestAPI();
@@ -107,6 +110,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   // participant
   participantStatus: ProlificMultiplayerParticipantStatus = {
     status: "not-started",
+    startingGameType: "prolificBaseline",
   };
   statusLoading = true;
 
@@ -217,7 +221,7 @@ export default class ProlificMultiplayerStudy extends Vue {
   private async joinLobby() {
     try {
       this.lobbyRoom = await this.$client.joinOrCreate(LITE_LOBBY_NAME, {
-        type: "prolificBaseline",
+        type: this.participantStatus.startingGameType,
       });
       applyLiteLobbyResponses(this.lobbyRoom, this);
       this.lobbyApi.connect(this.lobbyRoom);

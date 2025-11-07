@@ -34,6 +34,7 @@ export interface ClientSafeUser {
   isSystemBot?: boolean;
   dateConsented?: Date;
   participantId?: string;
+  prolificParticipantMode: StudyMode | null;
 }
 
 export interface ProfileData {
@@ -537,15 +538,17 @@ export interface ProlificSoloParticipantStatus {
 }
 
 export interface ProlificMultiplayerParticipantStatus {
+  startingGameType: LiteGameType;
   status: "not-started" | "in-progress" | "completed";
   completionUrl?: string;
   inProgressGameType?: LiteGameType | null;
   activeRoomId?: string;
 }
 
-export type StudyMode = "solo" | "multiplayer";
+export type StudyMode = "solo" | "multiplayer" | "interactive";
 
 export interface ProlificStudyData {
+  gameType: LiteGameType;
   description: string;
   studyId: string;
   completionCode: string;

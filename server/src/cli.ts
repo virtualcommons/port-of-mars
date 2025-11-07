@@ -105,7 +105,7 @@ async function exportSoloStudyData(em: EntityManager, studyIds: Array<string>) {
   }
 }
 
-async function exportLiteStudyData(em: EntityManager, studyIds: Array<string>) {
+async function exportMultiplayerStudyData(em: EntityManager, studyIds: Array<string>) {
   for (const studyId of studyIds) {
     const gameIds = await getServices().multiplayerStudy.getGameIdsForStudyId(studyId);
     if (gameIds.length > 0) {
@@ -128,6 +128,41 @@ async function exportLiteStudyData(em: EntityManager, studyIds: Array<string>) {
         `${studyExportPath}/investments.csv`,
         gameIds
       );
+    } else {
+      logger.info("No games found for study %s", studyId);
+    }
+  }
+}
+
+async function exportInteractiveStudyData(em: EntityManager, studyIds: Array<string>) {
+  for (const studyId of studyIds) {
+    const gameIds = await getServices().interactiveStudy.getGameIdsForStudyId(studyId);
+    if (gameIds.length > 0) {
+      const studyExportPath = `/dump/study/lite/${studyId}`;
+      await mkdir(studyExportPath, { recursive: true });
+      logger.info("Exporting data for %d games in study %s", gameIds.length, studyId);
+      await getServices().interactiveStudy.exportProlificStudyGamesCsv(
+        `${studyExportPath}/games.csv`,
+        studyId
+      );
+      await getServices().interactiveStudy.exportProlificStudyPlayersCsv(
+        `${studyExportPath}/players.csv`,
+        studyId
+      );
+      await getServices().litegame.exportEventCardsCsv(
+        `${studyExportPath}/eventcards.csv`,
+        gameIds
+      );
+      await getServices().litegame.exportInvestmentsCsv(
+        `${studyExportPath}/investments.csv`,
+        gameIds
+      );
+      await getServices().litegame.exportVotesCsv(`${studyExportPath}/votes.csv`, gameIds);
+      await getServices().litegame.exportVoteEffectsCsv(
+        `${studyExportPath}/vote-effects.csv`,
+        gameIds
+      );
+      await getServices().litegame.exportChatCsv(`${studyExportPath}/chat.csv`, gameIds);
     } else {
       logger.info("No games found for study %s", studyId);
     }
@@ -809,11 +844,24 @@ program
       )
       .addCommand(
         program
-          .createCommand("litestudy")
-          .description("export solo game data to flat CSV files for a given study or studies")
+          .createCommand("multiplayerstudy")
+          .description(
+            "export multiplayer game data to flat CSV files for a given study or studies"
+          )
           .option("-s, --studyIds <studyIds...>", "Specify one or more study IDs")
           .action(async cmd => {
-            await withDataSource(async em => exportLiteStudyData(em, cmd.studyIds));
+            await withDataSource(async em => exportMultiplayerStudyData(em, cmd.studyIds));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("interactivestudy")
+          .description(
+            "export interactive (simplified pom) game data to flat CSV files for a given study or studies"
+          )
+          .option("-s, --studyIds <studyIds...>", "Specify one or more study IDs")
+          .action(async cmd => {
+            await withDataSource(async em => exportInteractiveStudyData(em, cmd.studyIds));
           })
       )
   )

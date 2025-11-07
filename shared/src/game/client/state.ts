@@ -222,6 +222,7 @@ export const initialUserState: User = {
   isBanned: false,
   passedQuiz: false,
   isVerified: false,
+  prolificParticipantMode: null,
 };
 
 export function defaultLobbyState(): Lobby {

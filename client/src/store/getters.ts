@@ -11,6 +11,7 @@ import {
   MarsLogMessageData,
   Phase,
   ROLES,
+  StudyMode,
 } from "@port-of-mars/shared/types";
 
 export default {
@@ -28,6 +29,10 @@ export default {
 
   isVerified(state: State): boolean {
     return !!state.user?.isVerified;
+  },
+
+  prolificParticipantMode(state: State): StudyMode | null {
+    return state.user?.prolificParticipantMode ?? null;
   },
 
   user(state: State): User {

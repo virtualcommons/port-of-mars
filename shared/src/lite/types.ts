@@ -12,6 +12,9 @@ export interface EventCardData {
   pointsEffect: number;
   resourcesEffect: number;
   systemHealthEffect: number;
+  requiresVote?: boolean;
+  affectedRole?: Role;
+  eventTimeoutOverride?: number;
 }
 
 export interface HiddenParams {
@@ -31,20 +34,35 @@ export interface TreatmentData {
   isEventDeckKnown: boolean;
   thresholdInformation: ThresholdInformation;
   isLowResSystemHealth: boolean;
+  numLifeAsUsualCardsOverride?: number;
   instructions?: string;
 }
 
-export type LiteGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
+export type SoloGameType = "freeplay" | "prolificBaseline" | "prolificVariable";
+
+export type MultiplayerGameType =
+  | "freeplay"
+  | "prolificBaseline"
+  | "prolificVariable"
+  | "prolificInteractive";
+
+export type LiteGameType = SoloGameType | MultiplayerGameType;
 
 export type LiteGameStatus = "incomplete" | "victory" | "defeat";
 
+export type LiteGameBinaryVoteInterpretation =
+  // succinctly describe the context of a yes/no vote
+  "accept_greedy_offer" | "reject_greedy_offer" | "chose_hero" | "chose_pariah";
+
 export interface LiteGameParams {
   numPlayers?: number;
+  systemHealthScalingFactor?: number;
   // determines which game type to reset and transition to in the same game room
   // if not defined, then end normally
   nextGameType?: LiteGameType;
   maxRound: { min: number; max: number };
   roundTransitionDuration: number;
+  reportDuration?: number;
   twoEventsThreshold: { min: number; max: number };
   threeEventsThreshold: { min: number; max: number };
   twoEventsThresholdDisplayRange?: { min: number; max: number };
@@ -57,6 +75,14 @@ export interface LiteGameParams {
   points: number;
   resources: number;
   availableRoles?: Array<Role>;
+  chatEnabled?: boolean;
+}
+
+export interface SystemHealthReportData {
+  previousSystemHealth: number;
+  currentSystemHealth: number;
+  eventsDelta: number;
+  standardDecay: number;
 }
 
 export interface SoloGameClientState {
@@ -72,6 +98,7 @@ export interface SoloGameClientState {
     thresholdInformation: "unknown" | "range" | "known";
     isLowResSystemHealth: boolean;
     instructions?: string;
+    numLifeAsUsualCardsOverride?: number;
   };
   timeRemaining: number;
   systemHealth: number;
@@ -96,11 +123,42 @@ export interface LiteGamePlayerClientState {
   hasInvested: boolean;
   pointsEarned: number | null;
   isReadyToStart: boolean;
+  systemHealthContribution: number;
+  vote?: VoteData;
+}
+
+export interface ChatMessageData {
+  id?: number;
+  username: string;
+  role: Role;
+  message: string;
+  dateCreated: number;
+  round: number;
+}
+
+export interface VoteData {
+  binaryVote?: boolean;
+  roleVote?: Role;
+  isDefaultTimeoutVote?: boolean;
 }
 
 export interface LiteGameClientState extends SoloGameClientState {
-  players: Map<string, LiteGamePlayerClientState>;
+  eventTimeRemaining: number;
+  eventTimeTotal: number;
+  // round-start system health report phase
+  isRoundReportInProgress: boolean;
+  lastRoundReport: SystemHealthReportData;
+  players: Record<string, LiteGamePlayerClientState>;
   player: LiteGamePlayerClientState;
   numPlayers: number;
   isWaitingToStart: boolean;
+  chatMessages: ChatMessageData[];
+  chatEnabled: boolean;
+  votingInProgress: boolean;
+  currentVoteStep: number;
+  heroOrPariah: "hero" | "pariah" | "";
+  auditing: boolean;
+  sandstormRoundsRemaining: number;
+  voteOutcomeText?: string;
+  timeExtensionUsed?: boolean;
 }

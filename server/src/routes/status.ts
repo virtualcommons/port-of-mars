@@ -12,6 +12,12 @@ statusRouter.get("/", async (req: Request, res: Response, next) => {
     const services = getServices();
     const user = req.user as User;
     const safeUser = user ? { ...toClientSafeUser(user) } : null;
+    // append prolific participant mode to safe user
+    if (safeUser) {
+      safeUser.prolificParticipantMode = await services.account.getProlificParticipantModeForUser(
+        user
+      );
+    }
     const settings = await services.settings.getSettings();
     const { isFreePlayEnabled, isTournamentEnabled, announcementBannerText } = settings;
     let tournamentStatus = null;

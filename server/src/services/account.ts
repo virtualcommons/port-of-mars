@@ -1,4 +1,10 @@
-import { ChatReport, User } from "@port-of-mars/server/entity";
+import {
+  ChatReport,
+  ProlificInteractiveStudyParticipant,
+  ProlificMultiplayerStudyParticipant,
+  ProlificSoloStudyParticipant,
+  User,
+} from "@port-of-mars/server/entity";
 import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm";
 import validator from "validator";
 import { settings } from "@port-of-mars/server/settings";
@@ -15,6 +21,7 @@ import {
   MUTE,
   ClientSafeUser,
   ProfileData,
+  StudyMode,
 } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -391,5 +398,29 @@ export class AccountService extends BaseService {
       }
     }
     return bots;
+  }
+
+  async getProlificParticipantModeForUser(user: User): Promise<StudyMode | null> {
+    // check if the user is a Solo/Multiplayer/Interactive prolific participant
+    const userId = user.id;
+    const soloParticipant = await this.em
+      .getRepository(ProlificSoloStudyParticipant)
+      .findOneBy({ userId });
+    if (soloParticipant) {
+      return "solo";
+    }
+    const multiplayerParticipant = await this.em
+      .getRepository(ProlificMultiplayerStudyParticipant)
+      .findOneBy({ userId });
+    if (multiplayerParticipant) {
+      return "multiplayer";
+    }
+    const interactiveParticipant = await this.em
+      .getRepository(ProlificInteractiveStudyParticipant)
+      .findOneBy({ userId });
+    if (interactiveParticipant) {
+      return "interactive";
+    }
+    return null;
   }
 }

@@ -22,4 +22,25 @@ export interface Vote {
   binaryVote: boolean;
 }
 
-export type LiteGameRequest = EventContinue | Invest | PlayerReady;
+export interface SubmitVote {
+  kind: "submit-vote";
+  binaryVote?: boolean;
+  roleVote?: Role;
+}
+
+export interface SendChatMessage {
+  kind: "send-chat-message";
+  message: string;
+}
+
+export interface ExtendTimerRequest {
+  kind: "extend-timer";
+}
+
+export type LiteGameRequest =
+  | EventContinue
+  | Invest
+  | PlayerReady
+  | SubmitVote
+  | SendChatMessage
+  | ExtendTimerRequest;

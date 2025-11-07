@@ -53,6 +53,7 @@ export function toClientSafeUser(user: User): ClientSafeUser {
     isVerified: user.isVerified,
     dateConsented: user.dateConsented,
     participantId: user.participantId,
+    prolificParticipantMode: null,
   };
   return safeUser;
 }

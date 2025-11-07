@@ -429,7 +429,12 @@ export class TournamentService extends BaseService {
   }
 
   async deactivateTournaments(): Promise<void> {
-    await this.em.getRepository(Tournament).update({}, { active: false });
+    await this.em
+      .getRepository(Tournament)
+      .createQueryBuilder()
+      .update()
+      .set({ active: false })
+      .execute();
   }
 
   async getTournamentStatus(tournamentRound?: TournamentRound): Promise<TournamentStatus | null> {

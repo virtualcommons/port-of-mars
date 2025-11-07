@@ -31,4 +31,7 @@ export abstract class BaseLiteGameTreatment {
 export class SoloGameTreatment extends BaseLiteGameTreatment {}
 
 @Entity()
-export class LiteGameTreatment extends BaseLiteGameTreatment {}
+export class LiteGameTreatment extends BaseLiteGameTreatment {
+  @Column({ nullable: true })
+  numLifeAsUsualCardsOverride?: number;
+}

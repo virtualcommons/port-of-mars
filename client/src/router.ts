@@ -25,6 +25,7 @@ import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificSoloStudy from "@port-of-mars/client/views/ProlificSoloStudy.vue";
 import ProlificMultiplayerStudy from "@port-of-mars/client/views/ProlificMultiplayerStudy.vue";
+import ProlificInteractiveStudy from "@port-of-mars/client/views/ProlificInteractiveStudy.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -46,7 +47,9 @@ import {
   PROFILE_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_INTERACTIVE_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
+import { StudyMode } from "@port-of-mars/shared/types";
 
 Vue.use(VueRouter);
 
@@ -105,6 +108,10 @@ const router = new VueRouter({
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
     { ...PAGE_META[PROLIFIC_SOLO_STUDY_PAGE], component: ProlificSoloStudy },
     { ...PAGE_META[PROLIFIC_MULTIPLAYER_STUDY_PAGE], component: ProlificMultiplayerStudy },
+    {
+      ...PAGE_META[PROLIFIC_INTERACTIVE_STUDY_PAGE],
+      component: ProlificInteractiveStudy,
+    },
   ],
 });
 
@@ -128,6 +135,20 @@ function hasConsented() {
   return store.getters.hasConsented;
 }
 
+function prolificParticipantMode(): StudyMode | null {
+  return store.getters.prolificParticipantMode;
+}
+
+function prolificStudyPageForMode(mode: StudyMode) {
+  if (mode === "solo") {
+    return PROLIFIC_SOLO_STUDY_PAGE;
+  } else if (mode === "multiplayer") {
+    return PROLIFIC_MULTIPLAYER_STUDY_PAGE;
+  } else if (mode === "interactive") {
+    return PROLIFIC_INTERACTIVE_STUDY_PAGE;
+  }
+}
+
 router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
@@ -143,6 +164,19 @@ router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
   } else {
     next();
   }
+});
+
+router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
+  // make sure that prolific participants are only able to access their own study page
+  const mode = prolificParticipantMode();
+  if (!mode) {
+    return next();
+  }
+  const pageName = prolificStudyPageForMode(mode);
+  if (to.name === pageName) {
+    return next();
+  }
+  return next({ name: pageName });
 });
 
 router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {

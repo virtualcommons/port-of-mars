@@ -4,16 +4,19 @@ import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
 import {
   PROLIFIC_MULTIPLAYER_STUDY_PAGE,
+  PROLIFIC_INTERACTIVE_STUDY_PAGE,
   PROLIFIC_SOLO_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
 import { User } from "@port-of-mars/server/entity";
 import { ProlificStudyData, StudyMode } from "@port-of-mars/shared/types";
 import { isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
 import { BaseStudyService } from "@port-of-mars/server/services/study";
+import { LiteGameType } from "@port-of-mars/shared/lite/types";
 
 interface StudyModeRequest extends Request {
   studyService?: BaseStudyService;
   mode?: StudyMode;
+  gameType?: LiteGameType;
 }
 
 export const studyRouter = Router();
@@ -27,8 +30,13 @@ studyRouter.use("/prolific/:mode", (req: StudyModeRequest, res: Response, next: 
   } else if (mode === "multiplayer") {
     req.studyService = getServices().multiplayerStudy;
     req.mode = "multiplayer";
+  } else if (mode === "interactive") {
+    req.studyService = getServices().interactiveStudy;
+    req.mode = "interactive" as any;
   } else {
-    return res.status(400).json({ message: "Invalid mode. Use 'solo' or 'multiplayer'" });
+    return res
+      .status(400)
+      .json({ message: "Invalid mode. Use 'solo', 'multiplayer', or 'interactive'" });
   }
   next();
 });
@@ -61,6 +69,7 @@ studyRouter.get(
     }
     req.body.prolificId = prolificId;
     req.body.studyId = studyId;
+    req.gameType = study.gameType;
     next();
   },
   (req: StudyModeRequest, res: Response, next: NextFunction) => {
@@ -72,6 +81,8 @@ studyRouter.get(
       res.redirect(toUrl(PROLIFIC_SOLO_STUDY_PAGE));
     } else if (req.mode == "multiplayer") {
       res.redirect(toUrl(PROLIFIC_MULTIPLAYER_STUDY_PAGE));
+    } else if (req.mode == "interactive") {
+      res.redirect(toUrl(PROLIFIC_INTERACTIVE_STUDY_PAGE));
     }
   }
 );
@@ -135,7 +146,8 @@ studyRouter.post(
       if (!req.studyService) {
         return res.status(500).json({ message: "Study service not set" });
       }
-      const { description, studyId, completionCode, isActive } = req.body as ProlificStudyData;
+      const { gameType, description, studyId, completionCode, isActive } =
+        req.body as ProlificStudyData;
       if (!description || !studyId || !completionCode) {
         return res.status(400).json({
           message: "Missing required fields: description, studyId, or completionCode.",
@@ -145,7 +157,8 @@ studyRouter.post(
         studyId,
         completionCode,
         description,
-        isActive ?? true
+        isActive ?? true,
+        gameType
       );
       res.status(201).json(savedStudy);
     } catch (error) {

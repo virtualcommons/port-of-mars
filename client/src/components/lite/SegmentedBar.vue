@@ -1,5 +1,5 @@
 <template>
-  <div class="vfd-container p-3">
+  <div class="vfd-container px-3 pt-3">
     <div v-if="label">
       <h4 class="mb-0">{{ label }}</h4>
     </div>
@@ -48,6 +48,9 @@
         :variant="variant"
       />
     </div>
+    <div class="py-2">
+      <p v-if="helpText" class="text-muted small mb-0">{{ helpText }}</p>
+    </div>
   </div>
 </template>
 
@@ -72,6 +75,7 @@ export default class SegmentedBar extends Vue {
   @Prop({ default: "lg" }) size!: "sm" | "md" | "lg";
   @Prop({ default: "green" }) variant!: "green" | "blue" | "red" | "yellow";
   @Prop({ default: "" }) customTextDisplay!: string;
+  @Prop({ default: "" }) helpText!: string;
 
   dragging = false;
 

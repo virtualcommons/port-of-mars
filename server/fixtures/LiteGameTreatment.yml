@@ -193,3 +193,40 @@ items:
       <p>The possible event cards will be listed on the screen at the right.</p>
       <p>You get 20 seconds each round to make a decision using the controls at the right of the screen.</p>
       <p>If you are ready, click the start button.</p>
+  # prolific interactive treatments
+  liteProlificInteractiveTreatment1:
+    id: 20
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: false
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 12
+    instructions: ""
+  liteProlificInteractiveTreatment2:
+    id: 21
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: false
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 12
+    instructions: >
+      Groups in the Port of Mars game are more successful if they discuss
+      in detail the planning of investment decisions. You are recommended
+      to chat about the strategy of the group, the state of the game, and
+      discuss any questions you have about the mechanics of the game.
+  liteProlificInteractiveTreatment3:
+    id: 22
+    gameType: prolificInteractive
+    isNumberOfRoundsKnown: true
+    isEventDeckKnown: false
+    thresholdInformation: known
+    isLowResSystemHealth: false
+    numLifeAsUsualCardsOverride: 12
+    instructions: >
+      Groups in the Port of Mars game are more successful if they have
+      respectful and positive interactions with each other. You are recommended
+      to make compliments if others make good decisions and use a positive
+      attitude in your communications. Go team!
+
