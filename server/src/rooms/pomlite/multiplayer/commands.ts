@@ -117,6 +117,7 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.players.forEach(player => {
       player.resources = defaults.resources;
       player.systemHealthContribution = 0;
+      player.compulsiveInvestmentApplied = 0;
     });
     this.state.updateRoundInitialValues();
     this.state.isRoundTransitioning = false;
@@ -454,6 +455,11 @@ export class ApplyCompulsivePhilanthropyCmd extends BaseCardCmd {
   async execute({ card, playerSkipped } = this.payload) {
     this.card = card;
 
+    // ensure all players have votes recorded (blank defaults for non-voters)
+    for (const player of this.state.players.values()) {
+      this.createDefaultVoteIfNeeded(player, {});
+    }
+
     // get the role votes and find the most voted role
     const roleVotes: { [role: string]: number } = {};
     this.state.players.forEach(player => {
@@ -489,9 +495,10 @@ export class ApplyCompulsivePhilanthropyCmd extends BaseCardCmd {
           this.state.systemHealth + resourcesInvested
         );
         targetPlayer.systemHealthContribution = resourcesInvested;
+        targetPlayer.compulsiveInvestmentApplied = resourcesInvested;
         targetPlayer.resources = 0;
 
-        // persist the voting effects
+        // persist voting records for all players
         const { litegame } = getServices();
         for (const voter of this.state.players.values()) {
           if (voter.vote) {
@@ -500,23 +507,19 @@ export class ApplyCompulsivePhilanthropyCmd extends BaseCardCmd {
               this.card.deckCardId,
               this.state.currentVoteStep
             );
-
-            // create vote effect for the target player only
-            if (voter.playerId === targetPlayer.playerId) {
-              await litegame.createPlayerVoteEffect(
-                voter.playerId,
-                this.card.deckCardId,
-                0, // points change
-                -resourcesInvested, // resources change (negative because resources were removed)
-                resourcesInvested // system health change
-              );
-            }
           }
         }
+        // persist the vote effect for the target player
+        await litegame.createPlayerVoteEffect(
+          targetPlayer.playerId,
+          this.card.deckCardId,
+          0, // points change
+          -resourcesInvested, // resources change (negative because resources were removed)
+          resourcesInvested // system health change
+        );
         this.state.voteOutcomeText = `The ${targetPlayer.role} was forced to invest ${resourcesInvested} time blocks into system health`;
       }
     }
-
     this.finishVoting();
     // wait and clear outcome text
     await new Promise(resolve => setTimeout(resolve, 4 * 1000));
@@ -813,7 +816,10 @@ export class ProcessRoundCmd extends CmdWithoutPayload {
   async execute() {
     let totalSystemHealthInvestment = 0;
     this.state.players.forEach(player => {
-      totalSystemHealthInvestment += player.systemHealthContribution;
+      // exclude compulsive investments that were already applied immediately
+      const alreadyApplied = player.compulsiveInvestmentApplied || 0;
+      const netContribution = Math.max(0, (player.systemHealthContribution || 0) - alreadyApplied);
+      totalSystemHealthInvestment += netContribution;
       if (player.pendingInvestment >= 0) {
         // if the investment was caused by a timeout, the player invests nothing
         // and gets no points
@@ -915,6 +921,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     // reset contributions after the report is shown
     this.state.players.forEach(player => {
       player.systemHealthContribution = 0;
+      player.compulsiveInvestmentApplied = 0;
     });
 
     if (this.state.upcomingEventCards.length > 0) {
@@ -985,6 +992,7 @@ export class ResetGameStateCmd extends CmdWithoutPayload {
       p.points = 0;
       p.pendingInvestment = -1;
       p.pointsEarned = 0;
+      p.compulsiveInvestmentApplied = 0;
       p.hasInvested = false;
       p.isReadyToStart = false;
     });

@@ -112,6 +112,7 @@ export class Player extends Schema {
   @type("uint8") pointsEarned = 0;
   @type("boolean") isReadyToStart = false;
   @type("uint8") systemHealthContribution = 0;
+  @type("uint8") compulsiveInvestmentApplied = 0;
   @type(Vote) vote?: Vote;
 }
 
