@@ -2,11 +2,11 @@
   <b-container fluid class="h-100 m-0 p-0 bg-content">
     <div id="privacy-policy" class="p-5">
       <h1>Privacy Policy</h1>
-      <h3>For K-12 classroom use</h3>
+      <h3>For classroom use</h3>
       <hr />
       <p>
         This Privacy Policy explains how we collect, use, and share personal information for the
-        K-12 version of our website and online game,
+        classroom version of our website and online game,
         <a href="https://learn.portofmars.asu.edu/">learn.portofmars.asu.edu</a>. This version is
         designed for classroom use by teachers and their students.
       </p>
@@ -49,7 +49,7 @@
       <h4>Children's Privacy</h4>
       <p>
         In compliance with the Children's Online Privacy Protection Act (COPPA), we do not knowingly
-        collect personal information from children under the age of 13. The K-12 version is designed
+        collect personal information from children under the age of 13. The classroom version is designed
         for use in a classroom setting under teacher supervision. No personally identifiable
         information is collected from students.
       </p>

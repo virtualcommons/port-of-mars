@@ -4,7 +4,7 @@
     <div v-if="currentMode === 'welcome'" class="w-100 text-center welcome">
       <div style="margin-top: 35vh">
         <h2 class="mb-4" style="color: var(--light-shade)">
-          Welcome to the K-12 version of the Port of Mars
+          Welcome to the classroom version of the Port of Mars
         </h2>
         <h5 class="mb-4">Are you a...</h5>
       </div>
@@ -110,10 +110,9 @@
       <div v-if="currentMode === 'teacher'">
         <h2 class="text-center mb-4" style="color: var(--light-shade)">Teacher Sign-In</h2>
         <p class="mb-4" style="color: rgba(255, 255, 255, 0.7); font-size: 1rem; line-height: 1.6">
-          <strong>Welcome to the K-12 version of the Port of Mars.</strong> This version is designed
+          <strong>Welcome to the classroom version of the Port of Mars.</strong> This version is designed
           to be an educational experience for students and does not collect data for research
-          purposes. The original version is intended for players 18 years and older, where data is
-          collected to support research studies.
+          purposes unlike the original version.
         </p>
         <p class="mb-4" style="color: rgba(255, 255, 255, 0.7); font-size: 1rem; line-height: 1.6">
           For teachers, we also provide lesson materials that teachers may use in their curriculum
@@ -127,7 +126,7 @@
           >
             portmars@asu.edu
           </a>
-          . Please use your email address from your school so we can verify you are a K-12 teacher.
+          . Please use your email address from your school so we can verify you are a teacher.
         </p>
         <div class="d-flex justify-content-center">
           <b-tabs
